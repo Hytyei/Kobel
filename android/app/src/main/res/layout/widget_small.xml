@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/s_root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_bg" android:orientation="vertical" android:padding="16dp" android:gravity="center_vertical">
+<TextView android:id="@+id/s_tier" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BUNDESLIGA" android:textColor="#FF8E8E8E" android:textSize="13sp" android:textStyle="bold" android:fontFamily="sans-serif-condensed" android:letterSpacing="0.08" android:maxLines="1" />
+<TextView android:id="@+id/s_streak" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Days" android:textColor="#FFFFFFFF" android:textSize="30sp" android:textStyle="bold" android:fontFamily="sans-serif-condensed" android:layout_marginTop="2dp" android:maxLines="1" />
+<ProgressBar android:id="@+id/s_prog" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="4dp" android:layout_marginTop="12dp" android:max="100" android:progress="0" android:progressDrawable="@drawable/widget_progress" />
+</LinearLayout>
