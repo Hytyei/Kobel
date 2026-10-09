@@ -1,0 +1,22 @@
+# secrets and local state
+.dev.vars
+.env
+keystore.properties
+*.jks
+*.keystore
+.wrangler/
+node_modules/
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# OS
+.DS_Store

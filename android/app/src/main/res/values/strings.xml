@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Kobel</string>
+    <string name="widget_desc">Streak, daily goal and cards due</string>
+    <string name="widget_small_desc">League and streak</string>
+    <string name="widget_big_desc">Streak, league, statistics and trophies</string>
+</resources>
