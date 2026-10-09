@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/widget_bg" android:orientation="vertical" android:padding="14dp" android:gravity="center_vertical">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false">
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.4" android:orientation="vertical">
+            <TextView android:id="@+id/w_streak" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="0" android:textColor="#FFFF3B47" android:textSize="32sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" />
+            <TextView android:id="@+id/w_streak_lab" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="DAY STREAK" android:textColor="#FF8C8C92" android:textSize="10sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" android:letterSpacing="0.08" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:id="@+id/w_due" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="0" android:textColor="#FFFFFFFF" android:textSize="26sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" />
+            <TextView android:id="@+id/w_l_due" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="DUE" android:textColor="#FF8C8C92" android:textSize="10sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" android:letterSpacing="0.08" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:id="@+id/w_new" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="0" android:textColor="#FFFFFFFF" android:textSize="26sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" />
+            <TextView android:id="@+id/w_l_new" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="NEW" android:textColor="#FF8C8C92" android:textSize="10sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" android:letterSpacing="0.08" android:layout_marginTop="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp" android:gravity="center_vertical">
+    <TextView android:id="@+id/w_tier" android:layout_height="wrap_content"
+            android:text="3. Liga" android:textColor="#FF8C8C92" android:textSize="12sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" android:layout_width="0dp" android:layout_weight="1"/>
+    <TextView android:id="@+id/w_lp" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="0 LP" android:textColor="#FFFFFFFF" android:textSize="12sp" android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" android:includeFontPadding="false" android:maxLines="1" />
+    </LinearLayout>
+    <ProgressBar android:id="@+id/w_prog" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent"
+            android:layout_height="5dp" android:layout_marginTop="6dp" android:max="100" android:progress="0"
+            android:progressDrawable="@drawable/widget_progress" />
+</LinearLayout>

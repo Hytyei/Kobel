@@ -1,0 +1,15 @@
+# Cloudflare Worker configuration (free plan). See docs/DEPLOYMENT.md.
+name = "kobel-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true          # gives you https://kobel-api.<your-subdomain>.workers.dev (free)
+
+[vars]
+# Origins allowed to call the API from a browser/WebView. The Android app serves its UI from this origin:
+ALLOWED_ORIGINS = "https://appassets.androidplatform.net"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kobel-db"
+database_id = "REPLACE_WITH_YOUR_DATABASE_ID"   # printed by: npx wrangler d1 create kobel-db
+migrations_dir = "../database/migrations"
