@@ -36,7 +36,7 @@ keyPassword=...
 ```
 
 ## 5. Updates through GitHub (no Google Play)
-1. Raise the version when you build: `./gradlew assembleRelease -PversionCode=2 -PversionName=1.1.0` (or edit `versionCode`/`versionName` in `app/build.gradle.kts`). Always sign with the **same key**.
+1. Raise the version when you build: `./gradlew assembleRelease -PversionName=2.3.0` (or edit the default `versionName` in `app/build.gradle.kts`). The version code is derived from the name (2.3.0 becomes 20300) and the in-app updater compares the same number from your release tag, so always tag releases `v<major>.<minor>.<patch>`. Always sign with the **same key**.
 2. On GitHub: `Releases > Draft a new release`, tag `v1.1.0`, attach the APK (any file name ending in `.apk`).
    Optional: also attach `<name>.apk.sha256` containing the file's SHA-256 (`sha256sum app-release.apk`); the app then verifies the download.
 3. In the app: **Einstellungen > App-Update > Nach Update suchen**, then Download, then Install. The app also checks silently about every 12 hours when opened.

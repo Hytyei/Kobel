@@ -55,10 +55,13 @@ class Updater(private val ctx: Context, private val report: (String, String) -> 
                     if (n.endsWith(".apk.sha256")) sha = a.optString("browser_download_url")
                 }
                 val cur = versionName()
-                val newer = apk != null && isNewer(tag, cur)
+                val latestCode = codeOf(tag)
+                val curCode = BuildConfig.VERSION_CODE
+                val newer = apk != null && latestCode != null && latestCode > curCode
                 if (apk != null) info = Info(tag, j.optString("body"), apk.optString("browser_download_url"), apk.optLong("size"), sha)
                 send(
                     JSONObject().put("ok", true).put("newer", newer).put("latest", tag).put("current", cur)
+                        .put("noApk", apk == null).put("badTag", latestCode == null).put("latestCode", latestCode ?: 0).put("currentCode", curCode)
                         .put("notes", j.optString("body")).put("size", apk?.optLong("size") ?: 0),
                 )
             } catch (e: Exception) {
@@ -157,14 +160,13 @@ class Updater(private val ctx: Context, private val report: (String, String) -> 
     private fun allowedHost(h: String) =
         h == "api.github.com" || h == "github.com" || h.endsWith(".githubusercontent.com")
 
-    /** "v1.2.0" is newer than "1.1.9". Non-numeric parts are ignored. */
-    private fun isNewer(tag: String, cur: String): Boolean {
-        fun parts(s: String) = s.trim().removePrefix("v").split(Regex("[.\\-+]")).map { it.toIntOrNull() ?: 0 }
-        val a = parts(tag); val b = parts(cur)
-        for (i in 0 until maxOf(a.size, b.size)) {
-            val x = a.getOrElse(i) { 0 }; val y = b.getOrElse(i) { 0 }
-            if (x != y) return x > y
-        }
-        return false
+    /**
+     * "v2.2.1" -> 20201: major*10000 + minor*100 + patch, the same formula build.gradle.kts uses for versionCode.
+     * Comparing these numbers (instead of the text) keeps "2.10" from looking newer than "2.2.1".
+     */
+    private fun codeOf(tag: String): Int? {
+        val m = Regex("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?").find(tag) ?: return null
+        val n = m.groupValues.drop(1).map { it.toIntOrNull() ?: 0 }
+        return n[0] * 10000 + n[1] * 100 + n[2]
     }
 }

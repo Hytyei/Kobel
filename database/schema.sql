@@ -81,3 +81,12 @@ CREATE TABLE notices (
 );
 CREATE INDEX idx_notices_created ON notices (created_at DESC);
 CREATE UNIQUE INDEX idx_users_name_nocase ON users (name COLLATE NOCASE);
+
+-- 0003: anonymous accounts (see database/migrations/0003_accounts.sql)
+ALTER TABLE users ADD COLUMN visible INTEGER NOT NULL DEFAULT 1 CHECK (visible IN (0, 1));
+CREATE TABLE signups (
+  bucket TEXT    NOT NULL,
+  day    TEXT    NOT NULL,
+  n      INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (bucket, day)
+);

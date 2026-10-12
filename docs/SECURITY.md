@@ -16,3 +16,20 @@
 
 **Known limits (reasonable for a 2–3 person project):** there is no rate limiting beyond Cloudflare's own; a lost phone with an unlocked app can sync as you
 (remove the user with `DELETE FROM users WHERE name='…'` and create a new one); the "newest edit wins" rule trusts each device's clock.
+
+## Anonymous sign-up (`POST /v1/register`)
+
+New users get an account without any form: the app calls this endpoint once, the Worker creates an empty account and a random
+Kobel ID (125 bits, shown once, only its hash is stored). Each account has its own `users.id` and every query on cards, rules and
+progress is filtered by it, so accounts cannot read each other's data.
+
+| Risk | Protection |
+|---|---|
+| Someone scripts thousands of sign-ups | Per caller per day limit (default 5) and an overall daily cap (default 200), both counted in D1 (`signups`). A third limit-free switch: `REGISTRATION_OPEN = "false"` in `wrangler.toml` |
+| Privacy of callers | The caller is stored only as a salted hash that changes every day; counters are deleted after 3 days |
+| Strangers reading other players | New accounts are hidden from the league table until the user opts in. Notices are public information |
+| Name squatting | Names are unique, a taken name just gets a generated alternative; the daily limits cap the damage |
+| Unrestricted database access | The app never talks to D1. Only the Worker does, through its `DB` binding. No Cloudflare token, account id or database credential is in the APK or the repo (the D1 database id in `wrangler.toml` is only an identifier) |
+| Lost ID | There is no recovery: the ID is the key. The app shows it once after sign-up and always under Profile |
+
+Optional later hardening if the app becomes public: a Cloudflare Turnstile check on `/v1/register`, and a script that removes accounts that never synced anything.

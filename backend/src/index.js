@@ -4,19 +4,15 @@ import { HttpError, json, errorResponse, corsHeaders } from './http.js';
 import { handleSync, exportAll, deleteAll } from './sync.js';
 import { leaderboard } from './leaderboard.js';
 import { listNotices, renameUser } from './profile.js';
+import { register, sha256Hex } from './register.js';
 
 const MAX_BODY_BYTES = 262144; // 256 KB is far more than a 40-item sync needs
-
-async function sha256Hex(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
 
 /** The access code is sent as "Authorization: Bearer <code>". Only its hash is stored in the database. */
 async function authenticate(request, env) {
   const m = (request.headers.get('Authorization') || '').match(/^Bearer\s+([A-Za-z0-9_-]{20,128})$/);
   if (!m) throw new HttpError(401, 'unauthorized', 'Missing or invalid access code.');
-  const user = await env.DB.prepare('SELECT id, name FROM users WHERE token_hash = ?').bind(await sha256Hex(m[1])).first();
+  const user = await env.DB.prepare('SELECT id, name, visible FROM users WHERE token_hash = ?').bind(await sha256Hex(m[1])).first();
   if (!user) throw new HttpError(401, 'unauthorized', 'Missing or invalid access code.');
   return user;
 }
@@ -33,7 +29,7 @@ async function readJson(request) {
   }
 }
 
-const PATHS = ['/v1/health', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard'];
+const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard'];
 
 async function route(request, env) {
   const url = new URL(request.url);
@@ -41,9 +37,19 @@ async function route(request, env) {
   const method = request.method;
 
   if (path === '/v1/health' && method === 'GET') return json({ ok: true, time: Date.now() });
+  if (path === '/v1/register' && method === 'POST') {
+    // Public, but limited per caller and per day (see register.js). The body is optional: {"name": "..."}.
+    const raw = await request.text();
+    if (raw.length > 1024) throw new HttpError(413, 'too_large', 'Request body is too large.');
+    let body = null;
+    if (raw.trim()) {
+      try { body = JSON.parse(raw); } catch { throw new HttpError(400, 'invalid_json', 'Request body must be valid JSON.'); }
+    }
+    return json(await register(env.DB, env, request, body), 201);
+  }
   if (path === '/v1/me' && method === 'GET') {
     const user = await authenticate(request, env);
-    return json({ user: { name: user.name } });
+    return json({ user: { name: user.name, visible: Boolean(user.visible) } });
   }
   if (path === '/v1/me' && method === 'PATCH') {
     const user = await authenticate(request, env);

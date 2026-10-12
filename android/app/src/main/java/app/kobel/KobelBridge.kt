@@ -2,6 +2,7 @@ package app.kobel
 
 import android.content.Intent
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.webkit.JavascriptInterface
 import org.json.JSONObject
 import java.util.Locale
@@ -24,6 +25,20 @@ class KobelBridge(private val activity: MainActivity) {
         tts = TextToSpeech(activity.applicationContext) { status ->
             if (status == TextToSpeech.SUCCESS) germanReady = checkGerman()
         }
+        // Tactics Room dialogues: tell the page when a spoken line has finished so it can play the next one.
+        tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(utteranceId: String?) {}
+            override fun onDone(utteranceId: String?) = lineDone(utteranceId)
+            @Deprecated("Deprecated in Java")
+            override fun onError(utteranceId: String?) = lineDone(utteranceId)
+            override fun onStop(utteranceId: String?, interrupted: Boolean) = lineDone(utteranceId)
+        })
+    }
+
+    private fun lineDone(utteranceId: String?) {
+        // Only ids we created ourselves (letters and digits) are ever passed on to the page.
+        if (utteranceId == null || !utteranceId.matches(Regex("t[0-9]{1,9}"))) return
+        activity.runJs("window.onKobelSpeakDone&&window.onKobelSpeakDone('$utteranceId')")
     }
 
     private fun checkGerman(): Boolean {
@@ -52,7 +67,19 @@ class KobelBridge(private val activity: MainActivity) {
         if (!germanReady) return
         engine.language = Locale.GERMANY
         engine.setSpeechRate(rate.toFloat().coerceIn(0.3f, 1.5f))
+        engine.setPitch(1.0f) // dialogue lines may have changed it
         engine.speak(text.take(500), TextToSpeech.QUEUE_FLUSH, null, "kobel")
+    }
+
+    /** Like speak(), but with a pitch and an id; the page is told when this line is finished (see lineDone). */
+    @JavascriptInterface
+    fun speakLine(text: String, rate: Double, pitch: Double, id: String) {
+        val engine = tts ?: return
+        if (!germanReady || !id.matches(Regex("t[0-9]{1,9}"))) return
+        engine.language = Locale.GERMANY
+        engine.setSpeechRate(rate.toFloat().coerceIn(0.3f, 1.5f))
+        engine.setPitch(pitch.toFloat().coerceIn(0.7f, 1.4f))
+        engine.speak(text.take(500), TextToSpeech.QUEUE_FLUSH, null, id)
     }
 
     @JavascriptInterface

@@ -6,6 +6,7 @@ Instead of generic word decks, you add what you learned in class and Kobel turns
 
 - Anki-style spaced repetition, about 80% vocabulary and 20% grammar
 - 7 minigames with statistics (xG, clean sheets and more)
+- Tactics Room: a manager explains every lesson on a whiteboard, with spoken dialogues
 - Practise by subject: family, numbers, jobs, furniture and so on
 - Works offline. Optional free cloud sync and a friends league table
 - Android app, installed directly from [GitHub releases](https://github.com/Hytyei/Kobel/releases) (no Google Play)

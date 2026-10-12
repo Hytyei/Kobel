@@ -213,3 +213,95 @@ test('GET /v1/notices needs a code and returns newest first', async () => {
   const r = await call('GET', '/v1/notices', { code: a });
   assert.deepEqual(r.json.notices.map((n) => n.title), ['Hello', 'Kobel 2.10']);
 });
+
+// ───────── anonymous accounts (POST /v1/register) ─────────
+const IDRE = /^KB-[A-HJ-NP-Z2-9]{5}(-[A-HJ-NP-Z2-9]{5}){4}$/;
+const regCall = (env, { ip = '1.1.1.1', body, headers } = {}) =>
+  worker.fetch(new Request('https://api.test/v1/register', { method: 'POST', headers: { 'CF-Connecting-IP': ip, 'Content-Type': 'application/json', ...headers }, body: body === undefined ? undefined : JSON.stringify(body) }), env);
+
+test('register creates a private account whose ID works, and only the hash is stored', async () => {
+  const { db, env, call } = setup();
+  const res = await regCall(env, { body: { name: 'Hadi' } });
+  assert.equal(res.status, 201);
+  const j = await res.json();
+  assert.match(j.id, IDRE);
+  assert.equal(j.user.name, 'Hadi');
+  assert.equal(j.user.visible, false);
+  const me = await call('GET', '/v1/me', { code: j.id });
+  assert.equal(me.status, 200);
+  assert.equal(me.json.user.name, 'Hadi');
+  const row = db.sqlite.prepare('SELECT token_hash, visible FROM users WHERE name = ?').get('Hadi');
+  assert.equal(row.token_hash, createHash('sha256').update(j.id).digest('hex'));
+  assert.equal(row.visible, 0);
+  assert.equal(JSON.stringify(db.sqlite.prepare('SELECT * FROM users').all()).includes(j.id), false);
+});
+
+test('accounts are isolated: one user never sees another user\'s cards, export or leaderboard row', async () => {
+  const { env, call } = setup();
+  const a = await (await regCall(env, { ip: '2.2.2.2', body: { name: 'Anna' } })).json();
+  const b = await (await regCall(env, { ip: '3.3.3.3', body: { name: 'Berk' } })).json();
+  assert.notEqual(a.id, b.id);
+  await call('POST', '/v1/sync', { code: a.id, body: { since: 0, cards: [card({ id: 'secret1', de: 'Geheimnis' })] } });
+  const pullB = await call('POST', '/v1/sync', { code: b.id, body: { since: 0 } });
+  assert.equal(pullB.json.cards.length, 0);
+  assert.equal((await call('GET', '/v1/export', { code: b.id })).json.cards.length, 0);
+  assert.equal((await call('GET', '/v1/export', { code: a.id })).json.cards.length, 1);
+  // both hidden by default: the league table only shows the caller
+  const lb = await call('GET', '/v1/leaderboard?range=all', { code: b.id });
+  assert.deepEqual(lb.json.rows.map((r) => r.name), ['Berk']);
+  // A opts in: B now sees A
+  assert.equal((await call('PATCH', '/v1/me', { code: a.id, body: { visible: true } })).json.user.visible, true);
+  assert.deepEqual((await call('GET', '/v1/leaderboard?range=all', { code: b.id })).json.rows.map((r) => r.name).sort(), ['Anna', 'Berk']);
+});
+
+test('register: missing, invalid or taken names never fail; a free name is generated', async () => {
+  const { env } = setup();
+  const none = await (await regCall(env, { ip: '4.4.4.1' })).json();
+  assert.match(none.user.name, /^Player-[A-Z2-9]{4}$/);
+  const bad = await (await regCall(env, { ip: '4.4.4.2', body: { name: '<script>' } })).json();
+  assert.match(bad.user.name, /^Player-/);
+  const one = await (await regCall(env, { ip: '4.4.4.3', body: { name: 'Sina' } })).json();
+  const two = await (await regCall(env, { ip: '4.4.4.4', body: { name: 'sina' } })).json();
+  assert.equal(one.user.name, 'Sina');
+  assert.notEqual(two.user.name.toLowerCase(), 'sina');
+  assert.match(two.user.name, /^sina-/);
+});
+
+test('register is rate limited per caller, per day overall, and can be switched off', async () => {
+  const { env } = setup();
+  env.REGISTER_PER_IP_DAILY = '2';
+  assert.equal((await regCall(env, { ip: '9.9.9.9' })).status, 201);
+  assert.equal((await regCall(env, { ip: '9.9.9.9' })).status, 201);
+  const third = await regCall(env, { ip: '9.9.9.9' });
+  assert.equal(third.status, 429);
+  assert.equal((await third.json()).error.code, 'rate_limited');
+  assert.equal((await regCall(env, { ip: '8.8.8.8' })).status, 201); // another caller is unaffected
+  env.REGISTER_GLOBAL_DAILY = '3';
+  assert.equal((await regCall(env, { ip: '7.7.7.7' })).status, 429); // 3 accounts exist already today
+  env.REGISTRATION_OPEN = 'false';
+  assert.equal((await regCall(env, { ip: '6.6.6.6' })).status, 403);
+});
+
+test('register rejects bad bodies and does not weaken the other endpoints', async () => {
+  const { env, call } = setup();
+  assert.equal((await regCall(env, { ip: '5.5.5.1', body: [1] })).status, 400);
+  const res = await worker.fetch(new Request('https://api.test/v1/register', { method: 'POST', headers: { 'CF-Connecting-IP': '5.5.5.2' }, body: '{nope' }), env);
+  assert.equal(res.status, 400);
+  const big = await worker.fetch(new Request('https://api.test/v1/register', { method: 'POST', headers: { 'CF-Connecting-IP': '5.5.5.3' }, body: JSON.stringify({ name: 'x'.repeat(2000) }) }), env);
+  assert.equal(big.status, 413);
+  assert.equal((await call('GET', '/v1/register')).status, 405);
+  for (const p of ['/v1/sync', '/v1/export', '/v1/leaderboard', '/v1/notices']) assert.equal((await call(p === '/v1/sync' ? 'POST' : 'GET', p, { body: p === '/v1/sync' ? {} : undefined })).status, 401);
+  assert.equal((await call('DELETE', '/v1/data')).status, 401);
+});
+
+test('register allows the app origin (CORS) and existing users keep working and stay visible', async () => {
+  const { env, call, addUser } = setup();
+  const pre = await worker.fetch(new Request('https://api.test/v1/register', { method: 'OPTIONS', headers: { Origin: ORIGIN } }), env);
+  assert.equal(pre.status, 204);
+  assert.equal(pre.headers.get('Access-Control-Allow-Origin'), ORIGIN);
+  const old = addUser('Veteran');
+  assert.equal((await call('GET', '/v1/me', { code: old })).json.user.visible, true);
+  await regCall(env, { ip: '1.2.3.4', body: { name: 'Neu' } });
+  const lb = await call('GET', '/v1/leaderboard?range=all', { code: old });
+  assert.deepEqual(lb.json.rows.map((r) => r.name), ['Veteran']);
+});

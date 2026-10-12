@@ -9,7 +9,7 @@ Protected endpoints need the header `Authorization: Bearer <Kobel ID>`.
 { "error": { "code": "invalid_request", "message": "cards[0].de: is required", "field": "cards[0].de" } }
 ```
 
-Common errors: `401 unauthorized`, `404 not_found`, `405 method_not_allowed`, `500 internal`,
+Common errors: `401 unauthorized`, `429 rate_limited`, `404 not_found`, `405 method_not_allowed`, `500 internal`,
 `503 free_tier_limit` (today's free D1 quota is used up; try again after midnight UTC).
 
 ---
@@ -18,9 +18,19 @@ Common errors: `401 unauthorized`, `404 not_found`, `405 method_not_allowed`, `5
 * **Auth:** none
 * **Response 200:** `{ "ok": true, "time": 1790907743462 }`
 
+## POST /v1/register
+Creates a new, empty, private account and returns its Kobel ID. This is how the app signs people up automatically.
+It is the only endpoint that needs no ID, so it is limited (see SECURITY.md).
+
+* **Auth:** none
+* **Body (optional):** `{ "name": "Hytyei" }`. If the name is missing, invalid or already taken, a free one such as `Player-K3M9` is generated.
+* **Response 201:** `{ "id": "KB-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX", "user": { "name": "Player-K3M9", "visible": false } }`
+  The ID is shown **only in this response**; the database keeps just its SHA-256 hash. New accounts are hidden from the league table until the owner of the account opts in (`PATCH /v1/me`).
+* **Errors:** `400 invalid_request` / `invalid_json`, `403 registration_closed`, `413 too_large`, `429 rate_limited` (per caller and per day, and an overall daily cap), `503 try_again`
+
 ## GET /v1/me
 * **Auth:** required
-* **Response 200:** `{ "user": { "name": "Hadi" } }`
+* **Response 200:** `{ "user": { "name": "Hadi", "visible": true } }` (`visible`: shown on other players' league tables)
 * **Errors:** `401 unauthorized`
 
 ## GET /v1/leaderboard?range=week|month|all
@@ -28,15 +38,15 @@ League table for the "Table" screen.
 
 * **Auth:** required
 * **Response 200:** `{ "range": "week", "rows": [ { "name": "Sara", "points": 120, "streak": 3, "avatar": "owl", "isMe": false } ] }` (sorted, best first)
-* **Notes:** `range` defaults to `week`; any other value is treated as `week`. Only name, points and streak are returned.
+* **Notes:** `range` defaults to `week`; any other value is treated as `week`. Only name, avatar, points and streak are returned, and only for players who chose to be visible (plus you).
 * **Errors:** `401 unauthorized`
 
 ## PATCH /v1/me
-Changes the display name. Progress is not affected (data is linked by user id, not by name).
+Changes the display name and/or the league-table visibility. Progress is not affected (data is linked by user id, not by name).
 
 * **Auth:** required
-* **Body:** `{ "name": "Hytyei" }`: 2 to 24 characters, letters, numbers, space, `.` `-` `_`; unique ignoring upper/lower case
-* **Response 200:** `{ "user": { "name": "Hytyei" } }`
+* **Body:** `{ "name": "Hytyei", "visible": true }`: both optional, at least one required. Name: 2 to 24 characters, letters, numbers, space, `.` `-` `_`; unique ignoring upper/lower case
+* **Response 200:** `{ "user": { "name": "Hytyei", "visible": true } }`
 * **Errors:** `400 invalid_request`, `401 unauthorized`, `409 name_taken`
 
 ## GET /v1/notices

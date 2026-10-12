@@ -7,9 +7,13 @@ workers_dev = true          # gives you https://kobel-api.<your-subdomain>.worke
 [vars]
 # Origins allowed to call the API from a browser/WebView. The Android app serves its UI from this origin:
 ALLOWED_ORIGINS = "https://appassets.androidplatform.net"
+# Anonymous sign-up limits (POST /v1/register). Set REGISTRATION_OPEN to "false" to stop new accounts.
+REGISTRATION_OPEN = "true"
+REGISTER_PER_IP_DAILY = "5"
+REGISTER_GLOBAL_DAILY = "200"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "kobel-db"
-database_id = "ba9f3cf3-4b8d-415b-9a01-021086689fd4"   # printed by: npx wrangler d1 create kobel-db
+database_id = "ba9f3cf3-4b8d-415b-9a01-021086689fd4"   # your production D1 database (an identifier, not a credential)
 migrations_dir = "../database/migrations"

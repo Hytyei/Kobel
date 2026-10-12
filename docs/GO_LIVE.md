@@ -154,3 +154,26 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * The same exercise type does not appear three times in a row.
 * Timed games draw from a shuffled deck: a card only returns after the other cards were shown.
 * Wrong options in multiple choice and gap exercises look like the right one: same word type and subject, similar spelling, other forms of the same word (komme / kommst / kommt / kommen, der / die / das / dem).
+
+
+## Version 2.2.1: update checklist (nothing here has been done for you)
+
+1. **Backend (needs your approval, adds a column and a table, deletes nothing):**
+   ```
+   cd backend
+   npx wrangler d1 migrations apply kobel-db --remote   # applies 0003_accounts.sql
+   npx wrangler deploy
+   ```
+   Existing users keep working and stay visible on the league table. `wrangler.toml` already contains your production database id.
+2. **Release:** the tag must look like `v2.2.1` (`v<major>.<minor>.<patch>`). Build with `./gradlew assembleRelease` (version 2.2.1 is the default; the
+   version code is derived from it automatically) and upload the file as `kobelapp.apk`.
+3. **First install of 2.2.1:** if your phone still has a build named `2.10`, install 2.2.1 by hand once (open the APK). Those old builds compare versions as text
+   and think 2.10 is newer than 2.2.x, so their built-in updater can not see it. From 2.2.1 on the updater compares numbers (tag `v2.2.1` = 20201).
+4. **Where the server address comes from:** `android/gradle.properties` (`kobelApi=https://kobel-api.thehdv7.workers.dev`). Users never type it.
+
+
+## Version 2.3.0 (Tactics Room): release checklist (nothing here has been done for you)
+
+* No backend or database change: you do **not** need to deploy the Worker or run a migration for this version.
+* Release: tag `v2.3.0` (version code 20300), build with `./gradlew assembleRelease` using your **existing** release keystore (never create a new one, or users cannot update), upload the APK as before.
+* Details of the feature: `docs/TACTICS_ROOM.md`.

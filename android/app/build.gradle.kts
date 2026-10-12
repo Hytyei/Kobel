@@ -20,11 +20,21 @@ android {
         applicationId = "app.kobel.german"
         minSdk = 26            // Android 8.0 and newer
         targetSdk = 35
-        // CI (and you) can override these:  ./gradlew assembleRelease -PversionCode=5 -PversionName=1.2.0
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 220
-        versionName = (project.findProperty("versionName") as String?) ?: "2.2.0"
+        // CI (and you) can override these:  ./gradlew assembleRelease -PversionName=2.3.0
+        // versionName is what people see ("2.3.0"). versionCode is derived from it (major*10000 + minor*100 + patch,
+        // so 2.3.0 -> 20300). Android needs the code to rise with every release, and the in-app updater compares it
+        // with the same number computed from the GitHub tag, so name your tags v<major>.<minor>.<patch>.
+        val vName = (project.findProperty("versionName") as String?) ?: "2.3.0"
+        val vParts = vName.removePrefix("v").split(".").map { it.toIntOrNull() ?: 0 }
+        val vCode = (project.findProperty("versionCode") as String?)?.toInt()
+            ?: (vParts.getOrElse(0) { 0 } * 10000 + vParts.getOrElse(1) { 0 } * 100 + vParts.getOrElse(2) { 0 })
+        versionCode = vCode
+        versionName = vName
+        // Default server for new users: your production Worker (an address, not a secret). HTTPS only.
+        val api = (project.findProperty("kobelApi") as String?) ?: "https://kobel-api.thehdv7.workers.dev"
+        require(api.isEmpty() || api.startsWith("https://")) { "kobelApi must start with https://" }
+        buildConfigField("String", "API_URL", "\"$api\"")
         // The GitHub repo that hosts your releases, e.g. "hadi/kobel". Set it in android/gradle.properties.
-        buildConfigField("String", "API_URL", "\"${project.findProperty("kobelApi") ?: ""}\"")
         buildConfigField("String", "GITHUB_REPO", "\"${project.findProperty("kobelRepo") ?: "YOUR_GITHUB_USER/kobel"}\"")
     }
 

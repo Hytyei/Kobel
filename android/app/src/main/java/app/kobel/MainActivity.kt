@@ -143,6 +143,9 @@ class MainActivity : ComponentActivity() {
         runOnUiThread { webView?.evaluateJavascript(code, null) }
     }
 
+    /** Lets the JS bridge send a fixed callback to the page (used for spoken-line completion). */
+    fun runJs(code: String) = js(code)
+
     private fun readLimited(input: InputStream, max: Int): String? {
         val out = java.io.ByteArrayOutputStream()
         val buf = ByteArray(8192)
