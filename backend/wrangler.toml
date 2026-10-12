@@ -11,5 +11,5 @@ ALLOWED_ORIGINS = "https://appassets.androidplatform.net"
 [[d1_databases]]
 binding = "DB"
 database_name = "kobel-db"
-database_id = "REPLACE_WITH_YOUR_DATABASE_ID"   # printed by: npx wrangler d1 create kobel-db
+database_id = "ba9f3cf3-4b8d-415b-9a01-021086689fd4"   # printed by: npx wrangler d1 create kobel-db
 migrations_dir = "../database/migrations"
