@@ -52,12 +52,14 @@ export const ruleToWire = (r) => ({ id: r.id, topic: r.topic, lesson: r.lesson, 
 export async function handleSync(db, user, rawBody, now = Date.now()) {
   const body = validateSyncBody(rawBody);
   const uid = user.id;
-  const since = body.since;
+  // Normalize the client's cursor: a cursor from the future (bad clock, bad client) is treated as "just before now", so it can
+  // never hide changes or push the server's timestamps into the future.
+  const since = Math.min(body.since, now - 1);
   const hasWrites = body.cards.length > 0 || body.rules.length > 0 || body.deleted.length > 0 || Boolean(body.profile);
-  // One timestamp for every write in this request. Reads use `synced_at > since`, so a write must be stamped strictly
-  // after the client's cursor (since + 1), otherwise a write in the same millisecond as the last serverTime is never pulled.
-  // A pull without writes hands out a cursor too, and a later write (maybe from another device that sends no `since`) can land in
-  // the same millisecond, so that cursor stays one millisecond behind `now` (and never behind `since`).
+  // One timestamp for every write in this request, strictly after the cursor. Reads use `synced_at > since`, so a write stamped
+  // equal to a cursor the client already holds would be missed. Because since <= now - 1, this is simply `now` and never in the future.
+  // A pull without writes also hands out a cursor; keep it one millisecond behind `now` (never behind `since`) so a later write
+  // in the same millisecond, perhaps from another device that sends no `since`, is still newer than it.
   const syncAt = hasWrites ? Math.max(now, since + 1) : Math.max(now - 1, since);
 
   // 1) write what the client sent
