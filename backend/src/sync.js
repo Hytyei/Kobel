@@ -52,19 +52,25 @@ export const ruleToWire = (r) => ({ id: r.id, topic: r.topic, lesson: r.lesson, 
 export async function handleSync(db, user, rawBody, now = Date.now()) {
   const body = validateSyncBody(rawBody);
   const uid = user.id;
+  const since = body.since;
+  const hasWrites = body.cards.length > 0 || body.rules.length > 0 || body.deleted.length > 0 || Boolean(body.profile);
+  // One timestamp for every write in this request. Reads use `synced_at > since`, so a write must be stamped strictly
+  // after the client's cursor (since + 1), otherwise a write in the same millisecond as the last serverTime is never pulled.
+  // A pull without writes hands out a cursor too, and a later write (maybe from another device that sends no `since`) can land in
+  // the same millisecond, so that cursor stays one millisecond behind `now` (and never behind `since`).
+  const syncAt = hasWrites ? Math.max(now, since + 1) : Math.max(now - 1, since);
 
   // 1) write what the client sent
   const writes = [];
-  for (const c of body.cards) writes.push(db.prepare(UPSERT_CARD).bind(uid, c.id, ...CARD_COLS.map((k) => c[k]), now));
-  for (const r of body.rules) writes.push(db.prepare(UPSERT_RULE).bind(uid, r.id, r.topic, r.lesson, r.text, r.updated_at, now));
+  for (const c of body.cards) writes.push(db.prepare(UPSERT_CARD).bind(uid, c.id, ...CARD_COLS.map((k) => c[k]), syncAt));
+  for (const r of body.rules) writes.push(db.prepare(UPSERT_RULE).bind(uid, r.id, r.topic, r.lesson, r.text, r.updated_at, syncAt));
   for (const d of body.deleted) {
-    writes.push((d.k === 'c' ? db.prepare(DELETE_CARD) : db.prepare(DELETE_RULE)).bind(uid, d.id, d.updated_at, now));
+    writes.push((d.k === 'c' ? db.prepare(DELETE_CARD) : db.prepare(DELETE_RULE)).bind(uid, d.id, d.updated_at, syncAt));
   }
-  if (body.profile) writes.push(db.prepare(UPSERT_PROFILE).bind(uid, body.profile.data, body.profile.updated_at, now));
+  if (body.profile) writes.push(db.prepare(UPSERT_PROFILE).bind(uid, body.profile.data, body.profile.updated_at, syncAt));
   if (writes.length) await db.batch(writes);
 
   // 2) read what changed on the server since the client's cursor (uses the (user_id, synced_at) indexes)
-  const since = body.since;
   const [cards, delCards, rules, delRules, profile] = await db.batch([
     db.prepare('SELECT * FROM cards WHERE user_id = ? AND synced_at > ? AND deleted = 0 ORDER BY synced_at LIMIT ?').bind(uid, since, PULL_LIMIT),
     db.prepare('SELECT id FROM cards WHERE user_id = ? AND synced_at > ? AND deleted = 1 LIMIT ?').bind(uid, since, PULL_LIMIT),
@@ -75,7 +81,7 @@ export async function handleSync(db, user, rawBody, now = Date.now()) {
 
   const p = profile.results[0];
   return {
-    serverTime: now,
+    serverTime: syncAt,
     cards: cards.results.map(cardToWire),
     rules: rules.results.map(ruleToWire),
     deleted: [
