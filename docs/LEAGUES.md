@@ -15,3 +15,13 @@
 **Football statistics:** shots = answers, goals = right first time, on target = goals + near misses, xG = sum of (right+1)/(right+wrong+2) per card before the answer, clean sheets = error-free sessions, minutes = time spent.
 
 **Language:** Settings → Sprache / Language (English or Deutsch). Card data (your words) is never translated.
+
+## Career path and goals (version 2.4.0)
+
+The league ladder is long, so there is now a **career path** inside it: 41 small stages that follow your LP from the street up to the top.
+Examples: Bolzplatz (street football) → Hinterhof-Turnier → Sonntagsliga → Kreisliga → Amateurliga → … → Mittelklasse-Team → Meisterschaftself → Champions-League-Anwärter.
+Each stage shows up on **Table → League** with a progress bar and a toast when you reach it.
+
+**Goals** (31 small objectives such as "first practice session", "3 day streak", "100 answers", "combo of 10") pay a few extra LP once each (4 to 25 LP). They sit in the bonus part of LP, so they never replace learning words. Each goal can only be paid once.
+
+**Records** (Table → Statistics): longest and current streak, best day, best week, best combo, clean sessions, answers, words met and mastered, stars, Tactics Room talks, badges, duel record and best duel win streak.

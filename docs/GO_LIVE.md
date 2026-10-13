@@ -177,3 +177,13 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * No backend or database change: you do **not** need to deploy the Worker or run a migration for this version.
 * Release: tag `v2.3.0` (version code 20300), build with `./gradlew assembleRelease` using your **existing** release keystore (never create a new one, or users cannot update), upload the APK as before.
 * Details of the feature: `docs/TACTICS_ROOM.md`.
+
+
+## Version 2.4.0 (friends, duels, records, career, auto-save): release checklist (nothing here has been done for you)
+
+* **Database:** two migrations are waiting (`0003` from 2.2.1 if not applied yet, and the new `0004_friends_duels.sql`). Both only add tables. Run `cd backend && npx wrangler d1 migrations apply kobel-db --remote`.
+* **Backend:** deploy the Worker (`npx wrangler deploy`). Old app versions keep working; the new endpoints are only used by 2.4.0.
+* **Release:** tag `v2.4.0` (version code 20400), build with your **existing** release keystore (never make a new one), upload `kobelapp.apk`.
+* **Order:** migrate, deploy the Worker, then publish the APK, so friends and duels work on the first day.
+* Auto-save: Settings → Cloud sync → Auto-save (Smart by default). It uses the same sync as before, nothing to configure.
+* Details: `docs/FRIENDS_AND_DUELS.md`, `docs/LEAGUES.md`, `docs/API.md`.

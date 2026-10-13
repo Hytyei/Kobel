@@ -512,8 +512,8 @@ html[data-skin="clean"] .nt-card.fresh{box-shadow:inset 3px 0 0 var(--red)}
 .tl b{display:block;font:700 16px/1.3 var(--fb)}.tl i{display:block;font-style:normal;font-size:12.5px;color:#5b6577}
 .tl.on{border-color:#1F9D55;background:#e8f6ed}
 .tq{font:700 17px/1.35 var(--fb);margin-bottom:10px}.tops{display:flex;flex-direction:column;gap:7px}.tops.row{flex-direction:row;flex-wrap:wrap}
-.top{border:2px solid #14213D;background:#fff;color:#14213D;font:700 15.5px var(--fb);padding:10px 12px;text-align:left;cursor:pointer;border-radius:6px}
-.top.ok{background:#1F9D55;border-color:#1F9D55;color:#fff}.top.no{background:#E10600;border-color:#E10600;color:#fff}.top:disabled{opacity:.55;cursor:default}.top.ok:disabled{opacity:1}
+.tpo{border:2px solid #14213D;background:#fff;color:#14213D;font:700 15.5px var(--fb);padding:10px 12px;text-align:left;cursor:pointer;border-radius:6px}
+.tpo.ok{background:#1F9D55;border-color:#1F9D55;color:#fff}.tpo.no{background:#E10600;border-color:#E10600;color:#fff}.tpo:disabled{opacity:.55;cursor:default}.tpo.ok:disabled{opacity:1}
 .twhy{margin-top:12px;padding:10px 12px;border-left:5px solid;font-size:14.5px;line-height:1.4;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.twhy.ok{border-color:#1F9D55;background:#e8f6ed}.twhy.no{border-color:#E10600;background:#fff1f0}
 .tbuild{min-height:48px;border:2px dashed #14213D;border-radius:6px;padding:8px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.tbuild span{background:#14213D;color:#fff;padding:5px 10px;border-radius:5px;font-weight:700}.tbuild em{color:#8a93a3;font-size:14px}.tbuild.ok{border-color:#1F9D55;border-style:solid}
 .tlink{border:0;background:none;color:#0B5CAD;font:700 14px var(--fb);text-decoration:underline;margin-top:10px;cursor:pointer;padding:6px 0}
@@ -522,6 +522,32 @@ html[data-skin="clean"] .nt-card.fresh{box-shadow:inset 3px 0 0 var(--red)}
 .tfb{border:0;background:rgba(255,255,255,.14);color:#fff;font:800 14px var(--fd);letter-spacing:1px;text-transform:uppercase;padding:12px 18px;cursor:pointer}.tfb.go{background:var(--red)}.tfb:disabled{opacity:.35}
 html[data-skin="clean"] .tbtn,html[data-skin="clean"] .tfb,html[data-skin="clean"] .tu-n{clip-path:none;border-radius:10px}
 html[data-skin="clean"] .tu,html[data-skin="clean"] .th-card{border-radius:14px}
+
+/* ───────── 2.4.0: records, career, friends, duels ───────── */
+.rec-list{padding:6px 14px}.rec-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px}.rec-row:last-child{border-bottom:0}.rec-row span{color:var(--mute)}.rec-row b{text-align:right;font-weight:800}
+.stgs{padding:6px 14px}.stg{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);opacity:.55}.stg:last-child{border-bottom:0}
+.stg i{flex:none;width:22px;height:22px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px;background:var(--surf2);color:var(--ink)}
+.stg div{flex:1;min-width:0}.stg b{display:block;font:800 16px var(--fd);text-transform:uppercase}.stg span{font-size:12.5px;color:var(--mute)}.stg em{flex:none;font:700 12px var(--fb);color:var(--mute);font-style:normal}
+.stg.done{opacity:.8}.stg.done i{background:#1F9D55;color:#fff}.stg.cur{opacity:1}.stg.cur i{background:var(--red);color:#fff}
+.objs{padding:6px 14px}.obj{padding:10px 0;border-bottom:1px solid var(--line)}.obj:last-child{border-bottom:0}.obj .oh{display:flex;justify-content:space-between;gap:8px}.obj .oh b{font:800 16px var(--fd);text-transform:uppercase}.obj .oh em{font-style:normal;font:800 13px var(--fb);color:var(--red)}.obj span{display:block;font-size:13px;color:var(--mute);margin:2px 0 6px}.obj small{font-size:12px;color:var(--mute)}
+.dl-list{padding:4px 12px}.drow{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.drow:last-child{border-bottom:0}
+.drow .fav{flex:none;border:0;background:none;padding:0;cursor:pointer}.drow .dm{flex:1;min-width:0;display:flex;flex-direction:column;text-align:left;border:0;background:none;color:var(--ink);padding:0;font:inherit}.drow .dm b{font:800 17px var(--fd);text-transform:uppercase}.drow .dm span{font-size:12.5px;color:var(--mute)}
+.drow .da{flex:none;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:46%}.drow .lnk{cursor:pointer}
+.dtag{display:inline-block;background:var(--surf2);padding:0 6px;font:800 10px/16px var(--fd);letter-spacing:1px;color:var(--ink)}.dtag.live{background:var(--red);color:#fff}
+.fcode{font:800 38px/1 var(--fd);letter-spacing:4px;margin:6px 0 8px;color:var(--ink);user-select:all}
+.pf-head{display:flex;gap:14px;align-items:center}.fc-mini{display:flex;gap:6px;align-items:flex-end;justify-content:space-between;margin:12px 0}.fc-mini div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute)}.fc-mini b{width:100%;background:var(--red);display:block;min-height:2px}
+.gpicks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.gpick{border:2px solid var(--line);background:var(--surf);color:var(--ink);text-align:left;padding:10px;cursor:pointer;display:flex;flex-direction:column;gap:2px;font:inherit}
+.gpick .gi{width:24px;height:24px;display:block;color:var(--red)}.gpick .gi svg{width:24px;height:24px}.gpick b{font:800 16px var(--fd);text-transform:uppercase}.gpick i{font-style:normal;font-size:11.5px;color:var(--mute)}.gpick.on{border-color:var(--red)}.gpick:disabled{opacity:.4;cursor:default}
+.dl{position:fixed;inset:0;z-index:66;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);animation:sesin .35s cubic-bezier(.2,.9,.3,1)}
+.dl-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0B0B0B;color:#fff;border-bottom:3px solid var(--red)}.dl-t{display:flex;flex-direction:column}.dl-t span{font:800 11px var(--fd);letter-spacing:1.4px;text-transform:uppercase;color:#ffb3ae}.dl-t b{font:800 18px var(--fd);text-transform:uppercase}
+.dl-score{display:flex;gap:14px;padding:10px 14px;background:var(--surf)}.dl-score>div{flex:1}.dl-score span{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:1px}.dl-score b{display:block;font:800 30px/1 var(--fd)}
+.dl-body{flex:1;overflow:auto;padding:18px 16px 24px;width:100%;max-width:540px;margin:0 auto}.dl-body.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.dl-q{text-align:center;font:800 13px var(--fd);letter-spacing:1.4px;color:var(--mute)}.dl-tb{height:6px;background:var(--surf2);margin:6px 0 10px}.dl-tb i{display:block;height:100%;width:100%;background:var(--red)}
+.dl-build{min-height:54px;border:2px dashed var(--line);padding:10px;font:800 26px var(--fd);text-align:center;letter-spacing:3px;margin:10px 0;text-transform:none;word-break:break-all}.dl-build em{font:500 14px var(--fb);letter-spacing:0;color:var(--mute)}
+.dl-chars{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.dl-chars .ch{width:46px;height:46px;border:0;background:var(--surf);color:var(--ink);font:800 22px var(--fd);cursor:pointer}.dl-chars .ch:disabled{opacity:.25}
+.bigcount{font:800 140px/1 var(--fd);color:var(--red)}.spin{width:42px;height:42px;border:5px solid var(--surf2);border-top-color:var(--red);border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.dl-final{display:flex;gap:30px;margin:10px 0}.dl-final span{display:block;font-size:13px;color:var(--mute)}.dl-final b{font:800 44px/1 var(--fd)}
+.seg.segx{overflow-x:auto;scrollbar-width:none;margin-left:-2px}.seg.segx::-webkit-scrollbar{display:none}.seg.segx button{flex:none;white-space:nowrap;padding:7px 11px;font-size:14px}
 .intro .mk{display:flex;justify-content:center;color:var(--lantern-d)}.sec{text-transform:uppercase}
 </style>
 </head>
@@ -1182,7 +1208,7 @@ function load(){
   if(S.batch<BATCHES.length){let a=0,ga=0;for(let i=S.batch;i<BATCHES.length;i++){const x=addParsed(parseNotes(BATCHES[i]));a+=x.a;ga+=x.ga}S.batch=BATCHES.length;save();bootMsg=`New class notes added: ${a} words, ${ga} grammar items`}
 }
 let syncT=null;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}pushWidgets();if(S&&S.sync&&S.sync.url&&S.sync.code){clearTimeout(syncT);syncT=setTimeout(()=>syncNow(false),8000)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}pushWidgets();if(S&&S.sync&&S.sync.url&&S.sync.code){autoSaveKick()}}
 const byId=id=>S.cards.find(c=>c.id===id);
 const isG=c=>c.type==='g';
 const WA=()=>S.cards.filter(c=>!isG(c));
@@ -1704,7 +1730,7 @@ function cabinetHtml(){
   <div class="cabinet">${tr.map(slot).join('')}${ghost}</div>`;
 }
 /* ───────── v2.10: version, skins, welcome, about ───────── */
-const APP_VER='2.3.0';
+const APP_VER='2.4.0';
 const isDe=()=>LANG==='de';
 const tx=(en,de)=>isDe()?de:en;
 function applySkin(){document.documentElement.dataset.skin=S.settings.skin==='clean'?'clean':'bl'}
@@ -1792,9 +1818,9 @@ function addNotice(n){
   ib.push({id:n.id,kind:n.kind||'news',title:String(n.title||'').slice(0,80),body:String(n.body||'').slice(0,1000),t:n.t||Date.now(),read:false});
   ib.sort((a,b)=>b.t-a.t);S.inbox=ib.slice(0,40);return true;
 }
-const CHANGELOG={v:'2.3.0',title:{en:'Kobel 2.3.0: the Tactics Room',de:'Kobel 2.3.0: der Taktikraum'},body:{
-  en:'New tab "Taktik": your manager explains every lesson from your class notes on a whiteboard, in the best order for a beginner, with words, grammar, examples and spoken dialogues. Start at Matchday 1.',
-  de:'Neuer Tab "Taktik": Dein Trainer erklärt jede Lektion aus deinem Unterricht an der Taktiktafel, in der besten Reihenfolge für Anfänger, mit Wörtern, Grammatik, Beispielen und Hörgesprächen. Starte am Spieltag 1.'}};
+const CHANGELOG={v:'2.4.0',title:{en:'Kobel 2.4.0: friends, duels and a career path',de:'Kobel 2.4.0: Freunde, Duelle und ein Karriereweg'},body:{
+  en:'New: add friends with an invite code and open their profiles, play live or turn-based duels, a records section in Statistik, a career path with small milestones (Bolzplatz to Champions League) plus goals, and auto-save with a timer you can choose.',
+  de:'Neu: Freunde per Einladungscode hinzufügen und ihre Profile öffnen, Live- oder rundenbasierte Duelle spielen, Rekorde in der Statistik, ein Karriereweg mit kleinen Etappen (Bolzplatz bis Champions League) plus Ziele und automatisches Speichern mit einstellbarem Takt.'}};
 function seedNotices(){
   addNotice({id:'ver:'+CHANGELOG.v,kind:'update',title:CHANGELOG.title.en,body:CHANGELOG.body.en,t:Date.now()});
 }
@@ -1918,7 +1944,7 @@ function syncCard(){
   else if(def&&a.auto&&!a.noAuto)body=`<p class="sub" style="margin-bottom:10px">${tx('Your private account is created automatically as soon as you are online. Until then Kobel works fully offline and keeps everything on this phone.','Dein privates Konto wird automatisch erstellt, sobald du online bist. Bis dahin funktioniert Kobel komplett offline und speichert alles auf diesem Handy.')}${a.err?`<br><span style="color:var(--mute)">${esc(a.err)}</span>`:''}</p><div class="row2"><button class="btn c-fern" data-a="acctnow">${tx('Try now','Jetzt versuchen')}</button><button class="btn ghost" data-a="restore">${tx('Enter my ID','ID eingeben')}</button></div>`;
   else if(def)body=`<p class="sub" style="margin-bottom:10px">${tx('Not backed up online. Create a private account to save your words and progress online and to load them on a new phone. No email or password needed.','Nicht online gesichert. Erstelle ein privates Konto, um Wörter und Fortschritt online zu sichern und auf einem neuen Handy zu laden. Keine E-Mail, kein Passwort.')}</p><div class="row2"><button class="btn c-fern" data-a="acctnow">${tx('Create my account','Konto erstellen')}</button><button class="btn ghost" data-a="restore">${tx('Enter my ID','ID eingeben')}</button></div>`;
   else body=`<p class="sub" style="margin-bottom:10px">${tx('Optional. Keeps your words and progress under your Kobel ID on your own free Cloudflare database, so you can load them on any phone.','Optional. Speichert deine Wörter und deinen Fortschritt unter deiner Kobel-ID in deiner eigenen kostenlosen Cloudflare-Datenbank, damit du sie auf jedem Handy laden kannst.')}</p><button class="btn c-fern" data-a="restore">${tx('Enter my ID','ID eingeben')}</button>`;
-  return `<h2 class="sec">${tx('Cloud sync','Cloud-Sync')}</h2><div class="card patch">${body}</div>`;
+  return `<h2 class="sec">${tx('Cloud sync','Cloud-Sync')}</h2><div class="card patch">${body}</div>`+autoSaveCard();
 }
 /* ───────── automatic private account (works offline first) ─────────
    New installs never type a server address or code: the app creates an anonymous account on the default server
@@ -2206,12 +2232,12 @@ function trBoard(b,u,bi){
   if(k==='dlg')return h+`<div class="tctl"><button class="tplay" data-a="tchplay"><span class="p">▶ ${tx('Play','Abspielen')}</span><span class="s">■ ${tx('Stop','Stopp')}</span></button><button class="tslow ${TR.slow?'on':''}" data-a="tchslow">½× ${tx('Slow','Langsam')}</button></div>`+b.lines.map((l,i)=>`<div class="tl ${l[0]==='A'?'a':'b'}" data-i="${i}" data-a="tchline"><span class="tav">${l[0]}</span><div><b>${esc(l[1])}</b><i>${esc(l[2])}</i></div></div>`).join('');
   if(k==='drill'){
     const a=TR.ans[u.id+':'+bi];
-    return h+`<div class="tq">${esc(b.q)}${b.de?'':''}</div><div class="tops">${b.opts.map((o,i)=>`<button class="top ${a===undefined?'':(i===b.a?'ok':(a===i?'no':''))}" data-a="tchdr" data-i="${i}" ${a===b.a?'disabled':''}>${esc(o)}</button>`).join('')}</div>`+(a===undefined?'':`<div class="twhy ${a===b.a?'ok':'no'}">${a===b.a?tx('Goal! ','Tor! '):tx('Not this time. ','Knapp daneben. ')}${esc(b.why)}${b.de&&a===b.a?trSpk(b.de):''}</div>`);
+    return h+`<div class="tq">${esc(b.q)}${b.de?'':''}</div><div class="tops">${b.opts.map((o,i)=>`<button class="tpo ${a===undefined?'':(i===b.a?'ok':(a===i?'no':''))}" data-a="tchdr" data-i="${i}" ${a===b.a?'disabled':''}>${esc(o)}</button>`).join('')}</div>`+(a===undefined?'':`<div class="twhy ${a===b.a?'ok':'no'}">${a===b.a?tx('Goal! ','Tor! '):tx('Not this time. ','Knapp daneben. ')}${esc(b.why)}${b.de&&a===b.a?trSpk(b.de):''}</div>`);
   }
   if(k==='order'){
     const st=TR.ord[u.id+':'+bi]||(TR.ord[u.id+':'+bi]={pick:[],ok:false});
     const pool=trShuffle(b.words.map((w,i)=>i),bi+u.md);
-    return h+`<div class="tq">${esc(b.q)}</div><div class="tbuild ${st.ok?'ok':''}">${st.pick.length?st.pick.map(i=>`<span>${esc(b.words[i])}</span>`).join(''):'<em>'+tx('Tap the words in order','Tippe die Wörter der Reihe nach')+'</em>'}</div><div class="tops row">${pool.map(i=>`<button class="top" data-a="tchord" data-i="${i}" ${st.pick.includes(i)?'disabled':''}>${esc(b.words[i])}</button>`).join('')}</div><button class="tlink" data-a="tchordreset">${tx('Reset','Zurücksetzen')}</button>`+(st.ok?`<div class="twhy ok">${tx('Goal! ','Tor! ')}${esc(b.why)}${trSpk(b.words.join(' ')+(/^W/.test(b.words[0])?'?':'.'))}</div>`:'');
+    return h+`<div class="tq">${esc(b.q)}</div><div class="tbuild ${st.ok?'ok':''}">${st.pick.length?st.pick.map(i=>`<span>${esc(b.words[i])}</span>`).join(''):'<em>'+tx('Tap the words in order','Tippe die Wörter der Reihe nach')+'</em>'}</div><div class="tops row">${pool.map(i=>`<button class="tpo" data-a="tchord" data-i="${i}" ${st.pick.includes(i)?'disabled':''}>${esc(b.words[i])}</button>`).join('')}</div><button class="tlink" data-a="tchordreset">${tx('Reset','Zurücksetzen')}</button>`+(st.ok?`<div class="twhy ok">${tx('Goal! ','Tor! ')}${esc(b.why)}${trSpk(b.words.join(' ')+(/^W/.test(b.words[0])?'?':'.'))}</div>`:'');
   }
   if(k==='recap'){
     const nx=TEACH[TR.u+1];
@@ -2266,6 +2292,458 @@ const TEACH_ACTIONS={
   tchnextunit:()=>{trOpen(TR.u+1)}
 };
 if(location.hash==='#debug')window.__t={TEACH,TR,trOpen,trClose,trUnit,TEACH_ACTIONS};
+/* ───────── Career path, objectives, records, auto-save (2.4.0) ───────── */
+/* Stages: small steps inside the big leagues, so there is something to reach every few days.
+   They are driven by Liga-Punkte (LP) like the leagues, so they never contradict the league table.
+   [LP needed, German name, what it means] */
+const CAREER=[
+  [[0,'Bolzplatz','Street football: jackets for goalposts. You are just starting.'],[15,'Hinterhof-Turnier','A courtyard tournament with the neighbours.'],[40,'Parkliga','Weekend games in the park, teams picked on the spot.'],[80,'Sonntagsliga','Sunday league: real shirts, real referee.'],[140,'Kreisliga C','Your first club. Muddy pitches, big heart.'],[220,'Kreisliga B','Climbing the local pyramid.'],[320,'Kreisliga A','Top of the district. The scouts start to notice.'],[440,'Bezirksliga','A proper amateur league with a proper table.'],[580,'Landesliga','State level. Away trips by minibus.'],[760,'Oberliga','Semi-pro football. Training four times a week.'],[1000,'Regionalliga','One step from the professional game.']],
+  [[1300,'Pokal-Qualifikation','You fight for a place in the cup draw.'],[1450,'1. Pokalrunde','The cup draw: a big club away from home.'],[1650,'2. Pokalrunde','Giant killer. The whole town travels with you.'],[1850,'Achtelfinale','Last 16 of the DFB-Pokal.'],[2050,'Viertelfinale','Quarter-final under floodlights.'],[2200,'Halbfinale','One match from Berlin.'],[2330,'Pokalfinale','The final in the Olympiastadion.']],
+  [[2400,'Aufsteiger','Promoted. Everything is new again.'],[2650,'Tabellenmitte','A solid mid-table team with a clear plan.'],[2950,'Oberes Mittelfeld','Looking up at the promotion places.'],[3300,'Aufstiegsplatz','Fighting for the top three.'],[3650,'Relegations-Finale','Two matches for the Bundesliga.']],
+  [[4000,'Bundesliga-Neuling','Welcome to the big stage.'],[4500,'Mittelfeld-Team','A comfortable mid-tier team: safe, respected.'],[5000,'Europa-Kandidat','Pushing for a European place.'],[5500,'Kader für den Titel','You are building a championship squad.'],[6000,'Titelkandidat','Top of the table in the spring.'],[6500,'Meisterschale','Champions of Germany.']],
+  [[7000,'Gruppenphase','Europa League: first European nights.'],[7700,'Playoffs','Knockout football.'],[8400,'Achtelfinale','Last 16 in Europe.'],[9000,'Halbfinale','Two legs from the final.'],[9600,'Europa-Finale','A European final.']],
+  [[10000,'Qualifikation','The Champions League doors open.'],[10800,'Gruppenphase','The anthem. The stars. The pressure.'],[11600,'K.-o.-Runde','One slip and it is over.'],[12400,'Viertelfinale','The best eight in Europe.'],[13200,'Halbfinale','A night nobody forgets.'],[14000,'Champions-League-Finale','The final.'],[15000,'Weltklasse','A legend of the game.']]
+];
+const STAGES=CAREER.flatMap((arr,ti)=>arr.map(([lp,n,d])=>({lp,n,d,ti})));
+function stageNow(lp){let i=0;STAGES.forEach((s,k)=>{if(lp>=s.lp)i=k});const s=STAGES[i],nx=STAGES[i+1];return{i,s,nx,pct:nx?Math.max(0,Math.min(1,(lp-s.lp)/(nx.lp-s.lp))):1}}
+
+/* Objectives: one-off goals. Each pays a small Liga-Punkte bonus (counted in "Boni"). */
+const nTeach=()=>{try{return Object.keys((S.stats.teach||{}).done||{}).length}catch(e){return 0}};
+const starTotal=()=>Object.values(S.games||{}).reduce((a,g)=>a+(g.stars||0),0);
+const threeStarGames=()=>Object.values(S.games||{}).filter(g=>g.stars>=3).length;
+const knownN=()=>WALL().filter(c=>c.srs.seen>0).length;
+const masteredN=()=>WALL().filter(c=>stateOf(c)==='mastered').length;
+const goalDays=()=>{const g=S.settings.goal||60;return Object.values(S.stats.days||{}).filter(d=>d.xp>=g).length};
+const mp=()=>S.stats.mp||(S.stats.mp={w:0,l:0,d:0,streak:0,best:0,ids:[]});
+const OBJ=[
+  ['o_first','Anstoß','Finish your first practice session',()=>S.stats.sessions,1,4],
+  ['o_s3','3 Tage in Serie','Keep a 3-day streak',()=>S.stats.best,3,6],
+  ['o_s7','Woche ungeschlagen','Keep a 7-day streak',()=>S.stats.best,7,10],
+  ['o_s14','Zwei Wochen','Keep a 14-day streak',()=>S.stats.best,14,15],
+  ['o_s30','Dauerbrenner','Keep a 30-day streak',()=>S.stats.best,30,25],
+  ['o_k25','Erste Elf','Meet 25 words',knownN,25,5],['o_k50','Auf der Bank','Meet 50 words',knownN,50,8],['o_k100','Kader steht','Meet 100 words',knownN,100,12],
+  ['o_k200','Breiter Kader','Meet 200 words',knownN,200,16],['o_k300','Fast komplett','Meet 300 words',knownN,300,20],
+  ['o_m10','Stammspieler','Master 10 words',masteredN,10,8],['o_m25','Leistungsträger','Master 25 words',masteredN,25,14],['o_m50','Mannschaftskapitän','Master 50 words',masteredN,50,20],
+  ['o_st1','Hattrick','Earn 3 stars in one minigame',threeStarGames,1,6],['o_st3','Dreierpack','Earn 3 stars in 3 minigames',threeStarGames,3,12],['o_st5','Allrounder','Earn 3 stars in 5 minigames',threeStarGames,5,20],
+  ['o_p1','Weiße Weste','Finish a session without a mistake',()=>S.stats.perfect,1,5],['o_p5','Abwehrbollwerk','5 sessions without a mistake',()=>S.stats.perfect,5,12],
+  ['o_c10','Torjäger','Reach a combo of 10',()=>S.stats.maxCombo,10,5],['o_c20','Maschine','Reach a combo of 20',()=>S.stats.maxCombo,20,12],
+  ['o_a100','Hundert Schüsse','Answer 100 questions',()=>S.stats.answers,100,5],['o_a500','Fünfhundert Schüsse','Answer 500 questions',()=>S.stats.answers,500,12],['o_a1000','Tausend Schüsse','Answer 1,000 questions',()=>S.stats.answers,1000,20],
+  ['o_g5','Tagesziel x5','Reach your daily goal on 5 days',goalDays,5,6],['o_g20','Tagesziel x20','Reach your daily goal on 20 days',goalDays,20,16],
+  ['o_t5','Taktikschule','Finish 5 talks in the Tactics Room',nTeach,5,8],['o_t17','Trainerschein','Finish all 17 talks in the Tactics Room',nTeach,17,24],
+  ['o_f1','Mannschaftskamerad','Add a friend',()=>(S.social&&S.social.friends||[]).length,1,5],
+  ['o_d1','Erster Sieg','Win a duel',()=>mp().w,1,8],['o_d5','Duell-Profi','Win 5 duels',()=>mp().w,5,16],['o_d3s','Siegesserie','Win 3 duels in a row',()=>mp().best,3,14]
+].map(([id,n,d,cur,goal,lp])=>({id,n,d,cur,goal,lp}));
+
+function careerCheck(){
+  try{
+    const L=LS();if(!L.ob)L.ob={};
+    const lp=lpNow(),st=stageNow(lp);
+    if(L.stg===undefined)L.stg=st.i;               // existing players: no flood of messages
+    else if(st.i>L.stg){
+      for(let k=L.stg+1;k<=st.i;k++){const s=STAGES[k];addNotice({id:'stg:'+k,kind:'news',title:tx('New stage: ','Neue Stufe: ')+s.n,body:s.d,t:Date.now()});toast(tx('Career stage reached: ','Karrierestufe erreicht: ')+s.n);addXP(10,0)}
+      L.stg=st.i;save();
+    }
+    let got=0,lpSum=0;const quiet=!L.obInit;
+    OBJ.forEach(o=>{if(!L.ob[o.id]&&o.cur()>=o.goal){L.ob[o.id]=Date.now();L.bonus+=o.lp;got++;lpSum+=o.lp;
+      if(!quiet){addNotice({id:'ob:'+o.id,kind:'tip',title:tx('Goal reached: ','Ziel erreicht: ')+o.n,body:'+'+o.lp+' LP · '+o.d,t:Date.now()});toast(tx('Goal reached: ','Ziel erreicht: ')+o.n+' (+'+o.lp+' LP)')}}});
+    if(quiet){L.obInit=1;if(got)addNotice({id:'ob:init',kind:'tip',title:tx('Career goals: '+got+' already reached','Karriereziele: '+got+' schon erreicht'),body:'+'+lpSum+' LP',t:Date.now()});save()}
+    else if(got)save();
+  }catch(e){}
+}
+
+/* ---- records ---- */
+const dLabel=k=>{try{return new Date(k+'T12:00:00').toLocaleDateString(isDe()?'de-DE':'en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(e){return k}};
+function recordsData(){
+  const st=S.stats,days=Object.entries(st.days||{});
+  let bestDay=['',0],busy=['',0];const wk={};
+  days.forEach(([k,v])=>{const x=v.xp||0,n=v.n||0;if(x>bestDay[1])bestDay=[k,x];if(n>busy[1])busy=[k,n];const w=dkey(weekStart(new Date(k+'T12:00:00').getTime()));wk[w]=(wk[w]||0)+x});
+  let bestWeek=['',0];Object.entries(wk).forEach(([k,v])=>{if(v>bestWeek[1])bestWeek=[k,v]});
+  const first=days.map(d=>d[0]).sort()[0]||'',L=LS();
+  const plays=Object.entries(S.games||{}).sort((a,b)=>(b[1].plays||0)-(a[1].plays||0))[0];
+  const bestG=Object.entries(S.games||{}).filter(([id,g])=>GAMES[id]&&g.best>0).sort((a,b)=>b[1].stars-a[1].stars||b[1].best-a[1].best)[0];
+  const seen=WALL().filter(c=>c.srs.seen>0).sort((a,b)=>b.de.length-a.de.length)[0];
+  const tw=tricky()[0],m=mp();
+  const top=Math.max(L.i,...(L.seasons||[]).map(s=>s.lg));
+  return{bestDay,busy,bestWeek,first,activeDays:days.filter(([k,v])=>v.xp>0).length,plays,bestG,longest:seen,tw,m,top,known:knownN(),mastered:masteredN(),trophies:(L.tr||[]).length,seasons:(L.seasons||[]).length,stars:starTotal(),talks:nTeach(),badges:Object.keys(st.badges||{}).length};
+}
+function recordsHtml(){
+  const st=S.stats,r=recordsData(),dash='–';
+  const alive=st.last===dkey()||st.last===dkey(Date.now()-DAY);
+  const cells=[
+    [st.best||0,tx('Longest streak','Längste Serie'),tx('days in a row','Tage am Stück')],
+    [alive?st.streak:0,tx('Current streak','Aktuelle Serie'),tx('days','Tage')],
+    [r.bestDay[1],tx('Best day','Bester Tag'),r.bestDay[0]?dLabel(r.bestDay[0])+' · XP':'XP'],
+    [r.bestWeek[1],tx('Best week','Beste Woche'),'XP'],
+    [r.busy[1],tx('Busiest day','Fleißigster Tag'),r.busy[0]?dLabel(r.busy[0])+' · '+tx('answers','Antworten'):tx('answers','Antworten')],
+    [st.maxCombo||0,tx('Best combo','Bester Combo'),tx('right in a row','richtig am Stück')],
+    [st.perfect||0,tx('Clean sessions','Fehlerfreie Einheiten'),tx('no mistakes','ohne Fehler')],
+    [st.answers||0,tx('Answers','Antworten'),tx('all time','insgesamt')],
+    [r.activeDays,tx('Days played','Spieltage'),r.first?tx('since ','seit ')+dLabel(r.first):dash],
+    [r.known,tx('Words met','Wörter gesehen'),r.mastered+' '+tx('mastered','gemeistert')],
+    [r.stars,tx('Stars','Sterne'),tx('in minigames','in Minispielen')],
+    [r.talks+'/'+TEACH.length,tx('Talks','Besprechungen'),tx('Tactics Room','Taktikraum')],
+    [r.badges,tx('Badges','Auszeichnungen'),r.trophies+' '+tx('trophies','Trophäen')],
+    [r.m.w+'-'+r.m.d+'-'+r.m.l,tx('Duel record','Duell-Bilanz'),tx('W-D-L','S-U-N')],
+    [r.m.best||0,tx('Best win streak','Beste Siegesserie'),tx('duels','Duelle')]
+  ].map(([v,l,s])=>sCell(v,l,s)).join('');
+  const odd=[
+    r.plays&&GAMES[r.plays[0]]?[tx('Favourite game','Lieblingsspiel'),GAMES[r.plays[0]].n+' · '+(r.plays[1].plays||0)+'×']:null,
+    r.bestG?[tx('Best minigame','Bestes Minispiel'),GAMES[r.bestG[0]].n+' · '+r.bestG[1].best+' · '+'★'.repeat(r.bestG[1].stars||0)]:null,
+    r.longest?[tx('Longest word learned','Längstes Wort'),(r.longest.art?r.longest.art+' ':'')+r.longest.de]:null,
+    r.tw&&r.tw.bad?[tx('Most missed word','Meistverpasstes Wort'),(r.tw.art?r.tw.art+' ':'')+r.tw.de+' · '+r.tw.bad+'×']:null,
+    [tx('Highest league','Höchste Liga'),TIERS[r.top].n+' · '+TIERS[r.top].lv],
+    [tx('Seasons played','Gespielte Saisons'),String(r.seasons+1)],
+    st.night?[tx('Night owl','Nachtschicht'),tx('studied after 22:00','nach 22 Uhr gelernt')]:null
+  ].filter(Boolean).map(([a,b])=>`<div class="rec-row"><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join('');
+  return `<h2 class="sec">${tx('Records','Rekorde')}</h2><div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${cells}</div><div class="card patch rec-list">${odd}</div>`;
+}
+
+/* ---- career card and objective list (league tab) ---- */
+function careerHtml(){
+  const lp=lpNow(),sn=stageNow(lp),L=LS(),ti=sn.s.ti;
+  const cur=CAREER[ti],rows=cur.map(([need,n,d])=>{const i=STAGES.findIndex(s=>s.n===n&&s.lp===need),st=i<sn.i?'done':i===sn.i?'cur':'';return `<div class="stg ${st}"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div><b>${esc(n)}</b><span>${esc(d)}</span></div><em>${need} LP</em></div>`}).join('');
+  const done=OBJ.filter(o=>L.ob&&L.ob[o.id]).length;
+  const open=OBJ.filter(o=>!(L.ob&&L.ob[o.id])).map(o=>({o,p:Math.min(1,o.cur()/o.goal)})).sort((a,b)=>b.p-a.p);
+  const shown=open.slice(0,6).map(({o,p})=>`<div class="obj"><div class="oh"><b>${esc(o.n)}</b><em>+${o.lp} LP</em></div><span>${esc(o.d)}</span><div class="bar"><i style="width:${Math.round(p*100)}%;background:var(--red)"></i></div><small>${Math.min(o.cur(),o.goal).toLocaleString('en')} / ${o.goal.toLocaleString('en')}</small></div>`).join('');
+  return `<h2 class="sec">${tx('Career path','Karriereweg')}</h2>
+  <div class="card patch c-lantern"><div class="kick">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style="font:800 30px/1.05 var(--fd);text-transform:uppercase">${esc(sn.s.n)}</div><p class="sub" style="margin:4px 0 8px">${esc(sn.s.d)}</p>
+  ${sn.nx?`<div class="tier-bar" style="height:10px"><i data-w="${Math.max(4,sn.pct*100)}%"></i></div><p class="sub" style="font-size:13px;margin-top:6px">${Math.max(0,sn.nx.lp-lp)} LP ${tx('to','bis')} ${esc(sn.nx.n)}</p>`:''}</div>
+  <div class="card patch stgs">${rows}</div>
+  <h2 class="sec">${tx('Goals','Ziele')} · ${done}/${OBJ.length}</h2>${shown?`<div class="card patch objs">${shown}</div>`:`<div class="card patch"><p class="sub">${tx('All goals reached. Legend.','Alle Ziele erreicht. Legende.')}</p></div>`}`;
+}
+
+/* ---- public numbers for friends (a small whitelist; the server ignores everything else) ---- */
+function refreshPub(){
+  try{
+    const r=recordsData(),st=S.stats;
+    st.pub={lp:Math.max(0,lpNow()),stage:stageNow(lpNow()).s.n,rec:{bestDayXp:r.bestDay[1],bestWeekXp:r.bestWeek[1],busiestDay:r.busy[1],activeDays:r.activeDays,known:r.known,mastered:r.mastered,stars:r.stars,talks:r.talks,perfect:st.perfect||0,sessions:st.sessions||0,answers:st.answers||0,maxCombo:st.maxCombo||0,bestStreak:st.best||0,trophies:r.trophies,seasons:r.seasons,badges:r.badges,favGame:r.plays?r.plays[0]:''}};
+  }catch(e){}
+}
+
+/* ---- auto-save ---- */
+/* 'smart' (default) = a few seconds after a change, like before. 5/15/30 = at most once per interval (and when the app goes to the background). 'off' = only "Sync now". */
+const AUTOSAVE=[['smart',()=>tx('Smart','Smart')],['5',()=>'5 min'],['15',()=>'15 min'],['30',()=>'30 min'],['off',()=>tx('Off','Aus')]];
+const asMode=()=>S.settings.autosave||'smart';
+let asDirty=false,asTimer=0,asTick=0;
+function autoSaveKick(){
+  asDirty=true;
+  const m=asMode();
+  if(m==='off')return;
+  if(m==='smart'){clearTimeout(asTimer);asTimer=setTimeout(()=>{if(asDirty)syncNow(false)},8000);return}
+  if(!asTick)asTick=setInterval(autoSaveTick,30000);
+}
+function autoSaveTick(){
+  const m=asMode(),mins=+m;
+  if(!asDirty||!mins||!S.sync||!S.sync.url||!S.sync.code)return;
+  if(Date.now()-(S.sync.lastAt||0)>=mins*60000)syncNow(false);
+}
+function autoSaveLeave(){if(asDirty&&asMode()!=='off'&&S.sync&&S.sync.url&&S.sync.code)syncNow(false)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)autoSaveLeave()});
+window.addEventListener('pagehide',autoSaveLeave);
+function autoSaveCard(){
+  const c=S.sync;if(!c||!c.url)return '';
+  const last=c.lastAt?new Date(c.lastAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'–';
+  return `<h2 class="sec">${tx('Auto-save','Automatisch speichern')}</h2><div class="card patch"><div class="seg" style="margin-bottom:8px">${AUTOSAVE.map(([k,n])=>`<button class="${asMode()===k?'on':''}" data-a="aset" data-v="${k}">${n()}</button>`).join('')}</div><p class="sub" style="font-size:13px">${tx('Smart saves a few seconds after each change. The timed options save at most that often, and when you leave the app. Last saved: ','Smart speichert wenige Sekunden nach jeder Änderung. Die Zeitoptionen speichern höchstens so oft und beim Verlassen der App. Zuletzt gespeichert: ')}<b id="as-last">${last}</b></p></div>`;
+}
+const CAREER_ACTIONS={aset:t=>{S.settings.autosave=t.dataset.v;save();if(tab==='settings')render();toast(tx('Auto-save: ','Automatisch speichern: ')+(AUTOSAVE.find(a=>a[0]===t.dataset.v)||[0,()=>''])[1]())}};
+/* ───────── Friends, public profiles and duels (2.4.0) ───────── */
+const SO={duels:[],loaded:false,loading:false,at:0,err:'',code:null,skew:0,announced:{}};
+const soOK=()=>!!(S.sync&&S.sync.url&&S.sync.code);
+const soSocial=()=>S.social||(S.social={friends:[]});
+const soNow=()=>Date.now()+SO.skew;
+const soAgo=ms=>{if(!ms)return tx('never','nie');const m=Math.round((Date.now()-ms)/60000);return m<2?tx('just now','gerade eben'):m<60?m+' min':m<1440?Math.round(m/60)+' h':Math.round(m/1440)+' '+tx('d','Tg')};
+const soLeft=ms=>{const m=Math.max(0,Math.round(ms/60000));return m>=90?Math.round(m/60)+' h':m+' min'};
+const SO_GAMES=['sprint','dash','plural','gap','scramble'];
+
+async function soLoad(force){
+  if(!soOK()||SO.loading)return;
+  if(!force&&Date.now()-SO.at<6000)return;
+  SO.loading=true;
+  try{
+    const [f,d]=await Promise.all([api('GET','/v1/friends'),api('GET','/v1/duels')]);
+    soSocial().friends=f.friends;SO.duels=d.duels;SO.skew=d.now-Date.now();SO.err='';SO.at=Date.now();
+    soClaimAll();soAnnounce();
+  }catch(e){SO.err=e.message}
+  SO.loading=false;SO.loaded=true;soRefresh();
+}
+function soRefresh(){const b=$('#so-body');if(b)b.innerHTML=friendsInner()}
+
+/* rewards and records, once per finished duel */
+function soClaim(d){
+  const m=mp();if(!d.result||d.result.winner===null||m.ids.includes(d.id))return;
+  const w=d.result.winner;if(w==='them'&&!d.my.done&&false)return;
+  m.ids.push(d.id);if(m.ids.length>80)m.ids.shift();
+  if(w==='me'){m.w++;m.streak++;m.best=Math.max(m.best,m.streak);addXP(25,0);toast(tx('Duel won! +25 XP','Duell gewonnen! +25 XP'))}
+  else if(w==='draw'){m.d++;addXP(12,0);toast(tx('Draw. +12 XP','Unentschieden. +12 XP'))}
+  else{m.l++;m.streak=0;if(d.my.done)addXP(8,0)}
+  save();
+}
+function soClaimAll(){SO.duels.forEach(soClaim)}
+function soAnnounce(){
+  SO.duels.forEach(d=>{
+    if(d.status==='invited'&&d.role==='b'&&!SO.announced[d.id]){
+      SO.announced[d.id]=1;
+      const t=tx(`${d.opponent.name} challenges you: ${GAMES[d.game].n} (${d.mode==='live'?'live':'turn-based'})`,`${d.opponent.name} fordert dich heraus: ${GAMES[d.game].n} (${d.mode==='live'?'live':'rundenbasiert'})`);
+      if(d.mode==='live')toast(t);
+      addNotice({id:'duel:'+d.id,kind:'news',title:t,body:tx('Open Table > Friends to play.','Öffne Tabelle > Freunde zum Spielen.'),t:Date.now()});
+    }
+  });
+}
+/* while the app is open, look for new challenges now and then (about every 25 s, only when visible) */
+setInterval(()=>{if(!document.hidden&&soOK()&&!$('#dl')&&soSocial().friends.length)soLoad(true)},25000);
+
+/* ---------- friends tab ---------- */
+function friendsTab(){
+  if(soOK())soLoad();
+  return `<div id="so-body">${friendsInner()}</div>`;
+}
+function duelRow(d){
+  const o=d.opponent,g=GAMES[d.game]||{n:d.game},live=d.mode==='live';
+  const tag=`<span class="dtag ${live?'live':''}">${live?'LIVE':tx('TURN','RUNDE')}</span>`;
+  let line='',acts='';
+  const left=d.expiresAt-soNow();
+  if(d.status==='invited'&&d.role==='b'){line=tx('challenges you','fordert dich heraus');acts=`<button class="btn sm" data-a="duelacc" data-id="${d.id}">${tx('Accept','Annehmen')}</button><button class="btn sm ghost" data-a="duelno" data-id="${d.id}">${tx('Decline','Ablehnen')}</button>`}
+  else if(d.status==='invited'&&d.role==='a'){
+    if(live){line=tx('waiting for them to accept','wartet auf Annahme');acts=`<button class="btn sm" data-a="duelopen" data-id="${d.id}">${tx('Lobby','Lobby')}</button>`}
+    else if(!d.my.done){line=tx('your round is waiting','deine Runde wartet');acts=`<button class="btn sm" data-a="duelopen" data-id="${d.id}">${tx('Play','Spielen')}</button>`}
+    else{line=tx('you played · waiting for them to accept','du hast gespielt · wartet auf Annahme');acts=`<button class="btn sm ghost" data-a="duelno" data-id="${d.id}">${tx('Withdraw','Zurückziehen')}</button>`}
+  }else if(d.status==='active'){
+    if(!d.my.done){line=live?tx('live game running','Live-Spiel läuft'):tx('your turn','du bist dran')+' · '+soLeft(left);acts=`<button class="btn sm" data-a="duelopen" data-id="${d.id}">${live?tx('Join','Beitreten'):tx('Play','Spielen')}</button>`}
+    else{line=tx('you finished · waiting for them','fertig · wartet auf Gegner')+(live?'':' · '+soLeft(left));acts=`<button class="btn sm ghost" data-a="duelopen" data-id="${d.id}">${tx('Open','Öffnen')}</button>`}
+  }else if(d.status==='declined'){line=tx('declined','abgelehnt')}
+  else{const w=d.result&&d.result.winner;line=w==='me'?tx('You won','Gewonnen'):w==='them'?tx('You lost','Verloren'):w==='draw'?tx('Draw','Unentschieden'):tx('expired','abgelaufen');
+    if(w)line+=` · ${d.my.score}–${d.their.score===null?'?':d.their.score}`;acts=`<button class="btn sm ghost" data-a="duelrematch" data-id="${d.id}">${tx('Rematch','Revanche')}</button>`}
+  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${o.id}">${avatarSvg(o.avatar,36)}</button><div class="dm"><b>${esc(o.name)}</b><span>${esc(g.n)} ${tag} · ${line}</span></div><div class="da">${acts}</div></div>`;
+}
+function friendRow(f){
+  const t=TIERS[f.tier]||TIERS[0];
+  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${f.id}">${avatarSvg(f.avatar,40)}</button><button class="dm lnk" data-a="frprof" data-id="${f.id}"><b>${esc(f.name)}</b><span>${esc(f.stage||t.n)} · ${f.week} ${tx('pts this week','Pkt. diese Woche')} · ${f.streak?f.streak+' '+tx('day streak','Tage Serie'):tx('no streak','keine Serie')}</span></button><div class="da"><button class="btn sm" data-a="frchal" data-id="${f.id}" aria-label="Challenge">${tx('Duel','Duell')}</button></div></div>`;
+}
+function friendsInner(){
+  if(!soOK()){
+    const def=defaultApi();
+    return `<div class="card patch"><h3>${tx('Friends need an online account','Freunde brauchen ein Online-Konto')}</h3><p class="sub" style="margin:6px 0 10px">${tx('Create your private account (no email needed) to add friends, see their profiles and play duels.','Erstelle dein privates Konto (ohne E-Mail), um Freunde hinzuzufügen, ihre Profile zu sehen und Duelle zu spielen.')}</p>${def?`<button class="btn" data-a="acctnow">${tx('Create account','Konto erstellen')}</button>`:''}</div>`;
+  }
+  const fr=soSocial().friends,open=SO.duels.filter(d=>['invited','active'].includes(d.status)),past=SO.duels.filter(d=>!['invited','active'].includes(d.status)).slice(0,5);
+  const code=SO.code;
+  return `${SO.err?`<p class="sub" style="color:var(--badtxt)">${esc(SO.err)}</p>`:''}
+  <h2 class="sec">${tx('Add a friend','Freund hinzufügen')}</h2>
+  <div class="card patch">
+    ${code?`<div class="kick">${tx('Your invite code','Dein Einladungscode')}</div><div class="fcode">${esc(code.code)}</div><p class="sub" style="font-size:13px">${tx('Single use, valid for 7 days. Send it to a friend; they type it below.','Einmalig nutzbar, 7 Tage gültig. Schick ihn einem Freund; er gibt ihn unten ein.')}</p><div class="row2"><button class="btn sm" data-a="frcopy">${tx('Copy invite','Einladung kopieren')}</button><button class="btn sm ghost" data-a="frcode">${tx('New code','Neuer Code')}</button></div>`
+    :`<button class="btn" data-a="frcode">${tx('Create my invite code','Meinen Einladungscode erstellen')}</button>`}
+    <label style="margin-top:12px">${tx("Friend's code",'Code deines Freundes')}</label><div class="row2"><input class="inp" id="fr-code" maxlength="12" placeholder="ABCD-2345" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase"><button class="btn sm" data-a="fradd">${tx('Add','Hinzufügen')}</button></div>
+  </div>
+  ${open.length?`<h2 class="sec">${tx('Games','Spiele')}</h2><div class="card patch dl-list">${open.map(duelRow).join('')}</div>`:''}
+  <h2 class="sec">${tx('Friends','Freunde')} · ${fr.length}</h2>
+  <div class="card patch dl-list">${fr.length?fr.map(friendRow).join(''):`<p class="sub">${SO.loaded?tx('No friends yet. Share your code above.','Noch keine Freunde. Teile deinen Code oben.'):tx('Loading…','Lädt…')}</p>`}</div>
+  ${past.length?`<h2 class="sec">${tx('Recent results','Letzte Ergebnisse')}</h2><div class="card patch dl-list">${past.map(duelRow).join('')}</div>`:''}`;
+}
+
+/* ---------- public profile of a friend ---------- */
+async function friendSheet(id){
+  if(!soOK())return;
+  const f0=soSocial().friends.find(x=>x.id===id)||{name:'…',avatar:''};
+  sheet(`<h2>${esc(f0.name)}</h2><p class="sub">${tx('Loading…','Lädt…')}</p>`);
+  try{
+    const {profile:p}=await api('GET','/v1/friends/'+id);
+    const t=TIERS[p.tier]||TIERS[0],mx=Math.max(1,...p.last7),wd=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    const days=p.last7.map((v,i)=>`<div><b style="height:${Math.max(2,v/mx*46)}px"></b><span>${wd[(new Date().getDay()-6+i+14)%7]}</span></div>`).join('');
+    const gm=Object.keys(GAMES).filter(g=>p.games[g]&&p.games[g].plays>0).map(g=>`<div class="rec-row"><span>${esc(GAMES[g].n)}</span><b>${p.games[g].best} · ${'★'.repeat(p.games[g].stars)||'–'}</b></div>`).join('');
+    const r=p.rec||{},c=(v,l,s)=>sCell(v,l,s);
+    const d=p.duels,vs=p.versus;
+    sheet(`<div class="pf-head">${avatarSvg(p.avatar,64)}<div><h2 style="margin:0">${esc(p.name)}</h2><p class="sub">${esc(p.stage||t.n)} · ${esc(t.n)} ${t.lv}</p><p class="sub" style="font-size:12px">${tx('Last online','Zuletzt online')}: ${soAgo(p.seen)}</p></div></div>
+    <div class="statgrid" style="grid-template-columns:repeat(3,1fr);margin-top:10px">${c(lvl(p.xp),tx('Level','Level'),p.xp.toLocaleString('en')+' XP')}${c(p.streak,tx('Streak','Serie'),tx('best ','Rekord ')+p.best)}${c(p.week,tx('This week','Diese Woche'),tx('points','Punkte'))}</div>
+    <div class="fc7 fc-mini">${days}</div>
+    <div class="card patch" style="padding:10px 14px"><div class="rec-row"><span>${tx('League points','Liga-Punkte')}</span><b>${p.lp}</b></div><div class="rec-row"><span>${tx('Words met / mastered','Wörter gesehen / gemeistert')}</span><b>${r.known||0} / ${r.mastered||0}</b></div><div class="rec-row"><span>${tx('Best day / week','Bester Tag / Woche')}</span><b>${r.bestDayXp||0} / ${r.bestWeekXp||0}</b></div><div class="rec-row"><span>${tx('Best combo','Bester Combo')}</span><b>${r.maxCombo||0}</b></div><div class="rec-row"><span>${tx('Answers · clean sessions','Antworten · fehlerfreie Einheiten')}</span><b>${r.answers||0} · ${r.perfect||0}</b></div><div class="rec-row"><span>${tx('Trophies · badges','Trophäen · Auszeichnungen')}</span><b>${r.trophies||0} · ${r.badges||0}</b></div><div class="rec-row"><span>${tx('Tactics Room talks','Taktikraum')}</span><b>${r.talks||0}/${TEACH.length}</b></div></div>
+    ${gm?`<h3 style="margin:10px 0 4px">${tx('Minigame bests','Minispiel-Bestwerte')}</h3><div class="card patch" style="padding:6px 14px">${gm}</div>`:''}
+    <div class="card patch c-lantern" style="margin-top:10px"><div class="kick">${tx('Duels','Duelle')}</div><div style="font:800 26px var(--fd)">${d.w}-${d.d}-${d.l} <small style="font:600 13px var(--fb)">${tx('all duels','alle Duelle')}</small></div><p class="sub">${tx('You vs them','Du gegen ihn')}: <b>${vs.w}-${vs.d}-${vs.l}</b></p></div>
+    <div class="row2" style="margin-top:12px"><button class="btn" data-a="frchal" data-id="${p.id}">${tx('Challenge','Herausfordern')}</button><button class="btn ghost" data-a="frremove" data-id="${p.id}" data-n="${esc(p.name)}">${tx('Remove friend','Freund entfernen')}</button></div>`);
+  }catch(e){sheet(`<h2>${esc(f0.name)}</h2><p class="sub">${esc(e.message)}</p>`)}
+}
+function removeSheet(id,name){
+  sheet(`<h2>${tx('Remove ','Entfernen: ')}${esc(name)}?</h2><p class="sub">${tx('You will no longer see each other\'s profiles and open games with them end. You can add each other again with a new code.','Ihr seht eure Profile nicht mehr und offene Spiele enden. Ihr könnt euch mit einem neuen Code wieder hinzufügen.')}</p><div class="row2" style="margin-top:12px"><button class="btn c-berry" id="rm-y">${tx('Remove','Entfernen')}</button><button class="btn ghost" data-a="close">${tx('Cancel','Abbrechen')}</button></div>`,sh=>{
+    sh.querySelector('#rm-y').onclick=async()=>{try{await api('DELETE','/v1/friends/'+id);closeSheet();toast(tx('Friend removed','Freund entfernt'));soLoad(true)}catch(e){toast(e.message)}}});
+}
+
+/* ---------- duel decks (built from your own cards, sent to the server once) ---------- */
+const DECK_N=10;
+function dkMc(q,opts,ans,tm,hint){const o=shuffle(opts.slice());return{t:'mc',q:String(q).slice(0,160),o:o.map(x=>String(x).slice(0,80)),a:o.indexOf(ans),tm,hint:hint?String(hint).slice(0,160):''}}
+function buildDeck(game){
+  const all=shuffle(WALL().slice()),out=[];
+  if(game==='sprint'){
+    for(const c of all){if(out.length>=DECK_N)break;
+      if(Math.random()<.5){const w=smartEn(c,3);if(w.length<2)continue;out.push(dkMc(disDe(c),[c.en,...w],c.en,12,tx('Translate','Übersetze')))}
+      else{const w=smartDe(c,3);if(w.length<2)continue;out.push(dkMc(c.en,[disDe(c),...w.map(disDe)],disDe(c),12,tx('Pick the German','Wähle das Deutsche')))}}
+  }else if(game==='dash'){
+    for(const c of all.filter(c=>c.art)){if(out.length>=DECK_N)break;out.push(dkMc(c.de,['der','die','das'],c.art,8,tx('Which article?','Welcher Artikel?')))}
+  }else if(game==='plural'){
+    for(const c of all.filter(pluralOf)){if(out.length>=DECK_N)break;const r=pluralOf(c),w=pluralWrong(c,r,2);if(w.length<1)continue;out.push(dkMc(disDe(c),[r,...w],r,12,tx('Pick the plural: die …','Wähle den Plural: die …')))}
+  }else if(game==='gap'){
+    for(const c of shuffle(GALL().slice())){if(out.length>=DECK_N)break;const m=(c.sentence||'').match(/\{\{(.+?)\}\}/);if(!m)continue;const ans=m[1],w=gDistract(c,ans,3);if(w.length<1)continue;
+      out.push(dkMc(plain(c.sentence.replace(m[0],'____')),[ans,...w],ans,15,c.en))}
+  }else if(game==='scramble'){
+    for(const c of all.filter(scrOK)){if(out.length>=DECK_N)break;const ch=[...c.de];let s=shuffle(ch.slice()),n=0;while(s.join('')===c.de&&n++<5)s=shuffle(ch.slice());
+      out.push({t:'type',q:c.en.slice(0,160),a:c.de,chars:s,tm:25,hint:tx('Put the letters in order','Bringe die Buchstaben in Ordnung')})}
+  }
+  return out.length>=5?out:null;
+}
+const duelReq=g=>{const d=buildDeck(g);return d?null:tx('Not enough suitable words for this game yet.','Noch nicht genug passende Wörter für dieses Spiel.')};
+
+/* ---------- challenge sheet ---------- */
+const CH={g:'sprint',mode:'live',f:0};
+function challengeSheet(fid,keep){
+  closeSheet();if(!keep)CH.mode='live';CH.f=fid;const f=soSocial().friends.find(x=>x.id===fid)||{name:'?'};
+  const gs=SO_GAMES.map(id=>{const g=GAMES[id],bad=duelReq(id);return `<button class="gpick ${CH.g===id?'on':''}" data-a="chg" data-g="${id}" ${bad?'disabled title="'+esc(bad)+'"':''}><span class="gi">${g.ic}</span><b>${esc(g.n)}</b><i>${esc(g.tag)}</i></button>`}).join('');
+  sheet(`<h2>${tx('Duel with ','Duell mit ')}${esc(f.name)}</h2><p class="sub">${tx('Same 10 questions for both of you. Right answers score 100, plus up to 50 for speed.','Dieselben 10 Fragen für beide. Richtig = 100 Punkte, bis zu 50 extra für Tempo.')}</p>
+  <div class="gpicks">${gs}</div>
+  <div class="seg" style="margin:12px 0 6px"><button class="${CH.mode==='live'?'on':''}" data-a="chm" data-m="live">${tx('Live now','Live jetzt')}</button><button class="${CH.mode==='turn'?'on':''}" data-a="chm" data-m="turn">${tx('Turn-based · 24 h','Rundenbasiert · 24 h')}</button></div>
+  <p class="sub" style="font-size:13px">${CH.mode==='live'?tx('Both of you must be online now. Your friend has 2 minutes to accept, then you both start together.','Ihr müsst beide jetzt online sein. Dein Freund hat 2 Minuten zum Annehmen, dann startet ihr gemeinsam.'):tx('You play your round now. Your friend has 24 hours to accept and play theirs. The higher score wins.','Du spielst jetzt deine Runde. Dein Freund hat 24 Stunden zum Annehmen und Spielen. Die höhere Punktzahl gewinnt.')}</p>
+  <button class="btn" data-a="chgo" style="margin-top:10px">${tx('Send challenge','Herausforderung senden')}</button>`);
+}
+async function duelCreate(){
+  const deck=buildDeck(CH.g);if(!deck){toast(duelReq(CH.g));return}
+  try{
+    const j=await api('POST','/v1/duels',{friend:CH.f,game:CH.g,mode:CH.mode,deck});
+    closeSheet();SO.skew=j.duel.now-Date.now();soLoad(true);dlOpen(j.duel.id);
+  }catch(e){toast(e.message)}
+}
+
+/* ---------- the duel screen ---------- */
+const DL={id:0,d:null,i:0,locked:false,timer:0,poll:0,run:0,typed:[],used:[]};
+function dlEl(){let e=$('#dl');if(!e){e=document.createElement('div');e.id='dl';e.className='dl';document.body.appendChild(e)}return e}
+function dlClose(){clearInterval(DL.timer);clearInterval(DL.poll);DL.run++;const e=$('#dl');if(e)e.remove();DL.id=0;soLoad(true);if(tab==='stats')render()}
+const dlPlaying=()=>$('#dl')&&DL.id&&DL.deck&&DL.d&&!DL.d.my.done&&DL.mode==='play';
+function dlHead(){
+  const d=DL.d;if(!d)return '';
+  const g=GAMES[d.game]||{n:d.game},o=d.opponent;
+  return `<div class="dl-top"><button class="tr-x" data-a="dlclose" aria-label="Close">✕</button><div class="dl-t"><span>${esc(g.n)} · ${d.mode==='live'?'LIVE':tx('Turn-based','Rundenbasiert')}</span><b>${tx('You','Du')} vs ${esc(o.name)}</b></div></div>
+  <div class="dl-score"><div><span>${tx('You','Du')}</span><b id="dl-my">${d.my.score}</b><div class="bar"><i id="dl-myb" style="width:${d.n?d.my.count/d.n*100:0}%;background:var(--red)"></i></div></div><div><span>${esc(o.name)}</span><b id="dl-th">${d.their.score===null?'–':d.their.score}</b><div class="bar"><i id="dl-thb" style="width:${d.n?d.their.count/d.n*100:0}%;background:var(--ink)"></i></div></div></div>`;
+}
+function dlHeadUpdate(){
+  const d=DL.d;if(!d||!$('#dl-my'))return;
+  $('#dl-my').textContent=d.my.score;$('#dl-th').textContent=d.their.score===null?'–':d.their.score;
+  $('#dl-myb').style.width=(d.my.count/d.n*100)+'%';$('#dl-thb').style.width=(d.their.count/d.n*100)+'%';
+}
+async function dlOpen(id){
+  DL.id=id;DL.run++;const run=DL.run;DL.mode='load';DL.deck=null;DL.i=0;DL.locked=false;
+  const el=dlEl();el.innerHTML=`<div class="dl-body"><p class="sub" style="text-align:center;margin-top:40vh">${tx('Loading…','Lädt…')}</p></div>`;
+  try{
+    let j=await api('GET','/v1/duels/'+id);if(run!==DL.run)return;
+    DL.d=j.duel;SO.skew=j.duel.now-Date.now();DL.mode='load';
+    const d=DL.d;
+    if(d.status==='invited'&&d.role==='b')return dlInvite();
+    if(d.status==='invited'&&d.mode==='live')return dlLobby();
+    if(d.my.done||['done','expired','declined'].includes(d.status))return dlResult();
+    if(d.mode==='turn'){j=await api('POST',`/v1/duels/${id}/start`);if(run!==DL.run)return;DL.d=j.duel}
+    DL.deck=DL.d.deck;DL.i=DL.d.my.count;
+    if(d.mode==='live'&&soNow()<DL.d.startAt)return dlCountdown();
+    dlPlay();
+  }catch(e){toast(e.message);dlClose()}
+}
+function dlInvite(){
+  const d=DL.d,g=GAMES[d.game];
+  dlEl().innerHTML=`${dlHead()}<div class="dl-body center"><h2>${esc(d.opponent.name)} ${tx('challenges you','fordert dich heraus')}</h2><p class="sub">${esc(g.n)} · ${d.mode==='live'?tx('live, both online now','live, beide jetzt online'):tx('turn-based, you have 24 hours','rundenbasiert, du hast 24 Stunden')}</p><div class="row2" style="margin-top:16px"><button class="btn" data-a="dlaccept">${tx('Accept and play','Annehmen und spielen')}</button><button class="btn ghost" data-a="dlno">${tx('Decline','Ablehnen')}</button></div></div>`;
+}
+function dlLobby(){
+  const d=DL.d;DL.mode='lobby';const run=DL.run;
+  dlEl().innerHTML=`${dlHead()}<div class="dl-body center"><div class="spin"></div><h2>${tx('Waiting for ','Warte auf ')}${esc(d.opponent.name)}…</h2><p class="sub">${tx('They have 2 minutes to accept. Keep this screen open.','Er hat 2 Minuten zum Annehmen. Lass diesen Bildschirm offen.')}</p><button class="btn ghost" data-a="dlno" style="margin-top:14px">${tx('Cancel','Abbrechen')}</button></div>`;
+  clearInterval(DL.poll);
+  DL.poll=setInterval(async()=>{
+    try{const j=await api('GET','/v1/duels/'+DL.id);if(run!==DL.run)return;DL.d=j.duel;SO.skew=j.duel.now-Date.now();
+      if(j.duel.status==='active'){clearInterval(DL.poll);DL.deck=j.duel.deck;DL.i=0;dlCountdown()}
+      else if(['expired','declined'].includes(j.duel.status)){clearInterval(DL.poll);toast(tx('Not accepted in time.','Nicht rechtzeitig angenommen.'));dlClose()}}catch(e){}
+  },1500);
+}
+function dlCountdown(){
+  const run=DL.run;DL.mode='count';clearInterval(DL.poll);
+  const tick=()=>{if(run!==DL.run)return;const left=DL.d.startAt-soNow();
+    if(left<=0){dlPlay();return}
+    dlEl().innerHTML=`${dlHead()}<div class="dl-body center"><p class="sub">${tx('Get ready','Mach dich bereit')}</p><div class="bigcount">${Math.max(1,Math.ceil(left/1000))}</div></div>`;
+    setTimeout(tick,Math.min(250,left))};
+  tick();
+}
+function dlPlay(){
+  const run=DL.run;DL.mode='play';
+  if(DL.d.mode==='live'){clearInterval(DL.poll);DL.poll=setInterval(async()=>{try{const j=await api('GET','/v1/duels/'+DL.id);if(run!==DL.run)return;const mine=DL.d.my;DL.d=Object.assign(j.duel,{my:mine.count>=j.duel.my.count?mine:j.duel.my});dlHeadUpdate()}catch(e){}},1500)}
+  dlQuestion();
+}
+function dlQuestion(){
+  const run=DL.run,d=DL.d,i=DL.i,it=DL.deck[i];if(!it){dlResult();return}
+  DL.locked=false;DL.typed=[];DL.used=[];
+  let body;
+  if(it.t==='mc')body=`<div class="opts ${it.o.length===3&&it.o.join()==='der,die,das'?'art3':''}">${it.o.map((o,k)=>`<button class="opt ${/^(der|die|das)$/.test(o)?o:''}" data-a="dlpick" data-i="${k}"><span class="k">${k+1}</span><span>${esc(o)}</span></button>`).join('')}</div>`;
+  else body=`<div class="dl-build" id="dl-build"><em>${tx('Tap the letters','Tippe die Buchstaben')}</em></div><div class="dl-chars">${it.chars.map((c,k)=>`<button class="ch" data-a="dlchar" data-i="${k}">${esc(c)}</button>`).join('')}</div><div class="row2" style="margin-top:10px"><button class="btn sm ghost" data-a="dlback">⌫</button><button class="btn sm" data-a="dlsend">${tx('Check','Prüfen')}</button></div><div id="dl-ans" class="sub" style="text-align:center;margin-top:8px"></div>`;
+  dlEl().innerHTML=`${dlHead()}<div class="dl-body"><div class="dl-q">${i+1} / ${d.n}</div><div class="dl-tb"><i id="dl-tb"></i></div><p class="sub" style="text-align:center">${esc(it.hint||'')}</p><h2 class="q big" style="text-align:center">${esc(it.q)}</h2>${body}</div>`;
+  const t0=Date.now(),lim=it.tm*1000;clearInterval(DL.timer);
+  DL.timer=setInterval(()=>{if(run!==DL.run){clearInterval(DL.timer);return}const f=Math.max(0,1-(Date.now()-t0)/lim),b=$('#dl-tb');if(b)b.style.width=f*100+'%';if(f<=0){clearInterval(DL.timer);dlSend(null)}},100);
+}
+async function dlSend(v){
+  if(DL.locked)return;DL.locked=true;clearInterval(DL.timer);const run=DL.run,i=DL.i,it=DL.deck[i];
+  let r;
+  for(let tries=0;tries<4;tries++){
+    try{r=await api('POST',`/v1/duels/${DL.id}/answer`,{i,v});break}
+    catch(e){if(run!==DL.run)return;if(/not started/i.test(e.message)&&tries<3){await new Promise(x=>setTimeout(x,600));continue}toast(e.message);dlClose();return}
+  }
+  if(run!==DL.run)return;
+  const mine=r.duel.my;DL.d=Object.assign(r.duel,{});dlHeadUpdate();
+  if(it.t==='mc'){const k=it.o.indexOf(r.answer);document.querySelectorAll('#dl .opt').forEach((b,j)=>{if(j===k)b.classList.add('ok');else if(j===v&&!r.correct)b.classList.add('no')});sfx(r.correct?'ok':'no')}
+  else{const a=$('#dl-ans');if(a)a.innerHTML=r.correct?`<b style="color:var(--ink)">✓ ${esc(r.answer)}</b>`:`<b style="color:var(--red)">✗ ${esc(r.answer)}</b>`;sfx(r.correct?'ok':'no')}
+  if(r.correct)vib(12);
+  setTimeout(()=>{if(run!==DL.run)return;DL.i++;if(DL.i>=DL.d.n)dlResult();else dlQuestion()},900);
+}
+function dlResult(){
+  const run=DL.run;DL.mode='result';clearInterval(DL.timer);
+  const draw=()=>{
+    if(run!==DL.run)return;const d=DL.d,w=d.result&&d.result.winner,o=d.opponent;
+    const final=['done','expired'].includes(d.status);
+    if(final)soClaim(d);
+    let head,sub='';
+    if(d.status==='declined'){head=tx('Declined','Abgelehnt')}
+    else if(w==='me')head=tx('You win!','Du gewinnst!');else if(w==='them')head=tx(o.name+' wins','Gewinner: '+o.name);else if(w==='draw')head=tx('Draw','Unentschieden');
+    else if(final)head=tx('Expired','Abgelaufen');
+    else{head=tx('Waiting for '+o.name,'Warte auf '+o.name);sub=d.mode==='live'?tx('They are still playing…','Er spielt noch…'):tx('They have '+soLeft(d.expiresAt-soNow())+' left to play. The result appears under Friends.','Er hat noch '+soLeft(d.expiresAt-soNow())+'. Das Ergebnis erscheint unter Freunde.')}
+    dlEl().innerHTML=`${dlHead()}<div class="dl-body center"><div class="tstar" style="color:${w==='me'?'#E6A700':'var(--mute)'}">${w==='me'?'★':w==='them'?'●':'='}</div><h2>${esc(head)}</h2><div class="dl-final"><div><span>${tx('You','Du')}</span><b>${d.my.score}</b></div><div><span>${esc(o.name)}</span><b>${d.their.score===null?'–':d.their.score}</b></div></div><p class="sub">${esc(sub)}</p><div class="row2" style="margin-top:16px">${final?`<button class="btn" data-a="dlrematch">${tx('Rematch','Revanche')}</button>`:''}<button class="btn ghost" data-a="dlclose">${tx('Close','Schließen')}</button></div></div>`;
+  };
+  draw();
+  if(DL.d.mode==='live'&&!['done','expired'].includes(DL.d.status)){
+    clearInterval(DL.poll);
+    DL.poll=setInterval(async()=>{try{const j=await api('GET','/v1/duels/'+DL.id);if(run!==DL.run)return;DL.d=j.duel;draw();if(['done','expired'].includes(j.duel.status))clearInterval(DL.poll)}catch(e){}},2000);
+  }
+}
+
+const SOCIAL_ACTIONS={
+  frcode:async()=>{try{SO.code=await api('POST','/v1/friends/code');soRefresh()}catch(e){toast(e.message)}},
+  frcopy:()=>{if(SO.code)copyText(tx('Join me on Kobel! My friend code: ','Komm zu Kobel! Mein Freundescode: ')+SO.code.code)},
+  fradd:async()=>{const v=(($('#fr-code')||{}).value||'').trim();if(!v){toast(tx('Enter your friend\'s code','Gib den Code deines Freundes ein'));return}
+    try{const j=await api('POST','/v1/friends',{code:v});toast(tx('Friend added: ','Freund hinzugefügt: ')+j.friend.name);await soLoad(true)}catch(e){toast(e.message)}},
+  frprof:t=>friendSheet(+t.dataset.id),
+  frremove:t=>removeSheet(+t.dataset.id,t.dataset.n),
+  close:()=>closeSheet(),
+  frchal:t=>challengeSheet(+t.dataset.id),
+  chg:t=>{CH.g=t.dataset.g;challengeSheet(CH.f,1)},
+  chm:t=>{CH.mode=t.dataset.m;challengeSheet(CH.f,1)},
+  chgo:duelCreate,
+  duelopen:t=>dlOpen(+t.dataset.id),
+  duelacc:t=>dlAcceptId(+t.dataset.id),
+  duelno:t=>dlDeclineId(+t.dataset.id),
+  duelrematch:t=>{const d=SO.duels.find(x=>x.id===+t.dataset.id);if(d){CH.g=SO_GAMES.includes(d.game)?d.game:'sprint';CH.mode=d.mode;challengeSheet(d.opponent.id,1)}},
+  dlclose:()=>{if(dlPlaying()){toast(tx('Finish the game: your clock keeps running.','Spiel beenden: deine Uhr läuft weiter.'));return}dlClose()},
+  dlaccept:()=>dlAcceptId(DL.id),
+  dlno:async()=>{await dlDeclineId(DL.id);dlClose()},
+  dlrematch:()=>{const d=DL.d;dlClose();CH.g=d.game;CH.mode=d.mode;challengeSheet(d.opponent.id,1)},
+  dlpick:t=>{if(DL.locked)return;const i=+t.dataset.i;document.querySelectorAll('#dl .opt').forEach(b=>b.classList.remove('sel'));t.classList.add('sel');dlSend(i)},
+  dlchar:t=>{if(DL.locked||t.disabled)return;const i=+t.dataset.i;t.disabled=true;DL.used.push(i);DL.typed.push(DL.deck[DL.i].chars[i]);const b=$('#dl-build');if(b)b.textContent=DL.typed.join('')},
+  dlback:()=>{if(DL.locked||!DL.used.length)return;const i=DL.used.pop();DL.typed.pop();const b=document.querySelector(`#dl .ch[data-i="${i}"]`);if(b)b.disabled=false;const e=$('#dl-build');if(e)e.textContent=DL.typed.join('')||''},
+  dlsend:()=>{if(!DL.typed.length)return;dlSend(DL.typed.join(''))}
+};
+async function dlAcceptId(id){
+  try{await api('POST',`/v1/duels/${id}/accept`);await soLoad(true);dlOpen(id)}catch(e){toast(e.message);soLoad(true)}
+}
+async function dlDeclineId(id){
+  try{await api('POST',`/v1/duels/${id}/decline`)}catch(e){toast(e.message)}
+  soLoad(true);
+}
+if(location.hash==='#debug')window.__s={SO,DL,CH,buildDeck,duelReq,STAGES,OBJ,careerCheck,recordsData,refreshPub,stageNow,soClaim,SOCIAL_ACTIONS,soLoad,friendsInner,autoSaveKick,asMode,mp};
 const starsFor=(id,sc)=>GAMES[id].stars.filter(t=>sc>=t).length;
 const starsHtml=n=>`<span class="stars">${[0,1,2].map(i=>`<span class="${i<n?'on':'off'}">★</span>`).join('')}</span>`;
 function featuredId(){const ids=Object.keys(GAMES).filter(id=>!gameReq(id,''));if(!ids.length)return'';let h=0;for(const ch of dkey())h=(h*31+ch.charCodeAt(0))>>>0;return ids[h%ids.length]}
@@ -2308,7 +2786,7 @@ function drawTabs(){
   $('#tabs .in').innerHTML=t.map(([k,n,i])=>`<button class="tab ${tab===k?'on':''}" data-a="tab" data-k="${k}">${i}<span>${n}</span></button>`).join('');
 }
 function render(){
-  settle();
+  settle();careerCheck();
   $('#app').innerHTML=`<div class="view">${({home:()=>S.settings.skin==='clean'?vHomeClean():vHome(),arcade:vArcade,library:vLib,stats:vStats,teach:vTeach,settings:vSet,about:vAbout,profile:vProfile,inbox:vInbox})[tab]()}</div>`;
   drawTabs();
   if(tab==='library')libList();
@@ -2662,7 +3140,7 @@ function leagueHtml(){
 /* ───────── table / statistics view ───────── */
 const dkeyStart=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
 let statTab='league';
-const SEGS=[['league','Liga'],['stats','Statistik'],['cabinet','Vitrine']];
+const SEGS=[['league','Liga'],['stats','Statistik'],['cabinet','Vitrine'],['friends','Freunde']];
 function sCell(v,l,sub){return `<div class="sb"><b>${v}</b><span>${l}</span>${sub?`<i class="sbs">${sub}</i>`:''}</div>`}
 function leagueTab(){
   const st=S.stats,ti=tierInfo(),L=LS(),k=knowledge(),zones=TIERS.map((t,i)=>`<div class="zone ${i===ti.i?'cur':i<ti.i?'done':''}"><span class="nm">${t.n}</span><span class="lv">${t.lv} · ${i===0?tx('start · ','Start · '):''}~${t.std.toLocaleString('en')} ${tx('words','Wörter')}</span></div>`).reverse().join('');
@@ -2670,8 +3148,9 @@ function leagueTab(){
   const ss=L.seasons.slice().reverse().map(x=>`<tr><td class="n">${x.n}</td><td>${esc(TIERS[x.lg].n)}</td><td class="r">${x.w}-${x.d}-${x.l}</td><td class="r">${x.lp}</td><td class="r" style="font:800 18px var(--fd)">${x.out==='up'?'↑':x.out==='down'?'↓':'='}</td></tr>`).join('');
   loadLeague();
   return `<div class="card patch c-lantern"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 style="font-size:36px">${esc(ti.t.n)}</h2><span class="sub">${ti.t.lv} · ${ti.lp} LP</span></div><div class="tier-bar" style="height:14px"><i data-w="${Math.max(4,ti.pct*100)}%"></i></div><p class="sub" style="margin-top:8px">${ti.nx?ti.left+' LP bis '+esc(ti.nx.n):'Höchste Liga erreicht'} · ${esc(zoneTxt(ti.zone))}</p></div>
-  <div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(k,'Kaderwert','Wortäquivalente')}${sCell((L.form>0?'+':'')+L.form,'Form','Wochenergebnisse')}${sCell((L.bonus>0?'+':'')+L.bonus,'Boni','Saisonfinale')}</div>
+  <div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(k,'Kaderwert','Wortäquivalente')}${sCell((L.form>0?'+':'')+L.form,'Form','Wochenergebnisse')}${sCell((L.bonus>0?'+':'')+L.bonus,'Boni','Saisonfinale + Ziele')}</div>
   <p class="sub" style="font-size:13px;margin:-4px 2px 8px">Kaderwert counts your words (stage-weighted) and grammar items (worth ${GRAM_WE}×). Liga-Punkte = Kaderwert + Form + Boni.</p>
+  ${careerHtml()}
   <h2 class="sec">Liga-Tabelle</h2>${leagueHtml()}
   <h2 class="sec">Spieltage</h2><div class="card patch" style="padding:10px 12px 14px 16px">${rs?`<table class="tbl"><thead><tr><th class="n">S.ST</th><th>Punkte</th><th class="r">Tage</th><th class="r">Erg.</th><th class="r">LP</th></tr></thead><tbody>${rs}</tbody></table>`:'<p class="sub">Your first matchday closes on Monday. Hit the weekly target to win it.</p>'}</div>
   ${ss?`<h2 class="sec">Saisonbilanz</h2><div class="card patch" style="padding:10px 12px 14px 16px"><table class="tbl"><thead><tr><th class="n">#</th><th>Liga</th><th class="r">S-U-N</th><th class="r">LP</th><th class="r"></th></tr></thead><tbody>${ss}</tbody></table></div>`:''}
@@ -2688,7 +3167,7 @@ function statsTab(){
   const lt=lessonTable().sort((a,b)=>(b.acc==null?-1:b.acc)-(a.acc==null?-1:a.acc)).map((l,i)=>`<tr class="${l.off?'dim':''}"><td class="n">${i+1}</td><td class="lt">${esc(l.name)}</td><td class="r">${pctf(l.acc)}</td><td class="r">${l.ok}</td><td class="r">${l.bad}</td></tr>`).join('');
   const tw=tricky().slice(0,6).map(c=>`<div style="display:flex;justify-content:space-between;margin:6px 0"><span style="font-weight:800">${fmtDe(c)}</span><span class="sub">${esc(c.en)} · missed ${c.bad||0}×</span></div>`).join('');
   const dxg=m.diff>=0?'+'+m.diff.toFixed(1):m.diff.toFixed(1);
-  return `<div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(m.sh,'Schüsse','Antworten')}${sCell(m.g,'Tore','Richtig beim ersten Mal')}${sCell(m.ga,'Gegentore','Fehler')}${sCell(pctf(m.sh?m.acc:null),'Schussgenauigkeit','Tore / Schüsse')}${sCell(pctf(m.sh?m.ontarget:null),'Aufs Tor','Tore + knapp')}${sCell(m.xg.toFixed(1),'xG','erwartete Tore')}</div>
+  return `${recordsHtml()}<h2 class="sec">Statistik</h2><div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(m.sh,'Schüsse','Antworten')}${sCell(m.g,'Tore','Richtig beim ersten Mal')}${sCell(m.ga,'Gegentore','Fehler')}${sCell(pctf(m.sh?m.acc:null),'Schussgenauigkeit','Tore / Schüsse')}${sCell(pctf(m.sh?m.ontarget:null),'Aufs Tor','Tore + knapp')}${sCell(m.xg.toFixed(1),'xG','erwartete Tore')}</div>
   <div class="card patch ${m.diff>=0?'c-fern':'c-berry'}" style="padding:12px 14px 14px 20px"><div class="kick">xG-Bilanz</div><div style="font:800 34px/1.05 var(--fd);text-transform:uppercase">${dxg} ${m.diff>=0?'über Erwartung':'unter Erwartung'}</div><p class="sub" style="margin-top:4px">xG is how many answers your history with each card said you would get right. Above it means you are punching above your weight.</p></div>
   <h2 class="sec">Spielanalyse</h2><div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(m.cs,'Weiße Westen','Fehlerfreie Einheiten')}${sCell(st.maxCombo||0,'Torserie','bester Combo')}${sCell(m.reds,'Rote Karten','Rückfälle')}${sCell(pctf(m.poss),'Ballbesitz','aktive Tage / 28')}${sCell(pctf(m.pass),'Passquote','Doppelpass')}${sCell(pctf(m.pen),'Elfmeter','Der-Die-Das')}${sCell(Math.round(m.sec/60),'Einsatzminuten','auf dem Platz')}${sCell(st.sessions,'Einheiten','Trainings')}${sCell(totalPlays(),'Minispiele','gespielt')}</div>
   ${m.top?`<div class="card patch c-sky" style="padding:12px 14px 14px 20px"><div class="kick">Top-Torschütze</div><div style="font:800 32px/1.05 var(--fd)">${fmtDe(m.top)}</div><p class="sub">${esc(m.top.en)} · ${m.top.ok} Tore</p></div>`:''}
@@ -2704,9 +3183,9 @@ function cabinetTab(){
   return `${cabinetHtml()}<h2 class="sec">Auszeichnungen</h2><div class="badges">${BADGES.map(b=>`<div class="bdg ${st.badges[b.id]?'':'lock'}"><span class="e">${b.e}</span>${b.n}</div>`).join('')}</div>`;
 }
 function vStats(){
-  const body=statTab==='stats'?statsTab():statTab==='cabinet'?cabinetTab():leagueTab();
+  const body=statTab==='stats'?statsTab():statTab==='cabinet'?cabinetTab():statTab==='friends'?friendsTab():leagueTab();
   return `<div class="top"><h1 class="h1">Tabelle</h1><div class="chips"><div class="chip">${ACORN(18)}${S.stats.xp}</div></div></div>
-  <div class="seg" style="margin-bottom:14px">${SEGS.map(([k,n])=>`<button class="${statTab===k?'on':''}" data-a="stab" data-k="${k}">${n}</button>`).join('')}</div>${body}`;
+  <div class="seg segx" style="margin-bottom:14px">${SEGS.map(([k,n])=>`<button class="${statTab===k?'on':''}" data-a="stab" data-k="${k}">${n}</button>`).join('')}</div>${body}`;
 }
 
 /* ───────── app update (GitHub releases, Android only) ───────── */
@@ -3264,6 +3743,7 @@ function customSheet(){
 let syncStatus='Not synced yet',syncing=false;
 const cardSig=c=>JSON.stringify([c.type,c.lesson,c.date,c.de,c.art,c.pl,c.forms,c.en,c.ex,c.exEn,c.note,c.sentence,c.topic,c.hint,c.srs,c.ok,c.bad,!!c.susp,c.bury||0]);
 function stamp(){
+  refreshPub();
   const now=Date.now();
   S.cards.forEach(c=>{const hh=cardSig(c);if(c.h!==hh){c.h=hh;c.u=now}});
   S.rules.forEach(r=>{const hh=JSON.stringify([r.topic,r.lesson,r.text]);if(r.h!==hh){r.h=hh;r.u=now}});
@@ -3342,7 +3822,7 @@ async function syncNow(manual){
     }
     if(pushProfile)S.psu=S.pu;
     cfg.pulled=Math.max(0,last.serverTime-5000);
-    save();syncing=false;
+    cfg.lastAt=Date.now();save();asDirty=false;clearTimeout(asTimer);syncing=false;
     setSyncStatus('Synced '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
     if(manual||tab==='home'||tab==='library'||tab==='stats')render();
     return true;
@@ -3360,7 +3840,7 @@ function syncCardOld(){
 /* ───────── language (English / Deutsch) ───────── */
 /* Every UI string that is not card data is looked up here. Key = the text as written in the code
    (digits become #). Value = [English, Deutsch]. Anything not listed stays as written. */
-const I18N={"# / # Pkt": ["# / # pts", "# / # Pkt"], "# LP bis DFB-Pokal · Klassenerhalt": ["# LP to DFB-Pokal · safe", "# LP bis DFB-Pokal · Klassenerhalt"], "# LP · Klassenerhalt": ["# LP · safe", "# LP · Klassenerhalt"], "# Tage bis Abpfiff · Sieg +# · Niederlage −#": ["# days to full time · win +# · loss −#", "# Tage bis Abpfiff · Sieg +# · Niederlage −#"], "# Tage in Serie": ["# day streak", "# Tage in Serie"], "# day streak": ["# day streak", "# Tage in Serie"], "# due": ["# due", "# fällig"], "# letters": ["# letters", "# Buchstaben"], "# new": ["# new", "# neu"], "# new words waiting": ["# new words waiting", "# neue Wörter warten"], "# of # active": ["# of # active", "# von # aktiv"], "# questions · #% wins Bronze, #% Silver, #% Gold": ["# questions · #% wins Bronze, #% Silver, #% Gold", "# Fragen · #% für Bronze, #% für Silber, #% für Gold"], "# seconds. Translate as many words as you can.": ["# seconds. Translate as many words as you can.", "# Sekunden. Übersetze so viele Wörter wie möglich."], "# to fix": ["# to fix", "# zu verbessern"], "# vocabulary cards as tab-separated text. In Anki use File → Import, then map the fields to Front, Back, Example, Example translation and Tags. Your progress stays in Kobel.": ["# vocabulary cards as tab-separated text. In Anki use File → Import, then map the fields to Front, Back, Example, Example translation and Tags. Your progress stays in Kobel.", "# Vokabelkarten als Text mit Tabulatoren. In Anki: Datei → Importieren, dann die Felder Vorderseite, Rückseite, Beispiel, Beispielübersetzung und Tags zuordnen. Dein Fortschritt bleibt in Kobel."], "# von # Partien aktiv": ["# of # matches active", "# von # Partien aktiv"], "# words · # grammar ·": ["# words · # grammar ·", "# Wörter · # Grammatik ·"], "# words, # grammar items · # Champions, # Bundesliga, # #. Liga, # Ersatzbank": ["# words, # grammar items · # Champions, # Bundesliga, # #. Liga, # bench", "# Wörter, # Grammatikpunkte · # Champions, # Bundesliga, # #. Liga, # Ersatzbank"], "#K": ["#K", "#K"], "-# unter Erwartung": ["-# below expectation", "-# unter Erwartung"], "A noun appears, tap der, die or das. Wrong answers cost # seconds.": ["A noun appears, tap der, die or das. Wrong answers cost # seconds.", "Ein Nomen erscheint: tippe auf der, die oder das. Falsche Antworten kosten # Sekunden."], "A# · # LP": ["A# · # LP", "A# · # LP"], "A# · Liga": ["A# · League", "A# · Liga"], "A# · ab # LP": ["A# · from # LP", "A# · ab # LP"], "B# · ab # LP": ["B# · from # LP", "B# · ab # LP"], "C# · ab # LP": ["C# · from # LP", "C# · ab # LP"], "Accuracy": ["Accuracy", "Genauigkeit"], "Add to lesson": ["Add to subject", "Zum Thema hinzufügen"], "Add to library": ["Add to library", "Zur Bibliothek hinzufügen"], "Add words": ["Add words", "Wörter hinzufügen"], "Aktive Tage · # / #": ["Active days · # / #", "Aktive Tage · # / #"], "Aktivität": ["Activity", "Aktivität"], "All": ["All", "Alle"], "All lessons": ["All subjects", "Alle Themen"], "Alle": ["All", "Alle"], "Allrounder": ["All-rounder", "Allrounder"], "Anki-style review": ["Anki-style review", "Wiederholung im Anki-Stil"], "Anpfiff!": ["Kick-off!", "Anpfiff!"], "Anstoß": ["Kick-off", "Anstoß"], "Answer:": ["Answer:", "Antwort:"], "Antworten": ["Answers", "Antworten"], "App-Update": ["App update", "App-Update"], "Aufs Tor": ["On target", "Aufs Tor"], "Aufstellung": ["Line-up", "Aufstellung"], "Aufstieg": ["Promotion", "Aufstieg"], "Aufstiegspokal": ["Promotion Cup", "Aufstiegspokal"], "Aus dem Training nehmen": ["Remove from training", "Aus dem Training nehmen"], "Auszeichnungen": ["Awards", "Auszeichnungen"], "Auto": ["Auto", "Auto"], "Back to the start": ["Back to the start", "Zurück zum Start"], "Backup": ["Backup", "Sicherung"], "Badge unlocked: Kader komplett": ["Badge unlocked: Full squad", "Abzeichen freigeschaltet: Kader komplett"], "Ballbesitz": ["Possession", "Ballbesitz"], "Best": ["Best", "Bestwert"], "Best combo": ["Best combo", "Bester Combo"], "Boni": ["Bonuses", "Boni"], "Both": ["Both", "Beides"], "Bronze": ["Bronze", "Bronze"], "Bundesliga": ["Bundesliga", "Bundesliga"], "CL": ["CL", "CL"], "Card options": ["Card options", "Kartenoptionen"], "Champions": ["Champions", "Champions"], "Champions-Kader": ["Champions squad", "Champions-Kader"], "Check": ["Check", "Prüfen"], "Checking GitHub…": ["Checking GitHub…", "GitHub wird geprüft…"], "Choose": ["Choose", "Wählen"], "Close": ["Close", "Schließen"], "Cloud sync": ["Cloud sync", "Cloud-Sync"], "Connect and sync": ["Connect and sync", "Verbinden und synchronisieren"], "Connect your server in Settings to compete with friends.": ["Connect your server in Settings to compete with friends.", "Verbinde deinen Server in den Einstellungen, um gegen Freunde anzutreten."], "Continue": ["Continue", "Weiter"], "Copy": ["Copy", "Kopieren"], "Copy as text": ["Copy as text", "Als Text kopieren"], "Copy backup as text": ["Copy backup as text", "Sicherung als Text kopieren"], "Copy prompt for Claude": ["Copy prompt for Claude", "Prompt für Claude kopieren"], "Custom study": ["Custom study", "Eigenes Training"], "Custom study…": ["Custom study…", "Eigenes Training…"], "DE→EN": ["DE→EN", "DE→EN"], "DFB": ["DFB", "DFB"], "Daily points goal": ["Daily points goal", "Tägliches Punkteziel"], "Data": ["Data", "Daten"], "Dauerbrenner": ["Ever-present", "Dauerbrenner"], "Delete": ["Delete", "Löschen"], "Der, die or das? Take the shot.": ["Der, die or das? Take the shot.", "Der, die oder das? Schieß!"], "Der-Die-Das": ["Der-Die-Das", "Der-Die-Das"], "Deutsch": ["Deutsch", "Deutsch"], "Deutsch · Bundesliga der Wörter": ["German · the Bundesliga of words", "Deutsch · Bundesliga der Wörter"], "Di": ["Tu", "Di"], "Do": ["Th", "Do"], "Mi": ["We", "Mi"], "Mo": ["Mo", "Mo"], "Fr": ["Fr", "Fr"], "Sa": ["Sa", "Sa"], "So": ["Su", "So"], "Doppelpass": ["One-two", "Doppelpass"], "Du": ["You", "Du"], "Dunkel": ["Dark", "Dunkel"], "EN→DE": ["EN→DE", "EN→DE"], "Eight sentences from your grammar notes. The rule shows up when you miss one.": ["Eight sentences from your grammar notes. The rule shows up when you miss one.", "Acht Sätze aus deinen Grammatiknotizen. Die Regel erscheint, wenn du einen verfehlst."], "Eight words. Hints help but cost points.": ["Eight words. Hints help but cost points.", "Acht Wörter. Hinweise helfen, kosten aber Punkte."], "Eight words. Umlauts and ß count, but tiny typos are forgiven.": ["Eight words. Umlauts and ß count, but tiny typos are forgiven.", "Acht Wörter. Umlaute und ß zählen, kleine Tippfehler werden verziehen."], "Einheiten": ["Sessions", "Einheiten"], "Einsatzminuten": ["Minutes played", "Einsatzminuten"], "Einstellungen": ["Settings", "Einstellungen"], "Elfmeter": ["Penalty", "Elfmeter"], "English": ["English", "English"], "Erase everything (empty library)": ["Erase everything (empty library)", "Alles löschen (leere Bibliothek)"], "Erg.": ["Res.", "Erg."], "Ersatzbank": ["Bench", "Ersatzbank"], "Everything lives on this device. You have not saved a backup file yet.": ["Everything lives on this device. You have not saved a backup file yet.", "Alles liegt auf diesem Gerät. Du hast noch keine Sicherungsdatei gespeichert."], "Export for Anki": ["Export for Anki", "Für Anki exportieren"], "Export for Anki (TSV)": ["Export for Anki (TSV)", "Für Anki exportieren (TSV)"], "Extra practice, like AnkiDroid's custom study.": ["Extra practice, like AnkiDroid's custom study.", "Zusätzliches Training, wie das eigene Lernen in AnkiDroid."], "Fehler": ["Errors", "Fehler"], "Fehlerfreie Einheiten": ["Error-free sessions", "Fehlerfreie Einheiten"], "Fertig": ["Done", "Fertig"], "Fertig!": ["Done!", "Fertig!"], "Fill the gaps from your grammar notes.": ["Fill the gaps from your grammar notes.", "Fülle die Lücken aus deinen Grammatiknotizen."], "Finish all three for a +# bonus.": ["Finish all three for a +# bonus.", "Schließe alle drei für +# Bonus ab."], "Flashcard direction": ["Flashcard direction", "Kartenrichtung"], "Flashcards": ["Flashcards", "Karteikarten"], "Flashcards: what is due now": ["Flashcards: what is due now", "Karteikarten: was jetzt fällig ist"], "Form": ["Form", "Form"], "Fällig": ["Due", "Fällig"], "GT": ["GA", "GT"], "Gegentore": ["Goals against", "Gegentore"], "Genau!": ["Exactly!", "Genau!"], "German voice ready": ["German voice ready", "Deutsche Stimme bereit"], "Gesamt": ["Overall", "Gesamt"], "Gold": ["Gold", "Gold"], "Grammar item": ["Grammar item", "Grammatikpunkt"], "Grammar rule": ["Grammar rule", "Grammatikregel"], "Grammar share of practice": ["Grammar share of practice", "Grammatikanteil am Training"], "Guten Morgen! #. Liga · Nachwuchs": ["Guten Morgen! #. Liga · Nachwuchs", "Guten Morgen! #. Liga · Nachwuchs"], "Hattrick": ["Hat-trick", "Hattrick"], "Hell": ["Light", "Hell"], "Heute": ["Today", "Heute"], "Hint": ["Hint", "Hinweis"], "Ich bin ...": ["Ich bin ...", "Ich bin ..."], "Im Trainingsumfang (#/#)": ["In training scope (#/#)", "Im Trainingsumfang (#/#)"], "Import": ["Import", "Importieren"], "Import class notes": ["Import class notes", "Unterrichtsnotizen importieren"], "Installed:": ["Installed:", "Installiert:"], "Jetzt": ["Now", "Jetzt"], "Joker #": ["Joker #", "Joker #"], "Jot down words during class. One per line, same format as import.": ["Jot down words during class. One per line, same format as import.", "Notiere Wörter im Unterricht. Eins pro Zeile, im Importformat."], "Kader": ["Squad", "Kader"], "Kader komplett": ["Full squad", "Kader komplett"], "Kaderwert": ["Squad value", "Kaderwert"], "Kaderwert counts your words (stage-weighted) and grammar items (worth #×). Liga-Punkte = Kaderwert + Form + Boni.": ["Squad value counts your words (stage-weighted) and grammar items (worth #×). League points = squad value + form + bonuses.", "Der Kaderwert zählt deine Wörter (nach Stufe gewichtet) und Grammatikpunkte (#× wert). Liga-Punkte = Kaderwert + Form + Boni."], "Karten fällig": ["Cards due", "Karten fällig"], "Keep going": ["Keep going", "Weiter so"], "Kommentator": ["Commentator", "Kommentator"], "Königsklasse": ["Premier class", "Königsklasse"], "LP": ["LP", "LP"], "Learn": ["Learn", "Lernen"], "Learn more new words (# waiting)": ["Learn more new words (# waiting)", "Mehr neue Wörter lernen (# warten)"], "Learn the # new words": ["Learn the # new words", "Die # neuen Wörter lernen"], "Leave": ["Leave", "Verlassen"], "Leave this game?": ["Leave this game?", "Dieses Spiel verlassen?"], "Leave this session?": ["Leave this session?", "Diese Einheit verlassen?"], "Lesson": ["Subject", "Thema"], "Lessons in training": ["Subjects in training", "Themen im Training"], "Letzte #": ["Last #", "Letzte #"], "Liga": ["League", "Liga"], "Liga-Tabelle": ["League table", "Liga-Tabelle"], "Ligen": ["Leagues", "Ligen"], "Listen and type": ["Listen and type", "Hören und tippen"], "Listen, then spell what you hear.": ["Listen, then spell what you hear.", "Hör zu und schreibe, was du hörst."], "Live · Saison # · Spieltag #": ["Live · Season # · Matchday #", "Live · Saison # · Spieltag #"], "Load / import": ["Load / import", "Laden / importieren"], "Load file": ["Load file", "Datei laden"], "Match all pairs": ["Match all pairs", "Ordne alle Paare zu"], "Match the pairs": ["Match the pairs", "Paare zuordnen"], "Meet # new words": ["Meet # new words", "# neue Wörter kennenlernen"], "Mehrzahl": ["Plural", "Mehrzahl"], "Minigames built from your own notes. Words you miss come back in your next practice.": ["Minigames built from your own notes. Words you miss come back in your next practice.", "Minispiele aus deinen eigenen Notizen. Verfehlte Wörter kommen im nächsten Training wieder."], "Minigames with these words": ["Minigames with these words", "Minispiele mit diesen Wörtern"], "Minispiele": ["Minigames", "Minispiele"], "Monat": ["Month", "Monat"], "Nachtschicht": ["Night shift", "Nachtschicht"], "Nein": ["No", "Nein"], "Neu": ["New", "Neu"], "Neueste": ["Newest", "Neueste"], "Neuzugang": ["New signing", "Neuzugang"], "Neuzugänge": ["New signings", "Neuzugänge"], "New words per session": ["New words per session", "Neue Wörter pro Einheit"], "Nicht bestanden": ["Not passed", "Nicht bestanden"], "No single card to manage here": ["No single card to manage here", "Hier gibt es keine einzelne Karte zu verwalten"], "None yet, nice": ["None yet, nice", "Noch keine, super"], "Not played yet": ["Not played yet", "Noch nicht gespielt"], "Not quite": ["Not quite", "Nicht ganz"], "Nächste # Tage": ["Next # days", "Nächste # Tage"], "Off": ["Off", "Aus"], "Optional. Keeps your words and progress in your own free Cloudflare database and shares them between your devices. It works in the Android app. The access code is stored only on this device.": ["Optional. Keeps your words and progress in your own free Cloudflare database and shares them between your devices. It works in the Android app. The access code is stored only on this device.", "Optional. Speichert deine Wörter und deinen Fortschritt in deiner eigenen kostenlosen Cloudflare-Datenbank und teilt sie zwischen deinen Geräten. Funktioniert in der Android-App. Der Zugangscode wird nur auf diesem Gerät gespeichert."], "Pair German words with meanings.": ["Pair German words with meanings.", "Ordne deutsche Wörter ihren Bedeutungen zu."], "Partie": ["Match", "Partie"], "Partien-Tabelle": ["Match table", "Partien-Tabelle"], "Passquote": ["Pass accuracy", "Passquote"], "Paste": ["Paste", "Einfügen"], "Paste the prompt into a chat, add your raw class notes under it, then paste the reply here.": ["Paste the prompt into a chat, add your raw class notes under it, then paste the reply here.", "Füge den Prompt in einen Chat ein, ergänze darunter deine Rohnotizen und füge die Antwort hier ein."], "Paste your notes in the Kobel format. Import again after every class: known words are updated and keep their progress.": ["Paste your notes in the Kobel format. Import again after every class: known words are updated and keep their progress.", "Füge deine Notizen im Kobel-Format ein. Importiere nach jedem Unterricht erneut: bekannte Wörter werden aktualisiert und behalten ihren Fortschritt."], "Pick the German": ["Pick the German", "Wähle das Deutsche"], "Pick the correct plural form.": ["Pick the correct plural form.", "Wähle die richtige Pluralform."], "Pick the lessons that feed your practice, flashcards and minigames. Lessons you pause keep all their progress. New lessons join automatically.": ["Pick the subjects that feed your practice, flashcards and minigames. Subjects you pause keep all their progress. New subjects join automatically.", "Wähle die Themen für Training, Karteikarten und Minispiele. Pausierte Themen behalten ihren Fortschritt. Neue Themen kommen automatisch dazu."], "Pick the right plural for each noun from your notes. Needs nouns with (Pl. …) in your notes.": ["Pick the right plural for each noun from your notes. Needs nouns with (Pl. …) in your notes.", "Wähle für jedes Nomen aus deinen Notizen den richtigen Plural. Braucht Nomen mit (Pl. …) in den Notizen."], "Pick the right translation. Combos add bonus points, every #th correct answer gives +# seconds, a wrong answer costs #.": ["Pick the right translation. Combos add bonus points, every #th correct answer gives +# seconds, a wrong answer costs #.", "Wähle die richtige Übersetzung. Combos geben Bonuspunkte, jede #. richtige Antwort gibt +# Sekunden, eine falsche kostet #."], "Pkt": ["pts", "Pkt"], "Play": ["Play", "Spielen"], "Play a few rounds to see your trend.": ["Play a few rounds to see your trend.", "Spiele ein paar Runden, um deinen Trend zu sehen."], "Plays": ["Plays", "Spiele"], "Plural": ["Plural", "Plural"], "Pokalfighter": ["Cup fighter", "Pokalfighter"], "Practice this lesson": ["Practice this subject", "Dieses Thema üben"], "Problemzonen": ["Weak spots", "Schwächen"], "Punkte": ["Points", "Punkte"], "Punkte · # / #": ["Points · # / #", "Punkte · # / #"], "Put the letters in the right lineup.": ["Put the letters in the right lineup.", "Bring die Buchstaben in die richtige Aufstellung."], "Quick add": ["Quick add", "Schnell hinzufügen"], "Quote": ["Rate", "Quote"], "Re-add my built-in class notes": ["Re-add my built-in class notes", "Meine integrierten Unterrichtsnotizen neu hinzufügen"], "Reach a #x combo": ["Reach a #x combo", "Erreiche einen #x-Combo"], "Recent scores": ["Recent scores", "Letzte Ergebnisse"], "Reset progress (keep words)": ["Reset progress (keep words)", "Fortschritt zurücksetzen (Wörter behalten)"], "Review ahead: next # day (# cards)": ["Review ahead: next # day (# cards)", "Vorab wiederholen: nächster # Tag (# Karten)"], "Review ahead: next # days (# cards)": ["Review ahead: next # days (# cards)", "Vorab wiederholen: nächste # Tage (# Karten)"], "Richtig beim ersten Mal": ["Right first time", "Richtig beim ersten Mal"], "Richtig!": ["Correct!", "Richtig!"], "Rote Karten": ["Red cards", "Rote Karten"], "Rule": ["Rule", "Regel"], "Rückfälle": ["Lapses", "Rückfälle"], "S-U-N": ["W-D-L", "S-U-N"], "S.ST": ["Str.", "S.ST"], "Saison # · Saisonfinale": ["Season # · Season finale", "Saison # · Saisonfinale"], "Saison # · Spieltag #/#": ["Season # · Matchday #/#", "Saison # · Spieltag #/#"], "Saisonbilanz": ["Season record", "Saisonbilanz"], "Saisonfinale": ["Season finale", "Saisonfinale"], "Save": ["Save", "Speichern"], "Save .txt file": ["Save .txt file", "TXT-Datei speichern"], "Save backup file": ["Save backup file", "Sicherungsdatei speichern"], "Schussgenauigkeit": ["Shot accuracy", "Schussgenauigkeit"], "Schüsse": ["Shots", "Schüsse"], "Score": ["Score", "Ergebnis"], "Score #+ in a minigame": ["Score #+ in a minigame", "Erreiche #+ in einem Minispiel"], "Sentence (wrap the gap in {{ }})": ["Sentence (wrap the gap in {{ }})", "Satz (Lücke in {{ }} setzen)"], "Serie": ["Streak", "Serie"], "Settings": ["Settings", "Einstellungen"], "Show the text": ["Show the text", "Text anzeigen"], "Silber": ["Silver", "Silber"], "Skip": ["Skip", "Überspringen"], "Sound effects": ["Sound effects", "Soundeffekte"], "Speak German aloud": ["Speak German aloud", "Deutsch vorlesen"], "Spiel des Tages:": ["Game of the day:", "Spiel des Tages:"], "Spielanalyse": ["Match analysis", "Spielanalyse"], "Spieler": ["Players", "Spieler"], "Spielplan": ["Fixtures", "Spielplan"], "Spieltage": ["Matchdays", "Spieltage"], "Sprache / Language": ["Sprache / Language", "Sprache / Language"], "Sprint": ["Sprint", "Sprint"], "Stark!": ["Strong!", "Stark!"], "Start": ["Start", "Start"], "Statistik": ["Statistics", "Statistik"], "Suspend card (hide from study)": ["Suspend card (hide from study)", "Karte pausieren (nicht lernen)"], "TAG": ["DAY", "TAG"], "TAGE": ["DAYS", "TAGE"], "Tabelle": ["Table", "Tabelle"], "Tage": ["Days", "Tage"], "Tagesaufgaben": ["Daily tasks", "Tagesaufgaben"], "Tagesziel": ["Daily goal", "Tagesziel"], "Taktiktafel": ["Tactics board", "Taktiktafel"], "Tausender": ["Thousand club", "Tausender"], "Test the German voice": ["Test the German voice", "Deutsche Stimme testen"], "The Kobel notes format": ["The Kobel notes format", "Das Kobel-Notizformat"], "Theme": ["Theme", "Design"], "This score will not count.": ["This score will not count.", "Dieses Ergebnis zählt nicht."], "Top-Torschütze": ["Top scorer", "Top-Torschütze"], "Topic": ["Topic", "Thema"], "Tore": ["Goals", "Tore"], "Tore + knapp": ["Goals + near miss", "Tore + knapp"], "Tore / Schüsse": ["Goals / shots", "Tore / Schüsse"], "Torjäger": ["Goal-getter", "Torjäger"], "Torserie": ["Scoring run", "Torserie"], "Training": ["Training", "Training"], "Training starten": ["Start training", "Training starten"], "Trainings": ["Trainings", "Trainings"], "Trainingsumfang": ["Training scope", "Trainingsumfang"], "Translation": ["Translation", "Übersetzung"], "Tricky": ["Tricky", "Knifflig"], "Tricky words (#)": ["Tricky words (#)", "Knifflige Wörter (#)"], "Trophäen": ["Trophies", "Trophäen"], "Try again": ["Try again", "Nochmal versuchen"], "Two rounds of six pairs. Faster and cleaner earns more.": ["Two rounds of six pairs. Faster and cleaner earns more.", "Zwei Runden mit je sechs Paaren. Schneller und sauberer bringt mehr."], "Type it in German": ["Type it in German", "Auf Deutsch tippen"], "Unscramble": ["Unscramble", "Ordnen"], "Vitrine": ["Trophy cabinet", "Vitrine"], "Weiße Weste": ["Clean sheet", "Weiße Weste"], "Weiße Westen": ["Clean sheets", "Weiße Westen"], "What do you hear?": ["What do you hear?", "Was hörst du?"], "What does it mean?": ["What does it mean?", "Was bedeutet es?"], "Which article?": ["Which article?", "Welcher Artikel?"], "Wiederholen": ["Review", "Wiederholen"], "Win silverware: # questions": ["Win silverware: # questions", "Hol dir Silber: # Fragen"], "Woche": ["Week", "Woche"], "Woche ungeschlagen": ["Week unbeaten", "Woche ungeschlagen"], "Wochenergebnisse": ["Weekly results", "Wochenergebnisse"], "Wochenziel": ["Weekly goal", "Wochenziel"], "Wort des Tages": ["Word of the day", "Wort des Tages"], "Wortäquivalente": ["Word equivalents", "Wortäquivalente"], "Wunderbar!": ["Wonderful!", "Wunderbar!"], "You need #% to win silverware. Review and try again.": ["You need #% to win silverware. Review and try again.", "Du brauchst #%, um Silber zu holen. Wiederhole und versuche es erneut."], "Your answers so far are saved.": ["Your answers so far are saved.", "Deine bisherigen Antworten sind gespeichert."], "Your words, progress, streak and game records in one file. Restore it from Words → Import on any device.": ["Your words, progress, streak and game records in one file. Restore it from Words → Import on any device.", "Deine Wörter, dein Fortschritt, deine Serie und Spielrekorde in einer Datei. Stelle sie auf jedem Gerät über Wörter → Importieren wieder her."], "Zurück zur Kabine": ["Back to the dressing room", "Zurück zur Kabine"], "aktive Tage / #": ["active days / #", "aktive Tage / #"], "auf dem Platz": ["on the pitch", "auf dem Platz"], "bester Combo": ["best combo", "bester Combo"], "correct": ["correct", "richtig"], "due": ["due", "fällig"], "erwartete Tore": ["expected goals", "erwartete Tore"], "gespielt": ["played", "gespielt"], "gives double points.": ["gives double points.", "gibt doppelte Punkte."], "in a row": ["in a row", "in Folge"], "neue Wörter": ["new words", "neue Wörter"], "new": ["new", "neu"], "points": ["points", "Punkte"], "score": ["score", "Ergebnis"], "wiederholen": ["review", "wiederholen"], "xG": ["xG", "xG"], "xG is how many answers your history with each card said you would get right. Above it means you are punching above your weight.": ["xG is how many answers your history with each card said you would get right. Above it means you are punching above your weight.", "xG ist die Zahl an Antworten, die du laut deiner Kartenhistorie richtig haben solltest. Liegst du darüber, spielst du über deinem Niveau."], "xG-Bilanz": ["xG balance", "xG-Bilanz"], "# Tage bis Abpfiff": ["# days to full time", "# Tage bis Abpfiff"], "Spieltag": ["Matchday", "Spieltag"], "Saison": ["Season", "Saison"], "Abstieg": ["Relegation", "Abstieg"], "Klassenerhalt": ["Safe", "Klassenerhalt"], "Abstiegszone": ["Relegation zone", "Abstiegszone"], "Aufstiegsplatz": ["Promotion place", "Aufstiegsplatz"], "Prüfung": ["Exam", "Prüfung"], "Trophäenschrank": ["Trophy cabinet", "Trophäenschrank"], "Liga-Punkte": ["League points", "Liga-Punkte"], "Sprache": ["Language", "Sprache"], "Wörter": ["Words", "Wörter"], "Words": ["Words", "Wörter"], "Home": ["Home", "Start"], "Stats": ["Stats", "Statistik"], "Games": ["Games", "Spiele"], "Session # · Classroom & basics": ["Session # · Classroom & basics", "Einheit # · Klassenzimmer & Grundlagen"], "Session # · Greetings, jobs & questions": ["Session # · Greetings, jobs & questions", "Einheit # · Begrüßung, Berufe & Fragen"], "Session # · Numbers & introducing yourself": ["Session # · Numbers & introducing yourself", "Einheit # · Zahlen & sich vorstellen"], "Vocabulary · #": ["Vocabulary · #", "Vokabeln · #"], "Grammar · #": ["Grammar · #", "Grammatik · #"], "Promoted to the # Bundesliga!": ["Promoted to the 2. Bundesliga!", "Aufstieg in die 2. Bundesliga!"], "Saison # · Abpfiff": ["Season # · Full time", "Saison # · Abpfiff"], "Siege": ["Wins", "Siege"], "Remis": ["Draws", "Remis"], "Niederlagen": ["Losses", "Niederlagen"], "# Liga-Punkte.": ["# league points.", "# Liga-Punkte."], "Hit your weekly target and keep your words fresh to climb back.": ["Hit your weekly target and keep your words fresh to climb back.", "Erreiche dein Wochenziel und halte deine Wörter frisch, um wieder aufzusteigen."], "New league, new vocabulary. Keep the streak alive.": ["New league, new vocabulary. Keep the streak alive.", "Neue Liga, neuer Wortschatz. Halte die Serie am Leben."], "Keep going: the next promotion is closer than you think.": ["Keep going: the next promotion is closer than you think.", "Weiter so: der nächste Aufstieg ist näher, als du denkst."], "Saisonfinale spielen": ["Play the season finale", "Saisonfinale spielen"], "Schließen": ["Close", "Schließen"], "Schliessen": ["Close", "Schließen"], "Neue Trophäe": ["New trophy", "Neue Trophäe"], "Meister!": ["Champion!", "Meister!"], "Bestanden!": ["Passed!", "Bestanden!"], "Season exam passed.": ["Season exam passed.", "Saisonprüfung bestanden."], "Back to the table": ["Back to the table", "Zurück zur Tabelle"], "Weiter": ["Continue", "Weiter"], "Relegated to the # Bundesliga.": ["Relegated to the 2. Bundesliga.", "Abstieg in die 2. Bundesliga."], "Safe in the # Bundesliga.": ["Safe in the 2. Bundesliga.", "Klassenerhalt in der 2. Bundesliga."]};
+const I18N={"# / # Pkt": ["# / # pts", "# / # Pkt"], "# LP bis DFB-Pokal · Klassenerhalt": ["# LP to DFB-Pokal · safe", "# LP bis DFB-Pokal · Klassenerhalt"], "# LP · Klassenerhalt": ["# LP · safe", "# LP · Klassenerhalt"], "# Tage bis Abpfiff · Sieg +# · Niederlage −#": ["# days to full time · win +# · loss −#", "# Tage bis Abpfiff · Sieg +# · Niederlage −#"], "# Tage in Serie": ["# day streak", "# Tage in Serie"], "# day streak": ["# day streak", "# Tage in Serie"], "# due": ["# due", "# fällig"], "# letters": ["# letters", "# Buchstaben"], "# new": ["# new", "# neu"], "# new words waiting": ["# new words waiting", "# neue Wörter warten"], "# of # active": ["# of # active", "# von # aktiv"], "# questions · #% wins Bronze, #% Silver, #% Gold": ["# questions · #% wins Bronze, #% Silver, #% Gold", "# Fragen · #% für Bronze, #% für Silber, #% für Gold"], "# seconds. Translate as many words as you can.": ["# seconds. Translate as many words as you can.", "# Sekunden. Übersetze so viele Wörter wie möglich."], "# to fix": ["# to fix", "# zu verbessern"], "# vocabulary cards as tab-separated text. In Anki use File → Import, then map the fields to Front, Back, Example, Example translation and Tags. Your progress stays in Kobel.": ["# vocabulary cards as tab-separated text. In Anki use File → Import, then map the fields to Front, Back, Example, Example translation and Tags. Your progress stays in Kobel.", "# Vokabelkarten als Text mit Tabulatoren. In Anki: Datei → Importieren, dann die Felder Vorderseite, Rückseite, Beispiel, Beispielübersetzung und Tags zuordnen. Dein Fortschritt bleibt in Kobel."], "# von # Partien aktiv": ["# of # matches active", "# von # Partien aktiv"], "# words · # grammar ·": ["# words · # grammar ·", "# Wörter · # Grammatik ·"], "# words, # grammar items · # Champions, # Bundesliga, # #. Liga, # Ersatzbank": ["# words, # grammar items · # Champions, # Bundesliga, # #. Liga, # bench", "# Wörter, # Grammatikpunkte · # Champions, # Bundesliga, # #. Liga, # Ersatzbank"], "#K": ["#K", "#K"], "-# unter Erwartung": ["-# below expectation", "-# unter Erwartung"], "A noun appears, tap der, die or das. Wrong answers cost # seconds.": ["A noun appears, tap der, die or das. Wrong answers cost # seconds.", "Ein Nomen erscheint: tippe auf der, die oder das. Falsche Antworten kosten # Sekunden."], "A# · # LP": ["A# · # LP", "A# · # LP"], "A# · Liga": ["A# · League", "A# · Liga"], "A# · ab # LP": ["A# · from # LP", "A# · ab # LP"], "B# · ab # LP": ["B# · from # LP", "B# · ab # LP"], "C# · ab # LP": ["C# · from # LP", "C# · ab # LP"], "Accuracy": ["Accuracy", "Genauigkeit"], "Add to lesson": ["Add to subject", "Zum Thema hinzufügen"], "Add to library": ["Add to library", "Zur Bibliothek hinzufügen"], "Add words": ["Add words", "Wörter hinzufügen"], "Aktive Tage · # / #": ["Active days · # / #", "Aktive Tage · # / #"], "Aktivität": ["Activity", "Aktivität"], "All": ["All", "Alle"], "All lessons": ["All subjects", "Alle Themen"], "Alle": ["All", "Alle"], "Allrounder": ["All-rounder", "Allrounder"], "Anki-style review": ["Anki-style review", "Wiederholung im Anki-Stil"], "Anpfiff!": ["Kick-off!", "Anpfiff!"], "Anstoß": ["Kick-off", "Anstoß"], "Answer:": ["Answer:", "Antwort:"], "Antworten": ["Answers", "Antworten"], "App-Update": ["App update", "App-Update"], "Aufs Tor": ["On target", "Aufs Tor"], "Aufstellung": ["Line-up", "Aufstellung"], "Aufstieg": ["Promotion", "Aufstieg"], "Aufstiegspokal": ["Promotion Cup", "Aufstiegspokal"], "Aus dem Training nehmen": ["Remove from training", "Aus dem Training nehmen"], "Auszeichnungen": ["Awards", "Auszeichnungen"], "Auto": ["Auto", "Auto"], "Back to the start": ["Back to the start", "Zurück zum Start"], "Backup": ["Backup", "Sicherung"], "Badge unlocked: Kader komplett": ["Badge unlocked: Full squad", "Abzeichen freigeschaltet: Kader komplett"], "Ballbesitz": ["Possession", "Ballbesitz"], "Best": ["Best", "Bestwert"], "Best combo": ["Best combo", "Bester Combo"], "Boni": ["Bonuses", "Boni"], "Both": ["Both", "Beides"], "Bronze": ["Bronze", "Bronze"], "Bundesliga": ["Bundesliga", "Bundesliga"], "CL": ["CL", "CL"], "Card options": ["Card options", "Kartenoptionen"], "Champions": ["Champions", "Champions"], "Champions-Kader": ["Champions squad", "Champions-Kader"], "Check": ["Check", "Prüfen"], "Checking GitHub…": ["Checking GitHub…", "GitHub wird geprüft…"], "Choose": ["Choose", "Wählen"], "Close": ["Close", "Schließen"], "Cloud sync": ["Cloud sync", "Cloud-Sync"], "Connect and sync": ["Connect and sync", "Verbinden und synchronisieren"], "Connect your server in Settings to compete with friends.": ["Connect your server in Settings to compete with friends.", "Verbinde deinen Server in den Einstellungen, um gegen Freunde anzutreten."], "Continue": ["Continue", "Weiter"], "Copy": ["Copy", "Kopieren"], "Copy as text": ["Copy as text", "Als Text kopieren"], "Copy backup as text": ["Copy backup as text", "Sicherung als Text kopieren"], "Copy prompt for Claude": ["Copy prompt for Claude", "Prompt für Claude kopieren"], "Custom study": ["Custom study", "Eigenes Training"], "Custom study…": ["Custom study…", "Eigenes Training…"], "DE→EN": ["DE→EN", "DE→EN"], "DFB": ["DFB", "DFB"], "Daily points goal": ["Daily points goal", "Tägliches Punkteziel"], "Data": ["Data", "Daten"], "Dauerbrenner": ["Ever-present", "Dauerbrenner"], "Delete": ["Delete", "Löschen"], "Der, die or das? Take the shot.": ["Der, die or das? Take the shot.", "Der, die oder das? Schieß!"], "Der-Die-Das": ["Der-Die-Das", "Der-Die-Das"], "Deutsch": ["Deutsch", "Deutsch"], "Deutsch · Bundesliga der Wörter": ["German · the Bundesliga of words", "Deutsch · Bundesliga der Wörter"], "Di": ["Tu", "Di"], "Do": ["Th", "Do"], "Mi": ["We", "Mi"], "Mo": ["Mo", "Mo"], "Fr": ["Fr", "Fr"], "Sa": ["Sa", "Sa"], "So": ["Su", "So"], "Doppelpass": ["One-two", "Doppelpass"], "Du": ["You", "Du"], "Dunkel": ["Dark", "Dunkel"], "EN→DE": ["EN→DE", "EN→DE"], "Eight sentences from your grammar notes. The rule shows up when you miss one.": ["Eight sentences from your grammar notes. The rule shows up when you miss one.", "Acht Sätze aus deinen Grammatiknotizen. Die Regel erscheint, wenn du einen verfehlst."], "Eight words. Hints help but cost points.": ["Eight words. Hints help but cost points.", "Acht Wörter. Hinweise helfen, kosten aber Punkte."], "Eight words. Umlauts and ß count, but tiny typos are forgiven.": ["Eight words. Umlauts and ß count, but tiny typos are forgiven.", "Acht Wörter. Umlaute und ß zählen, kleine Tippfehler werden verziehen."], "Einheiten": ["Sessions", "Einheiten"], "Einsatzminuten": ["Minutes played", "Einsatzminuten"], "Einstellungen": ["Settings", "Einstellungen"], "Elfmeter": ["Penalty", "Elfmeter"], "English": ["English", "English"], "Erase everything (empty library)": ["Erase everything (empty library)", "Alles löschen (leere Bibliothek)"], "Erg.": ["Res.", "Erg."], "Ersatzbank": ["Bench", "Ersatzbank"], "Everything lives on this device. You have not saved a backup file yet.": ["Everything lives on this device. You have not saved a backup file yet.", "Alles liegt auf diesem Gerät. Du hast noch keine Sicherungsdatei gespeichert."], "Export for Anki": ["Export for Anki", "Für Anki exportieren"], "Export for Anki (TSV)": ["Export for Anki (TSV)", "Für Anki exportieren (TSV)"], "Extra practice, like AnkiDroid's custom study.": ["Extra practice, like AnkiDroid's custom study.", "Zusätzliches Training, wie das eigene Lernen in AnkiDroid."], "Fehler": ["Errors", "Fehler"], "Fehlerfreie Einheiten": ["Error-free sessions", "Fehlerfreie Einheiten"], "Fertig": ["Done", "Fertig"], "Fertig!": ["Done!", "Fertig!"], "Fill the gaps from your grammar notes.": ["Fill the gaps from your grammar notes.", "Fülle die Lücken aus deinen Grammatiknotizen."], "Finish all three for a +# bonus.": ["Finish all three for a +# bonus.", "Schließe alle drei für +# Bonus ab."], "Flashcard direction": ["Flashcard direction", "Kartenrichtung"], "Flashcards": ["Flashcards", "Karteikarten"], "Flashcards: what is due now": ["Flashcards: what is due now", "Karteikarten: was jetzt fällig ist"], "Form": ["Form", "Form"], "Fällig": ["Due", "Fällig"], "GT": ["GA", "GT"], "Gegentore": ["Goals against", "Gegentore"], "Genau!": ["Exactly!", "Genau!"], "German voice ready": ["German voice ready", "Deutsche Stimme bereit"], "Gesamt": ["Overall", "Gesamt"], "Gold": ["Gold", "Gold"], "Grammar item": ["Grammar item", "Grammatikpunkt"], "Grammar rule": ["Grammar rule", "Grammatikregel"], "Grammar share of practice": ["Grammar share of practice", "Grammatikanteil am Training"], "Guten Morgen! #. Liga · Nachwuchs": ["Guten Morgen! #. Liga · Nachwuchs", "Guten Morgen! #. Liga · Nachwuchs"], "Hattrick": ["Hat-trick", "Hattrick"], "Hell": ["Light", "Hell"], "Heute": ["Today", "Heute"], "Hint": ["Hint", "Hinweis"], "Ich bin ...": ["Ich bin ...", "Ich bin ..."], "Im Trainingsumfang (#/#)": ["In training scope (#/#)", "Im Trainingsumfang (#/#)"], "Import": ["Import", "Importieren"], "Import class notes": ["Import class notes", "Unterrichtsnotizen importieren"], "Installed:": ["Installed:", "Installiert:"], "Jetzt": ["Now", "Jetzt"], "Joker #": ["Joker #", "Joker #"], "Jot down words during class. One per line, same format as import.": ["Jot down words during class. One per line, same format as import.", "Notiere Wörter im Unterricht. Eins pro Zeile, im Importformat."], "Kader": ["Squad", "Kader"], "Kader komplett": ["Full squad", "Kader komplett"], "Kaderwert": ["Squad value", "Kaderwert"], "Kaderwert counts your words (stage-weighted) and grammar items (worth #×). Liga-Punkte = Kaderwert + Form + Boni.": ["Squad value counts your words (stage-weighted) and grammar items (worth #×). League points = squad value + form + bonuses.", "Der Kaderwert zählt deine Wörter (nach Stufe gewichtet) und Grammatikpunkte (#× wert). Liga-Punkte = Kaderwert + Form + Boni."], "Karten fällig": ["Cards due", "Karten fällig"], "Keep going": ["Keep going", "Weiter so"], "Kommentator": ["Commentator", "Kommentator"], "Königsklasse": ["Premier class", "Königsklasse"], "LP": ["LP", "LP"], "Learn": ["Learn", "Lernen"], "Learn more new words (# waiting)": ["Learn more new words (# waiting)", "Mehr neue Wörter lernen (# warten)"], "Learn the # new words": ["Learn the # new words", "Die # neuen Wörter lernen"], "Leave": ["Leave", "Verlassen"], "Leave this game?": ["Leave this game?", "Dieses Spiel verlassen?"], "Leave this session?": ["Leave this session?", "Diese Einheit verlassen?"], "Lesson": ["Subject", "Thema"], "Lessons in training": ["Subjects in training", "Themen im Training"], "Letzte #": ["Last #", "Letzte #"], "Liga": ["League", "Liga"], "Liga-Tabelle": ["League table", "Liga-Tabelle"], "Ligen": ["Leagues", "Ligen"], "Listen and type": ["Listen and type", "Hören und tippen"], "Listen, then spell what you hear.": ["Listen, then spell what you hear.", "Hör zu und schreibe, was du hörst."], "Live · Saison # · Spieltag #": ["Live · Season # · Matchday #", "Live · Saison # · Spieltag #"], "Load / import": ["Load / import", "Laden / importieren"], "Load file": ["Load file", "Datei laden"], "Match all pairs": ["Match all pairs", "Ordne alle Paare zu"], "Match the pairs": ["Match the pairs", "Paare zuordnen"], "Meet # new words": ["Meet # new words", "# neue Wörter kennenlernen"], "Mehrzahl": ["Plural", "Mehrzahl"], "Minigames built from your own notes. Words you miss come back in your next practice.": ["Minigames built from your own notes. Words you miss come back in your next practice.", "Minispiele aus deinen eigenen Notizen. Verfehlte Wörter kommen im nächsten Training wieder."], "Minigames with these words": ["Minigames with these words", "Minispiele mit diesen Wörtern"], "Minispiele": ["Minigames", "Minispiele"], "Monat": ["Month", "Monat"], "Nachtschicht": ["Night shift", "Nachtschicht"], "Nein": ["No", "Nein"], "Neu": ["New", "Neu"], "Neueste": ["Newest", "Neueste"], "Neuzugang": ["New signing", "Neuzugang"], "Neuzugänge": ["New signings", "Neuzugänge"], "New words per session": ["New words per session", "Neue Wörter pro Einheit"], "Nicht bestanden": ["Not passed", "Nicht bestanden"], "No single card to manage here": ["No single card to manage here", "Hier gibt es keine einzelne Karte zu verwalten"], "None yet, nice": ["None yet, nice", "Noch keine, super"], "Not played yet": ["Not played yet", "Noch nicht gespielt"], "Not quite": ["Not quite", "Nicht ganz"], "Nächste # Tage": ["Next # days", "Nächste # Tage"], "Off": ["Off", "Aus"], "Optional. Keeps your words and progress in your own free Cloudflare database and shares them between your devices. It works in the Android app. The access code is stored only on this device.": ["Optional. Keeps your words and progress in your own free Cloudflare database and shares them between your devices. It works in the Android app. The access code is stored only on this device.", "Optional. Speichert deine Wörter und deinen Fortschritt in deiner eigenen kostenlosen Cloudflare-Datenbank und teilt sie zwischen deinen Geräten. Funktioniert in der Android-App. Der Zugangscode wird nur auf diesem Gerät gespeichert."], "Pair German words with meanings.": ["Pair German words with meanings.", "Ordne deutsche Wörter ihren Bedeutungen zu."], "Partie": ["Match", "Partie"], "Partien-Tabelle": ["Match table", "Partien-Tabelle"], "Passquote": ["Pass accuracy", "Passquote"], "Paste": ["Paste", "Einfügen"], "Paste the prompt into a chat, add your raw class notes under it, then paste the reply here.": ["Paste the prompt into a chat, add your raw class notes under it, then paste the reply here.", "Füge den Prompt in einen Chat ein, ergänze darunter deine Rohnotizen und füge die Antwort hier ein."], "Paste your notes in the Kobel format. Import again after every class: known words are updated and keep their progress.": ["Paste your notes in the Kobel format. Import again after every class: known words are updated and keep their progress.", "Füge deine Notizen im Kobel-Format ein. Importiere nach jedem Unterricht erneut: bekannte Wörter werden aktualisiert und behalten ihren Fortschritt."], "Pick the German": ["Pick the German", "Wähle das Deutsche"], "Pick the correct plural form.": ["Pick the correct plural form.", "Wähle die richtige Pluralform."], "Pick the lessons that feed your practice, flashcards and minigames. Lessons you pause keep all their progress. New lessons join automatically.": ["Pick the subjects that feed your practice, flashcards and minigames. Subjects you pause keep all their progress. New subjects join automatically.", "Wähle die Themen für Training, Karteikarten und Minispiele. Pausierte Themen behalten ihren Fortschritt. Neue Themen kommen automatisch dazu."], "Pick the right plural for each noun from your notes. Needs nouns with (Pl. …) in your notes.": ["Pick the right plural for each noun from your notes. Needs nouns with (Pl. …) in your notes.", "Wähle für jedes Nomen aus deinen Notizen den richtigen Plural. Braucht Nomen mit (Pl. …) in den Notizen."], "Pick the right translation. Combos add bonus points, every #th correct answer gives +# seconds, a wrong answer costs #.": ["Pick the right translation. Combos add bonus points, every #th correct answer gives +# seconds, a wrong answer costs #.", "Wähle die richtige Übersetzung. Combos geben Bonuspunkte, jede #. richtige Antwort gibt +# Sekunden, eine falsche kostet #."], "Pkt": ["pts", "Pkt"], "Play": ["Play", "Spielen"], "Play a few rounds to see your trend.": ["Play a few rounds to see your trend.", "Spiele ein paar Runden, um deinen Trend zu sehen."], "Plays": ["Plays", "Spiele"], "Plural": ["Plural", "Plural"], "Pokalfighter": ["Cup fighter", "Pokalfighter"], "Practice this lesson": ["Practice this subject", "Dieses Thema üben"], "Problemzonen": ["Weak spots", "Schwächen"], "Punkte": ["Points", "Punkte"], "Punkte · # / #": ["Points · # / #", "Punkte · # / #"], "Put the letters in the right lineup.": ["Put the letters in the right lineup.", "Bring die Buchstaben in die richtige Aufstellung."], "Quick add": ["Quick add", "Schnell hinzufügen"], "Quote": ["Rate", "Quote"], "Re-add my built-in class notes": ["Re-add my built-in class notes", "Meine integrierten Unterrichtsnotizen neu hinzufügen"], "Reach a #x combo": ["Reach a #x combo", "Erreiche einen #x-Combo"], "Recent scores": ["Recent scores", "Letzte Ergebnisse"], "Reset progress (keep words)": ["Reset progress (keep words)", "Fortschritt zurücksetzen (Wörter behalten)"], "Review ahead: next # day (# cards)": ["Review ahead: next # day (# cards)", "Vorab wiederholen: nächster # Tag (# Karten)"], "Review ahead: next # days (# cards)": ["Review ahead: next # days (# cards)", "Vorab wiederholen: nächste # Tage (# Karten)"], "Richtig beim ersten Mal": ["Right first time", "Richtig beim ersten Mal"], "Richtig!": ["Correct!", "Richtig!"], "Rote Karten": ["Red cards", "Rote Karten"], "Rule": ["Rule", "Regel"], "Rückfälle": ["Lapses", "Rückfälle"], "S-U-N": ["W-D-L", "S-U-N"], "S.ST": ["Str.", "S.ST"], "Saison # · Saisonfinale": ["Season # · Season finale", "Saison # · Saisonfinale"], "Saison # · Spieltag #/#": ["Season # · Matchday #/#", "Saison # · Spieltag #/#"], "Saisonbilanz": ["Season record", "Saisonbilanz"], "Saisonfinale": ["Season finale", "Saisonfinale"], "Save": ["Save", "Speichern"], "Save .txt file": ["Save .txt file", "TXT-Datei speichern"], "Save backup file": ["Save backup file", "Sicherungsdatei speichern"], "Schussgenauigkeit": ["Shot accuracy", "Schussgenauigkeit"], "Schüsse": ["Shots", "Schüsse"], "Score": ["Score", "Ergebnis"], "Score #+ in a minigame": ["Score #+ in a minigame", "Erreiche #+ in einem Minispiel"], "Sentence (wrap the gap in {{ }})": ["Sentence (wrap the gap in {{ }})", "Satz (Lücke in {{ }} setzen)"], "Serie": ["Streak", "Serie"], "Settings": ["Settings", "Einstellungen"], "Show the text": ["Show the text", "Text anzeigen"], "Silber": ["Silver", "Silber"], "Skip": ["Skip", "Überspringen"], "Sound effects": ["Sound effects", "Soundeffekte"], "Speak German aloud": ["Speak German aloud", "Deutsch vorlesen"], "Spiel des Tages:": ["Game of the day:", "Spiel des Tages:"], "Spielanalyse": ["Match analysis", "Spielanalyse"], "Spieler": ["Players", "Spieler"], "Spielplan": ["Fixtures", "Spielplan"], "Spieltage": ["Matchdays", "Spieltage"], "Sprache / Language": ["Sprache / Language", "Sprache / Language"], "Sprint": ["Sprint", "Sprint"], "Stark!": ["Strong!", "Stark!"], "Start": ["Start", "Start"], "Statistik": ["Statistics", "Statistik"], "Suspend card (hide from study)": ["Suspend card (hide from study)", "Karte pausieren (nicht lernen)"], "TAG": ["DAY", "TAG"], "TAGE": ["DAYS", "TAGE"], "Tabelle": ["Table", "Tabelle"], "Tage": ["Days", "Tage"], "Tagesaufgaben": ["Daily tasks", "Tagesaufgaben"], "Tagesziel": ["Daily goal", "Tagesziel"], "Taktiktafel": ["Tactics board", "Taktiktafel"], "Tausender": ["Thousand club", "Tausender"], "Test the German voice": ["Test the German voice", "Deutsche Stimme testen"], "The Kobel notes format": ["The Kobel notes format", "Das Kobel-Notizformat"], "Theme": ["Theme", "Design"], "This score will not count.": ["This score will not count.", "Dieses Ergebnis zählt nicht."], "Top-Torschütze": ["Top scorer", "Top-Torschütze"], "Topic": ["Topic", "Thema"], "Tore": ["Goals", "Tore"], "Tore + knapp": ["Goals + near miss", "Tore + knapp"], "Tore / Schüsse": ["Goals / shots", "Tore / Schüsse"], "Torjäger": ["Goal-getter", "Torjäger"], "Torserie": ["Scoring run", "Torserie"], "Training": ["Training", "Training"], "Training starten": ["Start training", "Training starten"], "Trainings": ["Trainings", "Trainings"], "Trainingsumfang": ["Training scope", "Trainingsumfang"], "Translation": ["Translation", "Übersetzung"], "Tricky": ["Tricky", "Knifflig"], "Tricky words (#)": ["Tricky words (#)", "Knifflige Wörter (#)"], "Trophäen": ["Trophies", "Trophäen"], "Try again": ["Try again", "Nochmal versuchen"], "Two rounds of six pairs. Faster and cleaner earns more.": ["Two rounds of six pairs. Faster and cleaner earns more.", "Zwei Runden mit je sechs Paaren. Schneller und sauberer bringt mehr."], "Type it in German": ["Type it in German", "Auf Deutsch tippen"], "Unscramble": ["Unscramble", "Ordnen"], "Vitrine": ["Trophy cabinet", "Vitrine"], "Weiße Weste": ["Clean sheet", "Weiße Weste"], "Weiße Westen": ["Clean sheets", "Weiße Westen"], "What do you hear?": ["What do you hear?", "Was hörst du?"], "What does it mean?": ["What does it mean?", "Was bedeutet es?"], "Which article?": ["Which article?", "Welcher Artikel?"], "Wiederholen": ["Review", "Wiederholen"], "Win silverware: # questions": ["Win silverware: # questions", "Hol dir Silber: # Fragen"], "Woche": ["Week", "Woche"], "Woche ungeschlagen": ["Week unbeaten", "Woche ungeschlagen"], "Wochenergebnisse": ["Weekly results", "Wochenergebnisse"], "Wochenziel": ["Weekly goal", "Wochenziel"], "Wort des Tages": ["Word of the day", "Wort des Tages"], "Wortäquivalente": ["Word equivalents", "Wortäquivalente"], "Wunderbar!": ["Wonderful!", "Wunderbar!"], "You need #% to win silverware. Review and try again.": ["You need #% to win silverware. Review and try again.", "Du brauchst #%, um Silber zu holen. Wiederhole und versuche es erneut."], "Your answers so far are saved.": ["Your answers so far are saved.", "Deine bisherigen Antworten sind gespeichert."], "Your words, progress, streak and game records in one file. Restore it from Words → Import on any device.": ["Your words, progress, streak and game records in one file. Restore it from Words → Import on any device.", "Deine Wörter, dein Fortschritt, deine Serie und Spielrekorde in einer Datei. Stelle sie auf jedem Gerät über Wörter → Importieren wieder her."], "Zurück zur Kabine": ["Back to the dressing room", "Zurück zur Kabine"], "aktive Tage / #": ["active days / #", "aktive Tage / #"], "auf dem Platz": ["on the pitch", "auf dem Platz"], "bester Combo": ["best combo", "bester Combo"], "correct": ["correct", "richtig"], "due": ["due", "fällig"], "erwartete Tore": ["expected goals", "erwartete Tore"], "gespielt": ["played", "gespielt"], "gives double points.": ["gives double points.", "gibt doppelte Punkte."], "in a row": ["in a row", "in Folge"], "neue Wörter": ["new words", "neue Wörter"], "new": ["new", "neu"], "points": ["points", "Punkte"], "score": ["score", "Ergebnis"], "wiederholen": ["review", "wiederholen"], "xG": ["xG", "xG"], "xG is how many answers your history with each card said you would get right. Above it means you are punching above your weight.": ["xG is how many answers your history with each card said you would get right. Above it means you are punching above your weight.", "xG ist die Zahl an Antworten, die du laut deiner Kartenhistorie richtig haben solltest. Liegst du darüber, spielst du über deinem Niveau."], "xG-Bilanz": ["xG balance", "xG-Bilanz"], "# Tage bis Abpfiff": ["# days to full time", "# Tage bis Abpfiff"], "Spieltag": ["Matchday", "Spieltag"], "Saison": ["Season", "Saison"], "Abstieg": ["Relegation", "Abstieg"], "Klassenerhalt": ["Safe", "Klassenerhalt"], "Abstiegszone": ["Relegation zone", "Abstiegszone"], "Aufstiegsplatz": ["Promotion place", "Aufstiegsplatz"], "Prüfung": ["Exam", "Prüfung"], "Trophäenschrank": ["Trophy cabinet", "Trophäenschrank"], "Liga-Punkte": ["League points", "Liga-Punkte"], "Sprache": ["Language", "Sprache"], "Wörter": ["Words", "Wörter"], "Words": ["Words", "Wörter"], "Home": ["Home", "Start"], "Stats": ["Stats", "Statistik"], "Games": ["Games", "Spiele"], "Session # · Classroom & basics": ["Session # · Classroom & basics", "Einheit # · Klassenzimmer & Grundlagen"], "Session # · Greetings, jobs & questions": ["Session # · Greetings, jobs & questions", "Einheit # · Begrüßung, Berufe & Fragen"], "Session # · Numbers & introducing yourself": ["Session # · Numbers & introducing yourself", "Einheit # · Zahlen & sich vorstellen"], "Vocabulary · #": ["Vocabulary · #", "Vokabeln · #"], "Grammar · #": ["Grammar · #", "Grammatik · #"], "Promoted to the # Bundesliga!": ["Promoted to the 2. Bundesliga!", "Aufstieg in die 2. Bundesliga!"], "Saison # · Abpfiff": ["Season # · Full time", "Saison # · Abpfiff"], "Siege": ["Wins", "Siege"], "Remis": ["Draws", "Remis"], "Niederlagen": ["Losses", "Niederlagen"], "# Liga-Punkte.": ["# league points.", "# Liga-Punkte."], "Hit your weekly target and keep your words fresh to climb back.": ["Hit your weekly target and keep your words fresh to climb back.", "Erreiche dein Wochenziel und halte deine Wörter frisch, um wieder aufzusteigen."], "New league, new vocabulary. Keep the streak alive.": ["New league, new vocabulary. Keep the streak alive.", "Neue Liga, neuer Wortschatz. Halte die Serie am Leben."], "Keep going: the next promotion is closer than you think.": ["Keep going: the next promotion is closer than you think.", "Weiter so: der nächste Aufstieg ist näher, als du denkst."], "Saisonfinale spielen": ["Play the season finale", "Saisonfinale spielen"], "Schließen": ["Close", "Schließen"], "Schliessen": ["Close", "Schließen"], "Neue Trophäe": ["New trophy", "Neue Trophäe"], "Meister!": ["Champion!", "Meister!"], "Bestanden!": ["Passed!", "Bestanden!"], "Season exam passed.": ["Season exam passed.", "Saisonprüfung bestanden."], "Back to the table": ["Back to the table", "Zurück zur Tabelle"], "Weiter": ["Continue", "Weiter"], "Relegated to the # Bundesliga.": ["Relegated to the 2. Bundesliga.", "Abstieg in die 2. Bundesliga."], "Safe in the # Bundesliga.": ["Safe in the 2. Bundesliga.", "Klassenerhalt in der 2. Bundesliga."], "Freunde": ["Friends", "Freunde"]};
 let LANG='en';
 const NT='.opt,.mt,.wt,.q,.intro,.face,.crow,.nm,.blank,.nt,.fb .b b,.troph,textarea,pre,input,script,style,.w,.ex,.ct,.lt,.nc';
 function trKey(s){const nums=[];const k=s.replace(/\d+(?:[.,]\d+)?/g,m=>{nums.push(m);return'#'});return{k:k.replace(/\s+/g,' ').trim(),nums}}
@@ -3412,6 +3892,8 @@ const A={
   scope:scopeSheet,
   ...PROFILE_ACTIONS,
   ...TEACH_ACTIONS,
+  ...SOCIAL_ACTIONS,
+  ...CAREER_ACTIONS,
   exam:startExam,
   stab:t=>{statTab=t.dataset.k;render();window.scrollTo(0,0)},
   cabinet:()=>{tab='stats';statTab='cabinet';render()},
@@ -3451,7 +3933,7 @@ document.addEventListener('keydown',e=>{
 
 load();applyTheme();setLang(S.settings.lang);
 // hooks called by the Android shell
-window.onKobelBack=()=>{if($('#sheet')){closeSheet();return true}if($('#tr')){trClose();return true}if(ses){quit();return true}if(tab!=='home'){tab='home';render();return true}return false};
+window.onKobelBack=()=>{if($('#sheet')){closeSheet();return true}if($('#dl')){if(dlPlaying())toast(tx('Finish the game: your clock keeps running.','Spiel beenden: deine Uhr läuft weiter.'));else dlClose();return true}if($('#tr')){trClose();return true}if(ses){quit();return true}if(tab!=='home'){tab='home';render();return true}return false};
 window.onKobelVoice=()=>{if(tab==='settings'||tab==='arcade')render()};
 if(location.hash==='#debug')window.__k={S:()=>S,WALL,smartEn,smartDe,gapOptions,clozeOf,rushPick,rushDirTranslate,requeue,startSession,ses:()=>ses,setSes:v=>{ses=v},settle,LS,knowledge,render,startExam,openExam,closeMatchday,endSeason,lpNow,tierInfo,newsSheet,go:(t,s)=>{tab=t;if(s)statTab=s;render()},lang:l=>{S.settings.lang=l;setLang(l);render()}};
 render();

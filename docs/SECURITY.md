@@ -33,3 +33,14 @@ progress is filtered by it, so accounts cannot read each other's data.
 | Lost ID | There is no recovery: the ID is the key. The app shows it once after sign-up and always under Profile |
 
 Optional later hardening if the app becomes public: a Cloudflare Turnstile check on `/v1/register`, and a script that removes accounts that never synced anything.
+
+## Friends and duels (version 2.4.0)
+
+| Risk | Protection |
+|---|---|
+| Strangers adding you | Only someone who has your single-use invite code (40 random bits, valid 7 days) can add you. Guessing is limited to 20 tries per person per day |
+| A friend reading private data | `GET /v1/friends/{id}` returns a fixed whitelist (`stats.pub`, avatar, name). Cards, settings, sync address and access code are never read for this |
+| Non-friends reading a profile | Every friends and duel route checks the friendship on the server |
+| Cheating in duels | The server stores the right answers, sends the deck without them, scores each answer with its own clock, and requires answers in order |
+| Spam | Daily and open-challenge limits (see `docs/FRIENDS_AND_DUELS.md`); invalid or oversized decks are rejected |
+| Leaving friends | Removing a friend deletes the link for both sides |

@@ -33,7 +33,7 @@ const limitOf = (v, d) => {
 };
 
 /** Adds 1 to a counter unless it already reached `max`. Returns true if the caller may continue. */
-async function take(db, bucket, day, max) {
+export async function take(db, bucket, day, max) {
   const row = await db
     .prepare('INSERT INTO signups (bucket, day, n) VALUES (?, ?, 1) ON CONFLICT (bucket, day) DO UPDATE SET n = n + 1 WHERE n < ? RETURNING n')
     .bind(bucket, day, max)

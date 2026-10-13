@@ -118,3 +118,59 @@ Deletes **all** of the caller's cards, rules and profile (the user itself remain
 ## CORS
 Browsers/WebViews may call the API only from origins listed in `ALLOWED_ORIGINS` (`wrangler.toml`).
 The Android app's origin `https://appassets.androidplatform.net` is allowed by default. The Kobel ID, not CORS, is what protects the data.
+
+
+---
+
+## Friends (version 2.4.0)
+
+All friends endpoints need the Bearer header. Being friends is mutual. Only friends can see each other's public profile.
+
+### POST /v1/friends/code
+Makes (or replaces) your invite code. Single use, valid 7 days.
+* **Response 200:** `{ "code": "ABCD-2345", "expiresAt": 1790907743000 }`
+
+### POST /v1/friends
+Adds the person who made the code.
+* **Body:** `{ "code": "ABCD-2345" }` (case and dash do not matter)
+* **Response 200:** `{ "friend": { "id": 7, "name": "Anna", ... } }`
+* **Errors:** `400 invalid_request`, `400 own_code`, `404 code_not_found` (wrong or expired), `409 already_friends`, `409 friend_limit` (30 friends), `429 too_many_attempts` (20 tries per day).
+
+### GET /v1/friends
+* **Response 200:** `{ "friends": [ { "id", "name", "avatar", "xp", "streak", "week", "tier", "stage", "seen" } ] }`
+
+### GET /v1/friends/{id}
+A friend's public profile: whitelisted numbers only (XP, streak, league, career stage, records, minigame bests) plus `duels` (their overall record) and `versus` (your record against them).
+* **Errors:** `404 not_found` (not your friend)
+
+### DELETE /v1/friends/{id}
+Removes the friendship for both people. Open duels between you are closed.
+* **Response 200:** `{ "ok": true }`
+
+## Duels (version 2.4.0)
+
+Multiplayer minigames: `sprint`, `dash`, `plural`, `gap`, `scramble`. Two modes: `live` (both players at the same time, 2 minute invite) and `turn` (each plays when they like, 24 hours). Details: `docs/FRIENDS_AND_DUELS.md`.
+
+### POST /v1/duels
+* **Body:** `{ "friend": 7, "game": "sprint", "mode": "live" | "turn", "deck": [ ...10 questions... ] }`. The challenger builds the deck from their own cards.
+* **Response 200:** `{ "duel": { id, game, mode, status, role, n, opponent, my, their, startAt, expiresAt, result, now }, "deck": [...] }` (right answers are never in the deck the client receives)
+* **Errors:** `400 invalid_request` (names the field), `404 not_found` (not a friend), `409 already_open`, `409 too_many_open` (8), `429 too_many_duels` (40 per day)
+
+### GET /v1/duels
+Your open and recent duels. In live games this is also what the app polls (about every 1.5 s).
+
+### GET /v1/duels/{id}
+One duel (with the deck if you may play it).
+
+### POST /v1/duels/{id}/accept, /decline
+Only the challenged friend. `409 not_open` if it expired or was already answered.
+
+### POST /v1/duels/{id}/start
+Turn-based games only: starts your own clock.
+
+### POST /v1/duels/{id}/answer
+* **Body:** `{ "i": 0, "v": 2 }` where `i` is the question number (in order, no skipping) and `v` is an option number, short text, or `null` for "no answer".
+* **Response 200:** `{ "correct": true, "points": 130, "answer": "der Tisch", "duel": {...} }`
+* **Errors:** `409 out_of_order`, `409 not_started`, `409 already_done`, `409 not_open`
+
+Points are decided by the server from its own clock; the phone only says what was chosen.

@@ -90,3 +90,42 @@ CREATE TABLE signups (
   n      INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (bucket, day)
 );
+
+-- 0004: friends and duels (see database/migrations/0004_friends_duels.sql for the commented version)
+CREATE TABLE friend_codes (
+  user_id    INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  code       TEXT    NOT NULL UNIQUE,
+  created_at INTEGER NOT NULL
+);
+CREATE TABLE friends (
+  user_a     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_b     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (user_a, user_b),
+  CHECK (user_a < user_b)
+);
+CREATE INDEX idx_friends_b ON friends (user_b);
+CREATE TABLE duels (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  game       TEXT    NOT NULL CHECK (game IN ('sprint', 'dash', 'plural', 'gap', 'scramble')),
+  mode       TEXT    NOT NULL CHECK (mode IN ('live', 'turn')),
+  a_user     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  b_user     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  status     TEXT    NOT NULL DEFAULT 'invited' CHECK (status IN ('invited', 'active', 'done', 'declined', 'expired')),
+  deck       TEXT    NOT NULL,
+  a_answers  TEXT    NOT NULL DEFAULT '[]',
+  b_answers  TEXT    NOT NULL DEFAULT '[]',
+  a_score    INTEGER NOT NULL DEFAULT 0,
+  b_score    INTEGER NOT NULL DEFAULT 0,
+  a_done     INTEGER NOT NULL DEFAULT 0 CHECK (a_done IN (0, 1)),
+  b_done     INTEGER NOT NULL DEFAULT 0 CHECK (b_done IN (0, 1)),
+  a_t        INTEGER NOT NULL DEFAULT 0,
+  b_t        INTEGER NOT NULL DEFAULT 0,
+  start_at   INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  expires_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  CHECK (a_user <> b_user)
+);
+CREATE INDEX idx_duels_a ON duels (a_user, updated_at DESC);
+CREATE INDEX idx_duels_b ON duels (b_user, updated_at DESC);

@@ -5,6 +5,8 @@ import { handleSync, exportAll, deleteAll } from './sync.js';
 import { leaderboard } from './leaderboard.js';
 import { listNotices, renameUser } from './profile.js';
 import { register, sha256Hex } from './register.js';
+import { createCode, addFriend, listFriends, friendProfile, removeFriend } from './friends.js';
+import { createDuel, listDuels, getDuel, acceptDuel, declineDuel, startDuel, answerDuel, duelRecord } from './duels.js';
 
 const MAX_BODY_BYTES = 262144; // 256 KB is far more than a 40-item sync needs
 
@@ -29,7 +31,7 @@ async function readJson(request) {
   }
 }
 
-const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard'];
+const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels'];
 
 async function route(request, env) {
   const url = new URL(request.url);
@@ -75,6 +77,50 @@ async function route(request, env) {
     const user = await authenticate(request, env);
     await deleteAll(env.DB, user);
     return json({ ok: true });
+  }
+  // ── friends and duels (all need an access code) ──
+  if (path === '/v1/friends/code' && method === 'POST') {
+    const user = await authenticate(request, env);
+    return json(await createCode(env.DB, user));
+  }
+  if (path === '/v1/friends' && method === 'GET') {
+    const user = await authenticate(request, env);
+    return json(await listFriends(env.DB, user));
+  }
+  if (path === '/v1/friends' && method === 'POST') {
+    const user = await authenticate(request, env);
+    return json(await addFriend(env.DB, user, await readJson(request)), 201);
+  }
+  const fm = path.match(/^\/v1\/friends\/(\d{1,12})$/);
+  if (fm && (method === 'GET' || method === 'DELETE')) {
+    const user = await authenticate(request, env);
+    const id = Number(fm[1]);
+    if (method === 'DELETE') return json(await removeFriend(env.DB, user, id));
+    const out = await friendProfile(env.DB, user, id);
+    out.profile.duels = await duelRecord(env.DB, id);
+    out.profile.versus = await duelRecord(env.DB, user.id, id);
+    return json(out);
+  }
+  if (path === '/v1/duels' && method === 'GET') {
+    const user = await authenticate(request, env);
+    return json(await listDuels(env.DB, user));
+  }
+  if (path === '/v1/duels' && method === 'POST') {
+    const user = await authenticate(request, env);
+    return json(await createDuel(env.DB, user, await readJson(request)), 201);
+  }
+  const dm = path.match(/^\/v1\/duels\/(\d{1,12})(?:\/(accept|decline|start|answer))?$/);
+  if (dm) {
+    const id = Number(dm[1]), action = dm[2];
+    if (!action && method === 'GET') return json(await getDuel(env.DB, await authenticate(request, env), id));
+    if (action && method === 'POST') {
+      const user = await authenticate(request, env);
+      if (action === 'accept') return json(await acceptDuel(env.DB, user, id));
+      if (action === 'decline') return json(await declineDuel(env.DB, user, id));
+      if (action === 'start') return json(await startDuel(env.DB, user, id));
+      return json(await answerDuel(env.DB, user, id, await readJson(request)));
+    }
+    throw new HttpError(405, 'method_not_allowed', 'Method not allowed.');
   }
   if (PATHS.includes(path)) throw new HttpError(405, 'method_not_allowed', 'Method not allowed.');
   throw new HttpError(404, 'not_found', 'Unknown endpoint.');
