@@ -8,15 +8,15 @@
 
 What a friend can see is a fixed list of numbers. They can **never** see your cards, settings, sync address or access code (see `docs/SECURITY.md`).
 
-## Duels (multiplayer minigames)
-Games: Sprint, Dash, Plural, Gap and Scramble. (Doppelpass and Kommentator stay single player.)
+## Duels (turn-based)
+Games: Sprint, Dash, Plural, Gap and Scramble. (Doppelpass and Kommentator stay single player.) Since 2.5.0 there is no live mode: you play your 9 questions and send the challenge, your friend plays whenever they open the app within 24 hours. The score is goals (the number of right answers, 0 to 9) and the result looks like a football score. The opponent's score stays hidden until you have both finished.
 
-| Mode | How it works |
-|---|---|
-| **Live** | Both of you are online. The friend has 2 minutes to accept, then a 4 second countdown starts and you answer the same 10 questions at the same time. The app asks the server about every 1.5 seconds how the other player is doing. |
-| **Turn-based** | You play your 10 questions and send the challenge. Your friend plays whenever they open the app, within 24 hours. The result shows when both have played. |
+Fairness: both players get the same 9 questions. The server keeps the right answers and counts the time itself, so a changed app cannot cheat. Time only breaks ties in points.
 
-Fairness: both players get the same 10 questions. The server keeps the right answers and counts the time itself, so a changed app cannot cheat. Faster right answers give more points. In turn-based games the opponent's score stays hidden until you have both finished.
+## Friends tab, streaks and study groups (2.5.0)
+* Friends have their own tab. Everyone is in every table and ranking; there is no longer a setting to hide.
+* **Friend streak:** days in a row on which both of you practised.
+* **Study groups:** up to 8 friends. Start a round (a minigame, 9 questions, 24 hours); everyone plays when they like; the group table gives 3 points for a win, 1 for a draw, and a missed round is a loss. Each group has its own streak: every member practising on the same day.
+* **Notifications:** the phone checks `/v1/alerts` about every 15 to 30 minutes (Android decides) for friend requests, match requests, results and group news, plus a local evening reminder before your streak ends and an alert for new app versions. You can switch each off in Settings.
 
-Limits (to stay inside the free Cloudflare plan): 30 friends, 8 open challenges, 40 challenges a day, 20 code tries a day.
-Live mode is "near live" over normal HTTPS requests. There are no WebSockets and no extra Cloudflare products.
+Limits (to stay inside the free Cloudflare plan): 30 friends, 8 open challenges, 40 challenges a day, 20 code tries a day, 5 groups per person, 8 people per group.

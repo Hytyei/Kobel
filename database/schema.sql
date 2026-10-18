@@ -101,6 +101,7 @@ CREATE TABLE friends (
   user_a     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   user_b     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created_at INTEGER NOT NULL,
+  added_by   INTEGER,
   PRIMARY KEY (user_a, user_b),
   CHECK (user_a < user_b)
 );
@@ -125,7 +126,51 @@ CREATE TABLE duels (
   created_at INTEGER NOT NULL,
   expires_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL,
+  finished_by INTEGER,
   CHECK (a_user <> b_user)
 );
 CREATE INDEX idx_duels_a ON duels (a_user, updated_at DESC);
 CREATE INDEX idx_duels_b ON duels (b_user, updated_at DESC);
+
+-- 0005: study groups
+CREATE TABLE groups (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT    NOT NULL,
+  owner      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
+CREATE TABLE group_members (
+  group_id  INTEGER NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+  user_id   INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  added_by  INTEGER,
+  joined_at INTEGER NOT NULL,
+  PRIMARY KEY (group_id, user_id)
+);
+CREATE INDEX idx_group_members_user ON group_members (user_id, joined_at DESC);
+
+CREATE TABLE group_games (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  group_id   INTEGER NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+  game       TEXT    NOT NULL CHECK (game IN ('sprint', 'dash', 'plural', 'gap', 'scramble')),
+  creator    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  deck       TEXT    NOT NULL,                                  -- JSON: questions and right answers (never sent to players)
+  status     TEXT    NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'done')),
+  created_at INTEGER NOT NULL,
+  expires_at INTEGER NOT NULL,
+  settled_at INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX idx_group_games_group ON group_games (group_id, created_at DESC);
+
+CREATE TABLE group_plays (
+  game_id     INTEGER NOT NULL REFERENCES group_games(id) ON DELETE CASCADE,
+  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  answers     TEXT    NOT NULL DEFAULT '[]',
+  score       INTEGER NOT NULL DEFAULT 0,                       -- goals: right answers, 0 to 9
+  done        INTEGER NOT NULL DEFAULT 0 CHECK (done IN (0, 1)),
+  t           INTEGER NOT NULL DEFAULT 0,                       -- server time the current question was handed out
+  finished_at INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (game_id, user_id)
+);
+CREATE INDEX idx_group_plays_user ON group_plays (user_id, finished_at DESC);

@@ -6,6 +6,8 @@ import { leaderboard } from './leaderboard.js';
 import { listNotices, renameUser } from './profile.js';
 import { register, sha256Hex } from './register.js';
 import { createCode, addFriend, listFriends, friendProfile, removeFriend } from './friends.js';
+import { listAlerts } from './alerts.js';
+import { createGroup, listGroups, getGroup, renameGroup, deleteGroup, addMember, removeMember, createRound, getRound, startRound, answerRound } from './groups.js';
 import { createDuel, listDuels, getDuel, acceptDuel, declineDuel, startDuel, answerDuel, duelRecord } from './duels.js';
 
 const MAX_BODY_BYTES = 262144; // 256 KB is far more than a 40-item sync needs
@@ -31,7 +33,7 @@ async function readJson(request) {
   }
 }
 
-const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels'];
+const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels', '/v1/groups', '/v1/alerts'];
 
 async function route(request, env) {
   const url = new URL(request.url);
@@ -51,7 +53,7 @@ async function route(request, env) {
   }
   if (path === '/v1/me' && method === 'GET') {
     const user = await authenticate(request, env);
-    return json({ user: { name: user.name, visible: Boolean(user.visible) } });
+    return json({ user: { id: user.id, name: user.name, visible: true } });
   }
   if (path === '/v1/me' && method === 'PATCH') {
     const user = await authenticate(request, env);
@@ -119,6 +121,35 @@ async function route(request, env) {
       if (action === 'decline') return json(await declineDuel(env.DB, user, id));
       if (action === 'start') return json(await startDuel(env.DB, user, id));
       return json(await answerDuel(env.DB, user, id, await readJson(request)));
+    }
+    throw new HttpError(405, 'method_not_allowed', 'Method not allowed.');
+  }
+  // ── alerts and study groups ──
+  if (path === '/v1/alerts' && method === 'GET') {
+    const user = await authenticate(request, env);
+    return json(await listAlerts(env.DB, user, url.searchParams.get('since')));
+  }
+  if (path === '/v1/groups' && method === 'GET') return json(await listGroups(env.DB, await authenticate(request, env)));
+  if (path === '/v1/groups' && method === 'POST') {
+    const user = await authenticate(request, env);
+    return json(await createGroup(env.DB, user, await readJson(request)), 201);
+  }
+  const gm = path.match(/^\/v1\/groups\/(\d{1,12})(?:\/(members|games)(?:\/(\d{1,12})(?:\/(start|answer))?)?)?$/);
+  if (gm) {
+    const gid = Number(gm[1]), sub = gm[2], x = gm[3] === undefined ? null : Number(gm[3]), act = gm[4];
+    const user = await authenticate(request, env);
+    if (!sub) {
+      if (method === 'GET') return json(await getGroup(env.DB, user, gid));
+      if (method === 'PATCH') return json(await renameGroup(env.DB, user, gid, await readJson(request)));
+      if (method === 'DELETE') return json(await deleteGroup(env.DB, user, gid));
+    } else if (sub === 'members') {
+      if (x === null && !act && method === 'POST') return json(await addMember(env.DB, user, gid, await readJson(request)), 201);
+      if (x !== null && !act && method === 'DELETE') return json(await removeMember(env.DB, user, gid, x));
+    } else if (sub === 'games') {
+      if (x === null && method === 'POST') return json(await createRound(env.DB, user, gid, await readJson(request)), 201);
+      if (x !== null && !act && method === 'GET') return json(await getRound(env.DB, user, gid, x));
+      if (x !== null && act === 'start' && method === 'POST') return json(await startRound(env.DB, user, gid, x));
+      if (x !== null && act === 'answer' && method === 'POST') return json(await answerRound(env.DB, user, gid, x, await readJson(request)));
     }
     throw new HttpError(405, 'method_not_allowed', 'Method not allowed.');
   }

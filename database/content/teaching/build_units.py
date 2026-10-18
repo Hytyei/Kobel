@@ -232,7 +232,7 @@ U.append({"id":"vowel","md":16,"tag":"Advanced tactics","title":"Verbs with vowe
  recap("You have the full tactics board. Train the changing verbs.","Verbs with vowel change")]})
 
 # 17 ───────── Languages
-U.append({"id":"languages","md":17,"tag":"Final","title":"Languages","de":"Sprachen","sub":"Say which languages you speak and how well.","subject":"Countries & languages","boards":[
+U.append({"id":"languages","md":17,"tag":"Semi-final","title":"Languages","de":"Sprachen","sub":"Say which languages you speak and how well.","subject":"Countries & languages","boards":[
  talk("The final","The last match of the season: languages. You can already say where you are from. Now say what you speak and how well.",["Ich spreche ...","Ich lerne ..."]),
  words("Languages","Language = country + -isch (mostly).",[["Deutsch","German"],["Englisch","English"],["Französisch","French"],["Italienisch","Italian"],["Spanisch","Spanish"],["Schwedisch","Swedish"],["Chinesisch","Chinese"],["Russisch","Russian"],["Polnisch","Polish"],["Türkisch","Turkish"],["Persisch","Persian"],["Aserbaidschanisch","Azerbaijani"]]),
  words("How well?","From best to worst.",[["sehr gut","very well"],["gut","well"],["ein bisschen","a little bit"],["gar nicht","not at all"]]),
@@ -242,7 +242,129 @@ U.append({"id":"languages","md":17,"tag":"Final","title":"Languages","de":"Sprac
  dlg("Match tape: the press room","Two players, many languages.",[["A","Welche Sprachen sprichst du?","Which languages do you speak?"],["B","Ich spreche sehr gut Deutsch und ein bisschen Türkisch.","I speak German very well and a little Turkish."],["A","Sprichst du Persisch?","Do you speak Persian?"],["B","Ja. Und ich lerne Deutsch.","Yes. And I am learning German."],["A","Ich spreche gar nicht Chinesisch.","I do not speak Chinese at all."]]),
  drill("How do you say: I speak a little German?",["Ich spreche ein bisschen Deutsch.","Ich spreche gar nicht Deutsch.","Ich spreche sehr gut Deutsch."],0,"ein bisschen = a little bit.","Ich spreche ein bisschen Deutsch."),
  drill("Complete: Welche Sprachen ___ du?",["sprechen","sprichst","spreche"],1,"du sprichst: e → i."),
- recap("Champions! You have covered every lesson in the notes. Train the languages and keep the streak.","Countries & languages")]})
+ recap("Full time! That was the last of the early lessons. Train the languages and keep the streak.","Countries & languages")]})
+
+
+# ───────── Sessions 7-10 (md numbers are renumbered at the end) ─────────
+# 18 ───────── Big numbers & prices
+U.append({"id":"bignum","md":18,"tag":"Attendance figures","title":"Big numbers & prices","de":"Große Zahlen & Preise","sub":"Count to a million and read prices aloud.","subject":"Big numbers & prices","boards":[
+ talk("Attendance figures","A stadium announcer reads out big crowds. In German a big number is one long word, built from small blocks.",["hundert, tausend, Million","Units before tens, like in einundzwanzig"]),
+ table("Hundreds","Say the digit, then hundert. All in one word.",[["100","(ein)hundert"],["200","zweihundert"],["300","dreihundert"],["450","vierhundertfünfzig"]],[3]),
+ table("Build 451","Take the blocks one by one. The last digit comes before the tens: ein-und-fünfzig.",[["4","vier"],["100","hundert"],["1","ein"],["50","fünfzig"],["451","vierhunderteinundfünfzig"]],[4]),
+ words("Thousands and a million","tausend works like hundert. Million is a noun with a capital letter.",[["(ein)tausend","1.000"],["zehntausend","10.000"],["einhunderttausend","100.000"],["zweihundertzehntausend","210.000"],["dreihundertzwanzigtausend","320.000"],["vierhundertdreißigtausend","430.000"],["eine Million","1.000.000"]]),
+ words("Reading prices","Say the euros first, then the cents. The comma is not spoken.",[["Neun Euro neunundneunzig","9,99 €"]]),
+ drill("How do you read 9,99 €?",["Neun Euro neunundneunzig","Neunundneunzig Euro neun","Neun neunundneunzig"],0,"Euros first, then the cents.","Neun Euro neunundneunzig"),
+ drill("Which number is vierhundertfünfzig?",["405","450","540"],1,"vier + hundert + fünfzig = 450."),
+ order("Build the price: 9,99 €.",["Neun","Euro","neunundneunzig"],"Euro first, then the cents."),
+ recap("Final whistle! Big numbers are just blocks. Train them now.","Big numbers & prices")]})
+
+# 19 ───────── ein / kein
+U.append({"id":"einkein","md":19,"tag":"Starting eleven","title":"ein / eine / kein / keine","de":"Indefinit- & Negativartikel","sub":"Say 'a' and 'not a' for der, das and die nouns.","subject":"Articles: ein / kein","boards":[
+ talk("Starting eleven","Introduce a player for the first time with a, not the. In German: ein or eine. To say not a, use kein or keine.",["der and das → ein / kein","die → eine / keine"]),
+ slots("Three forms for each noun","The word before the noun changes with the noun's gender.",[
+   {"line":"der Tisch (m.)","parts":[["ein Tisch","indefinite","hi"],["kein Tisch","negative"]]},
+   {"line":"das Buch (n.)","parts":[["ein Buch","indefinite","hi"],["kein Buch","negative"]]},
+   {"line":"die Uhr (f.)","parts":[["eine Uhr","indefinite","hi"],["keine Uhr","negative"]]}]),
+ dlg("Match tape: what is it?","Introduce a thing, then replace it with er, es or sie.",[["A","Das ist ein Tisch.","That is a table."],["B","Ist er aus Holz?","Is it made of wood?"],["A","Ja.","Yes."],["B","Das ist kein Buch.","That is not a book."],["A","Es ist eine Uhr.","It is a clock."]]),
+ drill("Complete: Das ist ___ Uhr.",["ein","eine","kein"],1,"die Uhr is feminine: eine Uhr."),
+ drill("Complete: Das ist ___ Buch. (not a book)",["kein","keine","eine"],0,"das Buch is neuter: kein Buch."),
+ order("Build: That is not a clock.",["Das","ist","keine","Uhr"],"die Uhr → keine Uhr."),
+ recap("Final whistle! You can name things and say what they are not. Train the articles now.","Articles: ein / kein")]})
+
+# 20 ───────── Colours & materials
+U.append({"id":"colours","md":20,"tag":"Kit room","title":"Colours & materials","de":"Farben & Materialien","sub":"What colour is it, and what is it made of?","subject":"Colours","covers":["Materials"],"boards":[
+ talk("The kit room","Home kit, away kit, third kit. Every team knows its colours, and what the kit is made of.",["Colours: rot, blau, grün ...","Materials: das Holz, das Glas ..."]),
+ words("Colours","Say the colours of the kit.",[["weiß","white"],["gelb","yellow"],["orange","orange"],["rot","red"],["grün","green"],["blau","blue"],["braun","brown"],["schwarz","black"],["grau","grey"]]),
+ words("Light and dark","hell = light, dunkel = dark. Put it before the colour.",[["hellbraun","light brown"],["dunkelbraun","dark brown"]]),
+ words("Materials","Materials are neuter nouns, mostly with das.",[["das Holz","wood"],["das Papier","paper"],["das Metall","metal"],["das Plastik","plastic"],["das Glas","glass"],["das Leder","leather"],["der Stoff","fabric / cloth"],["der Kunststoff","synthetic material"]]),
+ drill("What is das Holz?",["wood","glass","paper"],0,"das Holz = wood."),
+ drill("Which colour is gelb?",["red","yellow","green"],1,"gelb = yellow."),
+ recap("Kit packed! Train the colours and materials.","Colours")]})
+
+# 21 ───────── Describing things
+U.append({"id":"describe2","md":21,"tag":"Scouting report","title":"Describing things","de":"Gegenstände beschreiben","sub":"Colour, material, and a guessing game.","subject":"Describing things","covers":["Guessing game"],"boards":[
+ talk("Scouting report","A scout describes things: what colour, what material. Use ist for the colour and ist aus for the material.",["Der Tisch ist grau.","Der Tisch ist aus Metall."]),
+ slots("Statement and question","A statement has the verb in position 2. A question starts with the verb.",[
+   {"line":"Der Tisch ist grau.","parts":[["Der Tisch","subject"],["ist","verb = position 2","hi"],["grau","colour"]]},
+   {"line":"Ist der Tisch grau?","parts":[["Ist","verb = position 1","hi"],["der Tisch","subject"],["grau","colour"]]},
+   {"line":"Ist er aus Metall?","parts":[["Ist","verb = position 1","hi"],["er","replaces der Tisch"],["aus Metall","material"]]}]),
+ dlg("Match tape: the guessing game","One player sees something. The other guesses.",[["A","Ich sehe etwas, siehst du es auch?","I can see something, can you see it too?"],["B","Ist es aus Plastik?","Is it made of plastic?"],["A","Nein.","No."],["B","Ist es aus Metall?","Is it made of metal?"],["A","Ja.","Yes."]]),
+ words("A bottle","Describe it with colour and material.",[["Die Flasche ist aus Plastik. Sie ist grün.","The bottle is made of plastic. It is green."]]),
+ drill("Which question asks about the material?",["Ist es aus Glas?","Ist es grün?","Ist es groß?"],0,"aus + material."),
+ drill("Complete: Die Flasche ist ___ Glas.",["aus","in","bei"],0,"ist aus Glas = is made of glass."),
+ recap("Final whistle! You can describe and guess. Train the describing words.","Describing things")]})
+
+# 22 ───────── Everyday objects
+U.append({"id":"objects","md":22,"tag":"Equipment bag","title":"Everyday objects","de":"Dinge","sub":"The things in your bag, and the verb sehen.","subject":"Everyday objects","covers":["Verbs: zeichnen, malen, sehen"],"boards":[
+ talk("Equipment bag","What is in your bag? Learn the names of everyday things, with their articles.",["Always learn der, die, das with the noun"]),
+ words("In the bag","Say each noun with its article.",[["der Bleistift","pencil"],["der Kugelschreiber","pen"],["der Schlüssel","key"],["die Brille","glasses"],["die Kamera","camera"],["die Flasche","bottle"],["die Zeitung","newspaper"],["die Kette","necklace / chain"],["das Handy","mobile phone"]]),
+ words("More things","The second bag.",[["das Feuerzeug","lighter"],["der Geldbeutel","wallet / purse"],["das Taschentuch","tissue"],["der Regenschirm","umbrella"],["die Jacke","jacket"],["die Seife","soap"],["das Handtuch","towel"],["der Fön","hairdryer"],["die Bürste","brush"],["das Streichholz","match"]]),
+ table("sehen (e → ie)","A vowel-change verb: du and er/sie/es change.",[["ich","sehe"],["du","siehst"],["er/sie/es","sieht"]],[1,2]),
+ words("Draw and paint","zeichnen adds an extra e: du zeichnest.",[["Du zeichnest ein Bild.","You draw a picture."],["Ich male ein Bild.","I paint a picture."],["Ich sehe ein Buch.","I see a book."]]),
+ drill("What is der Schlüssel?",["key","pen","bag"],0,"der Schlüssel = key."),
+ drill("Complete: Du ___ ein Auto.",["siehst","sehst","sieht"],0,"sehen: du siehst."),
+ recap("Bag packed! Train the everyday objects.","Everyday objects")]})
+
+# 23 ───────── Business cards & forms
+U.append({"id":"cards","md":23,"tag":"Player card 2","title":"Business cards & forms","de":"Visitenkarten & Formulare","sub":"Read a business card and fill in a form.","subject":"Business cards & forms","boards":[
+ talk("Player card","Every player has a card with name, club and number. In business life it is a Visitenkarte. Learn the fields.",["Department, company, address","Fill in a form with your details"]),
+ words("On a business card","The typical fields.",[["die Abteilung","department"],["die Personalabteilung","HR department"],["die IT-Abteilung","IT department"],["die E-Mail-Adresse","email address"],["die Firma","company"],["die Homepage","website"],["die Telefonnummer","telephone number"]]),
+ words("The address","Street, house number, postcode, place.",[["die Straße","street"],["die Hausnummer","house number"],["die Postleitzahl","postcode"],["der Ort","place / town"],["die Stadt","city"],["das Land","country"]]),
+ table("A form: Lena Nowak","Your book's form, filled in.",[["Vorname","Lena"],["Nachname","Nowak"],["Land","Polen"],["Alter","23"],["Familienstand","ledig"],["Kinder","keine"],["Straße","Marienstraße"],["Hausnummer","1a"],["Postleitzahl","12459"],["Ort","Berlin"]],[3,4]),
+ drill("Which word means postcode?",["die Hausnummer","die Postleitzahl","der Ort"],1,"die Postleitzahl (PLZ) = postcode."),
+ drill("Which department looks after people (HR)?",["die Personalabteilung","die IT-Abteilung","die Marketingabteilung"],0,"die Personalabteilung = HR."),
+ recap("Card signed! Train the business and form words.","Business cards & forms")]})
+
+# 24 ───────── Asking & thanking
+U.append({"id":"asking","md":24,"tag":"Press conference","title":"Asking & thanking","de":"Nachfragen & Danken","sub":"Ask how to say or spell something, and say thanks.","subject":"Asking & thanking","covers":["Everyday expressions"],"boards":[
+ talk("Press conference","A good player asks when stuck. Ask how to say a word, ask for it again, and say thanks politely.",["Wie heißt das auf Deutsch?","Noch einmal, bitte."]),
+ words("Ask","Questions for the teacher or a partner.",[["Wie heißt das auf Deutsch?","What is that called in German?"],["Entschuldigung, wie heißt das auf Deutsch?","Excuse me, what is that called in German?"],["Wie schreibt man das?","How do you write that?"],["Wie buchstabiert man das?","How do you spell that?"],["Buchstabieren Sie bitte.","Please spell it."],["Noch einmal, bitte.","Once more, please."]]),
+ words("Say thanks and answer","Thanks, and the many ways to say you are welcome.",[["Danke schön.","Thank you very much."],["Vielen Dank.","Thank you very much."],["Bitte schön.","You are welcome."],["Bitte. Sehr gern.","You are welcome. My pleasure."],["Kein Problem.","No problem."],["Gern geschehen.","You are welcome."]]),
+ dlg("Match tape: partner exercise","Two partners practise with a picture.",[["A","Wie heißt das auf Deutsch?","What is that called in German?"],["B","Ich weiß nicht.","I do not know."],["A","Das ist eine Jacke.","That is a jacket."],["B","Wie bitte? Noch einmal, bitte.","Pardon? Once more, please."],["A","Das ist eine Jacke.","That is a jacket."],["B","Danke schön.","Thank you very much."],["A","Bitte schön.","You are welcome."]]),
+ words("man and Mann","man with a small letter means one / you. der Mann with a capital letter is the man.",[["Wie schreibt man das?","How do you write that?"],["der Mann","the man / the husband"]]),
+ words("Everyday expressions","Small phrases that make you sound natural.",[["Schau mal!","Look!"],["Egal.","Whatever."],["Mir ist egal.","I do not care."],["Keine Ahnung.","No idea."],["Hier, bitte!","Here you go!"],["Freut mich.","Nice to meet you."],["Das ist ja interessant.","That is really interesting."]]),
+ drill("You did not catch the word. What do you say?",["Noch einmal, bitte.","Kein Problem.","Freut mich."],0,"Noch einmal, bitte = once more, please."),
+ drill("Someone says: Danke schön. What do you answer?",["Bitte schön.","Keine Ahnung.","Egal."],0,"Bitte schön = you are welcome."),
+ recap("Final whistle! You can ask, thank and react. Train these phrases.","Asking & thanking")]})
+
+# 25 ───────── Office & technology
+U.append({"id":"office","md":25,"tag":"Press box","title":"Office & technology","de":"Büro & Technik","sub":"Things on your desk and what you say at work.","subject":"Office & technology","covers":["Office expressions"],"boards":[
+ talk("The press box","Laptop, screen, keyboard: the press box is an office. Learn the things on the desk and the words you say when something goes wrong.",["Nouns with their articles","Office exclamations"]),
+ words("On the desk","Say each noun with its article.",[["der Laptop","laptop"],["der Computer","computer"],["der Bildschirm","screen / monitor"],["die Tastatur","keyboard"],["die Maus","mouse"],["der Drucker","printer"],["das Tablet","tablet"],["der Stift","pen / marker"],["der Kalender","calendar"],["die Visitenkarte","business card"]]),
+ words("Messages and appointments","Words for work life.",[["die E-Mail","email"],["die Nachricht","message"],["das Passwort","password"],["der Termin","appointment"]]),
+ dlg("Match tape: a bad Monday","Two colleagues at work.",[["A","Oh Gott! So viel Arbeit!","Oh God! So much work!"],["B","Hilfe! Mein Passwort ist falsch.","Help! My password is wrong."],["A","Ein Albtraum!","A nightmare!"],["B","Ich komme nicht ins WLAN.","I cannot get on the Wi-Fi."],["A","Morgen leider kein Yoga. Ich habe keine Zeit.","Unfortunately no yoga tomorrow. I have no time."]]),
+ words("What are they doing?","Short office notes.",[["hat Hunger","is hungry"],["braucht einen Kaffee","needs a coffee"],["telefoniert mit ...","is on the phone with ..."],["hat keinen Stift","does not have a pen"]]),
+ drill("Your password does not work. What do you say?",["Hilfe! Mein Passwort ist falsch.","Freut mich.","Wie bitte?"],0,"Hilfe! Mein Passwort ist falsch."),
+ drill("What is der Drucker?",["printer","keyboard","mouse"],0,"der Drucker = printer."),
+ recap("Final whistle! You can talk about your desk. Train the office words.","Office & technology")]})
+
+# 26 ───────── Plurals
+U.append({"id":"plurals","md":26,"tag":"Squad depth","title":"Plurals","de":"Pluralformen","sub":"The five plural patterns and plural articles.","subject":"Plurals","boards":[
+ talk("Squad depth","One player is a person, a full squad is a team. For nouns, one thing is singular, many things are plural. German has five plural patterns, and every plural noun takes die.",["-(e)n · -s · -e · -er · no ending","The plural article is always die"]),
+ table("The five patterns","Learn each noun with its plural.",[["-(e)n","die Nachricht → die Nachrichten"],["-s","der Laptop → die Laptops"],["-e / -¨e","der Termin → die Termine"],["-¨e","die Maus → die Mäuse"],["-er / -¨er","das Passwort → die Passwörter"],["— / -¨","der Drucker → die Drucker"]],[1]),
+ slots("ein, kein and the plural","The plural has no ein. Only the negative form keine exists.",[
+   {"line":"Singular","parts":[["der Termin","definite"],["ein Termin","indefinite"],["kein Termin","negative"]]},
+   {"line":"Plural","parts":[["die Termine","definite","hi"],["Termine","no article"],["keine Termine","negative","hi"]]}]),
+ words("In a sentence","Use the plural with keine.",[["Ich habe Zeit. Ich habe keine Termine.","I have time. I have no appointments."]]),
+ drill("What is the plural of der Laptop?",["die Laptops","die Laptope","die Laptopen"],0,"Laptop → Laptops (-s)."),
+ drill("What is the plural of die Maus?",["die Mause","die Mäuse","die Mausen"],1,"Maus → Mäuse (-¨e)."),
+ order("Build: I have no appointments.",["Ich","habe","keine","Termine"],"Plural: keine, never ein."),
+ recap("Final whistle! Always learn a noun with its plural. Train the plural patterns.","Plurals")]})
+
+# 27 ───────── Ordering online
+U.append({"id":"online","md":27,"tag":"Fan shop","title":"Ordering online","de":"Online bestellen","sub":"Read an order form and an email address aloud.","subject":"Ordering online","boards":[
+ talk("The fan shop","Order a shirt online: choose it, check the price, put it in the basket. And give your email address clearly.",["Order words","Reading symbols: _ @ ."]),
+ words("The order form","Fields on a shop page.",[["die Sonnenbrille","sunglasses"],["die Bestellnummer","order number"],["die Menge","quantity"],["der Preis","price"],["der Warenkorb","shopping basket"]]),
+ table("Symbols in an email address","Say the symbols out loud.",[["_","Unterstrich"],["@","ät"],[".","Punkt"]],[0,1,2]),
+ words("An email address aloud","Say each symbol as a word.",[["Maria Unterstrich 87 ät gmail Punkt com","Maria_87@gmail.com"]]),
+ drill("How do you say the @ sign?",["ät","Punkt","Unterstrich"],0,"@ = ät."),
+ drill("How do you say the dot in an email address?",["Punkt","ät","Menge"],0,". = Punkt."),
+ recap("Order placed! Train the shop words.","Ordering online")]})
+
+# ───────── Sorting: classroom instructions stay out of the Tactics Room (they live in daily challenges and training) ─────────
+EXCLUDED_FROM_TEACHING = {"class"}
+U = [u for u in U if u["id"] not in EXCLUDED_FROM_TEACHING]
+for _i, _u in enumerate(U): _u["md"] = _i + 1
 
 SPV={"sein = to be","heißen = to be called","haben = to have","Stems ending in -t","sprechen (e → i)","nehmen (e → i, double m)","lesen (e → ie)","schlafen (a → ä)","Regular endings"}  # SPV: verb tables are spoken row by row
 for _u in U:

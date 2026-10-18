@@ -219,20 +219,20 @@ const IDRE = /^KB-[A-HJ-NP-Z2-9]{5}(-[A-HJ-NP-Z2-9]{5}){4}$/;
 const regCall = (env, { ip = '1.1.1.1', body, headers } = {}) =>
   worker.fetch(new Request('https://api.test/v1/register', { method: 'POST', headers: { 'CF-Connecting-IP': ip, 'Content-Type': 'application/json', ...headers }, body: body === undefined ? undefined : JSON.stringify(body) }), env);
 
-test('register creates a private account whose ID works, and only the hash is stored', async () => {
+test('register creates an account whose ID works, and only the hash is stored', async () => {
   const { db, env, call } = setup();
   const res = await regCall(env, { body: { name: 'Hadi' } });
   assert.equal(res.status, 201);
   const j = await res.json();
   assert.match(j.id, IDRE);
   assert.equal(j.user.name, 'Hadi');
-  assert.equal(j.user.visible, false);
+  assert.equal(j.user.visible, true);
   const me = await call('GET', '/v1/me', { code: j.id });
   assert.equal(me.status, 200);
   assert.equal(me.json.user.name, 'Hadi');
   const row = db.sqlite.prepare('SELECT token_hash, visible FROM users WHERE name = ?').get('Hadi');
   assert.equal(row.token_hash, createHash('sha256').update(j.id).digest('hex'));
-  assert.equal(row.visible, 0);
+  assert.equal(row.visible, 1);
   assert.equal(JSON.stringify(db.sqlite.prepare('SELECT * FROM users').all()).includes(j.id), false);
 });
 
@@ -246,12 +246,14 @@ test('accounts are isolated: one user never sees another user\'s cards, export o
   assert.equal(pullB.json.cards.length, 0);
   assert.equal((await call('GET', '/v1/export', { code: b.id })).json.cards.length, 0);
   assert.equal((await call('GET', '/v1/export', { code: a.id })).json.cards.length, 1);
-  // both hidden by default: the league table only shows the caller
+  // everybody is in every table: B sees A and B, and A can not opt out
   const lb = await call('GET', '/v1/leaderboard?range=all', { code: b.id });
-  assert.deepEqual(lb.json.rows.map((r) => r.name), ['Berk']);
-  // A opts in: B now sees A
-  assert.equal((await call('PATCH', '/v1/me', { code: a.id, body: { visible: true } })).json.user.visible, true);
+  assert.deepEqual(lb.json.rows.map((r) => r.name).sort(), ['Anna', 'Berk']);
+  const hide = await call('PATCH', '/v1/me', { code: a.id, body: { visible: false } });
+  assert.equal(hide.status, 200);
+  assert.equal(hide.json.user.visible, true, 'the visible switch no longer exists');
   assert.deepEqual((await call('GET', '/v1/leaderboard?range=all', { code: b.id })).json.rows.map((r) => r.name).sort(), ['Anna', 'Berk']);
+  assert.equal((await call('GET', '/v1/me', { code: a.id })).json.user.visible, true);
 });
 
 test('register: missing, invalid or taken names never fail; a free name is generated', async () => {
@@ -303,5 +305,5 @@ test('register allows the app origin (CORS) and existing users keep working and 
   assert.equal((await call('GET', '/v1/me', { code: old })).json.user.visible, true);
   await regCall(env, { ip: '1.2.3.4', body: { name: 'Neu' } });
   const lb = await call('GET', '/v1/leaderboard?range=all', { code: old });
-  assert.deepEqual(lb.json.rows.map((r) => r.name), ['Veteran']);
+  assert.deepEqual(lb.json.rows.map((r) => r.name).sort(), ['Neu', 'Veteran'], 'new accounts are in the table too');
 });

@@ -4,6 +4,11 @@
     <!-- Needed only for the optional cloud sync. Everything else works offline. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Phone notifications (friend requests, match requests, study groups, streak reminder, updates). Android 13+ asks you once. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Keeps the notification check running after the phone restarts. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- Lets Kobel hand a downloaded update to Android's installer (you still confirm every install). -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
@@ -51,6 +56,11 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kobel_big_info" />
         </receiver>
+
+        <service
+            android:name=".NotifyPollJob"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

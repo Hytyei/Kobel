@@ -122,6 +122,27 @@ class KobelBridge(private val activity: MainActivity) {
     @JavascriptInterface
     fun setWidgetData(json: String) = WidgetCore.store(activity.applicationContext, json)
 
+    /** Notification settings from the page (JSON). Starts or stops the background check. */
+    @JavascriptInterface
+    fun setNotify(json: String) {
+        try {
+            val j = JSONObject(json)
+            NotifyPrefs.save(activity.applicationContext, j)
+            NotifyPollJob.schedule(activity.applicationContext, j.optBoolean("on", true))
+        } catch (_: Exception) {
+        }
+    }
+
+    /** Android 13+: asks for the notification permission once. */
+    @JavascriptInterface
+    fun askNotifyPermission() {
+        activity.runOnUiThread {
+            if (android.os.Build.VERSION.SDK_INT >= 33 && !Notifier.canPost(activity)) {
+                activity.requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 41)
+            }
+        }
+    }
+
     @JavascriptInterface
     fun saveFile(name: String, text: String) {
         activity.runOnUiThread { activity.startSave(name, text) }

@@ -217,223 +217,8 @@
   ]
  },
  {
-  "id": "class",
-  "md": 2,
-  "tag": "Warm-up",
-  "title": "Classroom & instructions",
-  "de": "Im Kurs",
-  "sub": "Understand your teacher and ask for help.",
-  "subject": "Classroom & instructions",
-  "boards": [
-   {
-    "k": "talk",
-    "h": "Warm-up drills",
-    "say": "Before the real game, the coach shouts instructions. In class your teacher does the same. Learn to understand them and you never get lost.",
-    "pts": [
-     "Instructions use Sie: Hören Sie.",
-     "The verb comes first, like a whistle"
-    ]
-   },
-   {
-    "k": "words",
-    "h": "Six skills",
-    "say": "These verbs are the basic training skills.",
-    "items": [
-     [
-      "hören",
-      "to hear / listen"
-     ],
-     [
-      "sprechen",
-      "to speak"
-     ],
-     [
-      "lesen",
-      "to read"
-     ],
-     [
-      "schreiben",
-      "to write"
-     ],
-     [
-      "buchstabieren",
-      "to spell"
-     ],
-     [
-      "wiederholen",
-      "to repeat"
-     ]
-    ]
-   },
-   {
-    "k": "words",
-    "h": "Coach's commands",
-    "say": "Your teacher gives orders. Each one starts with the verb and ends with Sie.",
-    "items": [
-     [
-      "Hören Sie.",
-      "Listen."
-     ],
-     [
-      "Sprechen Sie.",
-      "Speak."
-     ],
-     [
-      "Lesen Sie.",
-      "Read."
-     ],
-     [
-      "Schreiben Sie.",
-      "Write."
-     ],
-     [
-      "Ergänzen Sie.",
-      "Complete."
-     ],
-     [
-      "Kreuzen Sie an.",
-      "Tick the right answer."
-     ],
-     [
-      "Ordnen Sie zu.",
-      "Match them up."
-     ]
-    ]
-   },
-   {
-    "k": "words",
-    "h": "Help signals",
-    "say": "When you are stuck, use these. A good player always asks.",
-    "items": [
-     [
-      "Ich habe eine Frage.",
-      "I have a question."
-     ],
-     [
-      "Wie bitte?",
-      "Pardon?"
-     ],
-     [
-      "Darf ich raus?",
-      "May I go out?"
-     ],
-     [
-      "Entschuldigung",
-      "excuse me / sorry"
-     ],
-     [
-      "Kein Problem",
-      "no problem"
-     ]
-    ]
-   },
-   {
-    "k": "slots",
-    "h": "The command formation",
-    "say": "An instruction is short: the verb leads, Sie follows. Add a small word at the end if needed.",
-    "rows": [
-     {
-      "line": "Verb + Sie",
-      "parts": [
-       [
-        "Hören",
-        "verb",
-        "hi"
-       ],
-       [
-        "Sie",
-        "you (formal)"
-       ]
-      ]
-     },
-     {
-      "line": "Again",
-      "parts": [
-       [
-        "Hören Sie",
-        "Listen"
-       ],
-       [
-        "noch einmal",
-        "again"
-       ]
-      ]
-     }
-    ]
-   },
-   {
-    "k": "dlg",
-    "h": "Match tape: in class",
-    "say": "A normal minute in the classroom.",
-    "lines": [
-     [
-      "A",
-      "Hören Sie. Sprechen Sie nach.",
-      "Listen. Repeat after the recording."
-     ],
-     [
-      "B",
-      "Wie bitte?",
-      "Pardon?"
-     ],
-     [
-      "A",
-      "Hören Sie noch einmal.",
-      "Listen again."
-     ],
-     [
-      "B",
-      "Alles klar! Fertig!",
-      "All clear! Done!"
-     ],
-     [
-      "B",
-      "Ich habe eine Frage.",
-      "I have a question."
-     ],
-     [
-      "A",
-      "Ja. Kein Problem.",
-      "Yes. No problem."
-     ]
-    ]
-   },
-   {
-    "k": "drill",
-    "h": "Quick check",
-    "q": "Your teacher says: Hören Sie noch einmal. What do you do?",
-    "opts": [
-     "Listen again",
-     "Read again",
-     "Write again"
-    ],
-    "a": 0,
-    "why": "hören = to listen, noch einmal = once more.",
-    "de": "Hören Sie noch einmal."
-   },
-   {
-    "k": "drill",
-    "h": "Quick check",
-    "q": "You did not understand. What do you say?",
-    "opts": [
-     "Alles klar!",
-     "Wie bitte?",
-     "Fertig!"
-    ],
-    "a": 1,
-    "why": "Wie bitte? means Pardon? Ask when you did not catch it."
-   },
-   {
-    "k": "recap",
-    "h": "Full time",
-    "say": "Training complete. You can follow every instruction in class. Now practise the words.",
-    "subject": "Classroom & instructions"
-   }
-  ]
- },
- {
   "id": "sounds",
-  "md": 3,
+  "md": 2,
   "tag": "Fitness",
   "title": "Sounds & articles",
   "de": "Laute & Artikel",
@@ -603,7 +388,7 @@
  },
  {
   "id": "intro",
-  "md": 4,
+  "md": 3,
   "tag": "Team sheet",
   "title": "Introductions & names",
   "de": "Vorstellung",
@@ -817,7 +602,7 @@
  },
  {
   "id": "numbers",
-  "md": 5,
+  "md": 4,
   "tag": "Scoreboard",
   "title": "Numbers",
   "de": "Zahlen",
@@ -1112,7 +897,7 @@
  },
  {
   "id": "verbs",
-  "md": 6,
+  "md": 5,
   "tag": "Training ground",
   "title": "Everyday verbs",
   "de": "Verben",
@@ -1362,7 +1147,7 @@
  },
  {
   "id": "questions",
-  "md": 7,
+  "md": 6,
   "tag": "Set pieces",
   "title": "Questions",
   "de": "Fragen",
@@ -1610,7 +1395,7 @@
  },
  {
   "id": "personal",
-  "md": 8,
+  "md": 7,
   "tag": "Player card",
   "title": "Personal details",
   "de": "Persönliche Daten",
@@ -1820,7 +1605,7 @@
  },
  {
   "id": "countries",
-  "md": 9,
+  "md": 8,
   "tag": "Away fixtures",
   "title": "Countries",
   "de": "Länder",
@@ -2081,7 +1866,7 @@
  },
  {
   "id": "jobs",
-  "md": 10,
+  "md": 9,
   "tag": "Careers",
   "title": "Jobs & work",
   "de": "Beruf",
@@ -2348,7 +2133,7 @@
  },
  {
   "id": "family",
-  "md": 11,
+  "md": 10,
   "tag": "The club family",
   "title": "Family",
   "de": "Familie",
@@ -2620,7 +2405,7 @@
  },
  {
   "id": "doch",
-  "md": 12,
+  "md": 11,
   "tag": "VAR check",
   "title": "Answering: ja / nein / doch",
   "de": "Antworten",
@@ -2749,7 +2534,7 @@
  },
  {
   "id": "genders",
-  "md": 13,
+  "md": 12,
   "tag": "Tactics board",
   "title": "Noun genders",
   "de": "Genus-Regeln",
@@ -2900,7 +2685,7 @@
  },
  {
   "id": "furniture",
-  "md": 14,
+  "md": 13,
   "tag": "Dressing room",
   "title": "Furniture & home",
   "de": "Möbel",
@@ -3052,7 +2837,7 @@
  },
  {
   "id": "describe",
-  "md": 15,
+  "md": 14,
   "tag": "Transfer market",
   "title": "Describing & prices",
   "de": "Beschreiben",
@@ -3261,7 +3046,7 @@
  },
  {
   "id": "vowel",
-  "md": 16,
+  "md": 15,
   "tag": "Advanced tactics",
   "title": "Verbs with vowel change",
   "de": "Verben mit Vokalwechsel",
@@ -3495,8 +3280,8 @@
  },
  {
   "id": "languages",
-  "md": 17,
-  "tag": "Final",
+  "md": 16,
+  "tag": "Semi-final",
   "title": "Languages",
   "de": "Sprachen",
   "sub": "Say which languages you speak and how well.",
@@ -3692,8 +3477,1620 @@
    {
     "k": "recap",
     "h": "Full time",
-    "say": "Champions! You have covered every lesson in the notes. Train the languages and keep the streak.",
+    "say": "Full time! That was the last of the early lessons. Train the languages and keep the streak.",
     "subject": "Countries & languages"
+   }
+  ]
+ },
+ {
+  "id": "bignum",
+  "md": 17,
+  "tag": "Attendance figures",
+  "title": "Big numbers & prices",
+  "de": "Große Zahlen & Preise",
+  "sub": "Count to a million and read prices aloud.",
+  "subject": "Big numbers & prices",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Attendance figures",
+    "say": "A stadium announcer reads out big crowds. In German a big number is one long word, built from small blocks.",
+    "pts": [
+     "hundert, tausend, Million",
+     "Units before tens, like in einundzwanzig"
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Hundreds",
+    "say": "Say the digit, then hundert. All in one word.",
+    "rows": [
+     [
+      "100",
+      "(ein)hundert"
+     ],
+     [
+      "200",
+      "zweihundert"
+     ],
+     [
+      "300",
+      "dreihundert"
+     ],
+     [
+      "450",
+      "vierhundertfünfzig"
+     ]
+    ],
+    "hi": [
+     3
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Build 451",
+    "say": "Take the blocks one by one. The last digit comes before the tens: ein-und-fünfzig.",
+    "rows": [
+     [
+      "4",
+      "vier"
+     ],
+     [
+      "100",
+      "hundert"
+     ],
+     [
+      "1",
+      "ein"
+     ],
+     [
+      "50",
+      "fünfzig"
+     ],
+     [
+      "451",
+      "vierhunderteinundfünfzig"
+     ]
+    ],
+    "hi": [
+     4
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Thousands and a million",
+    "say": "tausend works like hundert. Million is a noun with a capital letter.",
+    "items": [
+     [
+      "(ein)tausend",
+      "1.000"
+     ],
+     [
+      "zehntausend",
+      "10.000"
+     ],
+     [
+      "einhunderttausend",
+      "100.000"
+     ],
+     [
+      "zweihundertzehntausend",
+      "210.000"
+     ],
+     [
+      "dreihundertzwanzigtausend",
+      "320.000"
+     ],
+     [
+      "vierhundertdreißigtausend",
+      "430.000"
+     ],
+     [
+      "eine Million",
+      "1.000.000"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Reading prices",
+    "say": "Say the euros first, then the cents. The comma is not spoken.",
+    "items": [
+     [
+      "Neun Euro neunundneunzig",
+      "9,99 €"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you read 9,99 €?",
+    "opts": [
+     "Neun Euro neunundneunzig",
+     "Neunundneunzig Euro neun",
+     "Neun neunundneunzig"
+    ],
+    "a": 0,
+    "why": "Euros first, then the cents.",
+    "de": "Neun Euro neunundneunzig"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which number is vierhundertfünfzig?",
+    "opts": [
+     "405",
+     "450",
+     "540"
+    ],
+    "a": 1,
+    "why": "vier + hundert + fünfzig = 450."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build the price: 9,99 €.",
+    "words": [
+     "Neun",
+     "Euro",
+     "neunundneunzig"
+    ],
+    "why": "Euro first, then the cents."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! Big numbers are just blocks. Train them now.",
+    "subject": "Big numbers & prices"
+   }
+  ]
+ },
+ {
+  "id": "einkein",
+  "md": 18,
+  "tag": "Starting eleven",
+  "title": "ein / eine / kein / keine",
+  "de": "Indefinit- & Negativartikel",
+  "sub": "Say 'a' and 'not a' for der, das and die nouns.",
+  "subject": "Articles: ein / kein",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Starting eleven",
+    "say": "Introduce a player for the first time with a, not the. In German: ein or eine. To say not a, use kein or keine.",
+    "pts": [
+     "der and das → ein / kein",
+     "die → eine / keine"
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "Three forms for each noun",
+    "say": "The word before the noun changes with the noun's gender.",
+    "rows": [
+     {
+      "line": "der Tisch (m.)",
+      "parts": [
+       [
+        "ein Tisch",
+        "indefinite",
+        "hi"
+       ],
+       [
+        "kein Tisch",
+        "negative"
+       ]
+      ]
+     },
+     {
+      "line": "das Buch (n.)",
+      "parts": [
+       [
+        "ein Buch",
+        "indefinite",
+        "hi"
+       ],
+       [
+        "kein Buch",
+        "negative"
+       ]
+      ]
+     },
+     {
+      "line": "die Uhr (f.)",
+      "parts": [
+       [
+        "eine Uhr",
+        "indefinite",
+        "hi"
+       ],
+       [
+        "keine Uhr",
+        "negative"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: what is it?",
+    "say": "Introduce a thing, then replace it with er, es or sie.",
+    "lines": [
+     [
+      "A",
+      "Das ist ein Tisch.",
+      "That is a table."
+     ],
+     [
+      "B",
+      "Ist er aus Holz?",
+      "Is it made of wood?"
+     ],
+     [
+      "A",
+      "Ja.",
+      "Yes."
+     ],
+     [
+      "B",
+      "Das ist kein Buch.",
+      "That is not a book."
+     ],
+     [
+      "A",
+      "Es ist eine Uhr.",
+      "It is a clock."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Das ist ___ Uhr.",
+    "opts": [
+     "ein",
+     "eine",
+     "kein"
+    ],
+    "a": 1,
+    "why": "die Uhr is feminine: eine Uhr."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Das ist ___ Buch. (not a book)",
+    "opts": [
+     "kein",
+     "keine",
+     "eine"
+    ],
+    "a": 0,
+    "why": "das Buch is neuter: kein Buch."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: That is not a clock.",
+    "words": [
+     "Das",
+     "ist",
+     "keine",
+     "Uhr"
+    ],
+    "why": "die Uhr → keine Uhr."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can name things and say what they are not. Train the articles now.",
+    "subject": "Articles: ein / kein"
+   }
+  ]
+ },
+ {
+  "id": "colours",
+  "md": 19,
+  "tag": "Kit room",
+  "title": "Colours & materials",
+  "de": "Farben & Materialien",
+  "sub": "What colour is it, and what is it made of?",
+  "subject": "Colours",
+  "covers": [
+   "Materials"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "The kit room",
+    "say": "Home kit, away kit, third kit. Every team knows its colours, and what the kit is made of.",
+    "pts": [
+     "Colours: rot, blau, grün ...",
+     "Materials: das Holz, das Glas ..."
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Colours",
+    "say": "Say the colours of the kit.",
+    "items": [
+     [
+      "weiß",
+      "white"
+     ],
+     [
+      "gelb",
+      "yellow"
+     ],
+     [
+      "orange",
+      "orange"
+     ],
+     [
+      "rot",
+      "red"
+     ],
+     [
+      "grün",
+      "green"
+     ],
+     [
+      "blau",
+      "blue"
+     ],
+     [
+      "braun",
+      "brown"
+     ],
+     [
+      "schwarz",
+      "black"
+     ],
+     [
+      "grau",
+      "grey"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Light and dark",
+    "say": "hell = light, dunkel = dark. Put it before the colour.",
+    "items": [
+     [
+      "hellbraun",
+      "light brown"
+     ],
+     [
+      "dunkelbraun",
+      "dark brown"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Materials",
+    "say": "Materials are neuter nouns, mostly with das.",
+    "items": [
+     [
+      "das Holz",
+      "wood"
+     ],
+     [
+      "das Papier",
+      "paper"
+     ],
+     [
+      "das Metall",
+      "metal"
+     ],
+     [
+      "das Plastik",
+      "plastic"
+     ],
+     [
+      "das Glas",
+      "glass"
+     ],
+     [
+      "das Leder",
+      "leather"
+     ],
+     [
+      "der Stoff",
+      "fabric / cloth"
+     ],
+     [
+      "der Kunststoff",
+      "synthetic material"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What is das Holz?",
+    "opts": [
+     "wood",
+     "glass",
+     "paper"
+    ],
+    "a": 0,
+    "why": "das Holz = wood."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which colour is gelb?",
+    "opts": [
+     "red",
+     "yellow",
+     "green"
+    ],
+    "a": 1,
+    "why": "gelb = yellow."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Kit packed! Train the colours and materials.",
+    "subject": "Colours"
+   }
+  ]
+ },
+ {
+  "id": "describe2",
+  "md": 20,
+  "tag": "Scouting report",
+  "title": "Describing things",
+  "de": "Gegenstände beschreiben",
+  "sub": "Colour, material, and a guessing game.",
+  "subject": "Describing things",
+  "covers": [
+   "Guessing game"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Scouting report",
+    "say": "A scout describes things: what colour, what material. Use ist for the colour and ist aus for the material.",
+    "pts": [
+     "Der Tisch ist grau.",
+     "Der Tisch ist aus Metall."
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "Statement and question",
+    "say": "A statement has the verb in position 2. A question starts with the verb.",
+    "rows": [
+     {
+      "line": "Der Tisch ist grau.",
+      "parts": [
+       [
+        "Der Tisch",
+        "subject"
+       ],
+       [
+        "ist",
+        "verb = position 2",
+        "hi"
+       ],
+       [
+        "grau",
+        "colour"
+       ]
+      ]
+     },
+     {
+      "line": "Ist der Tisch grau?",
+      "parts": [
+       [
+        "Ist",
+        "verb = position 1",
+        "hi"
+       ],
+       [
+        "der Tisch",
+        "subject"
+       ],
+       [
+        "grau",
+        "colour"
+       ]
+      ]
+     },
+     {
+      "line": "Ist er aus Metall?",
+      "parts": [
+       [
+        "Ist",
+        "verb = position 1",
+        "hi"
+       ],
+       [
+        "er",
+        "replaces der Tisch"
+       ],
+       [
+        "aus Metall",
+        "material"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: the guessing game",
+    "say": "One player sees something. The other guesses.",
+    "lines": [
+     [
+      "A",
+      "Ich sehe etwas, siehst du es auch?",
+      "I can see something, can you see it too?"
+     ],
+     [
+      "B",
+      "Ist es aus Plastik?",
+      "Is it made of plastic?"
+     ],
+     [
+      "A",
+      "Nein.",
+      "No."
+     ],
+     [
+      "B",
+      "Ist es aus Metall?",
+      "Is it made of metal?"
+     ],
+     [
+      "A",
+      "Ja.",
+      "Yes."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "A bottle",
+    "say": "Describe it with colour and material.",
+    "items": [
+     [
+      "Die Flasche ist aus Plastik. Sie ist grün.",
+      "The bottle is made of plastic. It is green."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which question asks about the material?",
+    "opts": [
+     "Ist es aus Glas?",
+     "Ist es grün?",
+     "Ist es groß?"
+    ],
+    "a": 0,
+    "why": "aus + material."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Die Flasche ist ___ Glas.",
+    "opts": [
+     "aus",
+     "in",
+     "bei"
+    ],
+    "a": 0,
+    "why": "ist aus Glas = is made of glass."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can describe and guess. Train the describing words.",
+    "subject": "Describing things"
+   }
+  ]
+ },
+ {
+  "id": "objects",
+  "md": 21,
+  "tag": "Equipment bag",
+  "title": "Everyday objects",
+  "de": "Dinge",
+  "sub": "The things in your bag, and the verb sehen.",
+  "subject": "Everyday objects",
+  "covers": [
+   "Verbs: zeichnen, malen, sehen"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Equipment bag",
+    "say": "What is in your bag? Learn the names of everyday things, with their articles.",
+    "pts": [
+     "Always learn der, die, das with the noun"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "In the bag",
+    "say": "Say each noun with its article.",
+    "items": [
+     [
+      "der Bleistift",
+      "pencil"
+     ],
+     [
+      "der Kugelschreiber",
+      "pen"
+     ],
+     [
+      "der Schlüssel",
+      "key"
+     ],
+     [
+      "die Brille",
+      "glasses"
+     ],
+     [
+      "die Kamera",
+      "camera"
+     ],
+     [
+      "die Flasche",
+      "bottle"
+     ],
+     [
+      "die Zeitung",
+      "newspaper"
+     ],
+     [
+      "die Kette",
+      "necklace / chain"
+     ],
+     [
+      "das Handy",
+      "mobile phone"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "More things",
+    "say": "The second bag.",
+    "items": [
+     [
+      "das Feuerzeug",
+      "lighter"
+     ],
+     [
+      "der Geldbeutel",
+      "wallet / purse"
+     ],
+     [
+      "das Taschentuch",
+      "tissue"
+     ],
+     [
+      "der Regenschirm",
+      "umbrella"
+     ],
+     [
+      "die Jacke",
+      "jacket"
+     ],
+     [
+      "die Seife",
+      "soap"
+     ],
+     [
+      "das Handtuch",
+      "towel"
+     ],
+     [
+      "der Fön",
+      "hairdryer"
+     ],
+     [
+      "die Bürste",
+      "brush"
+     ],
+     [
+      "das Streichholz",
+      "match"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "sehen (e → ie)",
+    "say": "A vowel-change verb: du and er/sie/es change.",
+    "rows": [
+     [
+      "ich",
+      "sehe"
+     ],
+     [
+      "du",
+      "siehst"
+     ],
+     [
+      "er/sie/es",
+      "sieht"
+     ]
+    ],
+    "hi": [
+     1,
+     2
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Draw and paint",
+    "say": "zeichnen adds an extra e: du zeichnest.",
+    "items": [
+     [
+      "Du zeichnest ein Bild.",
+      "You draw a picture."
+     ],
+     [
+      "Ich male ein Bild.",
+      "I paint a picture."
+     ],
+     [
+      "Ich sehe ein Buch.",
+      "I see a book."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What is der Schlüssel?",
+    "opts": [
+     "key",
+     "pen",
+     "bag"
+    ],
+    "a": 0,
+    "why": "der Schlüssel = key."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Du ___ ein Auto.",
+    "opts": [
+     "siehst",
+     "sehst",
+     "sieht"
+    ],
+    "a": 0,
+    "why": "sehen: du siehst."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Bag packed! Train the everyday objects.",
+    "subject": "Everyday objects"
+   }
+  ]
+ },
+ {
+  "id": "cards",
+  "md": 22,
+  "tag": "Player card 2",
+  "title": "Business cards & forms",
+  "de": "Visitenkarten & Formulare",
+  "sub": "Read a business card and fill in a form.",
+  "subject": "Business cards & forms",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Player card",
+    "say": "Every player has a card with name, club and number. In business life it is a Visitenkarte. Learn the fields.",
+    "pts": [
+     "Department, company, address",
+     "Fill in a form with your details"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "On a business card",
+    "say": "The typical fields.",
+    "items": [
+     [
+      "die Abteilung",
+      "department"
+     ],
+     [
+      "die Personalabteilung",
+      "HR department"
+     ],
+     [
+      "die IT-Abteilung",
+      "IT department"
+     ],
+     [
+      "die E-Mail-Adresse",
+      "email address"
+     ],
+     [
+      "die Firma",
+      "company"
+     ],
+     [
+      "die Homepage",
+      "website"
+     ],
+     [
+      "die Telefonnummer",
+      "telephone number"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "The address",
+    "say": "Street, house number, postcode, place.",
+    "items": [
+     [
+      "die Straße",
+      "street"
+     ],
+     [
+      "die Hausnummer",
+      "house number"
+     ],
+     [
+      "die Postleitzahl",
+      "postcode"
+     ],
+     [
+      "der Ort",
+      "place / town"
+     ],
+     [
+      "die Stadt",
+      "city"
+     ],
+     [
+      "das Land",
+      "country"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "A form: Lena Nowak",
+    "say": "Your book's form, filled in.",
+    "rows": [
+     [
+      "Vorname",
+      "Lena"
+     ],
+     [
+      "Nachname",
+      "Nowak"
+     ],
+     [
+      "Land",
+      "Polen"
+     ],
+     [
+      "Alter",
+      "23"
+     ],
+     [
+      "Familienstand",
+      "ledig"
+     ],
+     [
+      "Kinder",
+      "keine"
+     ],
+     [
+      "Straße",
+      "Marienstraße"
+     ],
+     [
+      "Hausnummer",
+      "1a"
+     ],
+     [
+      "Postleitzahl",
+      "12459"
+     ],
+     [
+      "Ort",
+      "Berlin"
+     ]
+    ],
+    "hi": [
+     3,
+     4
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which word means postcode?",
+    "opts": [
+     "die Hausnummer",
+     "die Postleitzahl",
+     "der Ort"
+    ],
+    "a": 1,
+    "why": "die Postleitzahl (PLZ) = postcode."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which department looks after people (HR)?",
+    "opts": [
+     "die Personalabteilung",
+     "die IT-Abteilung",
+     "die Marketingabteilung"
+    ],
+    "a": 0,
+    "why": "die Personalabteilung = HR."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Card signed! Train the business and form words.",
+    "subject": "Business cards & forms"
+   }
+  ]
+ },
+ {
+  "id": "asking",
+  "md": 23,
+  "tag": "Press conference",
+  "title": "Asking & thanking",
+  "de": "Nachfragen & Danken",
+  "sub": "Ask how to say or spell something, and say thanks.",
+  "subject": "Asking & thanking",
+  "covers": [
+   "Everyday expressions"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Press conference",
+    "say": "A good player asks when stuck. Ask how to say a word, ask for it again, and say thanks politely.",
+    "pts": [
+     "Wie heißt das auf Deutsch?",
+     "Noch einmal, bitte."
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Ask",
+    "say": "Questions for the teacher or a partner.",
+    "items": [
+     [
+      "Wie heißt das auf Deutsch?",
+      "What is that called in German?"
+     ],
+     [
+      "Entschuldigung, wie heißt das auf Deutsch?",
+      "Excuse me, what is that called in German?"
+     ],
+     [
+      "Wie schreibt man das?",
+      "How do you write that?"
+     ],
+     [
+      "Wie buchstabiert man das?",
+      "How do you spell that?"
+     ],
+     [
+      "Buchstabieren Sie bitte.",
+      "Please spell it."
+     ],
+     [
+      "Noch einmal, bitte.",
+      "Once more, please."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Say thanks and answer",
+    "say": "Thanks, and the many ways to say you are welcome.",
+    "items": [
+     [
+      "Danke schön.",
+      "Thank you very much."
+     ],
+     [
+      "Vielen Dank.",
+      "Thank you very much."
+     ],
+     [
+      "Bitte schön.",
+      "You are welcome."
+     ],
+     [
+      "Bitte. Sehr gern.",
+      "You are welcome. My pleasure."
+     ],
+     [
+      "Kein Problem.",
+      "No problem."
+     ],
+     [
+      "Gern geschehen.",
+      "You are welcome."
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: partner exercise",
+    "say": "Two partners practise with a picture.",
+    "lines": [
+     [
+      "A",
+      "Wie heißt das auf Deutsch?",
+      "What is that called in German?"
+     ],
+     [
+      "B",
+      "Ich weiß nicht.",
+      "I do not know."
+     ],
+     [
+      "A",
+      "Das ist eine Jacke.",
+      "That is a jacket."
+     ],
+     [
+      "B",
+      "Wie bitte? Noch einmal, bitte.",
+      "Pardon? Once more, please."
+     ],
+     [
+      "A",
+      "Das ist eine Jacke.",
+      "That is a jacket."
+     ],
+     [
+      "B",
+      "Danke schön.",
+      "Thank you very much."
+     ],
+     [
+      "A",
+      "Bitte schön.",
+      "You are welcome."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "man and Mann",
+    "say": "man with a small letter means one / you. der Mann with a capital letter is the man.",
+    "items": [
+     [
+      "Wie schreibt man das?",
+      "How do you write that?"
+     ],
+     [
+      "der Mann",
+      "the man / the husband"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Everyday expressions",
+    "say": "Small phrases that make you sound natural.",
+    "items": [
+     [
+      "Schau mal!",
+      "Look!"
+     ],
+     [
+      "Egal.",
+      "Whatever."
+     ],
+     [
+      "Mir ist egal.",
+      "I do not care."
+     ],
+     [
+      "Keine Ahnung.",
+      "No idea."
+     ],
+     [
+      "Hier, bitte!",
+      "Here you go!"
+     ],
+     [
+      "Freut mich.",
+      "Nice to meet you."
+     ],
+     [
+      "Das ist ja interessant.",
+      "That is really interesting."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "You did not catch the word. What do you say?",
+    "opts": [
+     "Noch einmal, bitte.",
+     "Kein Problem.",
+     "Freut mich."
+    ],
+    "a": 0,
+    "why": "Noch einmal, bitte = once more, please."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Someone says: Danke schön. What do you answer?",
+    "opts": [
+     "Bitte schön.",
+     "Keine Ahnung.",
+     "Egal."
+    ],
+    "a": 0,
+    "why": "Bitte schön = you are welcome."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can ask, thank and react. Train these phrases.",
+    "subject": "Asking & thanking"
+   }
+  ]
+ },
+ {
+  "id": "office",
+  "md": 24,
+  "tag": "Press box",
+  "title": "Office & technology",
+  "de": "Büro & Technik",
+  "sub": "Things on your desk and what you say at work.",
+  "subject": "Office & technology",
+  "covers": [
+   "Office expressions"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "The press box",
+    "say": "Laptop, screen, keyboard: the press box is an office. Learn the things on the desk and the words you say when something goes wrong.",
+    "pts": [
+     "Nouns with their articles",
+     "Office exclamations"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "On the desk",
+    "say": "Say each noun with its article.",
+    "items": [
+     [
+      "der Laptop",
+      "laptop"
+     ],
+     [
+      "der Computer",
+      "computer"
+     ],
+     [
+      "der Bildschirm",
+      "screen / monitor"
+     ],
+     [
+      "die Tastatur",
+      "keyboard"
+     ],
+     [
+      "die Maus",
+      "mouse"
+     ],
+     [
+      "der Drucker",
+      "printer"
+     ],
+     [
+      "das Tablet",
+      "tablet"
+     ],
+     [
+      "der Stift",
+      "pen / marker"
+     ],
+     [
+      "der Kalender",
+      "calendar"
+     ],
+     [
+      "die Visitenkarte",
+      "business card"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Messages and appointments",
+    "say": "Words for work life.",
+    "items": [
+     [
+      "die E-Mail",
+      "email"
+     ],
+     [
+      "die Nachricht",
+      "message"
+     ],
+     [
+      "das Passwort",
+      "password"
+     ],
+     [
+      "der Termin",
+      "appointment"
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: a bad Monday",
+    "say": "Two colleagues at work.",
+    "lines": [
+     [
+      "A",
+      "Oh Gott! So viel Arbeit!",
+      "Oh God! So much work!"
+     ],
+     [
+      "B",
+      "Hilfe! Mein Passwort ist falsch.",
+      "Help! My password is wrong."
+     ],
+     [
+      "A",
+      "Ein Albtraum!",
+      "A nightmare!"
+     ],
+     [
+      "B",
+      "Ich komme nicht ins WLAN.",
+      "I cannot get on the Wi-Fi."
+     ],
+     [
+      "A",
+      "Morgen leider kein Yoga. Ich habe keine Zeit.",
+      "Unfortunately no yoga tomorrow. I have no time."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "What are they doing?",
+    "say": "Short office notes.",
+    "items": [
+     [
+      "hat Hunger",
+      "is hungry"
+     ],
+     [
+      "braucht einen Kaffee",
+      "needs a coffee"
+     ],
+     [
+      "telefoniert mit ...",
+      "is on the phone with ..."
+     ],
+     [
+      "hat keinen Stift",
+      "does not have a pen"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Your password does not work. What do you say?",
+    "opts": [
+     "Hilfe! Mein Passwort ist falsch.",
+     "Freut mich.",
+     "Wie bitte?"
+    ],
+    "a": 0,
+    "why": "Hilfe! Mein Passwort ist falsch."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What is der Drucker?",
+    "opts": [
+     "printer",
+     "keyboard",
+     "mouse"
+    ],
+    "a": 0,
+    "why": "der Drucker = printer."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can talk about your desk. Train the office words.",
+    "subject": "Office & technology"
+   }
+  ]
+ },
+ {
+  "id": "plurals",
+  "md": 25,
+  "tag": "Squad depth",
+  "title": "Plurals",
+  "de": "Pluralformen",
+  "sub": "The five plural patterns and plural articles.",
+  "subject": "Plurals",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Squad depth",
+    "say": "One player is a person, a full squad is a team. For nouns, one thing is singular, many things are plural. German has five plural patterns, and every plural noun takes die.",
+    "pts": [
+     "-(e)n · -s · -e · -er · no ending",
+     "The plural article is always die"
+    ]
+   },
+   {
+    "k": "table",
+    "h": "The five patterns",
+    "say": "Learn each noun with its plural.",
+    "rows": [
+     [
+      "-(e)n",
+      "die Nachricht → die Nachrichten"
+     ],
+     [
+      "-s",
+      "der Laptop → die Laptops"
+     ],
+     [
+      "-e / -¨e",
+      "der Termin → die Termine"
+     ],
+     [
+      "-¨e",
+      "die Maus → die Mäuse"
+     ],
+     [
+      "-er / -¨er",
+      "das Passwort → die Passwörter"
+     ],
+     [
+      "— / -¨",
+      "der Drucker → die Drucker"
+     ]
+    ],
+    "hi": [
+     1
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "ein, kein and the plural",
+    "say": "The plural has no ein. Only the negative form keine exists.",
+    "rows": [
+     {
+      "line": "Singular",
+      "parts": [
+       [
+        "der Termin",
+        "definite"
+       ],
+       [
+        "ein Termin",
+        "indefinite"
+       ],
+       [
+        "kein Termin",
+        "negative"
+       ]
+      ]
+     },
+     {
+      "line": "Plural",
+      "parts": [
+       [
+        "die Termine",
+        "definite",
+        "hi"
+       ],
+       [
+        "Termine",
+        "no article"
+       ],
+       [
+        "keine Termine",
+        "negative",
+        "hi"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "words",
+    "h": "In a sentence",
+    "say": "Use the plural with keine.",
+    "items": [
+     [
+      "Ich habe Zeit. Ich habe keine Termine.",
+      "I have time. I have no appointments."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What is the plural of der Laptop?",
+    "opts": [
+     "die Laptops",
+     "die Laptope",
+     "die Laptopen"
+    ],
+    "a": 0,
+    "why": "Laptop → Laptops (-s)."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What is the plural of die Maus?",
+    "opts": [
+     "die Mause",
+     "die Mäuse",
+     "die Mausen"
+    ],
+    "a": 1,
+    "why": "Maus → Mäuse (-¨e)."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: I have no appointments.",
+    "words": [
+     "Ich",
+     "habe",
+     "keine",
+     "Termine"
+    ],
+    "why": "Plural: keine, never ein."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! Always learn a noun with its plural. Train the plural patterns.",
+    "subject": "Plurals"
+   }
+  ]
+ },
+ {
+  "id": "online",
+  "md": 26,
+  "tag": "Fan shop",
+  "title": "Ordering online",
+  "de": "Online bestellen",
+  "sub": "Read an order form and an email address aloud.",
+  "subject": "Ordering online",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "The fan shop",
+    "say": "Order a shirt online: choose it, check the price, put it in the basket. And give your email address clearly.",
+    "pts": [
+     "Order words",
+     "Reading symbols: _ @ ."
+    ]
+   },
+   {
+    "k": "words",
+    "h": "The order form",
+    "say": "Fields on a shop page.",
+    "items": [
+     [
+      "die Sonnenbrille",
+      "sunglasses"
+     ],
+     [
+      "die Bestellnummer",
+      "order number"
+     ],
+     [
+      "die Menge",
+      "quantity"
+     ],
+     [
+      "der Preis",
+      "price"
+     ],
+     [
+      "der Warenkorb",
+      "shopping basket"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Symbols in an email address",
+    "say": "Say the symbols out loud.",
+    "rows": [
+     [
+      "_",
+      "Unterstrich"
+     ],
+     [
+      "@",
+      "ät"
+     ],
+     [
+      ".",
+      "Punkt"
+     ]
+    ],
+    "hi": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "k": "words",
+    "h": "An email address aloud",
+    "say": "Say each symbol as a word.",
+    "items": [
+     [
+      "Maria Unterstrich 87 ät gmail Punkt com",
+      "Maria_87@gmail.com"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you say the @ sign?",
+    "opts": [
+     "ät",
+     "Punkt",
+     "Unterstrich"
+    ],
+    "a": 0,
+    "why": "@ = ät."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you say the dot in an email address?",
+    "opts": [
+     "Punkt",
+     "ät",
+     "Menge"
+    ],
+    "a": 0,
+    "why": ". = Punkt."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Order placed! Train the shop words.",
+    "subject": "Ordering online"
    }
   ]
  }

@@ -1,22 +1,19 @@
-// Duels: two friends answer the same 10 questions.
+// Duels: two friends answer the same 9 questions, turn-based.
 //
-// Two kinds (the "mode"):
-//   live: both players are online. The invite is open for 2 minutes. When the friend accepts, the server sets a common
-//         start time 4 seconds ahead; both phones count down to it and then play. Phones poll every ~1.5 s to show the
-//         opponent's progress (plain HTTPS polling: no WebSockets, no Durable Objects, no extra Cloudflare services).
-//   turn: turn-based with a time limit. The challenger plays right away, the friend has 24 hours to accept and play.
+// There is no live mode any more. The challenger plays right away, the friend has 24 hours to accept and play.
+// Score = goals: every right answer is one goal, so a game ends like a football score (0 to 9 goals each).
+// The player with more goals wins, equal goals is a draw. The time you needed does not count.
 //
 // Fairness: the server keeps the right answers. Players get the questions only, send one answer at a time and
-// receive "correct or not" back. The server measures the time between questions with its own clock, so a phone cannot
-// claim a faster time. Points: 100 for a right answer + up to 50 for speed.
+// receive "correct or not" back. The server measures the time per question with its own clock, so a phone cannot
+// claim a faster time or answer after the question's time limit.
 import { HttpError } from './http.js';
 import { take } from './register.js';
 import { areFriends } from './friends.js';
 
 export const GAMES = ['sprint', 'dash', 'plural', 'gap', 'scramble'];
-export const LIVE_INVITE_MS = 120000;
 export const TURN_MS = 24 * 3600000;
-export const LIVE_LEAD_MS = 4000;
+export const DECK_SIZE = 9;
 const FEEDBACK_MS = 900;   // the app shows the result for ~0.9 s before the next question; this is not counted against the player
 const GRACE_MS = 3000;
 const MAX_OPEN_AS_CHALLENGER = 8;
@@ -29,7 +26,7 @@ export const norm = (s) => String(s).normalize('NFC').toLowerCase().trim().repla
 
 /** Checks a deck sent by a challenger. Items: {t:'mc', q, o:[2-4 options], a:index} or {t:'type', q, a:'text', ok?:[...], chars?:[...]} (+ optional hint, tm seconds). */
 export function validateDeck(deck) {
-  if (!Array.isArray(deck) || deck.length < 5 || deck.length > 12) throw bad('deck must have 5 to 12 questions.', 'deck');
+  if (!Array.isArray(deck) || deck.length !== DECK_SIZE) throw bad(`deck must have exactly ${DECK_SIZE} questions.`, 'deck');
   const out = deck.map((it, i) => {
     const f = `deck[${i}]`;
     if (!it || typeof it !== 'object' || Array.isArray(it)) throw bad(`${f} must be an object.`, 'deck');
@@ -59,7 +56,7 @@ export function validateDeck(deck) {
 }
 
 /** The deck as players see it: no right answers. */
-const publicDeck = (deck) => deck.map((it) => (it.t === 'mc' ? { t: 'mc', q: it.q, o: it.o, tm: it.tm, hint: it.hint } : { t: 'type', q: it.q, chars: it.chars, tm: it.tm, hint: it.hint }));
+export const publicDeck = (deck) => deck.map((it) => (it.t === 'mc' ? { t: 'mc', q: it.q, o: it.o, tm: it.tm, hint: it.hint } : { t: 'type', q: it.q, chars: it.chars, tm: it.tm, hint: it.hint }));
 
 export function score(item, value, elapsedMs) {
   const limit = item.tm * 1000;
@@ -70,8 +67,7 @@ export function score(item, value, elapsedMs) {
     if (item.t === 'mc') correct = Number.isInteger(value) && value === item.a;
     else correct = typeof value === 'string' && [item.a, ...item.ok].some((x) => norm(x) === norm(value));
   }
-  const speed = correct ? Math.round(50 * Math.max(0, 1 - Math.min(ms, limit) / limit)) : 0;
-  return { correct, points: correct ? 100 + speed : 0, ms: Math.min(ms, limit) };
+  return { correct, points: correct ? 1 : 0, ms: Math.min(ms, limit) };   // one goal per right answer
 }
 
 const parse = (s, d) => { try { const v = JSON.parse(s); return v ?? d; } catch { return d; } };
@@ -119,8 +115,8 @@ function view(d, me, opp, now, withDeck) {
   const mine = parse(d[role + '_answers'], []), theirs = parse(d[other + '_answers'], []);
   const final = d.status === 'done' || d.status === 'expired';
   const w = winnerOf(d);
-  // A turn-based opponent's score stays hidden until they have played and you have played too (or the game is over).
-  const reveal = d.mode === 'live' || ((d[role + '_done'] || final) && (d[other + '_done'] || final));
+  // The opponent's score stays hidden until they have played and you have played too (or the game is over).
+  const reveal = (d[role + '_done'] || final) && (d[other + '_done'] || final);
   const out = {
     id: d.id, game: d.game, mode: d.mode, status: d.status, role, n: deck.length,
     opponent: opp || { id: role === 'a' ? d.b_user : d.a_user, name: '?', avatar: '' },
@@ -139,23 +135,16 @@ export async function createDuel(db, user, body, now = Date.now()) {
   const friend = body.friend;
   if (!Number.isInteger(friend)) throw bad('friend must be a friend id.', 'friend');
   if (!GAMES.includes(body.game)) throw bad(`game must be one of ${GAMES.join(', ')}.`, 'game');
-  if (body.mode !== 'live' && body.mode !== 'turn') throw bad("mode must be 'live' or 'turn'.", 'mode');
+  if (body.mode !== undefined && body.mode !== 'turn') throw bad("mode must be 'turn': live games were removed.", 'mode');
   const deck = validateDeck(body.deck);
   if (!(await areFriends(db, user.id, friend))) throw new HttpError(404, 'not_found', 'Friend not found.');
   if (!(await take(db, 'dl:' + user.id, dayKey(now), CREATE_PER_DAY))) throw new HttpError(429, 'too_many_duels', 'Too many challenges today.');
   const open = await db.prepare("SELECT COUNT(*) AS n FROM duels WHERE a_user = ? AND status IN ('invited', 'active') AND expires_at > ?").bind(user.id, now).first();
   if (open && open.n >= MAX_OPEN_AS_CHALLENGER) throw new HttpError(409, 'too_many_open', 'You have too many open challenges. Finish or wait for some first.');
-  if (body.mode === 'live') {
-    const dup = await db
-      .prepare("SELECT id FROM duels WHERE mode = 'live' AND status IN ('invited', 'active') AND expires_at > ? AND ((a_user = ? AND b_user = ?) OR (a_user = ? AND b_user = ?))")
-      .bind(now, user.id, friend, friend, user.id)
-      .first();
-    if (dup) throw new HttpError(409, 'already_open', 'There is already an open live game with this friend.');
-  }
-  const expires = now + (body.mode === 'live' ? LIVE_INVITE_MS : TURN_MS);
+  const expires = now + TURN_MS;
   const r = await db
     .prepare('INSERT INTO duels (game, mode, a_user, b_user, deck, created_at, expires_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id')
-    .bind(body.game, body.mode, user.id, friend, JSON.stringify(deck), now, expires, now)
+    .bind(body.game, 'turn', user.id, friend, JSON.stringify(deck), now, expires, now)
     .first();
   const d = await db.prepare('SELECT * FROM duels WHERE id = ?').bind(r.id).first();
   return { duel: view(d, user, (await names(db, [friend]))[friend], now, false) };
@@ -183,7 +172,7 @@ export async function listDuels(db, user, now = Date.now()) {
 export async function getDuel(db, user, id, now = Date.now()) {
   const d = await settle(db, await load(db, id, user), now);
   const role = d.a_user === user.id ? 'a' : 'b';
-  const canPlay = d.status === 'active' || (d.status === 'invited' && d.mode === 'turn' && role === 'a');
+  const canPlay = d.status === 'active' || (d.status === 'invited' && role === 'a');
   const nm = await names(db, [role === 'a' ? d.b_user : d.a_user]);
   return { duel: view(d, user, nm[role === 'a' ? d.b_user : d.a_user], now, canPlay) };
 }
@@ -193,14 +182,7 @@ export async function acceptDuel(db, user, id, now = Date.now()) {
   const d = await settle(db, await load(db, id, user), now);
   if (d.b_user !== user.id) throw new HttpError(403, 'forbidden', 'Only the challenged friend can accept.');
   if (d.status !== 'invited') throw new HttpError(409, 'not_open', 'This challenge is not open any more.');
-  const deck = parse(d.deck, []);
-  let start = 0, expires = now + TURN_MS, t = 0;
-  if (d.mode === 'live') {
-    start = now + LIVE_LEAD_MS;
-    t = start;
-    expires = start + deck.reduce((s, it) => s + it.tm * 1000 + FEEDBACK_MS + GRACE_MS, 0) + 15000;
-  }
-  await db.prepare("UPDATE duels SET status = 'active', start_at = ?, expires_at = ?, a_t = CASE WHEN ? > 0 THEN ? ELSE a_t END, b_t = CASE WHEN ? > 0 THEN ? ELSE b_t END, updated_at = ? WHERE id = ?").bind(start, expires, t, t, t, t, now, d.id).run();
+  await db.prepare("UPDATE duels SET status = 'active', expires_at = ?, updated_at = ? WHERE id = ?").bind(now + TURN_MS, now, d.id).run();
   return getDuel(db, user, id, now);
 }
 
@@ -216,7 +198,6 @@ export async function declineDuel(db, user, id, now = Date.now()) {
 export async function startDuel(db, user, id, now = Date.now()) {
   const d = await settle(db, await load(db, id, user), now);
   const role = d.a_user === user.id ? 'a' : 'b';
-  if (d.mode !== 'turn') throw new HttpError(409, 'wrong_mode', 'Live games start automatically.');
   const canPlay = d.status === 'active' || (d.status === 'invited' && role === 'a');
   if (!canPlay) throw new HttpError(409, 'not_open', 'Accept the challenge first.');
   if (d[role + '_done']) throw new HttpError(409, 'already_done', 'You already played this one.');
@@ -231,10 +212,9 @@ export async function answerDuel(db, user, id, body, now = Date.now()) {
   if (!(v === null || (Number.isInteger(v) && v >= -1 && v <= 3) || (typeof v === 'string' && v.length <= 60))) throw bad('v must be an option number or short text.', 'v');
   const d = await settle(db, await load(db, id, user), now);
   const role = d.a_user === user.id ? 'a' : 'b', other = role === 'a' ? 'b' : 'a';
-  const playable = d.status === 'active' || (d.status === 'invited' && d.mode === 'turn' && role === 'a');
+  const playable = d.status === 'active' || (d.status === 'invited' && role === 'a');
   if (!playable) throw new HttpError(409, 'not_open', 'This game is not open for answers.');
   if (d[role + '_done']) throw new HttpError(409, 'already_done', 'You already finished this one.');
-  if (d.mode === 'live' && now < d.start_at - 300) throw new HttpError(409, 'not_started', 'The game has not started yet.');
   if (!d[role + '_t']) throw new HttpError(409, 'not_started', 'Start the game first.');
   const deck = parse(d.deck, []), mine = parse(d[role + '_answers'], []);
   if (body.i !== mine.length || body.i >= deck.length) throw new HttpError(409, 'out_of_order', 'Answer the questions in order.');
@@ -245,12 +225,12 @@ export async function answerDuel(db, user, id, body, now = Date.now()) {
   const finished = mine.length === deck.length;
   const bothDone = finished && d[other + '_done'];
   await db
-    .prepare(`UPDATE duels SET ${role}_answers = ?, ${role}_score = ?, ${role}_done = ?, ${role}_t = ?, status = CASE WHEN ? THEN 'done' ELSE status END, updated_at = ? WHERE id = ?`)
-    .bind(JSON.stringify(mine), total, finished ? 1 : 0, now, bothDone ? 1 : 0, now, d.id)
+    .prepare(`UPDATE duels SET ${role}_answers = ?, ${role}_score = ?, ${role}_done = ?, ${role}_t = ?, status = CASE WHEN ? THEN 'done' ELSE status END, finished_by = CASE WHEN ? THEN ? ELSE finished_by END, updated_at = ? WHERE id = ?`)
+    .bind(JSON.stringify(mine), total, finished ? 1 : 0, now, bothDone ? 1 : 0, bothDone ? 1 : 0, user.id, now, d.id)
     .run();
   const fresh = await db.prepare('SELECT * FROM duels WHERE id = ?').bind(d.id).first();
   const nm = await names(db, [role === 'a' ? d.b_user : d.a_user]);
-  return { correct: s.correct, points: s.points, answer: answerText(item), duel: view(fresh, user, nm[role === 'a' ? d.b_user : d.a_user], now, false) };
+  return { correct: s.correct, points: s.points, goals: total, answer: answerText(item), duel: view(fresh, user, nm[role === 'a' ? d.b_user : d.a_user], now, false) };
 }
 
 /** Win/draw/loss counts of finished duels for one user (used on the public profile). `against` limits it to one opponent. */

@@ -44,3 +44,14 @@ Optional later hardening if the app becomes public: a Cloudflare Turnstile check
 | Cheating in duels | The server stores the right answers, sends the deck without them, scores each answer with its own clock, and requires answers in order |
 | Spam | Daily and open-challenge limits (see `docs/FRIENDS_AND_DUELS.md`); invalid or oversized decks are rejected |
 | Leaving friends | Removing a friend deletes the link for both sides |
+
+## Groups, streaks and alerts (version 2.5.0)
+
+| Risk | Protection |
+|---|---|
+| Joining a group uninvited | Only the owner can add, and only people who are already their friends; every group route checks membership on the server |
+| Seeing a round early | Round results are hidden until you finish it or it ended; answers stay on the server |
+| Group spam | Limits: 5 groups per person, 10 groups and 10 rounds per day, 3 open rounds per group, 8 members |
+| Streak data | Only whole local day numbers (max 90) are published, never times; the shared streak is computed on the server |
+| Alert feed | `GET /v1/alerts` only returns the caller's own events, at most 50, from the last 7 days |
+| Phone notifications | Polling uses the access code already stored on the phone; no push service, no extra keys or secrets in the app |

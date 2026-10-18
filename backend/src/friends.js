@@ -6,6 +6,7 @@
 // (never the sync address, access code, cards or settings).
 import { HttpError } from './http.js';
 import { take } from './register.js';
+import { activeDays, sharedStreak } from './streaks.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export const CODE_TTL_MS = 7 * 86400000;
@@ -25,6 +26,16 @@ const normCode = (v) => {
   const c = v.toUpperCase().replace(/[^A-Z0-9]/g, '');
   return c.length === 8 && [...c].every((ch) => ALPHABET.includes(ch)) ? c.slice(0, 4) + '-' + c.slice(4) : null;
 };
+
+/** The avatar (club) id stored in a synced profile document, or ''. */
+export function avatarOf(raw) {
+  try { const a = JSON.parse(raw || '{}').settings; return a && typeof a.avatar === 'string' && /^[a-z0-9_-]{1,20}$/.test(a.avatar) ? a.avatar : ''; } catch { return ''; }
+}
+async function myData(db, id) {
+  const r = await db.prepare('SELECT data FROM profiles WHERE user_id = ?').bind(id).first();
+  return r ? r.data : null;
+}
+const streak2 = (mine, theirs, now) => { const s = sharedStreak([activeDays(mine), activeDays(theirs)], now); return { n: s.n, best: s.best, today: s.today }; };
 
 const num = (v, max = 1e9) => (typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(max, Math.round(v))) : 0);
 
@@ -112,10 +123,10 @@ export async function addFriend(db, user, body, now = Date.now()) {
     throw new HttpError(409, 'friend_limit', `The friend list is full (${MAX_FRIENDS} friends).`);
   }
   const [a, b] = user.id < row.user_id ? [user.id, row.user_id] : [row.user_id, user.id];
-  await db.prepare('INSERT OR IGNORE INTO friends (user_a, user_b, created_at) VALUES (?, ?, ?)').bind(a, b, now).run();
+  await db.prepare('INSERT OR IGNORE INTO friends (user_a, user_b, created_at, added_by) VALUES (?, ?, ?, ?)').bind(a, b, now, user.id).run();
   await db.prepare('DELETE FROM friend_codes WHERE user_id = ?').bind(row.user_id).run(); // single use
   const f = await db.prepare('SELECT u.id AS id, u.name AS name, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id WHERE u.id = ?').bind(row.user_id).first();
-  return { friend: { id: f.id, name: f.name, ...publicView(f.data, now) } };
+  return { friend: { id: f.id, name: f.name, ...publicView(f.data, now), streak2: streak2(await myData(db, user.id), f.data, now) } };
 }
 
 /** GET /v1/friends: your friends with a short summary. */
@@ -129,10 +140,11 @@ export async function listFriends(db, user, now = Date.now()) {
     )
     .bind(user.id)
     .all();
+  const mine = await myData(db, user.id);
   return {
     friends: results.map((r) => {
       const v = publicView(r.data, now);
-      return { id: r.id, name: String(r.name).slice(0, 40), avatar: v.avatar, xp: v.xp, streak: v.streak, week: v.week, tier: v.tier, stage: v.stage, seen: r.seen || 0 };
+      return { id: r.id, name: String(r.name).slice(0, 40), avatar: v.avatar, xp: v.xp, streak: v.streak, week: v.week, tier: v.tier, stage: v.stage, seen: r.seen || 0, streak2: streak2(mine, r.data, now) };
     }),
   };
 }
@@ -145,7 +157,7 @@ export async function friendProfile(db, user, friendId, now = Date.now()) {
     .bind(friendId)
     .first();
   if (!r) throw new HttpError(404, 'not_found', 'Friend not found.');
-  return { profile: { id: r.id, name: String(r.name).slice(0, 40), since: r.created, seen: r.seen || 0, ...publicView(r.data, now) } };
+  return { profile: { id: r.id, name: String(r.name).slice(0, 40), since: r.created, seen: r.seen || 0, ...publicView(r.data, now), streak2: streak2(await myData(db, user.id), r.data, now) } };
 }
 
 /** DELETE /v1/friends/{id}: ends the friendship on both sides. Open duels between the two are closed. */

@@ -1,0 +1,9 @@
+/* DFL Sans (official Bundesliga typeface). The font files are licensed and are NOT in the git repository:
+   put them in assets/www/fonts/ (see fonts/README.md). Without them the app falls back to system fonts. */
+@font-face{font-family:'DFL Sans';src:url(fonts/DFL_Sans_Light.otf) format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'DFL Sans';src:url(fonts/DFL_Sans.otf) format('opentype');font-weight:400 600;font-style:normal;font-display:swap}
+@font-face{font-family:'DFL Sans';src:url(fonts/DFL_Sans_Italic.otf) format('opentype');font-weight:400 600;font-style:italic;font-display:swap}
+@font-face{font-family:'DFL Sans';src:url(fonts/DFL_Sans_Bold.otf) format('opentype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'DFL Sans';src:url(fonts/DFL_Sans_Extrabold.otf) format('opentype');font-weight:800 900;font-style:normal;font-display:swap}
+@font-face{font-family:'DFL Sans Condensed';src:url(fonts/DFL_Sans_Condensed.otf) format('opentype');font-weight:300 500;font-style:normal;font-display:swap}
+@font-face{font-family:'DFL Sans Condensed';src:url(fonts/DFL_Sans_Condensed_Bold.otf) format('opentype');font-weight:600 900;font-style:normal;font-display:swap}

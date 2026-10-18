@@ -24,7 +24,8 @@ def chk(where, text):
             bad.append((where, t, text))
 seen_subjects = set()
 for u in units:
-    if u.get("covers"): seen_subjects.add(u["covers"])
+    cv = u.get("covers") or []
+    for c_ in ([cv] if isinstance(cv, str) else cv): seen_subjects.add(c_)
     if u["subject"]:
         seen_subjects.add(u["subject"])
         if u["subject"] not in subjects: bad.append((u["id"], "subject", u["subject"]))
@@ -50,7 +51,8 @@ for u in units:
         elif k == "recap":
             if b["subject"] and b["subject"] not in subjects: bad.append((w, "subject", b["subject"]))
         if k == "table" and b["h"] in GER_TABLES and b["h"] in ("sein = to be",) and len(b["rows"]) != 6: bad.append((w,"rows",len(b["rows"])))
-missing = subjects - seen_subjects
+# Classroom instructions are for daily challenges and training only, not for the Tactics Room
+missing = subjects - seen_subjects - {"Classroom & instructions"}
 if missing: bad.append(("coverage", "subjects not taught", sorted(missing)))
 for x in bad: print("PROBLEM", x)
 print(f"{len(units)} units, {sum(len(u['boards']) for u in units)} boards, {len(bad)} problems")

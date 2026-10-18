@@ -1,5 +1,5 @@
 // League table: points per player for the last week / month / all time, read from each player's synced profile.
-// Only the name, points and streak leave the database. With 2-3 users this is a handful of rows.
+// Everybody is in every table (there is no opt-out). Only the name, avatar, points and streak leave the database.
 const RANGES = { week: 7, month: 30, all: 0 };
 const dayKey = (t) => new Date(t).toISOString().slice(0, 10);
 
@@ -8,8 +8,7 @@ export async function leaderboard(db, me, rangeRaw, now = Date.now()) {
   const days = RANGES[range];
   const cutoff = days ? dayKey(now - (days - 1) * 86400000) : '';
   const { results } = await db
-    .prepare('SELECT u.id AS id, u.name AS name, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id WHERE u.visible = 1 OR u.id = ? LIMIT 50')
-    .bind(me.id)
+    .prepare('SELECT u.id AS id, u.name AS name, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id LIMIT 50')
     .all();
   const today = dayKey(now), yesterday = dayKey(now - 86400000);
   const rows = results.map((r) => {

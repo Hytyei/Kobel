@@ -22,7 +22,7 @@ function setup() {
   const befriend = async (a, b) => { const { code } = await createCode(db, a); await addFriend(db, b, { code }); };
   return { db, addUser, call, befriend };
 }
-const deck = (n = 5) => Array.from({ length: n }, (_, i) => ({ t: 'mc', q: 'Q' + i, o: ['a' + i, 'b' + i, 'c' + i, 'd' + i], a: 1, tm: 10 }));
+const deck = (n = 9) => Array.from({ length: n }, (_, i) => ({ t: 'mc', q: 'Q' + i, o: ['a' + i, 'b' + i, 'c' + i, 'd' + i], a: 1, tm: 10 }));
 
 test('invite code: add a friend, single use, own code and bad codes are refused', async () => {
   const { db, addUser, call } = setup();
@@ -73,17 +73,18 @@ test('friend codes are rate limited and expire', async () => {
 });
 
 test('deck validation rejects malformed decks', () => {
-  assert.throws(() => validateDeck(deck(3)), /5 to 12/);
-  assert.throws(() => validateDeck([...deck(4), { t: 'mc', q: 'x', o: ['a', 'a', 'b', 'c'], a: 0 }]), /different/);
-  assert.throws(() => validateDeck([...deck(4), { t: 'zzz', q: 'x' }]), /mc/);
-  assert.throws(() => validateDeck([...deck(4), { t: 'mc', q: 'x', o: ['a', 'b', 'c', 'd'], a: 9 }]), /right option/);
-  assert.equal(validateDeck(deck(5)).length, 5);
+  assert.throws(() => validateDeck(deck(5)), /exactly 9/);
+  assert.throws(() => validateDeck(deck(10)), /exactly 9/);
+  assert.throws(() => validateDeck([...deck(8), { t: 'mc', q: 'x', o: ['a', 'a', 'b', 'c'], a: 0 }]), /different/);
+  assert.throws(() => validateDeck([...deck(8), { t: 'zzz', q: 'x' }]), /mc/);
+  assert.throws(() => validateDeck([...deck(8), { t: 'mc', q: 'x', o: ['a', 'b', 'c', 'd'], a: 9 }]), /right option/);
+  assert.equal(validateDeck(deck(9)).length, 9);
 });
 
-test('scoring: speed bonus, wrong and late answers, typed answers forgive case and spaces', () => {
+test('scoring: one goal per right answer; wrong and late answers score nothing; typed answers forgive case and spaces', () => {
   const mc = { t: 'mc', q: '', o: ['a', 'b', 'c', 'd'], a: 2, tm: 10, ok: [] };
-  assert.equal(score(mc, 2, 900).points, 150);                     // instant (feedback pause is not counted)
-  assert.ok(score(mc, 2, 900 + 5000).points > 120 && score(mc, 2, 900 + 5000).points < 130);
+  assert.equal(score(mc, 2, 900).points, 1);                       // a goal, however fast
+  assert.equal(score(mc, 2, 900 + 9000).points, 1, 'speed does not matter any more');
   assert.equal(score(mc, 1, 1000).points, 0);
   assert.equal(score(mc, 2, 900 + 10000 + 3500).points, 0);        // far too late
   const ty = { t: 'type', q: '', a: 'Straße', ok: ['Strasse'], tm: 10 };
@@ -91,57 +92,57 @@ test('scoring: speed bonus, wrong and late answers, typed answers forgive case a
   assert.equal(score(ty, 'Strase', 900).correct, false);
 });
 
-test('turn-based duel: challenger plays first, friend accepts and plays, the server decides the winner', async () => {
+test('duel: challenger plays first, friend accepts and plays, goals decide the winner', async () => {
   const { db, addUser, befriend } = setup();
   const A = addUser('Alice'), B = addUser('Bob'), C = addUser('Cleo');
   await befriend(A, B);
-  await assert.rejects(createDuel(db, A, { friend: C.id, game: 'sprint', mode: 'turn', deck: deck() }, 1000), /not found/);
-  const { duel } = await createDuel(db, A, { friend: B.id, game: 'sprint', mode: 'turn', deck: deck() }, 1000);
-  assert.equal(duel.status, 'invited'); assert.equal(duel.deck, undefined);
+  await assert.rejects(createDuel(db, A, { friend: C.id, game: 'sprint', deck: deck() }, 1000), /not found/);
+  await assert.rejects(createDuel(db, A, { friend: B.id, game: 'sprint', mode: 'live', deck: deck() }, 1000), /turn/);
+  const { duel } = await createDuel(db, A, { friend: B.id, game: 'sprint', deck: deck() }, 1000);
+  assert.equal(duel.status, 'invited'); assert.equal(duel.deck, undefined); assert.equal(duel.mode, 'turn'); assert.equal(duel.n, 9);
   let g = await startDuel(db, A, duel.id, 2000);
-  assert.equal(g.duel.deck.length, 5);
+  assert.equal(g.duel.deck.length, 9);
   assert.ok(!JSON.stringify(g.duel.deck).includes('"a"'), 'right answers are never sent');
   await assert.rejects(answerDuel(db, B, duel.id, { i: 0, v: 1 }, 2500), /not open|Accept/);
-  let t = 2000;
-  for (let i = 0; i < 5; i++) { t += 1500; const r = await answerDuel(db, A, duel.id, { i, v: 1 }, t); assert.equal(r.correct, true); assert.equal(r.answer, 'b' + i); }
-  await assert.rejects(answerDuel(db, A, duel.id, { i: 5, v: 1 }, t + 1000), /already|finished/);
+  let t = 2000, last;
+  for (let i = 0; i < 9; i++) { t += 1500; last = await answerDuel(db, A, duel.id, { i, v: 1 }, t); assert.equal(last.correct, true); assert.equal(last.answer, 'b' + i); assert.equal(last.goals, i + 1); }
+  assert.equal(last.duel.my.score, 9, 'nine right answers are nine goals');
+  await assert.rejects(answerDuel(db, A, duel.id, { i: 9, v: 1 }, t + 1000), /already|finished/);
   assert.equal((await getDuel(db, B, duel.id, t + 5000)).duel.their.score, null, 'hidden until B has played');
   await acceptDuel(db, B, duel.id, t + 10000);
   await startDuel(db, B, duel.id, t + 11000);
   let u = t + 11000;
   await assert.rejects(answerDuel(db, B, duel.id, { i: 1, v: 1 }, u + 1000), /order/);
-  for (let i = 0; i < 5; i++) { u += 8000; await answerDuel(db, B, duel.id, { i, v: i < 2 ? 0 : 1 }, u); }
+  for (let i = 0; i < 9; i++) { u += 8000; await answerDuel(db, B, duel.id, { i, v: i < 2 ? 0 : 1 }, u); }
   const end = (await getDuel(db, B, duel.id, u + 1)).duel;
-  assert.equal(end.status, 'done'); assert.equal(end.result.winner, 'them'); assert.ok(end.my.score < end.their.score);
+  assert.equal(end.status, 'done'); assert.equal(end.result.winner, 'them');
+  assert.equal(end.my.score, 7); assert.equal(end.their.score, 9);
   assert.equal((await getDuel(db, A, duel.id, u + 1)).duel.result.winner, 'me');
   assert.deepEqual(await duelRecord(db, A.id), { w: 1, l: 0, d: 0 });
   assert.deepEqual(await duelRecord(db, B.id, A.id), { w: 0, l: 1, d: 0 });
 });
 
-test('live duel: both start at the same server time; early answers are refused; progress is visible', async () => {
+test('duel: equal goals are a draw, however long the answers took', async () => {
   const { db, addUser, befriend } = setup();
   const A = addUser('Alice'), B = addUser('Bob');
   await befriend(A, B);
-  const { duel } = await createDuel(db, A, { friend: B.id, game: 'dash', mode: 'live', deck: deck() }, 1000);
-  await assert.rejects(createDuel(db, B, { friend: A.id, game: 'dash', mode: 'live', deck: deck() }, 1100), /already an open live/);
-  assert.equal((await acceptDuel(db, B, duel.id, 5000)).duel.startAt, 9000);
-  await assert.rejects(answerDuel(db, A, duel.id, { i: 0, v: 1 }, 6000), /not started/);
-  await answerDuel(db, A, duel.id, { i: 0, v: 1 }, 10500);
-  const seen = (await getDuel(db, B, duel.id, 10600)).duel;
-  assert.equal(seen.their.count, 1); assert.ok(seen.their.score > 0, 'live: opponent progress is visible');
-  assert.ok((await listDuels(db, B, 10600)).duels.some((d) => d.id === duel.id && d.status === 'active'));
+  const { duel } = await createDuel(db, A, { friend: B.id, game: 'dash', deck: deck() }, 1000);
+  await startDuel(db, A, duel.id, 1100);
+  for (let i = 0; i < 9; i++) await answerDuel(db, A, duel.id, { i, v: i < 5 ? 1 : 0 }, 1200 + i * 700);
+  await acceptDuel(db, B, duel.id, 9000); await startDuel(db, B, duel.id, 9100);
+  for (let i = 0; i < 9; i++) await answerDuel(db, B, duel.id, { i, v: i < 5 ? 1 : 0 }, 9200 + i * 9000);
+  const d = (await getDuel(db, A, duel.id, 200000)).duel;
+  assert.equal(d.status, 'done'); assert.equal(d.result.winner, 'draw'); assert.equal(d.my.score, 5); assert.equal(d.their.score, 5);
+  assert.deepEqual(await duelRecord(db, A.id), { w: 0, l: 0, d: 1 });
 });
 
-test('time limits: an unanswered live invite and an unplayed turn duel expire; the finisher wins', async () => {
+test('time limits: an unplayed duel expires and the player who finished wins', async () => {
   const { db, addUser, befriend } = setup();
   const A = addUser('Alice'), B = addUser('Bob');
   await befriend(A, B);
-  const live = (await createDuel(db, A, { friend: B.id, game: 'plural', mode: 'live', deck: deck() }, 1000)).duel;
-  await assert.rejects(acceptDuel(db, B, live.id, 1000 + 130000), /not open/);
-  assert.equal((await getDuel(db, A, live.id, 1000 + 130000)).duel.status, 'expired');
-  const turn = (await createDuel(db, A, { friend: B.id, game: 'gap', mode: 'turn', deck: deck() }, 2000)).duel;
+  const turn = (await createDuel(db, A, { friend: B.id, game: 'gap', deck: deck() }, 2000)).duel;
   await startDuel(db, A, turn.id, 2500);
-  for (let i = 0; i < 5; i++) await answerDuel(db, A, turn.id, { i, v: 1 }, 3000 + i * 1000);
+  for (let i = 0; i < 9; i++) await answerDuel(db, A, turn.id, { i, v: 1 }, 3000 + i * 1000);
   const late = (await getDuel(db, B, turn.id, 2000 + 25 * 3600000)).duel;
   assert.equal(late.status, 'expired'); assert.equal(late.result.winner, 'them');
   await assert.rejects(startDuel(db, B, turn.id, 2000 + 25 * 3600000), /not open|Accept/);
@@ -151,14 +152,14 @@ test('declining, outsiders, bad input and removing a friend closes open duels', 
   const { db, addUser, call, befriend } = setup();
   const A = addUser('Alice'), B = addUser('Bob'), C = addUser('Cleo');
   await befriend(A, B);
-  const d1 = (await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'scramble', mode: 'turn', deck: [...Array(5)].map((_, i) => ({ t: 'type', q: 'Q' + i, a: 'wort', chars: ['w', 'o', 'r', 't'] })) } })).json.duel;
+  const d1 = (await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'scramble', deck: [...Array(9)].map((_, i) => ({ t: 'type', q: 'Q' + i, a: 'wort', chars: ['w', 'o', 'r', 't'] })) } })).json.duel;
   assert.equal((await call('GET', `/v1/duels/${d1.id}`, { code: C.code })).status, 404, 'outsiders see nothing');
   assert.equal((await call('POST', `/v1/duels/${d1.id}/answer`, { code: C.code, body: { i: 0, v: 'x' } })).status, 404);
-  assert.equal((await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'chess', mode: 'turn', deck: deck() } })).status, 400);
-  assert.equal((await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'sprint', mode: 'turn', deck: 'x' } })).status, 400);
+  assert.equal((await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'chess', deck: deck() } })).status, 400);
+  assert.equal((await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'sprint', deck: 'x' } })).status, 400);
   assert.equal((await call('POST', `/v1/duels/${d1.id}/accept`, { code: A.code })).status, 403, 'only the friend can accept');
   await call('DELETE', `/v1/friends/${B.id}`, { code: A.code });
   assert.equal((await call('GET', `/v1/duels/${d1.id}`, { code: B.code })).json.duel.status, 'expired');
-  const d2 = (await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'sprint', mode: 'turn', deck: deck() } })).status;
+  const d2 = (await call('POST', '/v1/duels', { code: A.code, body: { friend: B.id, game: 'sprint', deck: deck() } })).status;
   assert.equal(d2, 404, 'not friends any more');
 });

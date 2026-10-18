@@ -54,7 +54,7 @@ export function parseNotes(txt) {
       topic = null;
       continue;
     }
-    if (/^@(date|subject)\b/i.test(line)) continue; // dates and subjects are only used by the app; tolerated and ignored here
+    if (/^@(date|subject)\b/i.test(line)) { if (/^@subject\b/i.test(line)) topic = null; continue; } // a new subject ends a grammar block (same as in the app)
     if ((m = line.match(/^@grammar\s*(.*)$/i))) { topic = (m[1] || 'Grammar').trim(); continue; }
     if (/^@(words|vocab)/i.test(line)) { topic = null; continue; }
     if (line[0] === '!') {

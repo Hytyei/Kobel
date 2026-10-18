@@ -147,17 +147,17 @@ A friend's public profile: whitelisted numbers only (XP, streak, league, career 
 Removes the friendship for both people. Open duels between you are closed.
 * **Response 200:** `{ "ok": true }`
 
-## Duels (version 2.4.0)
+## Duels (turn-based since 2.5.0)
 
-Multiplayer minigames: `sprint`, `dash`, `plural`, `gap`, `scramble`. Two modes: `live` (both players at the same time, 2 minute invite) and `turn` (each plays when they like, 24 hours). Details: `docs/FRIENDS_AND_DUELS.md`.
+Multiplayer minigames: `sprint`, `dash`, `plural`, `gap`, `scramble`. Since 2.5.0 duels are turn-based only (each player plays when they like, within 24 hours); `mode: "live"` is rejected with `400 invalid_request` on field `mode`. A duel has 9 questions and the score is goals: the number of correct answers, 0 to 9. Details: `docs/FRIENDS_AND_DUELS.md`.
 
 ### POST /v1/duels
-* **Body:** `{ "friend": 7, "game": "sprint", "mode": "live" | "turn", "deck": [ ...10 questions... ] }`. The challenger builds the deck from their own cards.
+* **Body:** `{ "friend": 7, "game": "sprint", "mode": "turn", "deck": [ ...9 questions... ] }`. The challenger builds the deck from their own cards.
 * **Response 200:** `{ "duel": { id, game, mode, status, role, n, opponent, my, their, startAt, expiresAt, result, now }, "deck": [...] }` (right answers are never in the deck the client receives)
 * **Errors:** `400 invalid_request` (names the field), `404 not_found` (not a friend), `409 already_open`, `409 too_many_open` (8), `429 too_many_duels` (40 per day)
 
 ### GET /v1/duels
-Your open and recent duels. In live games this is also what the app polls (about every 1.5 s).
+Your open and recent duels. 
 
 ### GET /v1/duels/{id}
 One duel (with the deck if you may play it).
@@ -170,7 +170,51 @@ Turn-based games only: starts your own clock.
 
 ### POST /v1/duels/{id}/answer
 * **Body:** `{ "i": 0, "v": 2 }` where `i` is the question number (in order, no skipping) and `v` is an option number, short text, or `null` for "no answer".
-* **Response 200:** `{ "correct": true, "points": 130, "answer": "der Tisch", "duel": {...} }`
+* **Response 200:** `{ "correct": true, "goals": 4, "points": 130, "answer": "der Tisch", "duel": {...} }`
 * **Errors:** `409 out_of_order`, `409 not_started`, `409 already_done`, `409 not_open`
 
 Points are decided by the server from its own clock; the phone only says what was chosen.
+
+## Streaks (version 2.5.0)
+The app publishes its practice days in `stats.pub.days` (up to 90 local day numbers, whole numbers between 15000 and 40000) through `POST /v1/sync`. The server never receives times of day.
+
+`GET /v1/friends` and `GET /v1/friends/{id}` add `streak2: { n, best, today }`: the run of consecutive days on which you and that friend both practised. It is alive while the latest shared day is today or yesterday. `today` says whether both of you have practised today.
+
+## Study groups (version 2.5.0)
+Up to 8 people, only friends can be added, you can be in up to 5 groups, 10 groups can be created per day. All routes need the Bearer access code and group membership.
+
+### POST /v1/groups
+* **Body:** `{ "name": "Sunday League", "members": [7, 9] }` (name 2 to 30 letters, numbers, spaces, `_ . ' & -`)
+* **Response 200:** `{ "group": { id, name, owner, members: [...], streak: {n, best, today}, table: [...], rounds: [...] } }`
+* **Errors:** `400 invalid_request`, `404 not_found` (not a friend), `409 group_full`, `409 too_many_groups`, `429`
+
+### GET /v1/groups
+Your groups (short form).
+
+### GET /v1/groups/{id}
+One group with members, group streak, the table and recent rounds. The table has P, W-D-L, GF:GA, GD, Pts (3 for a win, 1 for a draw, a missed round counts as a loss) and the last 5 results.
+
+### PATCH /v1/groups/{id}
+Owner only. Body `{ "name": "..." }`.
+
+### DELETE /v1/groups/{id}
+Owner only: deletes the group.
+
+### POST /v1/groups/{id}/members
+Owner only. Body `{ "user": 12 }` (a friend id). `409 group_full`.
+
+### DELETE /v1/groups/{id}/members/{userId}
+The owner can remove anyone; everyone can remove themselves. When the owner leaves, the group moves to the longest member; when the last member leaves the group is deleted.
+
+### POST /v1/groups/{id}/games
+Starts a round. Body `{ "game": "sprint", "deck": [ ...9 questions... ] }`. A round lasts 24 hours; at most 3 rounds are open at once. Round results stay hidden until you have finished it or the round has ended.
+
+### GET /v1/groups/{id}/games/{gid}, POST .../start, POST .../answer
+Same shape as duels (`i`, `v`; response includes `goals`).
+
+## Alerts (version 2.5.0)
+
+### GET /v1/alerts?since=<ms>
+The feed the phone polls for notifications. `since` is clamped to the last 7 days, at most 50 items are returned, and only your own data appears.
+* **Response 200:** `{ "alerts": [ { id, type, ts, ... } ], "now": 1760000000000, "since": 1759990000000 }`
+* **Types:** `friend` (someone added you), `duel_invite`, `duel_turn`, `duel_result`, `group_added`, `group_round`, `group_result`. The `id` is stable so the phone can show each alert once.

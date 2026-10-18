@@ -68,10 +68,10 @@ export async function register(db, env, request, body, now = Date.now()) {
     const id = newKobelId();
     try {
       await db
-        .prepare('INSERT INTO users (name, token_hash, created_at, visible) VALUES (?, ?, ?, 0)')
+        .prepare('INSERT INTO users (name, token_hash, created_at, visible) VALUES (?, ?, ?, 1)')
         .bind(name, await sha256Hex(id), now)
         .run();
-      return { id, user: { name, visible: false } };
+      return { id, user: { name, visible: true } };
     } catch (e) {
       if (!/UNIQUE|constraint/i.test(String(e && e.message))) throw e; // only a name clash is retried
     }

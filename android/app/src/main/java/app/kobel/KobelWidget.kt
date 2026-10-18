@@ -6,25 +6,31 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Typeface
+import android.os.Bundle
 import android.widget.RemoteViews
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
  * Home-screen widgets. The web UI pushes fresh numbers through KobelAndroid.setWidgetData(json); they are stored in
- * SharedPreferences and drawn here by three providers: 4x2 (KobelWidget), 2x2 (KobelWidgetSmall), 4x4 (KobelWidgetBig).
- * No network involved.
+ * SharedPreferences and drawn by WidgetArt (rings, bar charts, heatmap) into a bitmap that fills the widget.
+ * Providers: 4x2 (KobelWidget), 2x2 (KobelWidgetSmall), 4x4 (KobelWidgetBig). No network involved.
  */
 object WidgetCore {
     private const val PREFS = "kobel_widget"
-    private val DOTS = intArrayOf(R.id.d0, R.id.d1, R.id.d2, R.id.d3, R.id.d4, R.id.d5, R.id.d6)
-    
+    private const val MAX_JSON = 12000
+    private const val MAX_PIXELS = 1_400_000
+
     private fun data(ctx: Context): JSONObject {
         val raw = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("data", null)
         return try { JSONObject(raw ?: "{}") } catch (e: Exception) { JSONObject() }
     }
 
     fun store(ctx: Context, json: String) {
-        if (json.length > 6000) return
+        if (json.length > MAX_JSON) return
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("data", json).apply()
         refreshAll(ctx)
     }
@@ -32,109 +38,89 @@ object WidgetCore {
     fun refreshAll(ctx: Context) {
         val mgr = AppWidgetManager.getInstance(ctx)
         for (cls in listOf(KobelWidget::class.java, KobelWidgetSmall::class.java, KobelWidgetBig::class.java)) {
-            val ids = mgr.getAppWidgetIds(ComponentName(ctx, cls))
-            ids.forEach { mgr.updateAppWidget(it, build(ctx, cls)) }
+            mgr.getAppWidgetIds(ComponentName(ctx, cls)).forEach { update(ctx, mgr, it, cls) }
         }
     }
 
-    fun build(ctx: Context, cls: Class<*>): RemoteViews = when (cls) {
-        KobelWidgetSmall::class.java -> small(ctx)
-        KobelWidgetBig::class.java -> big(ctx)
-        else -> wide(ctx)
+    fun update(ctx: Context, mgr: AppWidgetManager, id: Int, cls: Class<*>) {
+        mgr.updateAppWidget(id, build(ctx, cls, mgr.getAppWidgetOptions(id)))
     }
 
-    private fun de(j: JSONObject) = j.optString("lang", "en") == "de"
-
-    /** Streak shown as a number plus a unit label; a full week or more is shown in weeks ("22 / WEEKS"). */
-    private fun streakNum(j: JSONObject): String { val s = j.optInt("streak"); return (if (s >= 7) s / 7 else s).toString() }
-    private fun streakUnit(j: JSONObject): String {
-        val s = j.optInt("streak"); val g = de(j); val n = if (s >= 7) s / 7 else s
-        return if (s >= 7) { if (g) (if (n == 1) "WOCHE" else "WOCHEN") else (if (n == 1) "WEEK" else "WEEKS") }
-        else if (g) (if (n == 1) "TAG" else "TAGE") else (if (n == 1) "DAY" else "DAYS")
-    }
-
-    private fun open(ctx: Context, v: RemoteViews, id: Int) {
-        v.setOnClickPendingIntent(id, PendingIntent.getActivity(
+    fun build(ctx: Context, cls: Class<*>, opts: Bundle? = null): RemoteViews {
+        val dm = ctx.resources.displayMetrics
+        val (defW, defH, layout, root) = when (cls) {
+            KobelWidgetSmall::class.java -> Spec(160, 160, R.layout.widget_small, R.id.s_root)
+            KobelWidgetBig::class.java -> Spec(320, 392, R.layout.widget_big, R.id.b_root)
+            else -> Spec(320, 150, R.layout.widget_kobel, R.id.w_root)
+        }
+        // the launcher tells us the size in dp: width when upright, height when upright (MAX_HEIGHT)
+        val wDp = (opts?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0) ?: 0).let { if (it > 40) it else defW }
+        val hDp = (opts?.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0) ?: 0).let { if (it > 40) it else defH }
+        var u = dm.density.coerceIn(1f, 3f)
+        while (wDp * u * hDp * u > MAX_PIXELS && u > 1f) u -= 0.25f
+        val w = (wDp * u).toInt().coerceAtLeast(2); val h = (hDp * u).toInt().coerceAtLeast(2)
+        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val art = WidgetArt(u, condFace(ctx), bodyFace(ctx))
+        val d = parse(data(ctx)); val c = Canvas(bmp)
+        when (cls) {
+            KobelWidgetSmall::class.java -> art.small(c, w.toFloat(), h.toFloat(), d)
+            KobelWidgetBig::class.java -> art.big(c, w.toFloat(), h.toFloat(), d)
+            else -> art.wide(c, w.toFloat(), h.toFloat(), d)
+        }
+        val v = RemoteViews(ctx.packageName, layout)
+        v.setImageViewBitmap(R.id.w_img, bmp)
+        v.setOnClickPendingIntent(root, PendingIntent.getActivity(
             ctx, 0, Intent(ctx, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+        return v
     }
 
-    private fun weekDots(v: RemoteViews, j: JSONObject) {
-        val week = j.optJSONArray("week"); val dow = j.optInt("dow", -1)
-        val letters = if (de(j)) "MDMDFSS" else "MTWTFSS"
-        DOTS.forEachIndexed { i, id ->
-            val on = week != null && week.optInt(i) == 1
-            v.setTextViewText(id, letters[i].toString())
-            v.setInt(id, "setBackgroundResource", if (on) R.drawable.dot_on else R.drawable.dot_off)
-            v.setTextColor(id, if (on || i == dow) 0xFFFFFFFF.toInt() else 0xFF8C8C92.toInt())
-        }
-    }
+    private data class Spec(val w: Int, val h: Int, val layout: Int, val root: Int)
 
-    private fun lp(j: JSONObject) = "${j.optInt("lp")} LP"
-    private fun tier(j: JSONObject) = j.optString("tier", "3. Liga")
+    /** DFL Sans if you put the font files into assets/www/fonts (they are not in the repository); otherwise the system condensed font. */
+    private fun face(ctx: Context, file: String, fallback: Typeface): Typeface = try {
+        Typeface.createFromAsset(ctx.assets, "www/fonts/$file")
+    } catch (e: Exception) { fallback }
 
-    private fun wide(ctx: Context): RemoteViews {
-        val v = RemoteViews(ctx.packageName, R.layout.widget_kobel); val j = data(ctx); val g = de(j)
-        v.setTextViewText(R.id.w_streak, streakNum(j))
-        v.setTextViewText(R.id.w_streak_lab, if (g) "SERIE · ${streakUnit(j)}" else "STREAK · ${streakUnit(j)}")
-        v.setTextViewText(R.id.w_due, j.optInt("due").toString())
-        v.setTextViewText(R.id.w_new, j.optInt("fresh").toString())
-        v.setTextViewText(R.id.w_l_due, if (g) "FÄLLIG" else "DUE")
-        v.setTextViewText(R.id.w_l_new, if (g) "NEU" else "NEW")
-        v.setTextViewText(R.id.w_tier, tier(j))
-        v.setTextViewText(R.id.w_lp, lp(j))
-        v.setProgressBar(R.id.w_prog, 100, j.optInt("tierPct").coerceIn(0, 100), false)
-        open(ctx, v, R.id.w_root); return v
-    }
+    private fun condFace(ctx: Context) = face(ctx, "DFL_Sans_Condensed_Bold.otf", Typeface.create("sans-serif-condensed", Typeface.BOLD))
+    private fun bodyFace(ctx: Context) = face(ctx, "DFL_Sans.otf", Typeface.create("sans-serif-medium", Typeface.NORMAL))
 
-    private fun small(ctx: Context): RemoteViews {
-        val v = RemoteViews(ctx.packageName, R.layout.widget_small); val j = data(ctx)
-        v.setTextViewText(R.id.s_tier, tier(j))
-        v.setTextViewText(R.id.s_streak, streakNum(j))
-        v.setTextViewText(R.id.s_unit, (if (de(j)) "SERIE · " else "STREAK · ") + streakUnit(j))
-        v.setProgressBar(R.id.s_prog, 100, j.optInt("tierPct").coerceIn(0, 100), false)
-        open(ctx, v, R.id.s_root); return v
-    }
+    private fun ints(a: JSONArray?, n: Int): List<Int> = List(n) { a?.optInt(it, 0) ?: 0 }
 
-    private fun big(ctx: Context): RemoteViews {
-        val v = RemoteViews(ctx.packageName, R.layout.widget_big); val j = data(ctx); val g = de(j)
-        v.setTextViewText(R.id.b_tier, tier(j))
-        v.setTextViewText(R.id.b_sub, j.optString("tierLv"))
-        v.setTextViewText(R.id.b_lp, lp(j))
-        v.setProgressBar(R.id.b_prog, 100, j.optInt("tierPct").coerceIn(0, 100), false)
-        v.setTextViewText(R.id.b_streak, streakNum(j))
-        v.setTextViewText(R.id.b_l_streak, if (g) "SERIE · ${streakUnit(j)}" else "STREAK · ${streakUnit(j)}")
-        v.setTextViewText(R.id.b_due, j.optInt("due").toString())
-        v.setTextViewText(R.id.b_new, j.optInt("fresh").toString())
-        v.setTextViewText(R.id.b_l_due, if (g) "FÄLLIG" else "DUE")
-        v.setTextViewText(R.id.b_l_new, if (g) "NEU" else "NEW")
-        weekDots(v, j)
-        val st = j.optJSONObject("st") ?: JSONObject()
-        v.setTextViewText(R.id.b_goals, st.optInt("g").toString())
-        v.setTextViewText(R.id.b_xg, String.format(java.util.Locale.US, "%.1f", st.optDouble("xg", 0.0)))
-        v.setTextViewText(R.id.b_cs, st.optInt("cs").toString())
-        v.setTextViewText(R.id.b_l_goals, if (g) "TORE" else "GOALS")
-        v.setTextViewText(R.id.b_l_cs, if (g) "WEISSE WESTEN" else "CLEAN SHEETS")
-        val tr = j.optJSONObject("tr") ?: JSONObject()
-        v.setTextViewText(R.id.b_tro, (if (g) "Trophäen  " else "Trophies  ") + "${tr.optInt("g")} · ${tr.optInt("s")} · ${tr.optInt("b")}")
-        open(ctx, v, R.id.b_root); return v
+    fun parse(j: JSONObject): WData {
+        val st = j.optJSONObject("st") ?: JSONObject(); val tr = j.optJSONObject("tr") ?: JSONObject()
+        val md = j.optJSONObject("mdp") ?: JSONObject(); val form = j.optJSONArray("form")
+        val cnt = j.optJSONObject("cnt") ?: JSONObject()
+        val week = j.optJSONArray("xp7")
+        return WData(
+            de = j.optString("lang", "en") == "de",
+            streak = j.optInt("streak"), today = j.optInt("today"), goal = j.optInt("goal", 60).coerceAtLeast(1),
+            due = j.optInt("due"), fresh = j.optInt("fresh"),
+            tier = j.optString("tier", "3. Liga"), tierLv = j.optString("tierLv", "A1"), tierPct = j.optInt("tierPct").coerceIn(0, 100),
+            lp = j.optInt("lp"), next = j.optString("next", ""), left = j.optInt("left"), zone = j.optString("zoneKey", "safe"),
+            season = j.optInt("season", 1), md = j.optInt("md", 1),
+            mdTore = md.optInt("tore"), mdTarget = md.optInt("target", 300).coerceAtLeast(1), mdDays = md.optInt("days"),
+            mdNeed = md.optInt("need", 4), mdLeft = md.optInt("left", 7),
+            form = List(form?.length() ?: 0) { form?.optString(it) ?: "" },
+            gold = tr.optInt("g"), silver = tr.optInt("s"), bronze = tr.optInt("b"),
+            goals = st.optInt("g"), xg = st.optDouble("xg", 0.0), cs = st.optInt("cs"),
+            dow = j.optInt("dow", 0).coerceIn(0, 6),
+            xp7 = ints(week, 7), heat = ints(j.optJSONArray("heat"), 35), fc = ints(j.optJSONArray("fc"), 7),
+            cnt = listOf(cnt.optInt("n"), cnt.optInt("l"), cnt.optInt("y"), cnt.optInt("m")),
+        )
     }
 }
 
-class KobelWidget : AppWidgetProvider() {
+abstract class ArtWidget(private val cls: Class<*>) : AppWidgetProvider() {
     override fun onUpdate(ctx: Context, mgr: AppWidgetManager, ids: IntArray) {
-        ids.forEach { mgr.updateAppWidget(it, WidgetCore.build(ctx, KobelWidget::class.java)) }
+        ids.forEach { WidgetCore.update(ctx, mgr, it, cls) }
+    }
+
+    override fun onAppWidgetOptionsChanged(ctx: Context, mgr: AppWidgetManager, id: Int, newOptions: Bundle) {
+        WidgetCore.update(ctx, mgr, id, cls)
     }
 }
 
-class KobelWidgetSmall : AppWidgetProvider() {
-    override fun onUpdate(ctx: Context, mgr: AppWidgetManager, ids: IntArray) {
-        ids.forEach { mgr.updateAppWidget(it, WidgetCore.build(ctx, KobelWidgetSmall::class.java)) }
-    }
-}
-
-class KobelWidgetBig : AppWidgetProvider() {
-    override fun onUpdate(ctx: Context, mgr: AppWidgetManager, ids: IntArray) {
-        ids.forEach { mgr.updateAppWidget(it, WidgetCore.build(ctx, KobelWidgetBig::class.java)) }
-    }
-}
+class KobelWidget : ArtWidget(KobelWidget::class.java)
+class KobelWidgetSmall : ArtWidget(KobelWidgetSmall::class.java)
+class KobelWidgetBig : ArtWidget(KobelWidgetBig::class.java)

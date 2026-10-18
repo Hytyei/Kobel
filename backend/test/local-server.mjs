@@ -21,6 +21,12 @@ http.createServer(async (req, res) => {
     const r = await worker.fetch(new Request('http://localhost' + req.url, { method: req.method, headers: req.headers, body: ['GET', 'HEAD'].includes(req.method) ? undefined : Buffer.concat(chunks) }), env);
     res.writeHead(r.status, Object.fromEntries(r.headers));
     res.end(Buffer.from(await r.arrayBuffer()));
+  } else if (req.url.startsWith('/mkuser')) {
+    const n = new URL(req.url, 'http://x').searchParams.get('n') || 'Test';
+    const ip = '10.0.' + Math.floor(Math.random() * 250) + '.' + Math.floor(Math.random() * 250);
+    const r = await worker.fetch(new Request('http://localhost/v1/register', { method: 'POST', headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: JSON.stringify({ name: n }) }), env);
+    const j = await r.json();
+    res.end(JSON.stringify({ ...j, code: j.code || j.id || j.kobel_id || j.token }));
   } else if (req.url === '/code') {
     res.end(code);
   } else if (htmlPath) {
