@@ -1,47 +1,26 @@
-# Dependencies
-node_modules/
-.pnpm-store/
-
-# Cloudflare / Wrangler
-.wrangler/
+# secrets and local state
 .dev.vars
-.dev.vars.*
-!.dev.vars.example
-
-# Environment variables and secrets
 .env
-.env.*
-!.env.example
-!.env.*.example
-*.pem
-*.key
-secrets/
-
-# Android signing credentials
 keystore.properties
 *.jks
 *.keystore
+.wrangler/
+node_modules/
 
 # Android / Gradle
-.gradle/
-build/
 android/.gradle/
 android/build/
 android/app/build/
 android/local.properties
 android/.idea/
-.idea/
-.kotlin/
 *.iml
 captures/
 .externalNativeBuild/
 .cxx/
 
-# Generated Android packages
-*.apk
-*.aab
-
-# Operating system
+# OS
 .DS_Store
-Thumbs.db
-desktop.ini
+
+# licensed DFL Sans fonts (keep out of the public repo; see assets/www/fonts/README.md)
+android/app/src/main/assets/www/fonts/*
+!android/app/src/main/assets/www/fonts/README.md

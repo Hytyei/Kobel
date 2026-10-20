@@ -3,8 +3,8 @@
     android:minWidth="250dp" android:minHeight="110dp"
     android:targetCellWidth="4" android:targetCellHeight="2"
     android:updatePeriodMillis="0"
-    android:resizeMode="none"
+    android:resizeMode="horizontal|vertical"
     android:initialLayout="@layout/widget_kobel"
-    android:previewLayout="@layout/widget_kobel"
+    android:previewImage="@drawable/widget_preview_wide" android:previewLayout="@layout/widget_kobel"
     android:description="@string/widget_desc"
     android:widgetCategory="home_screen" />

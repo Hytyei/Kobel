@@ -138,6 +138,7 @@ function finishPath(){
   sfx(pass?'win':'bad');if(pass)confetti();vib(pass?[20,30,20,30,60]:[40,40]);
   const secs=Math.round((Date.now()-ses.t0)/1000),idx=ses.pathIdx,ps=pathState(),nx=ps.nodes[idx+1],cur=ps.nodes[idx];
   const newCh=pass&&first&&nx&&nx.unit===cur.unit&&nx.ch!==cur.ch,newUnit=pass&&first&&nx&&nx.unit!==cur.unit,end=pass&&first&&!nx;
+  try{b3PathCelebrate({pass,first,improved:pass&&stars>old,stars,label:pathLabel(cur),unit:ps.units[cur.unit]&&ps.units[cur.unit].name,newCh,newUnit,end})}catch(e){}
   let extra='';
   if(pass&&first&&nx)extra+=noteCard('▶',newUnit?tx('New unit: '+ps.units[nx.unit].name,'Neue Einheit: '+ps.units[nx.unit].name):newCh?tx('Next chapter unlocked','Nächstes Kapitel freigeschaltet'):tx('Next level unlocked: ','Nächste Stufe frei: ')+pathLabel(nx));
   if(end)extra+=noteCard('🏆',tx('You finished the whole path. New lessons will extend it.','Du hast den ganzen Pfad geschafft. Neue Lektionen verlängern ihn.'));

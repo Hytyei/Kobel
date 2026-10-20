@@ -10,6 +10,9 @@ async def main():
         await pg.screenshot(path='/tmp/claude-0/f_res.png')
         print(await pg.evaluate("document.querySelector('#sMain').innerText.replace(/\\n+/g,' | ')"))
         print('done',await pg.evaluate("JSON.stringify(window.__k.S().stats.path)"))
+        await pg.wait_for_timeout(1500)
+        while await pg.evaluate("!!document.querySelector('#cel')"):
+            await pg.evaluate("document.querySelector('#cel [data-x=ok]').click()");await pg.wait_for_timeout(900)
         await pg.click('#again');await pg.wait_for_timeout(400)
         print('now level',await pg.evaluate("window.__k.ses().pathLv"))
         await pg.click('.x');await pg.wait_for_timeout(200)
