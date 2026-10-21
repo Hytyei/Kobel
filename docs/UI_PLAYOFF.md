@@ -1,4 +1,4 @@
-# UI layer, celebrations and the streak Play-Off (2.5.0)
+# UI layer, celebrations and the streak Play-Off (3.0.0)
 
 All UI code lives in `web/modules/` and is merged into `android/app/src/main/assets/www/index.html` by `python3 web/apply.py`
 (idempotent: run it again after editing a module).

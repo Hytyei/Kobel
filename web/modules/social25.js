@@ -2,32 +2,42 @@
    Everything here is added after the 2.4 social code. Where a 2.4 function is replaced (friendsInner, friendRow, soLoad,
    buildDeck, duel screens ...) the newer declaration below wins, so the older code stays in the file untouched. */
 
-/* ---- clubs: original shield badges in each club's colours (no official crests: those are trademarks) ---- */
+/* ---- clubs: official crests and stadium icons (assets/www/clubs/<id>.svg, assets/www/stadiums/<id>.png) ----
+   [id, name, abbreviation, main colour, second colour, stadium]. Clubs of earlier versions that are not in the 2026/27 set any more
+   (wob, stp, fch) are kept in CLUBS_OLD so that old profiles and friends still show a badge; they cannot be picked any more. */
 const CLUBS=[
-  ['fcb','FC Bayern München','FCB','#DC052D','#0066B2'],
-  ['bvb','Borussia Dortmund','BVB','#FDE100','#0B0B0B'],
-  ['rbl','RB Leipzig','RBL','#DD0741','#001F47'],
-  ['b04','Bayer 04 Leverkusen','B04','#E32221','#0B0B0B'],
-  ['sge','Eintracht Frankfurt','SGE','#E1000F','#0B0B0B'],
-  ['vfb','VfB Stuttgart','VFB','#FFFFFF','#E32219'],
-  ['scf','SC Freiburg','SCF','#E2001A','#0B0B0B'],
-  ['wob','VfL Wolfsburg','WOB','#65B32E','#FFFFFF'],
-  ['bmg','Borussia Mönchengladbach','BMG','#00A651','#0B0B0B'],
-  ['m05','1. FSV Mainz 05','M05','#C3141E','#FFFFFF'],
-  ['tsg','TSG Hoffenheim','TSG','#1961AC','#FFFFFF'],
-  ['fca','FC Augsburg','FCA','#BA3733','#006437'],
-  ['fcu','1. FC Union Berlin','FCU','#EB1923','#FDE100'],
-  ['svw','SV Werder Bremen','SVW','#1D9053','#FFFFFF'],
-  ['stp','FC St. Pauli','STP','#6B3A1E','#FFFFFF'],
-  ['fch','1. FC Heidenheim','FCH','#E2001A','#003C7D'],
-  ['koe','1. FC Köln','KOE','#ED1C24','#FFFFFF'],
-  ['hsv','Hamburger SV','HSV','#005CA9','#FFFFFF'],
-  ['s04','FC Schalke 04','S04','#004D9D','#FFFFFF']
+  ['fcb','FC Bayern München','FCB','#DC052D','#0066B2','Allianz Arena'],
+  ['bvb','Borussia Dortmund','BVB','#FDE100','#0B0B0B','Signal Iduna Park'],
+  ['rbl','RB Leipzig','RBL','#DD0741','#001F47','Red Bull Arena'],
+  ['b04','Bayer 04 Leverkusen','B04','#E32221','#0B0B0B','BayArena'],
+  ['sge','Eintracht Frankfurt','SGE','#E1000F','#0B0B0B','Deutsche Bank Park'],
+  ['vfb','VfB Stuttgart','VFB','#FFFFFF','#E32219','MHP Arena'],
+  ['scf','SC Freiburg','SCF','#E2001A','#0B0B0B','Europa-Park Stadion'],
+  ['bmg','Borussia Mönchengladbach','BMG','#00A651','#0B0B0B','Borussia-Park'],
+  ['m05','1. FSV Mainz 05','M05','#C3141E','#FFFFFF','Mewa Arena'],
+  ['tsg','TSG Hoffenheim','TSG','#1961AC','#FFFFFF','SNP Arena'],
+  ['fca','FC Augsburg','FCA','#BA3733','#006437','WWK Arena'],
+  ['fcu','1. FC Union Berlin','FCU','#EB1923','#FDE100','Stadion An der Alten Försterei'],
+  ['svw','SV Werder Bremen','SVW','#1D9053','#FFFFFF','Weserstadion'],
+  ['koe','1. FC Köln','KOE','#ED1C24','#FFFFFF','RheinEnergieStadion'],
+  ['hsv','Hamburger SV','HSV','#005CA9','#FFFFFF','Volksparkstadion'],
+  ['s04','FC Schalke 04','S04','#004D9D','#FFFFFF','Veltins-Arena'],
+  ['scp','SC Paderborn 07','SCP','#0069B4','#0B0B0B','Home Deluxe Arena'],
+  ['sve','SV Elversberg','SVE','#2B2B2B','#FFFFFF','Ursapharm-Arena']
+];
+const CLUBS_OLD=[
+  ['wob','VfL Wolfsburg','WOB','#65B32E','#FFFFFF',''],
+  ['stp','FC St. Pauli','STP','#6B3A1E','#FFFFFF',''],
+  ['fch','1. FC Heidenheim','FCH','#E2001A','#003C7D','']
 ];
 const CLUB_PICK=CLUBS.map(c=>[c[0]]);
-const clubOf=id=>CLUBS.find(c=>c[0]===id)||null;
+const clubOf=id=>CLUBS.find(c=>c[0]===id)||CLUBS_OLD.find(c=>c[0]===id)||null;
+const hasCrest=id=>CLUBS.some(c=>c[0]===id);
 function inkOn(hex){const n=parseInt(String(hex).slice(1),16)||0,r=n>>16,g=n>>8&255,b=n&255;return (r*299+g*587+b*114)/1000>150?'#0B0B0B':'#FFFFFF'}
+/* the stadium icon is a mask: it takes the colour of the text around it, whatever colour the PNG itself is */
+const stadIcon=(id,s=22)=>`<i class="stad" style="width:${s}px;height:${s}px;-webkit-mask-image:url(stadiums/${id}.png);mask-image:url(stadiums/${id}.png)"></i>`;
 function badgeSvg(id,size=40){
+  if(hasCrest(id))return `<span class="av club crest" style="width:${size}px;height:${size}px"><img src="clubs/${id}.svg" alt="" draggable="false"></span>`;
   const c=clubOf(id),bg=c?c[3]:'#D20515',fg=c?c[4]:'#0B0B0B',ab=c?c[2]:'K',ink=inkOn(bg),bar=bg.toUpperCase()===fg.toUpperCase()?'#0B0B0B':fg;
   return `<span class="av club" style="width:${size}px;height:${size}px"><svg viewBox="0 0 64 64"><path d="M8 5h48v27c0 15-10 23-24 28C18 55 8 47 8 32z" fill="${bg}" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/><path d="M8.8 5.8h46.4v9.2H8.8z" fill="${bar}"/><text x="32" y="43" text-anchor="middle" font-family="DFL Sans Condensed,Barlow Condensed,Arial Narrow,sans-serif" font-weight="800" font-size="${ab.length>2?19:22}" fill="${ink}">${ab}</text></svg></span>`;
 }

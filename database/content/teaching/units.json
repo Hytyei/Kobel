@@ -5093,5 +5093,440 @@
     "subject": "Ordering online"
    }
   ]
+ },
+ {
+  "id": "akk",
+  "md": 27,
+  "tag": "Direct play",
+  "title": "The accusative",
+  "de": "Der Akkusativ",
+  "sub": "Who or what gets the action: only der changes.",
+  "subject": "Accusative verbs",
+  "covers": [
+   "Accusative: bag and desk",
+   "Accusative: sentences"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Direct play",
+    "say": "In a match the ball goes to a player. In a sentence the action goes to an object. That direct object takes the accusative. Good news: only the masculine article changes.",
+    "pts": [
+     "Direct object = accusative",
+     "Only masculine changes: der → den, ein → einen",
+     "die, das and the plural stay the same"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Verbs that take an object",
+    "say": "These verbs need a direct object.",
+    "items": [
+     [
+      "haben",
+      "to have"
+     ],
+     [
+      "sehen",
+      "to see"
+     ],
+     [
+      "suchen",
+      "to look for"
+     ],
+     [
+      "brauchen",
+      "to need"
+     ],
+     [
+      "essen",
+      "to eat"
+     ],
+     [
+      "trinken",
+      "to drink"
+     ],
+     [
+      "lesen",
+      "to read"
+     ],
+     [
+      "kaufen",
+      "to buy"
+     ],
+     [
+      "packen",
+      "to pack"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "The definite article",
+    "say": "Only one shirt changes.",
+    "rows": [
+     [
+      "der Tisch",
+      "den Tisch"
+     ],
+     [
+      "die Uhr",
+      "die Uhr"
+     ],
+     [
+      "das Buch",
+      "das Buch"
+     ],
+     [
+      "die Stifte",
+      "die Stifte"
+     ]
+    ],
+    "hi": [
+     0
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "ein and kein",
+    "say": "Masculine gets einen / keinen. The rest keep their shirt.",
+    "rows": [
+     {
+      "line": "Masculine",
+      "parts": [
+       [
+        "Ich habe",
+        "I have"
+       ],
+       [
+        "einen",
+        "masc.",
+        "hi"
+       ],
+       [
+        "Stift",
+        "pen"
+       ]
+      ]
+     },
+     {
+      "line": "Masculine, negative",
+      "parts": [
+       [
+        "Ich habe",
+        "I have"
+       ],
+       [
+        "keinen",
+        "masc.",
+        "hi"
+       ],
+       [
+        "Stift",
+        "pen"
+       ]
+      ]
+     },
+     {
+      "line": "Feminine",
+      "parts": [
+       [
+        "Ich brauche",
+        "I need"
+       ],
+       [
+        "eine",
+        "same",
+        "hi"
+       ],
+       [
+        "Brille",
+        "glasses"
+       ]
+      ]
+     },
+     {
+      "line": "Neuter",
+      "parts": [
+       [
+        "Ich sehe",
+        "I see"
+       ],
+       [
+        "ein",
+        "same",
+        "hi"
+       ],
+       [
+        "Buch",
+        "book"
+       ]
+      ]
+     },
+     {
+      "line": "Plural",
+      "parts": [
+       [
+        "Wir haben",
+        "We have"
+       ],
+       [
+        "keine",
+        "same",
+        "hi"
+       ],
+       [
+        "Tablets",
+        "tablets"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: the appointment",
+    "say": "A boss and Mr Patschorke.",
+    "lines": [
+     [
+      "A",
+      "Wir haben doch einen Termin, Herr Patschorke. Haben Sie keinen Kalender?",
+      "We do have an appointment, Mr Patschorke. Do you not have a calendar?"
+     ],
+     [
+      "B",
+      "Doch. Aber ich sehe den Termin nicht.",
+      "Yes. But I do not see the appointment."
+     ],
+     [
+      "A",
+      "Dann suchen Sie bitte den Stift und notieren Sie.",
+      "Then please look for the pen and note it down."
+     ],
+     [
+      "B",
+      "Ich habe einen Stift.",
+      "I have a pen."
+     ],
+     [
+      "A",
+      "Das ist nicht gut. Sie brauchen einen Stift.",
+      "That is not good. You need a pen."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Packing the bag",
+    "say": "A memory chain: each player adds one thing.",
+    "items": [
+     [
+      "Ich packe einen Laptop in meine Tasche.",
+      "I pack a laptop in my bag."
+     ],
+     [
+      "Ich packe einen Laptop und zwei Stifte in meine Tasche.",
+      "I pack a laptop and two pens in my bag."
+     ],
+     [
+      "Ich packe einen Laptop, zwei Stifte und eine Brille in meine Tasche.",
+      "I pack a laptop, two pens and glasses in my bag."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Ich sehe ___ Kalender. (der Kalender)",
+    "opts": [
+     "der",
+     "den",
+     "dem"
+    ],
+    "a": 1,
+    "why": "Masculine accusative: der → den."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Ich brauche ___ Brille. (die Brille)",
+    "opts": [
+     "eine",
+     "einen",
+     "ein"
+    ],
+    "a": 0,
+    "why": "Feminine does not change: eine."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which article changes in the accusative?",
+    "opts": [
+     "masculine",
+     "feminine",
+     "plural"
+    ],
+    "a": 0,
+    "why": "Only the masculine article changes."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: I have a pen.",
+    "words": [
+     "Ich",
+     "habe",
+     "einen",
+     "Stift"
+    ],
+    "why": "der Stift → einen Stift."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! Only der changes. Train the accusative words.",
+    "subject": "Accusative verbs"
+   }
+  ]
+ },
+ {
+  "id": "phone",
+  "md": 28,
+  "tag": "Radio link",
+  "title": "Phone calls at the office",
+  "de": "Telefonieren im Büro",
+  "sub": "Answer the phone, ask for someone, say goodbye.",
+  "subject": "Phone calls at the office",
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Radio link",
+    "say": "On the phone you cannot see the other person, so the phrases are fixed. Learn the order and every call is easy.",
+    "pts": [
+     "Answer with your company and name",
+     "Ask: Ist Herr / Frau ... da?",
+     "End with Auf Wiederhören"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Answering",
+    "say": "What the person who picks up says.",
+    "items": [
+     [
+      "Firma ..., ..., guten Tag.",
+      "Company ..., ..., good day."
+     ],
+     [
+      "Was kann ich für Sie tun?",
+      "What can I do for you?"
+     ],
+     [
+      "Einen Moment bitte.",
+      "One moment, please."
+     ],
+     [
+      "Herr / Frau ... ist leider nicht da.",
+      "Mr / Ms ... is unfortunately not here."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Calling",
+    "say": "What the caller says.",
+    "items": [
+     [
+      "Hier ist ...",
+      "This is ..."
+     ],
+     [
+      "Mein Name ist ...",
+      "My name is ..."
+     ],
+     [
+      "Ist Herr / Frau ... da?",
+      "Is Mr / Ms ... there?"
+     ],
+     [
+      "Vielen Dank. Auf Wiederhören.",
+      "Thank you very much. Goodbye."
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: the call",
+    "say": "The whole call from start to finish.",
+    "lines": [
+     [
+      "A",
+      "Firma Müller, guten Tag.",
+      "Company Müller, good day."
+     ],
+     [
+      "B",
+      "Guten Tag, Patschorke hier.",
+      "Good day, Patschorke speaking."
+     ],
+     [
+      "A",
+      "Guten Tag, Herr Patschorke. Was kann ich für Sie tun?",
+      "Good day, Mr Patschorke. What can I do for you?"
+     ],
+     [
+      "B",
+      "Ist Frau Müller da?",
+      "Is Ms Müller there?"
+     ],
+     [
+      "A",
+      "Einen Moment bitte. Frau Müller ist leider nicht da.",
+      "One moment, please. Ms Müller is unfortunately not here."
+     ],
+     [
+      "B",
+      "Vielen Dank. Auf Wiederhören.",
+      "Thank you very much. Goodbye."
+     ],
+     [
+      "A",
+      "Sehr gern. Auf Wiederhören, Herr Patschorke.",
+      "My pleasure. Goodbye, Mr Patschorke."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "You want to speak to Ms Müller. What do you ask?",
+    "opts": [
+     "Ist Frau Müller da?",
+     "Was kann ich für Sie tun?",
+     "Einen Moment bitte."
+    ],
+    "a": 0,
+    "why": "Ist Frau Müller da?"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you say goodbye on the phone?",
+    "opts": [
+     "Auf Wiederhören",
+     "Auf Wiedersehen",
+     "Tschüs"
+    ],
+    "a": 0,
+    "why": "On the phone: Auf Wiederhören."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can handle a phone call. Train the phone phrases.",
+    "subject": "Phone calls at the office"
+   }
+  ]
  }
 ]

@@ -110,7 +110,7 @@ h1,h2,h3{font-family:var(--fd);font-weight:800;letter-spacing:-.02em;line-height
 .b3-hv{display:flex;align-items:center;gap:8px;margin-top:10px;max-width:52%;line-height:1.25;font:500 15px var(--fb);text-transform:uppercase;letter-spacing:.02em;opacity:.92}
 .b3-hv svg{width:22px;height:22px}
 .b3-crest{position:absolute!important;right:6%;top:24px;width:min(46%,200px);filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));animation:b3crest .9s cubic-bezier(.2,.9,.3,1.2) both}
-.b3-crest img{width:100%;display:block;box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+.b3-crest>img{width:100%;display:block;box-shadow:0 0 0 3px rgba(255,255,255,.85)}
 .b3-crest .av{width:100%!important;height:auto!important;display:block}
 .b3-crest .av svg{width:100%;height:auto;display:block}
 @keyframes b3crest{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:none}}
@@ -350,3 +350,35 @@ button.b3-tr{cursor:pointer}
 @keyframes pnpulse{0%,100%{box-shadow:0 5px 0 rgba(0,0,0,.4),0 0 0 0 rgba(255,255,255,.35)}50%{box-shadow:0 5px 0 rgba(0,0,0,.4),0 0 0 14px rgba(255,255,255,0)}}
 #app .btn.shine{background:#fff;color:#0B141B}
 .top p.sub,.view>p.sub{text-align:center}
+
+/* crests and stadium icons */
+.av.club.crest{filter:none;display:inline-block;flex:none}
+.av.club.crest img{width:100%;height:100%;object-fit:contain;display:block}
+.b3-crest .av.club.crest{filter:drop-shadow(0 8px 14px rgba(0,0,0,.35));aspect-ratio:1}
+.b3-crest .av.club.crest img{height:auto}
+.stad{display:inline-block;flex:none;background:currentColor;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
+.b3-hv .stad{margin-right:2px}
+
+/* league logos */
+.stg-i.lg{display:inline-flex;align-items:center;justify-content:center}
+.stg-i.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.b3-tk>button .stg-i.lg{display:flex}
+.cel-sh .stg-i.lg img{filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+/* career steps: outline icons */
+.stg .sico{flex:none;width:36px;height:36px;display:grid;place-items:center;border:1.5px solid var(--line);color:var(--ink);position:relative}
+.stg.done .sico{color:#1FB45A;border-color:#1FB45A}
+.stg.cur .sico{background:var(--red);border-color:var(--red);color:#fff}
+.stg.done .sico::after{content:'';position:absolute;right:-5px;top:-5px;width:12px;height:12px;border-radius:50%;background:#1FB45A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.3l2 2 4-4.3' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.stg .sico svg{width:22px;height:22px}
+.stg{align-items:center}
+.stg.cur{opacity:1}.stg.done{opacity:.85}
+.cel-ico{width:64px;height:64px;margin:6px auto 0;display:grid;place-items:center;border:2px solid currentColor;color:#fff;opacity:.95}
+.cel-ico svg{width:38px;height:38px}
+.sico.big{flex:none;width:56px;height:56px;display:grid;place-items:center;border:2px solid currentColor}
+.sico.big svg{width:34px;height:34px}
+.cel-sh{height:190px;margin-bottom:18px}
+.cel-sh .stg-i.lg{display:flex;align-items:center;justify-content:center}
+.cel-sh .stg-i.lg img{max-width:100%;max-height:100%;object-fit:contain}
+.cel-sh::after{display:none}
+.cel-from{left:-58px;bottom:6px;width:44px;height:48px;opacity:.5;filter:none}
+.cel-sh .cel-from{left:-62px!important;bottom:4px!important;width:44px!important;height:48px!important}

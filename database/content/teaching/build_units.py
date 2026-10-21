@@ -361,6 +361,35 @@ U.append({"id":"online","md":27,"tag":"Fan shop","title":"Ordering online","de":
  drill("How do you say the dot in an email address?",["Punkt","ät","Menge"],0,". = Punkt."),
  recap("Order placed! Train the shop words.","Ordering online")]})
 
+# 28 ───────── Accusative
+U.append({"id":"akk","md":28,"tag":"Direct play","title":"The accusative","de":"Der Akkusativ","sub":"Who or what gets the action: only der changes.","subject":"Accusative verbs","covers":["Accusative: bag and desk","Accusative: sentences"],"boards":[
+ talk("Direct play","In a match the ball goes to a player. In a sentence the action goes to an object. That direct object takes the accusative. Good news: only the masculine article changes.",["Direct object = accusative","Only masculine changes: der → den, ein → einen","die, das and the plural stay the same"]),
+ words("Verbs that take an object","These verbs need a direct object.",[["haben","to have"],["sehen","to see"],["suchen","to look for"],["brauchen","to need"],["essen","to eat"],["trinken","to drink"],["lesen","to read"],["kaufen","to buy"],["packen","to pack"]]),
+ table("The definite article","Only one shirt changes.",[["der Tisch","den Tisch"],["die Uhr","die Uhr"],["das Buch","das Buch"],["die Stifte","die Stifte"]],[0]),
+ slots("ein and kein","Masculine gets einen / keinen. The rest keep their shirt.",[
+   {"line":"Masculine","parts":[["Ich habe","I have"],["einen","masc.","hi"],["Stift","pen"]]},
+   {"line":"Masculine, negative","parts":[["Ich habe","I have"],["keinen","masc.","hi"],["Stift","pen"]]},
+   {"line":"Feminine","parts":[["Ich brauche","I need"],["eine","same","hi"],["Brille","glasses"]]},
+   {"line":"Neuter","parts":[["Ich sehe","I see"],["ein","same","hi"],["Buch","book"]]},
+   {"line":"Plural","parts":[["Wir haben","We have"],["keine","same","hi"],["Tablets","tablets"]]}]),
+ dlg("Match tape: the appointment","A boss and Mr Patschorke.",[["A","Wir haben doch einen Termin, Herr Patschorke. Haben Sie keinen Kalender?","We do have an appointment, Mr Patschorke. Do you not have a calendar?"],["B","Doch. Aber ich sehe den Termin nicht.","Yes. But I do not see the appointment."],["A","Dann suchen Sie bitte den Stift und notieren Sie.","Then please look for the pen and note it down."],["B","Ich habe einen Stift.","I have a pen."],["A","Das ist nicht gut. Sie brauchen einen Stift.","That is not good. You need a pen."]]),
+ words("Packing the bag","A memory chain: each player adds one thing.",[["Ich packe einen Laptop in meine Tasche.","I pack a laptop in my bag."],["Ich packe einen Laptop und zwei Stifte in meine Tasche.","I pack a laptop and two pens in my bag."],["Ich packe einen Laptop, zwei Stifte und eine Brille in meine Tasche.","I pack a laptop, two pens and glasses in my bag."]]),
+ drill("Ich sehe ___ Kalender. (der Kalender)",["der","den","dem"],1,"Masculine accusative: der → den."),
+ drill("Ich brauche ___ Brille. (die Brille)",["eine","einen","ein"],0,"Feminine does not change: eine."),
+ drill("Which article changes in the accusative?",["masculine","feminine","plural"],0,"Only the masculine article changes."),
+ order("Build: I have a pen.",["Ich","habe","einen","Stift"],"der Stift → einen Stift."),
+ recap("Final whistle! Only der changes. Train the accusative words.","Accusative verbs")]})
+
+# 29 ───────── Phone calls
+U.append({"id":"phone","md":29,"tag":"Radio link","title":"Phone calls at the office","de":"Telefonieren im Büro","sub":"Answer the phone, ask for someone, say goodbye.","subject":"Phone calls at the office","boards":[
+ talk("Radio link","On the phone you cannot see the other person, so the phrases are fixed. Learn the order and every call is easy.",["Answer with your company and name","Ask: Ist Herr / Frau ... da?","End with Auf Wiederhören"]),
+ words("Answering","What the person who picks up says.",[["Firma ..., ..., guten Tag.","Company ..., ..., good day."],["Was kann ich für Sie tun?","What can I do for you?"],["Einen Moment bitte.","One moment, please."],["Herr / Frau ... ist leider nicht da.","Mr / Ms ... is unfortunately not here."]]),
+ words("Calling","What the caller says.",[["Hier ist ...","This is ..."],["Mein Name ist ...","My name is ..."],["Ist Herr / Frau ... da?","Is Mr / Ms ... there?"],["Vielen Dank. Auf Wiederhören.","Thank you very much. Goodbye."]]),
+ dlg("Match tape: the call","The whole call from start to finish.",[["A","Firma Müller, guten Tag.","Company Müller, good day."],["B","Guten Tag, Patschorke hier.","Good day, Patschorke speaking."],["A","Guten Tag, Herr Patschorke. Was kann ich für Sie tun?","Good day, Mr Patschorke. What can I do for you?"],["B","Ist Frau Müller da?","Is Ms Müller there?"],["A","Einen Moment bitte. Frau Müller ist leider nicht da.","One moment, please. Ms Müller is unfortunately not here."],["B","Vielen Dank. Auf Wiederhören.","Thank you very much. Goodbye."],["A","Sehr gern. Auf Wiederhören, Herr Patschorke.","My pleasure. Goodbye, Mr Patschorke."]]),
+ drill("You want to speak to Ms Müller. What do you ask?",["Ist Frau Müller da?","Was kann ich für Sie tun?","Einen Moment bitte."],0,"Ist Frau Müller da?"),
+ drill("How do you say goodbye on the phone?",["Auf Wiederhören","Auf Wiedersehen","Tschüs"],0,"On the phone: Auf Wiederhören."),
+ recap("Final whistle! You can handle a phone call. Train the phone phrases.","Phone calls at the office")]})
+
 # ───────── Sorting: classroom instructions stay out of the Tactics Room (they live in daily challenges and training) ─────────
 EXCLUDED_FROM_TEACHING = {"class"}
 U = [u for u in U if u["id"] not in EXCLUDED_FROM_TEACHING]

@@ -38,7 +38,7 @@ function render(){
 }
 function b3AfterRender(){}
 const b3zone=k=>k==='mastered'?'var(--cl)':k==='young'?'var(--orange)':k==='learning'?'#1FB45A':'transparent';
-const tierShield=(i,s=42)=>`<span class="stg-i" style="width:${s}px;height:${s}px">${shield(['#1FB45A','#2BA3E0','#F5A524','#D20515','#F5A524','#2BA3E0'][i]||'#D20515','rgba(255,255,255,.7)',sTxt(TIERS[i].lv,'#fff').replace('font-size="13"','font-size="9.5"'))}</span>`;
+const tierShield=(i,s=42)=>LEAGUE_LOGO(i,s);
 function b3help(t){return `<button class="b3-q" data-a="b3help" data-t="${esc(t)}" aria-label="Info">?</button>`}
 function b3fx(o){return `<button class="b3-fx ${o.cls||''}" ${o.attrs||''}><span class="tm">${o.tm||''}</span><span class="mid"><b>${o.t}</b>${o.s?`<small>${o.s}</small>`:''}</span><span class="bx">${o.n!=null?`<i>${o.n}</i>`:''}<i class="go">${PLAYI}</i></span></button>`}
 function ringSvg(p,size=96,w=9){const r=(size-w)/2,C=2*Math.PI*r;return `<div class="b3-ring" style="width:${size}px;height:${size}px"><svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="${w}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#fff" stroke-width="${w}" stroke-dasharray="${C}" stroke-dashoffset="${C}" data-o="${C*(1-Math.min(1,p))}" style="transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)"/></svg><b>${Math.round(Math.min(1,p)*100)}%</b></div>`}
@@ -57,8 +57,9 @@ function vHome(){
   const st=S.stats,L=lvl(st.xp),due=dueCount(),nw=newWords().length,ls=lessonList(),q=quests(),ti=tierInfo(),sc=scopeInfo(),LG0=LS(),ex=openExam(),tr=tricky().length,m=matchStats();
   const club=clubOf(myAvatar()),pn=pathNextTitle(),p=mdProgress(),goal=S.settings.goal||60,gp=Math.min(1,todayXp()/goal);
   const hero=`<section class="b3-hero"><div><h1>${esc(myName())}</h1>
-    <div class="b3-hv">${STADIUM}<span>${esc(club?club[1]:'Kobel FC')}</span></div>
-    <div class="b3-hv" style="margin-top:4px;opacity:.75"><span>${esc(ti.t.n)} · ${esc(ti.t.lv)} · ${esc(title(L))}</span></div></div>
+    <div class="b3-hv" style="font-weight:800;margin-top:12px"><span>${esc(club?club[1]:'Kobel FC')}</span></div>
+    <div class="b3-hv" style="margin-top:6px">${club&&club[5]?stadIcon(club[0],24):STADIUM}<span>${esc(club&&club[5]?club[5]:tx('Kobel Park','Kobel-Stadion'))}</span></div>
+    <div class="b3-hv" style="margin-top:8px;opacity:.9">${LEAGUE_LOGO(ti.i,24)}<span>${esc(ti.t.n)} · ${esc(ti.t.lv)} · ${esc(title(L))}</span></div></div>
     <div class="b3-crest">${club?badgeSvg(myAvatar(),200):'<img src="brand/logo.png" alt="">'}</div>
     <div class="b3-hb"><button class="b3-wb red" data-a="pathgo"><span>${pn?esc(pn.label):tx('Open the path','Pfad öffnen')}</span>${ARWU}</button><button class="b3-wb dark" data-a="start" data-mode="mix" data-lesson=""><span>${tx('Training','Training')}</span>${ARWU}</button></div></section>
   <div class="b3-strip"><div><b>${due}</b><span>${tx('Due','Fällig')}</span></div><div><b>${nw}</b><span>${tx('New','Neu')}</span></div><div><b>${todayXp()}</b><span>${tx('Today','Heute')}</span></div></div>`;

@@ -28,12 +28,13 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'2.5.0',title:{en:'Kobel 2.5.0: Friends tab, study groups and club colours',de:'Kobel 2.5.0: Freunde-Tab, Lerngruppen und Vereinsfarben'},body:{\n  en:'New look: a full redesign after the Bundesliga website and app (top bar, club banner in your colours, ticker, standings tables, fixture rows, stat tiles), celebration screens for promotion, streaks, levels, daily goals, matchdays and path levels, and a Play-Off: when your streak is about to break you can win it back with one very hard typed question. Also: lessons from sessions 7 to 10 (big numbers, colours, objects, office and plurals), new Tactics Room units, redesigned home-screen widgets with charts, a Learning Path from easy to hard, new exercises (drag-and-drop blocks, article sorting, true/false, matching), a Friends tab with study groups, shared streaks and phone notifications, Bundesliga club badges as your avatar with your club colours in tables and scorebugs, and matches that end like football scores.',\n  de:'Neues Design nach der Bundesliga-Website und -App (Kopfleiste, Vereinsbanner in deinen Farben, Ticker, Tabellen, Spielplan-Zeilen, Statistik-Kacheln), Feierbildschirme für Aufstieg, Serien, Level, Tagesziele, Spieltage und Pfad-Stufen und ein Play-off: Wenn deine Serie zu reißen droht, kannst du sie mit einer sehr schweren getippten Frage zurückgewinnen. Außerdem: Lektionen aus den Sitzungen 7 bis 10 (große Zahlen, Farben, Dinge, Büro und Plural), neue Taktikraum-Einheiten, neu gestaltete Widgets mit Diagrammen, ein Lernpfad von leicht bis schwer, neue Übungen (Wortblöcke ziehen, Artikel sortieren, Richtig/Falsch, Zuordnen), ein Freunde-Tab mit Lerngruppen, gemeinsamen Serien und Handy-Benachrichtigungen, Bundesliga-Vereinswappen als Avatar mit deinen Vereinsfarben in Tabellen und Anzeigetafeln und Spiele, die wie Fußballergebnisse enden.'}};\n"
-if _re.search(r"const CHANGELOG=\{v:'2\.[45]\.0'", src):
-    src = _re.sub(r"const CHANGELOG=\{v:'2\.[45]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
+_CL = "const CHANGELOG={v:'3.0.0',title:{en:'Kobel 3.0.0: new design, celebrations, Play-Off and club crests',de:'Kobel 3.0.0: neues Design, Feiern, Play-off und Vereinswappen'},body:{\n  en:'Big update. New: the real club crests and stadium icons (pick one of the 18 clubs of the 2026/27 season), lessons from session 11 (accusative and office phone calls), a full redesign after the Bundesliga website and app (top bar, club banner in your colours, ticker, standings tables, fixture rows, stat tiles), celebration screens for promotion, streaks, levels, daily goals, matchdays and path levels, and a Play-Off: when your streak is about to break you can win it back with one very hard typed question. Also: lessons from sessions 7 to 10 (big numbers, colours, objects, office and plurals), new Tactics Room units, redesigned home-screen widgets with charts, a Learning Path from easy to hard, new exercises (drag-and-drop blocks, article sorting, true/false, matching), a Friends tab with study groups, shared streaks and phone notifications, Bundesliga club badges as your avatar with your club colours in tables and scorebugs, and matches that end like football scores.',\n  de:'Großes Update. Neu: die echten Vereinswappen und Stadion-Symbole (wähle einen der 18 Vereine der Saison 2026/27), Lektionen aus Sitzung 11 (Akkusativ und Telefonieren im Büro), neues Design nach der Bundesliga-Website und -App (Kopfleiste, Vereinsbanner in deinen Farben, Ticker, Tabellen, Spielplan-Zeilen, Statistik-Kacheln), Feierbildschirme für Aufstieg, Serien, Level, Tagesziele, Spieltage und Pfad-Stufen und ein Play-off: Wenn deine Serie zu reißen droht, kannst du sie mit einer sehr schweren getippten Frage zurückgewinnen. Außerdem: Lektionen aus den Sitzungen 7 bis 10 (große Zahlen, Farben, Dinge, Büro und Plural), neue Taktikraum-Einheiten, neu gestaltete Widgets mit Diagrammen, ein Lernpfad von leicht bis schwer, neue Übungen (Wortblöcke ziehen, Artikel sortieren, Richtig/Falsch, Zuordnen), ein Freunde-Tab mit Lerngruppen, gemeinsamen Serien und Handy-Benachrichtigungen, Bundesliga-Vereinswappen als Avatar mit deinen Vereinsfarben in Tabellen und Anzeigetafeln und Spiele, die wie Fußballergebnisse enden.'}};\n"
+if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'", src):
+    src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
 # ---- Sessions 7-10 and the Tactics Room list (classroom instructions are excluded from path and teaching) ----
-src = sub(src, "const BATCHES=[SEED,N4,N5,N6];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10];")
+import re as _re0
+src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11];", src, count=1)
 import json as _json
 _units = _json.load(open(ROOT.parent / 'database/content/teaching/units.json', encoding='utf-8'))
 _line = 'const TEACH=' + _json.dumps(_units, ensure_ascii=False) + ';'
@@ -54,7 +55,7 @@ if 'function widgetExtra()' not in src:
 }
 function pushWidgets(){""")
 src = sub(src, "lang:S.settings.lang,week:WK.map(", "...widgetExtra(),lang:S.settings.lang,week:WK.map(")
-if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
+if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={stageIco,celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
 if "poBuild,PO," not in src: src = src.replace("celebrate,streakRisk,poOpen,poBuild,", "celebrate,streakRisk,poOpen,poBuild,PO,", 1)
 
 # ---- 3.0 ----
@@ -67,10 +68,16 @@ src = sub(src, "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.fr
  "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.saveTok&&st.saveTok.day===t){st.streak++;r.usedPlayoff=true}\n    else if(gap===2&&st.freezes>0)")
 src = sub(src, "return g<=1||(g===2&&st.freezes>0)?st.streak:0}", "return g<=1||(g===2&&(st.freezes>0||(st.saveTok&&st.saveTok.day===dkey())))?st.streak:0}")
 src = sub(src, "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);", "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);b3ZoneCheck();")
-src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti},700);L.stg=st.i;save();\n")
+src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti,i:st.i},700);L.stg=st.i;save();\n")
 src = sub(src, "  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);", "  celebrate({k:'md',n:L.md+1,res,tore,days,d:delta},1200);\n  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);")
 src = sub(src, "  ...B3_ACTIONS,\n", "  ...B3_ACTIONS,\n  ...PO_ACTIONS,\n")
 src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeout(poAsk,2800);")
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
+src = sub(src, "const APP_VER='2.4.0';", "const APP_VER='3.0.0';")
+
+# ---- 3.0: career step icons, league logos ----
+src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
+src = sub(src, "<div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div>", "<div style=\"display:flex;gap:14px;align-items:center\"><span class=\"sico big\">${stageIco(sn.i,34)}</span><div><div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div></div></div>")
+if "widgetData,stageIco," not in src: src = src.replace("widgetData,celebrate,", "widgetData,stageIco,celebrate,", 1)

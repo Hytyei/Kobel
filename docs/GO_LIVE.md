@@ -187,3 +187,10 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * **Order:** migrate, deploy the Worker, then publish the APK, so friends and duels work on the first day.
 * Auto-save: Settings → Cloud sync → Auto-save (Smart by default). It uses the same sync as before, nothing to configure.
 * Details: `docs/FRIENDS_AND_DUELS.md`, `docs/LEAGUES.md`, `docs/API.md`.
+
+## Version 3.0.0 (new design, celebrations, streak Play-Off, club crests): release checklist (nothing here has been done for you)
+
+* **Backend:** no new endpoints or migrations since 2.5.0. If you have not yet applied migrations `0003`, `0004` and `0005` and deployed the Worker for 2.5.0, do that first (see the 2.5.0 section above); 3.0.0 needs the same backend.
+* **Fonts:** copy the seven DFL Sans `.otf` files into `android/app/src/main/assets/www/fonts/` before building (they are git-ignored on purpose).
+* **Assets:** the club crests (`assets/www/clubs/*.svg`) and stadium icons (`assets/www/stadiums/*.png`) are part of the repository.
+* **Release:** tag `v3.0.0` (version code 30000), build with your **existing** release keystore, upload `kobelapp.apk`.
