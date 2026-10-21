@@ -59,7 +59,7 @@ const pathNoun=c=>!!c.art&&/^[A-ZÄÖÜ][^\s.…]*$/.test(c.de.replace(/^(der|di
 function pathBuild(n){
   const ws=n.ids.map(byId).filter(c=>c&&act(c));
   if(n.kind==='g')return shuffle(ws).map(c=>({cid:c.id,kind:'gcl'}));
-  const items=[],spk=canSpeak(),enough=WALL().length>=4,L=n.lv;
+  const items=[],keep=new Set(),spk=canSpeak(),enough=WALL().length>=4,L=n.lv;
   const A=(c,k)=>items.push({cid:c.id,kind:k});
   const nouns=ws.filter(pathNoun),pl=ws.filter(c=>pluralOf(c)),cl=ws.filter(c=>clozeOf(c)),sn=ws.filter(c=>sentenceOf(c)),sc=ws.filter(scrOK);
   if(L===1){
@@ -74,6 +74,7 @@ function pathBuild(n){
     ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
     shuffle(ws).slice(0,5).forEach(c=>body.push({cid:c.id,kind:spk&&enough?'hear':'tf'}));
     shuffle(nouns).slice(0,4).forEach(c=>body.push({cid:c.id,kind:'art'}));
+    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
     items.push(...pathSpread(body));
   }else if(L===3){
     const body=[];
@@ -81,30 +82,37 @@ function pathBuild(n){
     if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
     shuffle(pl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'plu'}));
     shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
+    [...qvOddItems(n,ws,1),...qvRegItems(n,1)].forEach(x=>{body.push(x);keep.add(x)});
     shuffle(ws).slice(0,Math.max(3,8-body.length)).forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
     items.push(...pathSpread(body));
   }else if(L===4){
     const body=[];
-    shuffle(sn).slice(0,4).forEach(c=>body.push({cid:c.id,kind:'drag'}));
+    shuffle(sn).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'drag'}));
     shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
+    shuffle(cl).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
     shuffle(sc).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'scr'}));
+    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
     const have=new Set(body.map(b=>b.cid));
-    shuffle(ws.filter(c=>!have.has(c.id))).slice(0,Math.max(3,8-body.length)).forEach(c=>body.push({cid:c.id,kind:'type'}));
+    shuffle(ws.filter(c=>!have.has(c.id))).slice(0,Math.max(3,9-body.length)).forEach(c=>body.push({cid:c.id,kind:'type'}));
     items.push(...pathSpread(body));
   }else{
     const body=[];
     ws.forEach(c=>body.push({cid:c.id,kind:'type'}));
     if(spk)shuffle(ws).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'listen'}));
+    shuffle(sn).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'tsen'};body.push(x);keep.add(x)});
     shuffle(sn).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'drag'}));
     shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
+    shuffle(cl).slice(0,1).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
     shuffle(nouns).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'art'}));
+    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
     if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
     items.push(...pathSpread(body));
   }
-  const intro=items.filter(i=>i.kind==='intro');
-  return intro.concat(items.filter(i=>i.kind!=='intro').slice(0,L===5?20:16));
+  const intro=items.filter(i=>i.kind==='intro'),rest=items.filter(i=>i.kind!=='intro'),max=L===5?20:16;
+  /* trim to the size of the level, but never drop the special exercises */
+  for(let k=rest.length-1;k>=0&&rest.length>max;k--)if(!keep.has(rest[k]))rest.splice(k,1);
+  return intro.concat(rest.slice(0,max));
 }
-/* shuffle, but never the same word or the same exercise twice in a row if it can be avoided */
 function pathSpread(a){
   const r=shuffle(a.slice());
   for(let i=1;i<r.length;i++){
@@ -135,7 +143,7 @@ function finishPath(){
   const h=new Date().getHours();if(h>=22||h<5)st.night=true;
   bump('ans',total);bump('combo',ses.maxCombo);if(ses.learned)bump('new',ses.learned);
   const got=checkBadges();save();pushWidgets();
-  sfx(pass?'win':'bad');if(pass)confetti();vib(pass?[20,30,20,30,60]:[40,40]);
+  sfx(pass?'win':'lose');if(pass)confetti();vib(pass?[20,30,20,30,60]:[40,40]);
   const secs=Math.round((Date.now()-ses.t0)/1000),idx=ses.pathIdx,ps=pathState(),nx=ps.nodes[idx+1],cur=ps.nodes[idx];
   const newCh=pass&&first&&nx&&nx.unit===cur.unit&&nx.ch!==cur.ch,newUnit=pass&&first&&nx&&nx.unit!==cur.unit,end=pass&&first&&!nx;
   try{b3PathCelebrate({pass,first,improved:pass&&stars>old,stars,label:pathLabel(cur),unit:ps.units[cur.unit]&&ps.units[cur.unit].name,newCh,newUnit,end})}catch(e){}

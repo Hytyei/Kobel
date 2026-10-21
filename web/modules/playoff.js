@@ -93,7 +93,7 @@ function poResolve(ok,raw){
   S.stats.po={day:dkey(),tried:true,won:!!ok};
   if(ok){S.stats.poWins=(S.stats.poWins||0)+1}
   else{S.stats.streak=0;S.stats.last=null}
-  save();sfx(ok?'win':'bad');vib(ok?[30,40,30,40,90]:[200]);
+  save();sfx(ok?'win':'lose');vib(ok?[30,40,30,40,90]:[200]);
   el.innerHTML=`<div class="po-top"><div style="flex:1;font:800 15px var(--fd);letter-spacing:.14em;text-transform:uppercase">${tx('Play-off','Play-off')}</div></div>
   <div class="po-main"><span class="po-tag" style="background:${ok?'var(--green)':'var(--red)'}">${ok?tx('Full time · won','Abpfiff · gewonnen'):tx('Full time · lost','Abpfiff · verloren')}</span>
   <div class="po-big">${ok?tx('Streak<br>saved.','Serie<br>gerettet.'):tx('Streak<br>gone.','Serie<br>weg.')}</div>

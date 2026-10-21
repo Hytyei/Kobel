@@ -18,7 +18,12 @@ const letters=(t,d0=.5)=>{let i=0;return String(t).split(' ').map(w=>`<span clas
 function celSfx(k){
   if(!S.settings.sound)return;
   const seq={promo:[[392,0],[523,.12],[659,.24],[784,.36],[1046,.5],[1318,.66]],streak:[[330,0],[415,.1],[523,.2],[659,.3],[880,.45]],level:[[523,0],[659,.1],[784,.2],[1046,.34]],goal:[[587,0],[740,.12],[880,.26]],md:[[523,0],[659,.12],[784,.24]],stars:[[659,.3],[784,.6],[1046,.9]],down:[[294,0],[247,.18],[196,.36]]}[k];
-  if(seq)seq.forEach(([f,t])=>tone(f,t,.34,k==='down'?'sawtooth':'triangle',k==='down'?.05:.12));
+  if(seq){
+    const dn=k==='down';
+    seq.forEach(([f,t],i)=>{tone(f,t,dn?.5:.4,'triangle',dn?.08:.1,dn?f*.96:0);if(!dn)tone(f*2,t+.02,.3,'sine',.03)});
+    const last=seq[seq.length-1];
+    if(!dn){tone(seq[0][0]/2,0,.9,'sine',.13);const f=last[0];[1,1.25,1.5].forEach(m=>tone(f*m,last[1]+.1,.9,'triangle',.05));setTimeout(()=>noiseHit(0,.5,3000,.6,.02,7000),(last[1]+.05)*1000)}
+  }
 }
 function celConfetti(cv,power){
   if(celReduce()||!cv)return;
@@ -93,7 +98,7 @@ const CELV={
   stage(o){
     return{cls:'k-stage',conf:1,sfx:'level',vib:[30,40,60],html:`<div class="cel-k">${tx('New career stage','Neue Karrierestufe')}</div>
       <div class="cel-sh" style="margin-top:14px;height:190px">${tierShield(o.ti,170)}</div>
-      <h1 class="cel-h" style="font-size:clamp(34px,11vw,54px)">${letters(o.n,.5)}</h1><div class="cel-s" style="--d:1.2s">${esc(o.d)}</div>`};
+      ${o.i!=null?`<div class="cel-ico">${stageIco(o.i,38)}</div>`:''}<h1 class="cel-h" style="font-size:clamp(34px,11vw,54px)">${letters(o.n,.5)}</h1><div class="cel-s" style="--d:1.2s">${esc(o.d)}</div>`};
   },
   pathlvl(o){
     const big=o.end||o.newUnit,txt=o.end?tx('Path complete','Pfad geschafft'):o.newUnit?tx('Unit complete','Einheit geschafft'):o.newCh?tx('Chapter complete','Kapitel geschafft'):tx('Level complete','Stufe geschafft');

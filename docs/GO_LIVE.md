@@ -194,3 +194,9 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * **Fonts:** copy the seven DFL Sans `.otf` files into `android/app/src/main/assets/www/fonts/` before building (they are git-ignored on purpose).
 * **Assets:** the club crests (`assets/www/clubs/*.svg`) and stadium icons (`assets/www/stadiums/*.png`) are part of the repository.
 * **Release:** tag `v3.0.0` (version code 30000), build with your **existing** release keystore, upload `kobelapp.apk`.
+
+## Version 3.1.0 (question experience): release checklist (nothing here has been done for you)
+
+* **Backend:** unchanged, no new migrations or endpoints. Same requirements as 3.0.0.
+* **Release:** tag `v3.1.0` (version code 30100), build with your **existing** release keystore, upload `kobelapp.apk`.
+* **Check on a phone:** sounds (Settings > Sound on), the spelling game, a path level with the new question types.

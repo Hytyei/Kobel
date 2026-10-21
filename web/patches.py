@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'3.0.0',title:{en:'Kobel 3.0.0: new design, celebrations, Play-Off and club crests',de:'Kobel 3.0.0: neues Design, Feiern, Play-off und Vereinswappen'},body:{\n  en:'Big update. New: the real club crests and stadium icons (pick one of the 18 clubs of the 2026/27 season), lessons from session 11 (accusative and office phone calls), a full redesign after the Bundesliga website and app (top bar, club banner in your colours, ticker, standings tables, fixture rows, stat tiles), celebration screens for promotion, streaks, levels, daily goals, matchdays and path levels, and a Play-Off: when your streak is about to break you can win it back with one very hard typed question. Also: lessons from sessions 7 to 10 (big numbers, colours, objects, office and plurals), new Tactics Room units, redesigned home-screen widgets with charts, a Learning Path from easy to hard, new exercises (drag-and-drop blocks, article sorting, true/false, matching), a Friends tab with study groups, shared streaks and phone notifications, Bundesliga club badges as your avatar with your club colours in tables and scorebugs, and matches that end like football scores.',\n  de:'Großes Update. Neu: die echten Vereinswappen und Stadion-Symbole (wähle einen der 18 Vereine der Saison 2026/27), Lektionen aus Sitzung 11 (Akkusativ und Telefonieren im Büro), neues Design nach der Bundesliga-Website und -App (Kopfleiste, Vereinsbanner in deinen Farben, Ticker, Tabellen, Spielplan-Zeilen, Statistik-Kacheln), Feierbildschirme für Aufstieg, Serien, Level, Tagesziele, Spieltage und Pfad-Stufen und ein Play-off: Wenn deine Serie zu reißen droht, kannst du sie mit einer sehr schweren getippten Frage zurückgewinnen. Außerdem: Lektionen aus den Sitzungen 7 bis 10 (große Zahlen, Farben, Dinge, Büro und Plural), neue Taktikraum-Einheiten, neu gestaltete Widgets mit Diagrammen, ein Lernpfad von leicht bis schwer, neue Übungen (Wortblöcke ziehen, Artikel sortieren, Richtig/Falsch, Zuordnen), ein Freunde-Tab mit Lerngruppen, gemeinsamen Serien und Handy-Benachrichtigungen, Bundesliga-Vereinswappen als Avatar mit deinen Vereinsfarben in Tabellen und Anzeigetafeln und Spiele, die wie Fußballergebnisse enden.'}};\n"
+_CL = "const CHANGELOG={v:'3.1.0',title:{en:'Kobel 3.1.0: a better question experience',de:'Kobel 3.1.0: bessere Fragen'},body:{\n  en:'Question experience update. New: every question now moves (smooth slide-ins, answer feedback, particles), a minimal Bundesliga-style animated background, a combo counter with milestones (Hattrick, On fire, Unstoppable...), a rebuilt letter game (letter slots, tap tiles to place or remove, hints, forgiving first mistake, keyboard support) and the same slots for duels, du/Sie/ihr and er/sie/es hints so formal and informal sentences never look alike, new question types (du, Sie or ihr?, odd one out, find the mistake, translate the sentence), repeated sentences change small details (country, name, job, number), new logo animations and fresh sound effects.',\n  de:'Update für die Fragen. Neu: jede Frage bewegt sich (weiche Übergänge, Antwort-Feedback, Partikel), ein minimalistischer animierter Hintergrund im Bundesliga-Stil, ein Serienzähler mit Meilensteinen (Hattrick, On fire, Unstoppable...), ein neues Buchstabenspiel (Felder, Buchstaben antippen, Tipps, verzeihender erster Fehler, Tastatur), dieselben Felder für Duelle, Hinweise zu du/Sie/ihr und er/sie/es, damit formelle und informelle Sätze nie gleich aussehen, neue Fragetypen (du, Sie oder ihr?, Was passt nicht?, Finde den Fehler, Satz übersetzen), Wiederholungen ändern kleine Details (Land, Name, Beruf, Zahl), neue Logo-Animationen und neue Soundeffekte.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -55,7 +55,7 @@ if 'function widgetExtra()' not in src:
 }
 function pushWidgets(){""")
 src = sub(src, "lang:S.settings.lang,week:WK.map(", "...widgetExtra(),lang:S.settings.lang,week:WK.map(")
-if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
+if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={stageIco,celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
 if "poBuild,PO," not in src: src = src.replace("celebrate,streakRisk,poOpen,poBuild,", "celebrate,streakRisk,poOpen,poBuild,PO,", 1)
 
 # ---- 3.0 ----
@@ -68,11 +68,47 @@ src = sub(src, "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.fr
  "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.saveTok&&st.saveTok.day===t){st.streak++;r.usedPlayoff=true}\n    else if(gap===2&&st.freezes>0)")
 src = sub(src, "return g<=1||(g===2&&st.freezes>0)?st.streak:0}", "return g<=1||(g===2&&(st.freezes>0||(st.saveTok&&st.saveTok.day===dkey())))?st.streak:0}")
 src = sub(src, "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);", "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);b3ZoneCheck();")
-src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti},700);L.stg=st.i;save();\n")
+src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti,i:st.i},700);L.stg=st.i;save();\n")
 src = sub(src, "  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);", "  celebrate({k:'md',n:L.md+1,res,tore,days,d:delta},1200);\n  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);")
 src = sub(src, "  ...B3_ACTIONS,\n", "  ...B3_ACTIONS,\n  ...PO_ACTIONS,\n")
 src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeout(poAsk,2800);")
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = sub(src, "const APP_VER='2.4.0';", "const APP_VER='3.0.0';")
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.1.0';", src, count=1)
+
+# ---- 3.0: career step icons, league logos ----
+src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
+src = sub(src, "<div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div>", "<div style=\"display:flex;gap:14px;align-items:center\"><span class=\"sico big\">${stageIco(sn.i,34)}</span><div><div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div></div></div>")
+if "widgetData,stageIco," not in src: src = src.replace("widgetData,celebrate,", "widgetData,stageIco,celebrate,", 1)
+
+# ---- 3.1.0: question experience ----
+src = sub(src, "function drawTop(){\n  if(!ses)return;", "function drawSesTop(){\n  if(!ses)return;")
+src = sub(src, "function openOverlay(rush){\n  wipe();", "function openOverlay0(rush){\n  wipe();")
+src = sub(src, "const setMain=h=>{const m=$('#sMain');m.innerHTML=h;m.scrollTop=0};", "const setMain0=h=>{const m=$('#sMain');m.innerHTML=h;m.scrollTop=0};")
+src = sub(src, "function resolve(it,res,info={}){\n  if(ses.locked)return;ses.locked=true;", "function resolve0(it,res,info={}){\n  if(ses.locked)return;ses.locked=true;")
+src = sub(src, "function resultScreen(cfg){\n  $('#prog')", "function resultScreen0(cfg){\n  $('#prog')")
+src = sub(src, "const byId=id=>S.cards.find(c=>c.id===id);", "const byId=id=>QXV(S.cards.find(c=>c.id===id));")
+src = sub(src, "function mk(o){\n  const base={id:o.id", "function mk(o){const c=mk0(o);try{regFix(c)}catch(e){}return c}\nfunction mk0(o){\n  const base={id:o.id")
+src = sub(src, "  defaults();\n  if(!S.batch)S.batch=1;", "  defaults();\n  S.cards.forEach(c=>{try{regFix(c)}catch(e){}});\n  if(!S.batch)S.batch=1;")
+_tap = "<div class=\"dl-build\" id=\"dl-build\"><em>${tx('Tap the letters','Tippe die Buchstaben')}</em></div>"
+src = sub(src, _tap, "<div class=\"dl-build qx-slots\" id=\"dl-build\">${qxSlots([],it.chars.length)}</div>", 2)
+src = sub(src, "if(b)b.textContent=DL.typed.join('')", "if(b)qxShow(b,DL.typed,DL.deck[DL.i].chars.length)")
+src = sub(src, "if(e)e.textContent=DL.typed.join('')||''", "if(e)qxShow(e,DL.typed,DL.deck[DL.i].chars.length)")
+src = sub(src, "if(b)b.textContent=P.typed.join('')", "if(b)qxShow(b,P.typed,P.deck[P.i].chars.length)")
+src = sub(src, "if(e)e.textContent=P.typed.join('')||''", "if(e)qxShow(e,P.typed,P.deck[P.i].chars.length)")
+if "ses:()=>ses" not in src:
+    src = src.replace("next,openOverlay,R:()=>R,", "next,openOverlay,ses:()=>ses,R:()=>R,qvVary,regFix,qvRegOf,", 1)
+if "{sfx,qvKind," not in src:
+    src = src.replace("window.__k={", "window.__k={sfx,qvKind,", 1)
+
+# ---- 3.1.0: tag du/Sie on every card, also when the notes are merged ----
+src = sub(src, "function addParsed(p,lo){\n  let a=0,u=0,ga=0,gu=0,ra=0;", "function addParsed(p,lo){const r=addParsed0(p,lo);try{S.cards.forEach(regFix)}catch(e){}return r}\nfunction addParsed0(p,lo){\n  let a=0,u=0,ga=0,gu=0,ra=0;")
+src = src.replace("qvKind,qvKind,", "qvKind,")
+
+src = src.replace("const APP_VER='3.0.0';", "const APP_VER='3.1.0';")
+
+# ---- 3.1.0: only real nouns in der/die/das questions ----
+src = src.replace("if(id==='dash')pool=pool.filter(c=>c.art);", "if(id==='dash')pool=pool.filter(c=>c.art&&pathNoun(c));")
+src = src.replace("for(const c of all.filter(c=>c.art)){if(out.length>=DECK_N)", "for(const c of all.filter(c=>c.art&&pathNoun(c))){if(out.length>=DECK_N)")
+src = src.replace("for(const c of all.filter(c=>c.art)){if(out.length>=DUEL_N)", "for(const c of all.filter(c=>c.art&&pathNoun(c))){if(out.length>=DUEL_N)")

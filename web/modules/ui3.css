@@ -358,3 +358,27 @@ button.b3-tr{cursor:pointer}
 .b3-crest .av.club.crest img{height:auto}
 .stad{display:inline-block;flex:none;background:currentColor;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
 .b3-hv .stad{margin-right:2px}
+
+/* league logos */
+.stg-i.lg{display:inline-flex;align-items:center;justify-content:center}
+.stg-i.lg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.b3-tk>button .stg-i.lg{display:flex}
+.cel-sh .stg-i.lg img{filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+/* career steps: outline icons */
+.stg .sico{flex:none;width:36px;height:36px;display:grid;place-items:center;border:1.5px solid var(--line);color:var(--ink);position:relative}
+.stg.done .sico{color:#1FB45A;border-color:#1FB45A}
+.stg.cur .sico{background:var(--red);border-color:var(--red);color:#fff}
+.stg.done .sico::after{content:'';position:absolute;right:-5px;top:-5px;width:12px;height:12px;border-radius:50%;background:#1FB45A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.3l2 2 4-4.3' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.stg .sico svg{width:22px;height:22px}
+.stg{align-items:center}
+.stg.cur{opacity:1}.stg.done{opacity:.85}
+.cel-ico{width:64px;height:64px;margin:6px auto 0;display:grid;place-items:center;border:2px solid currentColor;color:#fff;opacity:.95}
+.cel-ico svg{width:38px;height:38px}
+.sico.big{flex:none;width:56px;height:56px;display:grid;place-items:center;border:2px solid currentColor}
+.sico.big svg{width:34px;height:34px}
+.cel-sh{height:190px;margin-bottom:18px}
+.cel-sh .stg-i.lg{display:flex;align-items:center;justify-content:center}
+.cel-sh .stg-i.lg img{max-width:100%;max-height:100%;object-fit:contain}
+.cel-sh::after{display:none}
+.cel-from{left:-58px;bottom:6px;width:44px;height:48px;opacity:.5;filter:none}
+.cel-sh .cel-from{left:-62px!important;bottom:4px!important;width:44px!important;height:48px!important}
