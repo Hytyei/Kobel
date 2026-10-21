@@ -93,7 +93,7 @@ const CELV={
   stage(o){
     return{cls:'k-stage',conf:1,sfx:'level',vib:[30,40,60],html:`<div class="cel-k">${tx('New career stage','Neue Karrierestufe')}</div>
       <div class="cel-sh" style="margin-top:14px;height:190px">${tierShield(o.ti,170)}</div>
-      ${o.i!=null?`<div class="cel-ico">${stageIco(o.i,38)}</div>`:''}<h1 class="cel-h" style="font-size:clamp(34px,11vw,54px)">${letters(o.n,.5)}</h1><div class="cel-s" style="--d:1.2s">${esc(o.d)}</div>`};
+      <h1 class="cel-h" style="font-size:clamp(34px,11vw,54px)">${letters(o.n,.5)}</h1><div class="cel-s" style="--d:1.2s">${esc(o.d)}</div>`};
   },
   pathlvl(o){
     const big=o.end||o.newUnit,txt=o.end?tx('Path complete','Pfad geschafft'):o.newUnit?tx('Unit complete','Einheit geschafft'):o.newCh?tx('Chapter complete','Kapitel geschafft'):tx('Level complete','Stufe geschafft');

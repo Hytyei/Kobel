@@ -55,7 +55,7 @@ if 'function widgetExtra()' not in src:
 }
 function pushWidgets(){""")
 src = sub(src, "lang:S.settings.lang,week:WK.map(", "...widgetExtra(),lang:S.settings.lang,week:WK.map(")
-if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={stageIco,celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
+if "window.__k={" in src and "celebrate,streakRisk" not in src: src = src.replace("window.__k={", "window.__k={celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,", 1)
 if "poBuild,PO," not in src: src = src.replace("celebrate,streakRisk,poOpen,poBuild,", "celebrate,streakRisk,poOpen,poBuild,PO,", 1)
 
 # ---- 3.0 ----
@@ -68,7 +68,7 @@ src = sub(src, "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.fr
  "    if(st.last&&gap===1)st.streak++;\n    else if(gap===2&&st.saveTok&&st.saveTok.day===t){st.streak++;r.usedPlayoff=true}\n    else if(gap===2&&st.freezes>0)")
 src = sub(src, "return g<=1||(g===2&&st.freezes>0)?st.streak:0}", "return g<=1||(g===2&&(st.freezes>0||(st.saveTok&&st.saveTok.day===dkey())))?st.streak:0}")
 src = sub(src, "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);", "    const L=LS();if(!L.ob)L.ob={};\n    const lp=lpNow(),st=stageNow(lp);b3ZoneCheck();")
-src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti,i:st.i},700);L.stg=st.i;save();\n")
+src = sub(src, "      L.stg=st.i;save();\n", "      celebrate({k:'stage',n:STAGES[st.i].n,d:STAGES[st.i].d,ti:STAGES[st.i].ti},700);L.stg=st.i;save();\n")
 src = sub(src, "  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);", "  celebrate({k:'md',n:L.md+1,res,tore,days,d:delta},1200);\n  L.md++;L.mdStart=weekStart(a+7*DAY+6*36e5);")
 src = sub(src, "  ...B3_ACTIONS,\n", "  ...B3_ACTIONS,\n  ...PO_ACTIONS,\n")
 src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeout(poAsk,2800);")
@@ -76,8 +76,3 @@ src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();new
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
 src = sub(src, "const APP_VER='2.4.0';", "const APP_VER='3.0.0';")
-
-# ---- 3.0: career step icons, league logos ----
-src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
-src = sub(src, "<div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div>", "<div style=\"display:flex;gap:14px;align-items:center\"><span class=\"sico big\">${stageIco(sn.i,34)}</span><div><div class=\"kick\">${tx('Your stage','Deine Stufe')} · ${esc(TIERS[ti].n)}</div><div style=\"font:800 30px/1.05 var(--fd);text-transform:uppercase\">${esc(sn.s.n)}</div></div></div>")
-if "widgetData,stageIco," not in src: src = src.replace("widgetData,celebrate,", "widgetData,stageIco,celebrate,", 1)
