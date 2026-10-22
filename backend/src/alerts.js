@@ -1,7 +1,8 @@
 // The alert feed: what is new for you since a given time. The phone polls this (WorkManager) and shows notifications.
 // Nothing is stored for it: every alert is derived from rows that exist anyway, so it costs a few small reads.
 // Types: friend (somebody added you), duel_invite (a friend challenged you), duel_result (your game finished),
-//        group_added (you were added to a group), group_round (a new round to play), group_result (a round ended).
+//        group_added (you were added to a group), group_round (a new round to play), group_result (a round ended),
+//        group_ping (a member pinged the group by hand).
 // The phone creates two more on its own because it knows the local day: streak ending soon, and app updates.
 import { HttpError } from './http.js';
 
@@ -49,6 +50,11 @@ export async function listAlerts(db, user, sinceRaw, now = Date.now()) {
     .prepare("SELECT gg.id AS id, gg.group_id AS gid, g.name AS gname, gg.game AS game, gg.settled_at AS ts FROM group_games gg JOIN groups g ON g.id = gg.group_id JOIN group_plays gp ON gp.game_id = gg.id AND gp.user_id = ?1 WHERE gg.status = 'done' AND gg.settled_at > ?2 ORDER BY gg.settled_at DESC LIMIT 20")
     .bind(user.id, since).all();
   for (const r of ended.results) push('group_result', r.id, r.ts, { group: r.gid, round: r.id, groupName: r.gname, game: r.game });
+
+  const pings = await db
+    .prepare('SELECT p.id AS id, p.group_id AS gid, g.name AS gname, p.kind AS kind, p.text AS text, p.created_at AS ts, u.name AS name FROM group_pings p JOIN group_members m ON m.group_id = p.group_id AND m.user_id = ?1 JOIN groups g ON g.id = p.group_id JOIN users u ON u.id = p.sender WHERE p.sender <> ?1 AND p.created_at > ?2 AND p.created_at >= m.joined_at ORDER BY p.created_at DESC LIMIT 20')
+    .bind(user.id, since).all();
+  for (const r of pings.results) push('group_ping', r.id, r.ts, { group: r.gid, groupName: r.gname, name: String(r.name).slice(0, 40), kind: r.kind, text: String(r.text).slice(0, 60) });
 
   alerts.sort((a, b) => b.ts - a.ts || a.id.localeCompare(b.id));
   return { alerts: alerts.slice(0, MAX_ALERTS), now, since };

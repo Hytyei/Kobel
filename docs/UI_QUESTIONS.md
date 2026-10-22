@@ -14,3 +14,10 @@ Rules worth knowing:
 * Every card whose German contains du/Sie/ihr gets "(informal)", "(formal)" or "(you all)" added to its English once, at load and whenever notes are merged (`regFix`). Sentences with `it` get "(masculine/feminine/neuter it)".
 * Letter tiles: tap a tile to place it in the next free slot, tap a placed tile to take it back, Backspace/Enter/letters work on a keyboard. The first wrong try keeps the right letters (green) and lets you fix the rest.
 * The background and all motion switch off with the system setting "reduce motion". Sound follows the existing Settings > Sound switch.
+
+## 3.2.0: no typing, more games
+
+* There are no text fields in questions any more. `askType()` in `web/modules/games.js` turns every old typed question into a tile game (letter crumble with decoy letters, listen and spell, build the sentence). The streak Play-Off is tile-based too.
+* Games: `wsearch` (word search), `snake` (cut a row of letters into words), `gapl` (missing letters), `memo` (memory pairs), `bubble` (bubble pop). They appear in Path levels 2 to 5 and as Minigames (Wortsuche, Wortschlange, Gedächtnis, Blasenjagd).
+* Settings and Profile live in `web/modules/settings.js` and `settings.css`. Squad (the word library) is reached from Settings > General and from the Profile tiles.
+* Study group nudge: `gpNudgeSheet()` in `social25.js` calls `POST /v1/groups/{id}/ping` (see `docs/API.md`). It needs migration `0006` and a Worker deploy.

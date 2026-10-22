@@ -22,19 +22,25 @@ function drawTop(){
   if(on){const l=on.offsetLeft-12,r=on.offsetLeft+on.offsetWidth+12;if(l<nv.scrollLeft)nv.scrollTo({left:l,behavior:sl?'smooth':'auto'});else if(r>nv.scrollLeft+nv.clientWidth)nv.scrollTo({left:r-nv.clientWidth,behavior:sl?'smooth':'auto'})}
 }
 function drawTabs(){drawTop()}
+const RN={tab:null,html:'',sk:''};
 function render(){
   settle();careerCheck();applyClub();
-  const keepY=window.scrollY;
-  $('#app').innerHTML=`<div class="view">${({home:vHome,arcade:vArcade,library:vLib,stats:vStats,teach:vTeach,path:vPath,friends:vFriends,settings:vSet,about:vAbout,profile:vProfile,inbox:vInbox})[tab]()}</div>`;
+  const keepY=window.scrollY,app=$('#app');
+  const html=`<div class="view">${({home:vHome,arcade:vArcade,library:vLib,stats:vStats,teach:vTeach,path:vPath,friends:vFriends,settings:vSet,about:vAbout,profile:vProfile,inbox:vInbox})[tab]()}</div>`;
+  /* no flicker: an identical screen is left alone, and a refresh of the same screen is drawn without the entrance animation */
+  const same=RN.tab===tab&&app.firstChild&&app.firstChild.classList&&app.firstChild.classList.contains('view');
+  app.innerHTML=html;RN.tab=tab;RN.html=html;
+  if(same){app.firstChild.classList.add('still');if(window.scrollY!==keepY)window.scrollTo(0,keepY)}
   drawTabs();
   if(tab==='library')libList();
-  requestAnimationFrame(()=>{
+  const fill=()=>{
     document.querySelectorAll('.bar i[data-w],.b3-lvl i[data-w],.tier-bar i[data-w]').forEach(i=>i.style.width=i.dataset.w);
     document.querySelectorAll('.b3-cmp .a[data-w]').forEach(i=>i.style.width=i.dataset.w);
     document.querySelectorAll('.fc7 b[data-h]').forEach(i=>i.style.height=i.dataset.h);
     document.querySelectorAll('.b3-ring circle[data-o]').forEach(c=>c.style.strokeDashoffset=c.dataset.o);
     const cur=document.querySelector('.b3-tk .cur');if(cur){const tk=cur.parentNode;tk.scrollLeft=Math.max(0,cur.offsetLeft-tk.clientWidth/2+cur.offsetWidth/2)}
-  });
+  };
+  if(same)fill();else requestAnimationFrame(fill);
   try{b3AfterRender()}catch(e){}
 }
 function b3AfterRender(){}

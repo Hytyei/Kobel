@@ -24,7 +24,7 @@ android {
         // versionName is what people see ("2.4.0"). versionCode is derived from it (major*10000 + minor*100 + patch,
         // so 2.4.0 -> 20400). Android needs the code to rise with every release, and the in-app updater compares it
         // with the same number computed from the GitHub tag, so name your tags v<major>.<minor>.<patch>.
-        val vName = (project.findProperty("versionName") as String?) ?: "3.1.0"
+        val vName = (project.findProperty("versionName") as String?) ?: "3.2.0"
         val vParts = vName.removePrefix("v").split(".").map { it.toIntOrNull() ?: 0 }
         val vCode = (project.findProperty("versionCode") as String?)?.toInt()
             ?: (vParts.getOrElse(0) { 0 } * 10000 + vParts.getOrElse(1) { 0 } * 100 + vParts.getOrElse(2) { 0 })

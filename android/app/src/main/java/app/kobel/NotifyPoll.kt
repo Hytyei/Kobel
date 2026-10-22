@@ -133,28 +133,59 @@ object NotifyWork {
             }
             "group_added" -> if (de) "Lerngruppe" to "Du wurdest zu $group hinzugefügt." else "Study group" to "You were added to $group."
             "group_round" -> if (de) "Neue Runde" to "$name hat in $group eine Runde gestartet." else "New round" to "$name started a round in $group."
+            "group_ping" -> {
+                val kind = a.optString("kind")
+                val msg = a.optString("text").take(60)
+                if (de) {
+                    "Anstupser von $name" to when (kind) {
+                        "custom" -> "$group: $msg"
+                        "round" -> "In $group wartet eine Runde."
+                        "streak" -> "Halten wir heute die Serie von $group am Leben."
+                        else -> "$group: Zeit zum Üben!"
+                    }
+                } else {
+                    "Nudge from $name" to when (kind) {
+                        "custom" -> "$group: $msg"
+                        "round" -> "A round is waiting in $group."
+                        "streak" -> "Let's keep the $group streak alive today."
+                        else -> "$group: time to practise!"
+                    }
+                }
+            }
             "group_result" -> if (de) "Runde beendet" to "Die Ergebnisse für $group sind da." else "Round over" to "The results are in for $group."
             else -> null
         }
     }
 
-    /** Evening reminder (18:00 to 22:59): your streak is alive from yesterday but you have not practised today. */
+    /**
+     * Two reminders while your streak is alive from yesterday and you have not practised today:
+     * an evening one (17:00 to 20:59) and a last call (21:00 to 23:59). Each is shown once per day.
+     */
     private fun streak(ctx: Context, p: SharedPreferencesView) {
         val now = Calendar.getInstance()
         val h = now.get(Calendar.HOUR_OF_DAY)
-        if (h < 18 || h > 22 || p.streak < 1) return
+        if (h < 17 || p.streak < 1) return
         val today = day()
         val yesterday = day(System.currentTimeMillis() - 86400000L)
         if (p.last != yesterday) return        // already practised today, or the streak is gone
         val sp = NotifyPrefs.raw(ctx)
-        if (sp.getString("streakDay", "") == today) return
-        sp.edit().putString("streakDay", today).apply()
+        val lastCall = h >= 21
+        val key = if (lastCall) "streakDay2" else "streakDay"
+        if (sp.getString(key, "") == today) return
+        sp.edit().putString(key, today).apply()
+        if (lastCall) sp.edit().putString("streakDay", today).apply()   // no evening reminder after the last call
         val n = p.streak
-        Notifier.show(
-            ctx, 7001, Notifier.CH_STREAK,
-            if (p.de) "Deine Serie endet heute" else "Your streak ends tonight",
-            if (p.de) "$n Tage in Folge. Ein kurzes Training rettet sie." else "$n days in a row. One short session keeps it alive.",
-        )
+        val title = if (lastCall) {
+            if (p.de) "Letzter Aufruf: Serie endet um Mitternacht" else "Last call: your streak ends at midnight"
+        } else {
+            if (p.de) "Deine Serie endet heute" else "Your streak ends tonight"
+        }
+        val body = if (lastCall) {
+            if (p.de) "$n Tage in Folge. Schon ein paar Fragen reichen." else "$n days in a row. A few questions are enough."
+        } else {
+            if (p.de) "$n Tage in Folge. Ein kurzes Training rettet sie." else "$n days in a row. One short session keeps it alive."
+        }
+        Notifier.show(ctx, if (lastCall) 7003 else 7001, Notifier.CH_STREAK, title, body)
     }
 
     /** A new release on GitHub (checked at most twice a day, same numeric version rule as the in-app updater). */

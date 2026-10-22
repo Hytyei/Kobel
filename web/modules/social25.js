@@ -268,6 +268,7 @@ function gpDraw(){
     <h2 class="sec">${tx('Rounds','Runden')}</h2>
     <div class="card patch gp-rounds">${g.rounds.length?g.rounds.map(gpRound).join(''):`<p class="sub">${tx('No round yet. Start one: everyone gets the same nine questions and 24 hours.','Noch keine Runde. Starte eine: alle bekommen dieselben neun Fragen und 24 Stunden.')}</p>`}</div>
     <button class="btn" style="margin-top:12px" data-a="gpround">${tx('New round','Neue Runde')}</button>
+    <button class="btn ghost gp-nudge" style="margin-top:10px" data-a="gpnudge"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.6 2H4.4z"/><path d="M10 21h4"/></svg><span>${tx('Nudge the group','Gruppe anstupsen')}</span></button>
     <div class="row2" style="margin-top:10px"><button class="btn ghost" data-a="gpadd">${tx('Add a friend','Freund hinzufügen')}</button>${own?`<button class="btn ghost" data-a="gpren">${tx('Rename','Umbenennen')}</button>`:''}</div>
     <div class="row2" style="margin-top:10px"><button class="btn ghost" data-a="gpleave">${tx('Leave group','Gruppe verlassen')}</button>${own?`<button class="btn ghost c-berry" data-a="gpdel">${tx('Delete group','Gruppe löschen')}</button>`:''}</div>
     ${GP.err?`<p class="sub" style="color:var(--badtxt)">${esc(GP.err)}</p>`:''}
@@ -340,7 +341,8 @@ const ALERT_TXT={
   duel_result:a=>[tx('Full time','Abpfiff'),tx(`You vs ${a.name}: ${a.goals[0]}–${a.goals[1]}.`,`Du gegen ${a.name}: ${a.goals[0]}–${a.goals[1]}.`)],
   group_added:a=>[tx('Study group','Lerngruppe'),tx(`You were added to ${a.groupName}.`,`Du wurdest zu ${a.groupName} hinzugefügt.`)],
   group_round:a=>[tx('New round','Neue Runde'),tx(`${a.name} started a round in ${a.groupName}.`,`${a.name} hat in ${a.groupName} eine Runde gestartet.`)],
-  group_result:a=>[tx('Round over','Runde beendet'),tx(`The results are in for ${a.groupName}.`,`Die Ergebnisse für ${a.groupName} sind da.`)]
+  group_result:a=>[tx('Round over','Runde beendet'),tx(`The results are in for ${a.groupName}.`,`Die Ergebnisse für ${a.groupName} sind da.`)],
+  group_ping:a=>[tx('Nudge from '+a.name,'Anstupser von '+a.name),a.kind==='custom'?`${a.groupName}: ${a.text}`:a.kind==='round'?tx(`A round is waiting in ${a.groupName}.`,`In ${a.groupName} wartet eine Runde.`):a.kind==='streak'?tx(`Let's keep the ${a.groupName} streak alive today.`,`Halten wir heute die Serie von ${a.groupName} am Leben.`):tx(`${a.groupName}: time to practise!`,`${a.groupName}: Zeit zum Üben!`)]
 };
 let alBusy=false;
 async function alPoll(){
@@ -376,7 +378,24 @@ function noteAsk(){try{if(NATIVE&&NATIVE.askNotifyPermission)NATIVE.askNotifyPer
 setInterval(pushNotifyState,60000);setTimeout(pushNotifyState,3000);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pushNotifyState()});
 
+/* manual nudge: preset messages (or one short custom line) sent to the other members of the group */
+const NUDGES=()=>[['practise',tx('Time to practise!','Zeit zum Üben!'),tx('A friendly reminder','Eine freundliche Erinnerung')],['round',tx('A round is waiting','Eine Runde wartet'),tx('Play the open round','Spielt die offene Runde')],['streak',tx('Save our group streak','Rettet unsere Gruppenserie'),tx('Everyone needs to practise today','Alle müssen heute üben')]];
+function gpNudgeSheet(){
+  sheet(`<h2>${tx('Nudge the group','Gruppe anstupsen')}</h2><p class="sub">${tx('The other members get a notification. You can nudge a group once every 10 minutes, 5 times a day.','Die anderen Mitglieder bekommen eine Benachrichtigung. Du kannst eine Gruppe alle 10 Minuten anstupsen, höchstens 5 Mal am Tag.')}</p>
+  <div class="nd-list">${NUDGES().map(n=>`<button class="nd-b" data-a="gpnudgego" data-kind="${n[0]}"><b>${n[1]}</b><span>${n[2]}</span></button>`).join('')}</div>
+  <label class="sub" for="nd-t" style="display:block;margin:14px 0 4px">${tx('Or write a short message (optional)','Oder schreibe eine kurze Nachricht (optional)')}</label>
+  <div class="nd-own"><input class="inp" id="nd-t" maxlength="60" placeholder="${tx('e.g. Quiz at 8?','z. B. Quiz um 8?')}" autocomplete="off"><button class="btn sm" data-a="gpnudgego" data-kind="custom">${tx('Send','Senden')}</button></div>
+  <p class="sub" id="nd-e" style="min-height:18px;margin-top:8px;font-size:13px"></p>`);
+}
+async function gpNudgeGo(t){
+  const kind=t.dataset.kind,e=$('#nd-e'),body={kind};
+  if(kind==='custom'){body.text=($('#nd-t')||{}).value||'';if(!body.text.trim()){if(e)e.textContent=tx('Write a message first.','Schreibe zuerst eine Nachricht.');return}}
+  document.querySelectorAll('.nd-b,.nd-own .btn').forEach(b=>b.disabled=true);
+  try{const j=await api('POST',`/v1/groups/${GP.id}/ping`,body);closeSheet();b3Banner('🔔',tx('Nudge sent','Anstupser gesendet'),tx(`${j.sent} member(s) notified`,`${j.sent} Mitglied(er) benachrichtigt`));sfx('ok',1)}
+  catch(er){document.querySelectorAll('.nd-b,.nd-own .btn').forEach(b=>b.disabled=false);if(e){e.style.color='var(--badtxt)';e.textContent=er.message}}
+}
 const SOCIAL25_ACTIONS={
+  gpnudge:gpNudgeSheet,gpnudgego:gpNudgeGo,
   frtab:t=>{FR.tab=t.dataset.k;render()},
   gpnew:gpNewSheet,
   gpopen:t=>gpOpen(+t.dataset.id),

@@ -7,7 +7,7 @@ import { listNotices, renameUser } from './profile.js';
 import { register, sha256Hex } from './register.js';
 import { createCode, addFriend, listFriends, friendProfile, removeFriend } from './friends.js';
 import { listAlerts } from './alerts.js';
-import { createGroup, listGroups, getGroup, renameGroup, deleteGroup, addMember, removeMember, createRound, getRound, startRound, answerRound } from './groups.js';
+import { createGroup, listGroups, getGroup, renameGroup, deleteGroup, addMember, removeMember, createRound, getRound, startRound, answerRound, pingGroup } from './groups.js';
 import { createDuel, listDuels, getDuel, acceptDuel, declineDuel, startDuel, answerDuel, duelRecord } from './duels.js';
 
 const MAX_BODY_BYTES = 262144; // 256 KB is far more than a 40-item sync needs
@@ -134,7 +134,7 @@ async function route(request, env) {
     const user = await authenticate(request, env);
     return json(await createGroup(env.DB, user, await readJson(request)), 201);
   }
-  const gm = path.match(/^\/v1\/groups\/(\d{1,12})(?:\/(members|games)(?:\/(\d{1,12})(?:\/(start|answer))?)?)?$/);
+  const gm = path.match(/^\/v1\/groups\/(\d{1,12})(?:\/(members|games|ping)(?:\/(\d{1,12})(?:\/(start|answer))?)?)?$/);
   if (gm) {
     const gid = Number(gm[1]), sub = gm[2], x = gm[3] === undefined ? null : Number(gm[3]), act = gm[4];
     const user = await authenticate(request, env);
@@ -142,6 +142,8 @@ async function route(request, env) {
       if (method === 'GET') return json(await getGroup(env.DB, user, gid));
       if (method === 'PATCH') return json(await renameGroup(env.DB, user, gid, await readJson(request)));
       if (method === 'DELETE') return json(await deleteGroup(env.DB, user, gid));
+    } else if (sub === 'ping') {
+      if (x === null && !act && method === 'POST') return json(await pingGroup(env.DB, user, gid, await readJson(request)), 201);
     } else if (sub === 'members') {
       if (x === null && !act && method === 'POST') return json(await addMember(env.DB, user, gid, await readJson(request)), 201);
       if (x !== null && !act && method === 'DELETE') return json(await removeMember(env.DB, user, gid, x));

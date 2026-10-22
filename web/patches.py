@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'3.1.0',title:{en:'Kobel 3.1.0: a better question experience',de:'Kobel 3.1.0: bessere Fragen'},body:{\n  en:'Question experience update. New: every question now moves (smooth slide-ins, answer feedback, particles), a minimal Bundesliga-style animated background, a combo counter with milestones (Hattrick, On fire, Unstoppable...), a rebuilt letter game (letter slots, tap tiles to place or remove, hints, forgiving first mistake, keyboard support) and the same slots for duels, du/Sie/ihr and er/sie/es hints so formal and informal sentences never look alike, new question types (du, Sie or ihr?, odd one out, find the mistake, translate the sentence), repeated sentences change small details (country, name, job, number), new logo animations and fresh sound effects.',\n  de:'Update für die Fragen. Neu: jede Frage bewegt sich (weiche Übergänge, Antwort-Feedback, Partikel), ein minimalistischer animierter Hintergrund im Bundesliga-Stil, ein Serienzähler mit Meilensteinen (Hattrick, On fire, Unstoppable...), ein neues Buchstabenspiel (Felder, Buchstaben antippen, Tipps, verzeihender erster Fehler, Tastatur), dieselben Felder für Duelle, Hinweise zu du/Sie/ihr und er/sie/es, damit formelle und informelle Sätze nie gleich aussehen, neue Fragetypen (du, Sie oder ihr?, Was passt nicht?, Finde den Fehler, Satz übersetzen), Wiederholungen ändern kleine Details (Land, Name, Beruf, Zahl), neue Logo-Animationen und neue Soundeffekte.'}};\n"
+_CL = "const CHANGELOG={v:'3.2.0',title:{en:'Kobel 3.2.0: games, new settings, nudges',de:'Kobel 3.2.0: Spiele, neue Einstellungen, Anstupser'},body:{\n  en:'Game update. Typing exercises are gone: every old typed question is now a tile game (letter crumble with decoy letters, listen and spell, build the sentence), and the streak Play-Off is tile-based too. New games in Paths and Minigames: Word search, Word snake, Missing letters, Memory and Bubble pop. Squad moved into Settings, and Settings and Profile are redesigned. Study groups can send a nudge to their members, streak reminders now come twice (evening and last call), and the screen no longer flickers when it refreshes in the background.',\n  de:'Spiele-Update. Tippen ist weg: jede frühere Tippfrage ist jetzt ein Kachelspiel (Buchstabensalat mit Zusatzbuchstaben, Hören und buchstabieren, Satz bauen), auch das Serien-Play-off. Neue Spiele in Pfad und Minispielen: Wortsuche, Wortschlange, Fehlende Buchstaben, Memory und Blasenjagd. Der Kader ist jetzt in den Einstellungen, Einstellungen und Profil sind neu gestaltet. Lerngruppen können ihre Mitglieder anstupsen, Serien-Erinnerungen kommen zweimal (Abend und letzter Aufruf), und der Bildschirm flackert beim Auffrischen im Hintergrund nicht mehr.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.1.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.2.0';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -106,9 +106,36 @@ if "{sfx,qvKind," not in src:
 src = sub(src, "function addParsed(p,lo){\n  let a=0,u=0,ga=0,gu=0,ra=0;", "function addParsed(p,lo){const r=addParsed0(p,lo);try{S.cards.forEach(regFix)}catch(e){}return r}\nfunction addParsed0(p,lo){\n  let a=0,u=0,ga=0,gu=0,ra=0;")
 src = src.replace("qvKind,qvKind,", "qvKind,")
 
-src = src.replace("const APP_VER='3.0.0';", "const APP_VER='3.1.0';")
+src = src.replace("const APP_VER='3.0.0';", "const APP_VER='3.2.0';")
 
 # ---- 3.1.0: only real nouns in der/die/das questions ----
 src = src.replace("if(id==='dash')pool=pool.filter(c=>c.art);", "if(id==='dash')pool=pool.filter(c=>c.art&&pathNoun(c));")
 src = src.replace("for(const c of all.filter(c=>c.art)){if(out.length>=DECK_N)", "for(const c of all.filter(c=>c.art&&pathNoun(c))){if(out.length>=DECK_N)")
 src = src.replace("for(const c of all.filter(c=>c.art)){if(out.length>=DUEL_N)", "for(const c of all.filter(c=>c.art&&pathNoun(c))){if(out.length>=DUEL_N)")
+
+# ---- 3.2.0: new arcade games (no typing) ----
+src = sub(src, "  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>",
+ "  search:IC('<rect x=\"3.5\" y=\"3.5\" width=\"17\" height=\"17\" rx=\"1.5\"/><path d=\"M7 8h5M7 12h10M7 16h6\" stroke-width=\"1.6\"/>'),\n  snake:IC('<path d=\"M3 15c3-8 5 6 8-2s5 6 8-2\" stroke-width=\"1.8\"/><path d=\"M13 5l2 4M17 4l1 5\" stroke-width=\"1.6\"/>'),\n  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>")
+src = sub(src, "  scramble:{n:'Aufstellung',",
+ "  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},\n  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},\n  scramble:{n:'Aufstellung',")
+src = sub(src, "    case'gap':return poolG(lesson).length>=3?null:'Needs 3+ grammar items';",
+ "    case'gap':return poolG(lesson).length>=3?null:'Needs 3+ grammar items';\n    case'search':return w.filter(gmWord).length>=5?null:'Needs 5+ single words';\n    case'snake':return w.filter(gmWord).length>=3?null:'Needs 3+ single words';")
+src = sub(src, "  else if(id==='echo')items=shuffle(words).slice(0,8).map(c=>({cid:c.id,kind:'listen'}));",
+ "  else if(id==='echo')items=shuffle(words).slice(0,8).map(c=>({cid:c.id,kind:'listen'}));\n  else if(id==='search'){const p=shuffle(words.filter(gmWord));for(let r=0;r<3;r++){const g=p.slice(r*4,r*4+4);if(g.length>=3)items.push({kind:'wsearch',cids:g.map(c=>c.id)})}}\n  else if(id==='snake'){const p=shuffle(words.filter(gmWord));for(let r=0;r<6;r++){const g=[];for(let k=0;k<3;k++)if(p.length)g.push(p[(r*3+k)%p.length]);if(g.length>=2)items.push({kind:'snake',cids:g.map(c=>c.id)})}}")
+src = src.replace("tag:'Listen, then spell what you hear.',how:'Eight words. Umlauts and ß count, but tiny typos are forgiven.'","tag:'Listen, then spell what you hear.',how:'Eight words. Tap the letters you hear, some are extra.'")
+
+# ---- 3.2.0: Squad moves into Settings, new Profile and Settings ----
+if "function vLib0(){" not in src:
+    src = src.replace("function vLib(){", "function vLib0(){", 1)
+src = src.replace("['arcade',tx('Training','Training')],['library',tx('Squad','Kader')],['stats'", "['arcade',tx('Training','Training')],['stats'")
+src = sub(src, "  ...PO_ACTIONS,\n", "  ...PO_ACTIONS,\n  ...SET3_ACTIONS,\n")
+
+# ---- 3.2.0: memory, bubble pop and missing-letters as Minigames ----
+src = sub(src, "  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>",
+ "  memo:IC('<rect x=\"3.5\" y=\"4\" width=\"7\" height=\"7.5\" rx=\"1\"/><rect x=\"13.5\" y=\"4\" width=\"7\" height=\"7.5\" rx=\"1\"/><rect x=\"3.5\" y=\"13\" width=\"7\" height=\"7.5\" rx=\"1\"/><path d=\"M15.5 17.2l2 2 3-3.6\" stroke-width=\"1.6\"/>'),\n  bubble:IC('<circle cx=\"9\" cy=\"14\" r=\"5.5\"/><circle cx=\"17\" cy=\"7\" r=\"3.2\"/><path d=\"M6.5 12.2a3 3 0 0 1 2-1.6\" stroke-width=\"1.4\"/>'),\n  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>")
+src = sub(src, "  scramble:{n:'Aufstellung',",
+ "  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},\n  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},\n  scramble:{n:'Aufstellung',")
+src = sub(src, "    case'search':return w.filter(gmWord).length>=5?null:'Needs 5+ single words';",
+ "    case'search':return w.filter(gmWord).length>=5?null:'Needs 5+ single words';\n    case'memo':return w.length>=6?null:'Needs 6+ words';\n    case'bubble':return w.length>=6?null:'Needs 6+ words';")
+src = sub(src, "  else if(id==='search'){const p=shuffle(words.filter(gmWord));",
+ "  else if(id==='memo'){const p=shuffle(words.filter(c=>String(c.de).length<=18));for(let r=0;r<3;r++){const g=p.slice(r*6,r*6+6);if(g.length>=4)items.push({kind:'memo',cids:g.map(c=>c.id)})}}\n  else if(id==='bubble'){const p=shuffle(words);for(let r=0;r<2;r++){const g=p.slice(r*6,r*6+6);if(g.length>=3)items.push({kind:'bubble',cids:g.map(c=>c.id)})}}\n  else if(id==='search'){const p=shuffle(words.filter(gmWord));")

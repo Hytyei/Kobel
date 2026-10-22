@@ -32,6 +32,16 @@ async def main():
         await pg.click('#gp-go'); await pg.wait_for_timeout(900)
         await pg.screenshot(path='/tmp/claude-0/s_group.png')
         print('group open:',await pg.evaluate("!!document.querySelector('#gp')&&document.querySelector('#gp .dl-t b').textContent"))
+        # nudge the group
+        await pg.evaluate("document.querySelector('[data-a=gpnudge]').click()"); await pg.wait_for_timeout(500)
+        await pg.screenshot(path='/tmp/claude-0/s_nudge.png')
+        await pg.evaluate("document.querySelector('[data-a=gpnudgego][data-kind=practise]').click()"); await pg.wait_for_timeout(900)
+        print('nudge sheet closed:',await pg.evaluate("!document.querySelector('.nd-list')"))
+        al=call(fr['code'],'GET','/v1/alerts?since=0')['alerts']
+        print('friend sees ping:',[ (a['type'],a.get('kind'),a.get('name')) for a in al if a['type']=='group_ping'])
+        await pg.evaluate("document.querySelector('[data-a=gpnudge]').click()"); await pg.wait_for_timeout(400)
+        await pg.evaluate("document.querySelector('[data-a=gpnudgego][data-kind=round]').click()"); await pg.wait_for_timeout(700)
+        print('cooldown msg:',await pg.evaluate("document.querySelector('#nd-e')&&document.querySelector('#nd-e').textContent"))
         # start a round and answer 9 with first option
         await pg.evaluate("document.querySelector('[data-a=gpround]').click()"); await pg.wait_for_timeout(200)
         await pg.evaluate("document.querySelector('[data-a=gpgo]').click()"); await pg.wait_for_timeout(1200)

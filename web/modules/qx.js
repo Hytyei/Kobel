@@ -106,12 +106,12 @@ function resultScreen(cfg){
    forgiven (right letters turn green and stay), a hint locks the next correct letter, a correct word submits itself. */
 const QX_ICO={hint:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>',clear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>'};
 function qxBuild(it,o){
-  const U=o.units,n=U.length,sol=o.sol||U,word=!!o.word,ts=word?0:(n<=6?54:n<=8?44:n<=10?34:n<=12?29:26);
+  const U=o.units,sol=o.sol||U,n=sol.length,m=U.length,word=!!o.word,ts=word?0:(m<=6?54:m<=8?44:m<=10?34:m<=12?29:26);
   let order=U.map((_,i)=>i),tries=0;
-  do{order=shuffle(order.slice());tries++}while(n>1&&order.every((v,i)=>U[v]===sol[i])&&tries<8);
+  do{order=shuffle(order.slice());tries++}while(n>1&&m===n&&order.every((v,i)=>U[v]===sol[i])&&tries<8);
   const T=U.map((u,i)=>({id:i,u,slot:-1,lock:false})),slots=Array(n).fill(null);
   let hints=0,attempts=0,done=false,busy=false;
-  setMain(`${o.head}<div class="qx-b ${word?'word':''}" style="--ts:${ts}px" id="qxb"><div class="qx-slots" id="qxs">${U.map((_,k)=>`<div class="qx-slot" data-k="${k}"></div>`).join('')}</div><div class="qx-meter" id="qxm"></div>
+  setMain(`${o.head}<div class="qx-b ${word?'word':''}" style="--ts:${ts}px" id="qxb"><div class="qx-slots" id="qxs">${sol.map((_,k)=>`<div class="qx-slot" data-k="${k}"></div>`).join('')}</div><div class="qx-meter" id="qxm"></div>
     <div class="qx-bank">${order.map(id=>`<div class="qx-cell" data-id="${id}"></div>`).join('')}</div>
     <div class="qx-acts">${o.hint?`<button type="button" id="qxh">${QX_ICO.hint}${tx('Hint','Tipp')}</button>`:''}<button type="button" id="qxc">${QX_ICO.clear}${tx('Reset','Neu')}</button></div><div class="qx-msg" id="qxg"></div></div>`);
   setFoot(`<div class="row2"><button class="btn ghost" id="skp" style="flex:none;width:34%">${tx('Skip','Weiter')}</button><button class="btn" id="chk" disabled>${tx('Check','Prüfen')}</button></div>`);

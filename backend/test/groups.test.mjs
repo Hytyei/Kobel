@@ -111,3 +111,36 @@ test('group rounds: hidden results, ordered answers, table and alerts', async ()
   assert.equal((await call('GET', '/v1/alerts?since=abc', { code: A.code })).status, 400);
   assert.equal((await call('GET', '/v1/alerts')).status, 401);
 });
+
+test('group ping: members get a notification, strangers cannot ping, cooldown and validation hold', async () => {
+  const { db, addUser, call, befriend } = setup();
+  const A = addUser('Alice'), B = addUser('Bob'), C = addUser('Cleo');
+  await befriend(A, B);
+  const g = (await call('POST', '/v1/groups', { code: A.code, body: { name: 'Study Crew' } })).json.group;
+  const gid = g.id;
+  // alone in the group: nobody to ping
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'practise' } })).status, 409);
+  assert.equal((await call('POST', `/v1/groups/${gid}/members`, { code: A.code, body: { user: B.id } })).status, 201);
+  // validation
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'spam' } })).status, 400);
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'custom', text: '' } })).status, 400);
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'custom', text: 'see https://evil.example' } })).status, 400);
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'custom', text: 'x'.repeat(61) } })).status, 400);
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: C.code, body: { kind: 'practise' } })).status, 404, 'not a member');
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { body: { kind: 'practise' } })).status, 401);
+  // a real ping
+  const ok = await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'custom', text: '  Quick <b>round</b> tonight?  ' } });
+  assert.equal(ok.status, 201); assert.equal(ok.json.sent, 1);
+  const al = (await call('GET', '/v1/alerts?since=0', { code: B.code })).json.alerts.filter((a) => a.type === 'group_ping');
+  assert.equal(al.length, 1);
+  assert.equal(al[0].name, 'Alice'); assert.equal(al[0].groupName, 'Study Crew'); assert.equal(al[0].kind, 'custom');
+  assert.equal(al[0].text, 'Quick b round /b tonight?', 'angle brackets are stripped');
+  assert.equal((await call('GET', '/v1/alerts?since=0', { code: A.code })).json.alerts.filter((a) => a.type === 'group_ping').length, 0, 'the sender gets nothing');
+  assert.equal((await call('GET', '/v1/alerts?since=0', { code: C.code })).json.alerts.filter((a) => a.type === 'group_ping').length, 0, 'outsiders get nothing');
+  // cooldown
+  const again = await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'practise' } });
+  assert.equal(again.status, 429); assert.equal(again.json.error.code, 'ping_cooldown');
+  // after the cooldown a preset works; the daily limit is 5
+  db.sqlite.prepare('UPDATE group_pings SET created_at = created_at - 3600000').run();
+  assert.equal((await call('POST', `/v1/groups/${gid}/ping`, { code: A.code, body: { kind: 'streak' } })).status, 201);
+});

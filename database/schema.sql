@@ -174,3 +174,14 @@ CREATE TABLE group_plays (
   PRIMARY KEY (game_id, user_id)
 );
 CREATE INDEX idx_group_plays_user ON group_plays (user_id, finished_at DESC);
+
+-- 0006: manual pings inside a study group
+CREATE TABLE group_pings (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  group_id   INTEGER NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+  sender     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind       TEXT    NOT NULL CHECK (kind IN ('practise', 'round', 'streak', 'custom')),
+  text       TEXT    NOT NULL DEFAULT '',
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX idx_group_pings_group ON group_pings (group_id, created_at DESC);

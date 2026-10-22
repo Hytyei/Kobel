@@ -300,3 +300,29 @@ export async function answerRound(db, user, groupId, gameId, body, now = Date.no
   const view = (await getRound(db, user, groupId, gameId, now)).round;
   return { correct: s.correct, points: s.points, goals: total, answer: item.t === 'mc' ? item.o[item.a] : item.a, round: view };
 }
+
+/** A manual notification to the other members of a group: a preset message or a short custom one. */
+export const PING_KINDS = ['practise', 'round', 'streak', 'custom'];
+export const PING_COOLDOWN_MS = 10 * 60000;
+const PINGS_PER_DAY = 5;
+export async function pingGroup(db, user, id, body, now = Date.now()) {
+  const g = await loadGroup(db, user, id);
+  if (!body || typeof body !== 'object' || Array.isArray(body)) throw bad('Body must be a JSON object.');
+  if (!PING_KINDS.includes(body.kind)) throw bad(`kind must be one of ${PING_KINDS.join(', ')}.`, 'kind');
+  let text = '';
+  if (body.kind === 'custom') {
+    text = typeof body.text === 'string' ? body.text.replace(/[\u0000-\u001f\u007f<>]/g, ' ').trim().replace(/\s+/g, ' ') : '';
+    if (text.length < 1 || text.length > 60) throw bad('text: 1 to 60 characters.', 'text');
+    if (/https?:|www\./i.test(text)) throw bad('text must not contain links.', 'text');
+  }
+  const mem = await members(db, g.id);
+  if (mem.length < 2) throw new HttpError(409, 'group_too_small', 'Add at least one friend before you ping the group.');
+  const last = await db.prepare('SELECT MAX(created_at) AS t FROM group_pings WHERE group_id = ? AND sender = ?').bind(g.id, user.id).first();
+  if (last && last.t && now - last.t < PING_COOLDOWN_MS) {
+    throw new HttpError(429, 'ping_cooldown', 'You pinged this group a moment ago. Wait a few minutes.');
+  }
+  if (!(await take(db, 'gp:' + user.id, dayKey(now), PINGS_PER_DAY))) throw new HttpError(429, 'too_many_pings', 'Too many pings today.');
+  await db.prepare('DELETE FROM group_pings WHERE group_id = ? AND created_at < ?').bind(g.id, now - 7 * 86400000).run();
+  await db.prepare('INSERT INTO group_pings (group_id, sender, kind, text, created_at) VALUES (?, ?, ?, ?, ?)').bind(g.id, user.id, body.kind, text, now).run();
+  return { ok: true, sent: mem.length - 1, next_at: now + PING_COOLDOWN_MS };
+}

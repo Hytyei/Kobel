@@ -212,9 +212,16 @@ Starts a round. Body `{ "game": "sprint", "deck": [ ...9 questions... ] }`. A ro
 ### GET /v1/groups/{id}/games/{gid}, POST .../start, POST .../answer
 Same shape as duels (`i`, `v`; response includes `goals`).
 
+### POST /v1/groups/{id}/ping (version 3.2.0, migration 0006)
+Any member sends a notification to the other members ("time to practise"). Auth: Bearer access code, members only.
+* **Body:** `{ "kind": "practise" | "round" | "streak" | "custom", "text": "..." }`. `text` is only used (and required) for `custom`: 1 to 60 characters, `<` `>` and control characters are removed, links are refused.
+* **Response 201:** `{ "ok": true, "sent": 2, "next_at": 1760000600000 }` (`sent` = other members).
+* **Errors:** `400 invalid_request` (kind/text), `401`, `404 not_found` (not a member), `409 group_too_small`, `429 ping_cooldown` (one ping per group every 10 minutes per member), `429 too_many_pings` (5 a day).
+* Members receive it as an alert of type `group_ping` (`{ group, groupName, name, kind, text }`); the sender does not.
+
 ## Alerts (version 2.5.0)
 
 ### GET /v1/alerts?since=<ms>
 The feed the phone polls for notifications. `since` is clamped to the last 7 days, at most 50 items are returned, and only your own data appears.
 * **Response 200:** `{ "alerts": [ { id, type, ts, ... } ], "now": 1760000000000, "since": 1759990000000 }`
-* **Types:** `friend` (someone added you), `duel_invite`, `duel_turn`, `duel_result`, `group_added`, `group_round`, `group_result`. The `id` is stable so the phone can show each alert once.
+* **Types:** `friend` (someone added you), `duel_invite`, `duel_turn`, `duel_result`, `group_added`, `group_round`, `group_result`, `group_ping` (3.2.0). The `id` is stable so the phone can show each alert once.

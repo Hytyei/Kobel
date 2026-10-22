@@ -18,7 +18,7 @@ function streakAlertHtml(){
   const last=r.kind==='last';
   return `<div class="b3-alert"><span class="fl">${FLAME(34)}</span><div style="flex:1;min-width:0"><b>${last?tx('Streak on the edge','Serie am Abgrund'):tx('Streak in danger','Serie in Gefahr')} · ${r.streak}</b><small>${last?tx('You missed a day. Win the Play-Off or lose it.','Du hast einen Tag verpasst. Gewinne das Play-Off oder verliere sie.'):tx('Ends in','Endet in')+' '+fmtLeft(r.left)+'. '+tx('Practise, or take the Play-Off.','Übe, oder spiele das Play-Off.')}</small></div><button class="b3-wb" data-a="poopen" style="flex:none"><span>Play-Off</span></button></div>`;
 }
-/* ---- build the question: always typed, never multiple choice ---- */
+/* ---- build the question: always built from tiles (with trap tiles), never multiple choice ---- */
 const poScore=c=>((c.bad||0)+(c.srs?c.srs.lapses:0)*2+1)/((c.ok||0)+1)+Math.random()*.8;
 function poBuild(peek){
   const known=S.cards.filter(c=>!c.susp&&c.srs&&c.srs.seen>0);
@@ -35,24 +35,19 @@ function poBuild(peek){
   const wt={sent:.45,noun:.3,gap:.25},sum=avail.reduce((a,k)=>a+wt[k],0);let r=Math.random()*sum,type=avail[0];
   for(const k of avail){r-=wt[k];if(r<=0){type=k;break}}
   const c=pools[type].sort((a,b)=>poScore(b)-poScore(a)).slice(0,8)[rnd(Math.min(8,pools[type].length))];
-  if(type==='sent'){const s=sentenceOf(c),words=s.de.split(/\s+/).length;
-    return{type,id:c.id,limit:100,label:tx('Translate the sentence into German','Übersetze den Satz ins Deutsche'),prompt:s.en,answer:s.de,tol:words>=8?1:0,hint:tx('Spelling counts. Umlauts count. One typo is forgiven in long sentences.','Rechtschreibung zählt. Umlaute zählen. Bei langen Sätzen ist ein Tippfehler erlaubt.')}}
-  if(type==='noun'){const pl=pluralOf(c);
-    return{type,id:c.id,limit:45,label:tx('Article, noun and plural','Artikel, Nomen und Plural'),prompt:c.en,answer:`${c.art} ${c.de}, die ${pl}`,parts:[`${c.art} ${c.de}`,`die ${pl}`],hint:tx('Write it like this: der Tisch, die Tische','Schreibe so: der Tisch, die Tische')}}
-  const z=gz(c);
-  return{type:'gap',id:c.id,limit:35,label:tx('Fill the gap, no options','Lücke füllen, keine Auswahl'),prompt:`${z.pre}____${z.post}`,en:c.en,answer:z.ans,hint:tx('Type only the missing word.','Tippe nur das fehlende Wort.')};
+  if(type==='sent'){
+    const s=sentenceOf(c),W=s.de.split(/\s+/),have=new Set(W.map(x=>x.toLowerCase().replace(/[.,!?]/g,'')));
+    const extra=shuffle(known.map(k=>sentenceOf(k)).filter(Boolean).flatMap(x=>x.de.split(/\s+/)).filter(w=>w.length>=3&&!have.has(w.toLowerCase().replace(/[.,!?]/g,''))&&!/[.!?]$/.test(w))).filter((w,i,a)=>a.indexOf(w)===i).slice(0,3);
+    return{type,id:c.id,limit:100,label:tx('Build the sentence in German','Baue den Satz auf Deutsch'),prompt:s.en,answer:s.de,board:{units:shuffle(W.concat(extra)),sol:W,word:true},hint:tx('Tap the words in the right order. Three of the words do not belong.','Tippe die Wörter in der richtigen Reihenfolge. Drei Wörter gehören nicht dazu.')}}
+  if(type==='noun'){const pl=pluralOf(c),U=[...pl];
+    return{type,id:c.id,limit:45,label:tx('Article and plural','Artikel und Plural'),prompt:c.en,answer:`${c.art} ${c.de}, die ${pl}`,art:c.art,board:{units:U.concat(gmDecoys(pl,3)),sol:U},hint:tx('Pick the article of the singular noun, then spell the plural. Some letters are extra.','Wähle den Artikel des Singulars und buchstabiere dann den Plural. Manche Buchstaben sind zu viel.')}}
+  const z=gz(c),one=!/\s/.test(z.ans.trim()),U=one?[...z.ans]:z.ans.trim().split(/\s+/);
+  return{type:'gap',id:c.id,limit:35,label:tx('Fill the gap, hard mode','Lücke füllen, schwer'),prompt:`${z.pre}____${z.post}`,en:c.en,answer:z.ans,board:one?{units:U.concat(gmDecoys(z.ans,3)),sol:U}:{units:U.concat(['nicht','der']).filter((w,i,a)=>a.indexOf(w)===i),sol:U,word:true},hint:tx('Spell the missing word. Some letters are extra.','Buchstabiere das fehlende Wort. Manche Buchstaben sind zu viel.')};
 }
 const poN=x=>norm(String(x).replace(/(\w)['’]s\b/g,'$1 es'));
-function poCheck(q,raw){
-  const a=poN(raw),good=poN(q.answer);
-  if(q.type==='noun'){
-    const bits=String(raw).split(/[,;/|]|\s[-–]\s/).map(x=>norm(x)).filter(Boolean);
-    if(bits.length<2)return false;
-    const p1=norm(q.parts[0]),p2=norm(q.parts[1]),p2b=p2.replace(/^die /,'');
-    return bits[0]===p1&&(bits[1]===p2||bits[1]===p2b);
-  }
-  if(q.type==='sent')return lev(a,good)<=q.tol;
-  return a===good;
+function poCheck(q,got,art){
+  const ok=got.length===q.board.sol.length&&got.every((x,i)=>x===q.board.sol[i]);
+  return q.type==='noun'?ok&&art===q.art:ok;
 }
 /* ---- UI ---- */
 function poClose(){clearInterval(PO.timer);const e=$('#po');if(e)e.remove();PO.q=null}
@@ -64,7 +59,7 @@ function poOpen(){
   el.innerHTML=`<div class="po-top"><button class="x" data-a="poquit" aria-label="Close">✕</button><div style="flex:1;font:800 15px var(--fd);letter-spacing:.14em;text-transform:uppercase">${last?tx('Relegation play-off','Relegations-Play-off'):tx('Streak play-off','Serien-Play-off')}</div></div>
   <div class="po-main"><span class="po-tag">${r.streak} ${tx('day streak at stake','Tage Serie auf dem Spiel')}</span>
   <div class="po-big">${tx('One question.<br>One chance.','Eine Frage.<br>Eine Chance.')}</div>
-  <div class="po-rule"><b>${tx('Hard','Schwer')}</b><span>${tx('Taken from the words and sentences you miss most. You must type the answer.','Aus den Wörtern und Sätzen, bei denen du die meisten Fehler machst. Du musst die Antwort tippen.')}</span><b>${tx('No help','Keine Hilfe')}</b><span>${tx('No options, no hints, no hear-it button, a running clock.','Keine Auswahl, keine Tipps, kein Vorlesen, eine laufende Uhr.')}</span><b>${tx('Win','Sieg')}</b><span>${last?tx('Your streak is kept and continues today.','Deine Serie bleibt erhalten und läuft heute weiter.'):tx('Today counts as practised. The streak lives.','Heute zählt als geübt. Die Serie lebt.')}</span><b>${tx('Lose','Niederlage')}</b><span>${tx('The streak goes. No second try today.','Die Serie ist weg. Heute kein zweiter Versuch.')}</span></div></div>
+  <div class="po-rule"><b>${tx('Hard','Schwer')}</b><span>${tx('Taken from the words and sentences you miss most. Build the answer from tiles, and some tiles are traps.','Aus den Wörtern und Sätzen, bei denen du die meisten Fehler machst. Baue die Antwort aus Kacheln, manche sind Fallen.')}</span><b>${tx('No help','Keine Hilfe')}</b><span>${tx('No options, no hints, no hear-it button, a running clock.','Keine Auswahl, keine Tipps, kein Vorlesen, eine laufende Uhr.')}</span><b>${tx('Win','Sieg')}</b><span>${last?tx('Your streak is kept and continues today.','Deine Serie bleibt erhalten und läuft heute weiter.'):tx('Today counts as practised. The streak lives.','Heute zählt als geübt. Die Serie lebt.')}</span><b>${tx('Lose','Niederlage')}</b><span>${tx('The streak goes. No second try today.','Die Serie ist weg. Heute kein zweiter Versuch.')}</span></div></div>
   <div class="po-foot"><button class="btn" id="po-go" style="background:var(--red)">${tx('Take the Play-Off','Play-Off spielen')} →</button><button class="btn ghost" data-a="poquit" style="margin-top:10px">${tx('Not now, I will practise','Nicht jetzt, ich übe')}</button></div>`;
   document.body.appendChild(el);
   $('#po-go').onclick=()=>poStart(r);
@@ -77,15 +72,28 @@ function poStart(r){
   const prompt=q.type==='gap'?`<div class="po-q">${esc(q.prompt).replace('____','<span style="border-bottom:4px solid var(--red);padding:0 24px"></span>')}</div><div class="po-en">${esc(q.en)}</div>`:`<div class="po-en" style="font-size:26px;margin-top:20px">${esc(q.prompt)}</div>`;
   el.innerHTML=`<div class="po-top"><button class="x" data-a="poforfeit" aria-label="Give up">✕</button><div class="po-clock"><i id="po-c"></i></div><div class="po-t" id="po-t">${q.limit}</div></div>
   <div class="po-main"><span class="po-tag">${tx('Play-off','Play-off')} · ${PO.risk.streak} ${tx('days','Tage')}</span><div class="po-hint" style="margin-top:14px">${esc(q.label)}</div>${prompt}
-  <input class="po-in" id="ans" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="…"><div class="po-uml">${['ä','ö','ü','ß','Ä','Ö','Ü'].map(ch=>`<button class="uk" data-ch="${ch}">${ch}</button>`).join('')}</div>
+  ${q.type==='noun'?`<div class="po-art" id="poa">${['der','die','das'].map(x=>`<button type="button" data-a2="${x}">${x}</button>`).join('')}</div>`:''}
+  <div class="po-slots" id="pos"></div><div class="po-bank" id="pob"></div><div class="po-act"><button type="button" id="por" class="uk">${tx('Reset','Neu')}</button></div>
   <div class="po-hint" style="margin-top:12px">${esc(q.hint)}</div></div>
   <div class="po-foot"><button class="btn" id="po-ok" style="background:#fff;color:#0B141B">${tx('Lock in answer','Antwort abgeben')}</button></div>`;
   PO.t0=Date.now();
   const tick=()=>{const left=Math.max(0,q.limit-(Date.now()-PO.t0)/1000);const c=$('#po-c'),t=$('#po-t');if(c)c.style.width=(left/q.limit*100)+'%';if(t)t.textContent=Math.ceil(left);if(left<=8&&c)c.style.background='#fff';if(left<=0){clearInterval(PO.timer);poResolve(false,'')}};
   clearInterval(PO.timer);PO.timer=setInterval(tick,250);
-  const inp=$('#ans');setTimeout(()=>inp&&inp.focus(),200);
-  $('#po-ok').onclick=()=>{const v=inp.value.trim();if(!v){inp.classList.add('bad');setTimeout(()=>inp.classList.remove('bad'),400);return}poResolve(poCheck(q,v),v)};
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')$('#po-ok').click()});
+  const B=q.board,n=B.sol.length,T=B.units.map((u,i)=>({id:i,u,slot:-1})),slots=Array(n).fill(null);let art='';
+  const draw=()=>{
+    $('#pos').innerHTML=slots.map((id,k)=>`<div class="po-slot ${id!==null?'f':''} ${B.word?'w':''}" data-k="${k}">${id!==null?`<button type="button" class="po-t2" data-id="${id}">${esc(T[id].u)}</button>`:''}</div>`).join('');
+    $('#pob').innerHTML=T.map(t=>`<div class="po-cell ${B.word?'w':''}">${t.slot<0?`<button type="button" class="po-t2" data-id="${t.id}">${esc(t.u)}</button>`:''}</div>`).join('');
+    const full=slots.every(v=>v!==null)&&(q.type!=='noun'||art);const ok=$('#po-ok');ok.disabled=!full;ok.style.opacity=full?1:.45;
+  };
+  const tap=id=>{if(PO.done)return;const t=T[id];if(t.slot<0){const k=slots.indexOf(null);if(k<0)return;slots[k]=id;t.slot=k;sfx('slot',k)}else{slots[t.slot]=null;t.slot=-1;sfx('back')}vib(6);draw()};
+  el.addEventListener('click',e=>{const b=e.target.closest('.po-t2');if(b){tap(+b.dataset.id);return}const a=e.target.closest('[data-a2]');if(a){art=a.dataset.a2;el.querySelectorAll('[data-a2]').forEach(x=>x.classList.toggle('on',x===a));sfx('tick');draw()}});
+  $('#por').onclick=()=>{if(PO.done)return;slots.fill(null);T.forEach(t=>t.slot=-1);draw()};
+  $('#po-ok').onclick=()=>{
+    if(slots.some(v=>v===null))return;
+    const got=slots.map(id=>T[id].u),ok=poCheck(q,got,art);
+    poResolve(ok,(q.type==='noun'?art+' ':'')+(B.word?got.join(' '):got.join('')));
+  };
+  draw();
 }
 function poResolve(ok,raw){
   if(PO.done)return;PO.done=true;clearInterval(PO.timer);
