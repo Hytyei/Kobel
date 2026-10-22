@@ -1,15 +1,21 @@
 /* ───────── Lernpfad: a guided path from the first easy level to the hardest ─────────
    Every lesson of your notes becomes a unit. Its words are cut into chapters of up to 8 words; every chapter has
-   five levels that get harder: 1 meet the words, 2 recognise, 3 build (drag and drop, articles, plurals),
-   4 sentences, 5 chapter final (typing, listening, no options). Grammar items get their own chapters.
+   five levels that get harder: 1 discover, 2 recognise, 3 apply (games, articles, plurals),
+   4 sentences, 5 chapter test. Every unit ends with a review checkpoint that mixes in earlier units (see roadmap.js). Grammar items get their own chapters.
    A level opens when the one before it is passed. Passing = 60% right (the chapter final needs 80%).
    Stars: 3 = no mistakes, 2 = 85% or better, 1 = passed. */
 const PATH_LV=[
-  {en:'Meet the words',de:'Wörter kennenlernen',ic:'1'},
+  {en:'Discover',de:'Entdecken',ic:'1'},
   {en:'Recognise',de:'Erkennen',ic:'2'},
-  {en:'Build',de:'Zusammenbauen',ic:'3'},
-  {en:'Sentences',de:'Satzbau',ic:'4'},
-  {en:'Chapter final',de:'Kapitelfinale',ic:'★'}
+  {en:'Apply',de:'Anwenden',ic:'3'},
+  {en:'Sentences',de:'Sätze',ic:'4'},
+  {en:'Chapter test',de:'Kapiteltest',ic:'★'}
+];
+const PATH_STAGES=[
+  {en:'Stage 1 · Arrive',de:'Stufe 1 · Ankommen',sub:{en:'Short words, pictures of meaning, no writing',de:'Kurze Wörter, Bedeutung erkennen, kein Schreiben'}},
+  {en:'Stage 2 · Everyday German',de:'Stufe 2 · Alltag',sub:{en:'Articles, plurals, small sentences',de:'Artikel, Plural, kleine Sätze'}},
+  {en:'Stage 3 · Build up',de:'Stufe 3 · Ausbauen',sub:{en:'Word order, gaps and polite forms',de:'Wortstellung, Lücken und Höflichkeit'}},
+  {en:'Stage 4 · Confident',de:'Stufe 4 · Sicher werden',sub:{en:'Mixed review, longer sentences, test pace',de:'Gemischte Wiederholung, längere Sätze, Testtempo'}}
 ];
 const PATH_CH=8;
 const PATH_SKIP=new Set(['Classroom & instructions']);
@@ -40,79 +46,26 @@ function pathNodes(){
       nodes.push({key:l.name+'#g'+(i/PATH_CH)+'#1',unit:ui,ch:ci,lv:1,kind:'g',ids:gs.slice(i,i+PATH_CH).map(c=>c.id),i:nodes.length});
       ch.to=nodes.length-1;u.chs.push(ch);
     }
+    if(chs.length){const ci=u.chs.length,allIds=chs.flat(),ch={ci,r:true,from:nodes.length};
+      nodes.push({key:l.name+'#r#1',unit:ui,ch:ci,lv:5,kind:'r',ids:allIds,i:nodes.length});ch.to=nodes.length-1;u.chs.push(ch)}
     u.to=nodes.length-1;if(u.chs.length)units.push(u);
   });
+  units.forEach((u,k)=>{u.stage=Math.min(4,1+Math.floor(k*4/Math.max(1,units.length)));for(let i=u.from;i<=u.to;i++)nodes[i].stage=u.stage});
   return{nodes,units};
 }
 function pathState(){
   const P=pst(),{nodes,units}=pathNodes();
   let skipIdx=0;if(P.skipTo){const k=nodes.findIndex(n=>n.key===P.skipTo);if(k>0)skipIdx=k}
-  const done=n=>(P.done[n.key]||0)>0||n.i<skipIdx;
+  let lastDone=-1;nodes.forEach(n=>{if(n.kind!=='r'&&(P.done[n.key]||0)>0)lastDone=n.i});
+  const done=n=>(P.done[n.key]||0)>0||n.i<skipIdx||(n.kind==='r'&&n.i<lastDone);
   let cur=nodes.findIndex(n=>!done(n));
   return{P,nodes,units,done,cur,all:cur<0};
 }
 const pathStars=(P,n)=>P.done[n.key]||0;
-function pathLabel(n){return n.kind==='g'?tx('Grammar','Grammatik'):tx(PATH_LV[n.lv-1].en,PATH_LV[n.lv-1].de)}
+function pathLabel(n){return n.kind==='g'?tx('Grammar','Grammatik'):n.kind==='r'?tx('Review checkpoint','Rückblick'):tx(PATH_LV[n.lv-1].en,PATH_LV[n.lv-1].de)}
 
 /* ---- what a level asks: items get harder from level 1 to 5 ---- */
 const pathNoun=c=>!!c.art&&/^[A-ZÄÖÜ][^\s.…]*$/.test(c.de.replace(/^(der|die|das)\s+/i,'').split('/')[0].trim());
-function pathBuild(n){
-  const ws=n.ids.map(byId).filter(c=>c&&act(c));
-  if(n.kind==='g')return shuffle(ws).map(c=>({cid:c.id,kind:'gcl'}));
-  const items=[],keep=new Set(),spk=canSpeak(),enough=WALL().length>=4,L=n.lv;
-  const A=(c,k)=>items.push({cid:c.id,kind:k});
-  const nouns=ws.filter(pathNoun),pl=ws.filter(c=>pluralOf(c)),cl=ws.filter(c=>clozeOf(c)),sn=ws.filter(c=>sentenceOf(c)),sc=ws.filter(scrOK);
-  if(L===1){
-    const fresh=ws.filter(c=>!c.srs.seen);
-    shuffle(fresh).forEach(c=>A(c,'intro'));
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc1':'tf'}));
-    ws.forEach(c=>body.push({cid:c.id,kind:'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===2){
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    shuffle(ws).slice(0,5).forEach(c=>body.push({cid:c.id,kind:spk&&enough?'hear':'tf'}));
-    shuffle(nouns).slice(0,4).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    items.push(...pathSpread(body));
-  }else if(L===3){
-    const body=[];
-    if(ws.length>=4)body.push({kind:'dmatch',cids:shuffle(ws).slice(0,6).map(c=>c.id)});
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    shuffle(pl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'plu'}));
-    shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    [...qvOddItems(n,ws,1),...qvRegItems(n,1)].forEach(x=>{body.push(x);keep.add(x)});
-    shuffle(ws).slice(0,Math.max(3,8-body.length)).forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===4){
-    const body=[];
-    shuffle(sn).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
-    shuffle(sc).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'scr'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    const have=new Set(body.map(b=>b.cid));
-    shuffle(ws.filter(c=>!have.has(c.id))).slice(0,Math.max(3,9-body.length)).forEach(c=>body.push({cid:c.id,kind:'type'}));
-    items.push(...pathSpread(body));
-  }else{
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:'type'}));
-    if(spk)shuffle(ws).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'listen'}));
-    shuffle(sn).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'tsen'};body.push(x);keep.add(x)});
-    shuffle(sn).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,1).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
-    shuffle(nouns).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    items.push(...pathSpread(body));
-  }
-  const intro=items.filter(i=>i.kind==='intro'),rest=items.filter(i=>i.kind!=='intro'),max=L===5?20:16;
-  /* trim to the size of the level, but never drop the special exercises */
-  for(let k=rest.length-1;k>=0&&rest.length>max;k--)if(!keep.has(rest[k]))rest.splice(k,1);
-  return intro.concat(rest.slice(0,max));
-}
 function pathSpread(a){
   const r=shuffle(a.slice());
   for(let i=1;i<r.length;i++){
@@ -132,11 +85,11 @@ function pathStart(i){
   openOverlay();next();
 }
 function finishPath(){
-  const P=pst(),total=ses.correct+ses.wrong,acc=total?ses.correct/total:1,need=ses.pathLv===5&&ses.pathKind==='w'?.8:.6;
+  const P=pst(),total=ses.correct+ses.wrong,acc=total?ses.correct/total:1,need=ses.pathKind==='r'?.75:ses.pathLv===5&&ses.pathKind==='w'?.8:.6;
   const pass=acc>=need,stars=pass?(ses.wrong===0?3:acc>=.85?2:1):0;
   const old=P.done[ses.pathKey]||0,first=old===0&&pass;
   if(pass&&stars>old)P.done[ses.pathKey]=stars;
-  const bonus=pass?(first?15+stars*5:5):0,fin=pass&&first&&ses.pathLv===5;
+  const bonus=pass?(first?15+stars*5:5):0,fin=pass&&first&&(ses.pathLv===5||ses.pathKind==='r');
   ses.xp+=10+bonus+(fin?25:0);
   const before=lvl(S.stats.xp),res=addXP(ses.xp,total),st=S.stats;
   st.sessions++;if(pass&&ses.wrong===0&&ses.items.length>=6)st.perfect++;st.maxCombo=Math.max(st.maxCombo,ses.maxCombo);
@@ -152,7 +105,7 @@ function finishPath(){
   if(end)extra+=noteCard('🏆',tx('You finished the whole path. New lessons will extend it.','Du hast den ganzen Pfad geschafft. Neue Lektionen verlängern ihn.'));
   if(!pass)extra+=noteCard('↻',tx(`You need ${Math.round(need*100)}% to pass. The words you missed come back sooner.`,`Zum Bestehen brauchst du ${Math.round(need*100)}%. Verpasste Wörter kommen früher wieder.`));
   extra+=extrasFor(res,got,lvl(st.xp)>before);
-  resultScreen({mood:pass?(stars>=2?'cheer':'happy'):'oops',title:pass?(stars===3?'Perfekt!':'Gut gemacht!'):'Noch nicht ganz',sub:`${esc(ses.pathKind==='g'?tx('Grammar','Grammatik'):tx(PATH_LV[ses.pathLv-1].en,PATH_LV[ses.pathLv-1].de))}`,stars:pass?stars:0,
+  resultScreen({mood:pass?(stars>=2?'cheer':'happy'):'oops',title:pass?(stars===3?'Perfekt!':'Gut gemacht!'):'Noch nicht ganz',sub:`${esc(pathLabel(cur))}`,stars:pass?stars:0,
     rows:[{v:0,id:'xpn',l:tx('points','Punkte'),c:'lantern'},{v:Math.round(acc*100)+'%',l:tx('accuracy','Genauigkeit'),c:'fern'},{v:Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0'),l:tx('time','Zeit'),c:'sky'}],
     count:{id:'xpn',to:ses.xp},extra,againLabel:pass&&nx?tx('Next level','Nächste Stufe'):pass?tx('Back to the path','Zurück zum Pfad'):tx('Try again','Nochmal'),
     again:()=>{closeSes();if(pass&&nx)pathStart(idx+1);else if(pass){tab='path';render()}else pathStart(idx)}});
@@ -165,8 +118,8 @@ function pathNodeHtml(st,n,pos){
   const P=st.P,s=pathStars(P,n),d=st.done(n),isCur=n.i===st.cur,locked=!d&&!isCur;
   const off=[0,-34,-48,-34,0,34,48,34][pos%8];
   const cls=d?'done':isCur?'cur':'lock';
-  const lab=n.kind==='g'?'G':PATH_LV[n.lv-1].ic;
-  return `<div class="pn-row" style="--off:${off}px"><button class="pn ${cls} ${n.lv===5&&n.kind==='w'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}">${isCur?`<span class="pn-go">${tx('START','LOS')}</span>`:''}<span class="pn-i">${locked?'🔒':d&&n.lv!==5?'✓':lab}</span>${d?`<span class="pn-s">${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span></span>`:''}</button></div>`;
+  const lab=n.kind==='g'?'G':n.kind==='r'?'↻':PATH_LV[n.lv-1].ic;
+  return `<div class="pn-row" style="--off:${off}px"><button class="pn ${cls} ${n.lv===5&&n.kind!=='g'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}">${isCur?`<span class="pn-go">${tx('START','LOS')}</span>`:''}<span class="pn-i">${locked?'🔒':d&&n.lv!==5?'✓':lab}</span>${d?`<span class="pn-s">${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span></span>`:''}</button></div>`;
 }
 function vPath(){
   const st=pathState(),{units,nodes}=st;
@@ -177,7 +130,9 @@ function vPath(){
   <p class="sub" style="margin-bottom:12px">${tx('Start easy, finish hard. Each level you pass opens the next one.','Leicht anfangen, schwer enden. Jede bestandene Stufe öffnet die nächste.')}</p>
   <div class="pbar"><i style="width:${Math.round(dn/total*100)}%"></i></div>`;
   if(curN)h+=`<button class="btn shine" style="margin:14px 0 4px" data-a="pathgo">${tx('Continue','Weiter')}: ${esc(units[curN.unit].name)} · ${esc(pathLabel(curN))}</button>`;
+  let lastStage=0;
   units.forEach(u=>{
+    if(u.stage!==lastStage){lastStage=u.stage;const S0=PATH_STAGES[u.stage-1];h+=`<div class="pstage"><b>${tx(S0.en,S0.de)}</b><span>${tx(S0.sub.en,S0.sub.de)}</span></div>`}
     const un=nodes.slice(u.from,u.to+1),ud=un.filter(n=>st.done(n)).length,complete=ud===un.length,isCur=u.ui===curUnit&&!st.all;
     const open=pathUi.open[u.name]!==undefined?pathUi.open[u.name]:isCur;
     const stars=un.reduce((a,n)=>a+pathStars(st.P,n),0);
@@ -186,7 +141,7 @@ function vPath(){
       h+='<div class="ptrack">';
       u.chs.forEach(ch=>{
         const cn=nodes.slice(ch.from,ch.to+1);
-        h+=`<div class="pch">${ch.g?tx('Grammar','Grammatik'):tx('Chapter','Kapitel')+' '+(ch.ci+1)}${ch.g?'':` · ${ch.ids.length} ${tx('words','Wörter')}`}</div>`;
+        h+=`<div class="pch">${ch.g?tx('Grammar','Grammatik'):ch.r?tx('Checkpoint · mixes in earlier units','Checkpoint · mit älteren Einheiten gemischt'):tx('Chapter','Kapitel')+' '+(ch.ci+1)}${ch.g||ch.r?'':` · ${ch.ids.length} ${tx('words','Wörter')}`}</div>`;
         cn.forEach((n,k)=>h+=pathNodeHtml(st,n,k));
       });
       h+='</div>';
@@ -203,7 +158,7 @@ function pathNodeSheet(i){
     2:tx('Pick the right translation, listen, choose articles.','Übersetzung wählen, zuhören, Artikel wählen.'),
     3:tx('Drag pairs together, sort nouns into der, die, das, plurals and gaps.','Paare zusammenziehen, Nomen in der, die, das sortieren, Plural und Lücken.'),
     4:tx('Drag word blocks into sentences, fill gaps, unscramble words.','Wortblöcke zu Sätzen ziehen, Lücken füllen, Wörter ordnen.'),
-    5:tx('No options: type the words, listen and write, build sentences. Needs 80%.','Keine Auswahl: Wörter tippen, hören und schreiben, Sätze bauen. Mindestens 80%.')}[n.lv];
+    5:n.kind==='r'?tx('Words and sentences from this unit mixed with older ones, so nothing fades. Needs 75%.','Wörter und Sätze dieser Einheit gemischt mit älteren, damit nichts verblasst. Mindestens 75%.'):tx('Everything from this chapter at test pace, with at most a little writing. Needs 80%.','Alles aus diesem Kapitel im Testtempo, höchstens ein bisschen Schreiben. Mindestens 80%.')}[n.lv];
   sheet(`<div class="kick">${esc(u.name)} · ${n.kind==='g'?tx('Grammar','Grammatik'):tx('Chapter','Kapitel')+' '+(n.ch+1)}</div><h3 style="font-size:30px">${esc(pathLabel(n))}</h3>
   <p class="sub" style="margin-top:6px">${n.kind==='g'?tx('Fill the gaps from your grammar notes.','Fülle die Lücken aus deinen Grammatiknotizen.'):body}</p>
   <div class="sub" style="margin:12px 0;font-size:14px">${names}</div>

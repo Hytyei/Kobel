@@ -206,3 +206,11 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * **Backend: this release needs it.** Group nudges use a new table. Apply migration `0006_group_pings.sql` to the remote D1 database and deploy the Worker (see the earlier sections for the exact commands). Migrations `0003` to `0005` must already be applied. Everything is additive; nothing existing is changed.
 * **Release:** tag `v3.2.0` (version code 30200), build with your **existing** release keystore, upload `kobelapp.apk`.
 * **Phone notifications:** the streak reminder now has two stages (17:00 and 21:00 onwards, once each per day) and understands group nudges. Android decides the exact poll time (about every 15 to 30 minutes), so a nudge may take a while to show on the phone; inside the open app it shows within about 30 seconds.
+
+## Version 3.3.0 (path roadmap, better answer options): release checklist (nothing here has been done for you)
+
+* **Backend:** unchanged. No new migrations or endpoints. Migrations `0003` to `0006` must already be applied if you want 3.2.0 features.
+* **Release:** tag `v3.3.0` (version code 30300), build with your **existing** release keystore, upload `kobelapp.apk`.
+* **Saved progress stays valid:** existing path nodes keep their keys. Each unit gains one new review checkpoint at its end; it counts as done automatically for units you have already passed.
+* **Check on a phone:** the stage banners on the Path tab, a checkpoint node, and a few multiple-choice questions (options should look alike).
+

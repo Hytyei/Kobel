@@ -597,6 +597,9 @@ html[data-skin="clean"] .tu,html[data-skin="clean"] .th-card{border-radius:14px}
 .dmt{font:700 18px var(--fb)}.dms{min-width:110px;min-height:40px;border-bottom:2px dashed var(--line);display:flex;justify-content:flex-end}
 .dmr .blk{font-size:20px;padding:6px 12px}
 .pn-s .o{opacity:.25}
+.pstage{margin:22px 2px 8px;padding:10px 14px;border-left:4px solid var(--lantern);background:var(--card,rgba(255,255,255,.04));border-radius:0 12px 12px 0;display:flex;flex-direction:column;gap:2px}
+.pstage b{font-family:var(--disp,inherit);font-size:17px;letter-spacing:.02em}
+.pstage span{font-size:13px;opacity:.7}
 /*@@end css-path*/
 /*@@css-fonts*/
 /* DFL Sans (official Bundesliga typeface). The font files are licensed and are NOT in the git repository:
@@ -2784,6 +2787,46 @@ const GICON={
   snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
   memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
   bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
+  search:IC('<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M7 8h5M7 12h10M7 16h6" stroke-width="1.6"/>'),
+  snake:IC('<path d="M3 15c3-8 5 6 8-2s5 6 8-2" stroke-width="1.8"/><path d="M13 5l2 4M17 4l1 5" stroke-width="1.6"/>'),
+  memo:IC('<rect x="3.5" y="4" width="7" height="7.5" rx="1"/><rect x="13.5" y="4" width="7" height="7.5" rx="1"/><rect x="3.5" y="13" width="7" height="7.5" rx="1"/><path d="M15.5 17.2l2 2 3-3.6" stroke-width="1.6"/>'),
+  bubble:IC('<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7" r="3.2"/><path d="M6.5 12.2a3 3 0 0 1 2-1.6" stroke-width="1.4"/>'),
   scramble:IC('<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M8 4v16M16 4v16M3 12h18M12 8v8" stroke-width="1.5"/>'),
   echo:IC('<path d="M5 14v-2a7 7 0 0 1 14 0v2"/><rect x="3" y="13" width="4" height="7" rx="1" fill="currentColor"/><rect x="17" y="13" width="4" height="7" rx="1" fill="currentColor"/>'),
   gap:IC('<rect x="3" y="3.5" width="18" height="17" rx="1.5"/><path d="M7 9h10M7 13h4M14 13h3" stroke-width="1.8"/><path d="M7 17h3" stroke="#D20515"/>')
@@ -2795,6 +2838,46 @@ const GAMES={
   dash:{n:'Elfmeter',ic:GICON.dash,col:'sky',kind:'rush',secs:45,stars:[120,250,400],tag:'Der, die or das? Take the shot.',how:'A noun appears, tap der, die or das. Wrong answers cost 3 seconds.'},
   plural:{n:'Mehrzahl',ic:GICON.plural,col:'berry',kind:'rush',secs:45,stars:[100,220,350],tag:'Pick the correct plural form.',how:'Pick the right plural for each noun from your notes. Needs nouns with (Pl. …) in your notes.'},
   match:{n:'Doppelpass',ic:GICON.match,col:'fern',kind:'sess',stars:[90,150,200],tag:'Pair German words with meanings.',how:'Two rounds of six pairs. Faster and cleaner earns more.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
+  search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
+  snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
+  memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
+  bubble:{n:'Blasenjagd',ic:GICON.bubble,col:'sky',kind:'sess',stars:[60,100,140],tag:'Pop the bubble with the right meaning.',how:'Six words. The right translation floats up among three wrong ones. Pop it before it leaves.'},
   search:{n:'Wortsuche',ic:GICON.search,col:'fern',kind:'sess',stars:[60,100,140],tag:'Find the hidden words in the grid.',how:'Three grids. Swipe over the letters of each word, or tap the first and the last letter.'},
   snake:{n:'Wortschlange',ic:GICON.snake,col:'berry',kind:'sess',stars:[60,100,140],tag:'Cut the snake into words.',how:'Six snakes. Tap between letters to cut a row of letters into the right words.'},
   memo:{n:'Gedächtnis',ic:GICON.memo,col:'lilac',kind:'sess',stars:[60,100,140],tag:'Flip cards and find the pairs.',how:'Three boards of six pairs: a German word and its meaning. Fewer wrong flips earn more.'},
@@ -3022,7 +3105,7 @@ function cabinetHtml(){
   <div class="cabinet">${tr.map(slot).join('')}${ghost}</div>`;
 }
 /* ───────── v2.10: version, skins, welcome, about ───────── */
-const APP_VER='3.2.0';
+const APP_VER='3.3.0';
 const isDe=()=>LANG==='de';
 const tx=(en,de)=>isDe()?de:en;
 function applySkin(){document.documentElement.dataset.skin=S.settings.skin==='clean'?'clean':'bl'}
@@ -3110,9 +3193,10 @@ function addNotice(n){
   ib.push({id:n.id,kind:n.kind||'news',title:String(n.title||'').slice(0,80),body:String(n.body||'').slice(0,1000),t:n.t||Date.now(),read:false});
   ib.sort((a,b)=>b.t-a.t);S.inbox=ib.slice(0,40);return true;
 }
-const CHANGELOG={v:'3.2.0',title:{en:'Kobel 3.2.0: games, new settings, nudges',de:'Kobel 3.2.0: Spiele, neue Einstellungen, Anstupser'},body:{
-  en:'Game update. Typing exercises are gone: every old typed question is now a tile game (letter crumble with decoy letters, listen and spell, build the sentence), and the streak Play-Off is tile-based too. New games in Paths and Minigames: Word search, Word snake, Missing letters, Memory and Bubble pop. Squad moved into Settings, and Settings and Profile are redesigned. Study groups can send a nudge to their members, streak reminders now come twice (evening and last call), and the screen no longer flickers when it refreshes in the background.',
-  de:'Spiele-Update. Tippen ist weg: jede frühere Tippfrage ist jetzt ein Kachelspiel (Buchstabensalat mit Zusatzbuchstaben, Hören und buchstabieren, Satz bauen), auch das Serien-Play-off. Neue Spiele in Pfad und Minispielen: Wortsuche, Wortschlange, Fehlende Buchstaben, Memory und Blasenjagd. Der Kader ist jetzt in den Einstellungen, Einstellungen und Profil sind neu gestaltet. Lerngruppen können ihre Mitglieder anstupsen, Serien-Erinnerungen kommen zweimal (Abend und letzter Aufruf), und der Bildschirm flackert beim Auffrischen im Hintergrund nicht mehr.'}};
+const CHANGELOG={v:'3.3.0',title:{en:'Kobel 3.3.0: a real roadmap',de:'Kobel 3.3.0: ein echter Lernweg'},body:{
+  en:'The Path is rebuilt as a four-stage roadmap from first words to confident sentences. Every unit now ends with a review checkpoint, words and sentences rotate through the whole path instead of repeating, writing exercises are capped at about 12% and use short words, and wrong answers in multiple choice are now close to the right one in length, type and form.',
+  de:'Der Pfad ist jetzt ein Lernweg in vier Stufen, von den ersten Wörtern bis zu sicheren Sätzen. Jede Einheit endet mit einem Rückblick, Wörter und Sätze wechseln sich über den ganzen Pfad ab statt sich zu wiederholen, Schreibaufgaben machen höchstens etwa 12% aus und nutzen kurze Wörter, und falsche Antworten sind der richtigen jetzt in Länge, Art und Form ähnlich.'
+}};
 function seedNotices(){
   addNotice({id:'ver:'+CHANGELOG.v,kind:'update',title:CHANGELOG.title.en,body:CHANGELOG.body.en,t:Date.now()});
 }
@@ -5188,16 +5272,22 @@ function startI18n(){setLang(S.settings.lang);trObs.observe(document.body,{child
 /*@@js-path*/
 /* ───────── Lernpfad: a guided path from the first easy level to the hardest ─────────
    Every lesson of your notes becomes a unit. Its words are cut into chapters of up to 8 words; every chapter has
-   five levels that get harder: 1 meet the words, 2 recognise, 3 build (drag and drop, articles, plurals),
-   4 sentences, 5 chapter final (typing, listening, no options). Grammar items get their own chapters.
+   five levels that get harder: 1 discover, 2 recognise, 3 apply (games, articles, plurals),
+   4 sentences, 5 chapter test. Every unit ends with a review checkpoint that mixes in earlier units (see roadmap.js). Grammar items get their own chapters.
    A level opens when the one before it is passed. Passing = 60% right (the chapter final needs 80%).
    Stars: 3 = no mistakes, 2 = 85% or better, 1 = passed. */
 const PATH_LV=[
-  {en:'Meet the words',de:'Wörter kennenlernen',ic:'1'},
+  {en:'Discover',de:'Entdecken',ic:'1'},
   {en:'Recognise',de:'Erkennen',ic:'2'},
-  {en:'Build',de:'Zusammenbauen',ic:'3'},
-  {en:'Sentences',de:'Satzbau',ic:'4'},
-  {en:'Chapter final',de:'Kapitelfinale',ic:'★'}
+  {en:'Apply',de:'Anwenden',ic:'3'},
+  {en:'Sentences',de:'Sätze',ic:'4'},
+  {en:'Chapter test',de:'Kapiteltest',ic:'★'}
+];
+const PATH_STAGES=[
+  {en:'Stage 1 · Arrive',de:'Stufe 1 · Ankommen',sub:{en:'Short words, pictures of meaning, no writing',de:'Kurze Wörter, Bedeutung erkennen, kein Schreiben'}},
+  {en:'Stage 2 · Everyday German',de:'Stufe 2 · Alltag',sub:{en:'Articles, plurals, small sentences',de:'Artikel, Plural, kleine Sätze'}},
+  {en:'Stage 3 · Build up',de:'Stufe 3 · Ausbauen',sub:{en:'Word order, gaps and polite forms',de:'Wortstellung, Lücken und Höflichkeit'}},
+  {en:'Stage 4 · Confident',de:'Stufe 4 · Sicher werden',sub:{en:'Mixed review, longer sentences, test pace',de:'Gemischte Wiederholung, längere Sätze, Testtempo'}}
 ];
 const PATH_CH=8;
 const PATH_SKIP=new Set(['Classroom & instructions']);
@@ -5228,79 +5318,26 @@ function pathNodes(){
       nodes.push({key:l.name+'#g'+(i/PATH_CH)+'#1',unit:ui,ch:ci,lv:1,kind:'g',ids:gs.slice(i,i+PATH_CH).map(c=>c.id),i:nodes.length});
       ch.to=nodes.length-1;u.chs.push(ch);
     }
+    if(chs.length){const ci=u.chs.length,allIds=chs.flat(),ch={ci,r:true,from:nodes.length};
+      nodes.push({key:l.name+'#r#1',unit:ui,ch:ci,lv:5,kind:'r',ids:allIds,i:nodes.length});ch.to=nodes.length-1;u.chs.push(ch)}
     u.to=nodes.length-1;if(u.chs.length)units.push(u);
   });
+  units.forEach((u,k)=>{u.stage=Math.min(4,1+Math.floor(k*4/Math.max(1,units.length)));for(let i=u.from;i<=u.to;i++)nodes[i].stage=u.stage});
   return{nodes,units};
 }
 function pathState(){
   const P=pst(),{nodes,units}=pathNodes();
   let skipIdx=0;if(P.skipTo){const k=nodes.findIndex(n=>n.key===P.skipTo);if(k>0)skipIdx=k}
-  const done=n=>(P.done[n.key]||0)>0||n.i<skipIdx;
+  let lastDone=-1;nodes.forEach(n=>{if(n.kind!=='r'&&(P.done[n.key]||0)>0)lastDone=n.i});
+  const done=n=>(P.done[n.key]||0)>0||n.i<skipIdx||(n.kind==='r'&&n.i<lastDone);
   let cur=nodes.findIndex(n=>!done(n));
   return{P,nodes,units,done,cur,all:cur<0};
 }
 const pathStars=(P,n)=>P.done[n.key]||0;
-function pathLabel(n){return n.kind==='g'?tx('Grammar','Grammatik'):tx(PATH_LV[n.lv-1].en,PATH_LV[n.lv-1].de)}
+function pathLabel(n){return n.kind==='g'?tx('Grammar','Grammatik'):n.kind==='r'?tx('Review checkpoint','Rückblick'):tx(PATH_LV[n.lv-1].en,PATH_LV[n.lv-1].de)}
 
 /* ---- what a level asks: items get harder from level 1 to 5 ---- */
 const pathNoun=c=>!!c.art&&/^[A-ZÄÖÜ][^\s.…]*$/.test(c.de.replace(/^(der|die|das)\s+/i,'').split('/')[0].trim());
-function pathBuild(n){
-  const ws=n.ids.map(byId).filter(c=>c&&act(c));
-  if(n.kind==='g')return shuffle(ws).map(c=>({cid:c.id,kind:'gcl'}));
-  const items=[],keep=new Set(),spk=canSpeak(),enough=WALL().length>=4,L=n.lv;
-  const A=(c,k)=>items.push({cid:c.id,kind:k});
-  const nouns=ws.filter(pathNoun),pl=ws.filter(c=>pluralOf(c)),cl=ws.filter(c=>clozeOf(c)),sn=ws.filter(c=>sentenceOf(c)),sc=ws.filter(scrOK);
-  if(L===1){
-    const fresh=ws.filter(c=>!c.srs.seen);
-    shuffle(fresh).forEach(c=>A(c,'intro'));
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc1':'tf'}));
-    ws.forEach(c=>body.push({cid:c.id,kind:'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===2){
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    shuffle(ws).slice(0,5).forEach(c=>body.push({cid:c.id,kind:spk&&enough?'hear':'tf'}));
-    shuffle(nouns).slice(0,4).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    items.push(...pathSpread(body));
-  }else if(L===3){
-    const body=[];
-    if(ws.length>=4)body.push({kind:'dmatch',cids:shuffle(ws).slice(0,6).map(c=>c.id)});
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    shuffle(pl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'plu'}));
-    shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    [...qvOddItems(n,ws,1),...qvRegItems(n,1)].forEach(x=>{body.push(x);keep.add(x)});
-    shuffle(ws).slice(0,Math.max(3,8-body.length)).forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===4){
-    const body=[];
-    shuffle(sn).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
-    shuffle(sc).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'scr'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    const have=new Set(body.map(b=>b.cid));
-    shuffle(ws.filter(c=>!have.has(c.id))).slice(0,Math.max(3,9-body.length)).forEach(c=>body.push({cid:c.id,kind:'type'}));
-    items.push(...pathSpread(body));
-  }else{
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:'type'}));
-    if(spk)shuffle(ws).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'listen'}));
-    shuffle(sn).slice(0,2).forEach(c=>{const x={cid:c.id,kind:'tsen'};body.push(x);keep.add(x)});
-    shuffle(sn).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,1).forEach(c=>{const x={cid:c.id,kind:'fix'};body.push(x);keep.add(x)});
-    shuffle(nouns).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    qvRegItems(n,1).forEach(x=>{body.push(x);keep.add(x)});
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    items.push(...pathSpread(body));
-  }
-  const intro=items.filter(i=>i.kind==='intro'),rest=items.filter(i=>i.kind!=='intro'),max=L===5?20:16;
-  /* trim to the size of the level, but never drop the special exercises */
-  for(let k=rest.length-1;k>=0&&rest.length>max;k--)if(!keep.has(rest[k]))rest.splice(k,1);
-  return intro.concat(rest.slice(0,max));
-}
 function pathSpread(a){
   const r=shuffle(a.slice());
   for(let i=1;i<r.length;i++){
@@ -5320,11 +5357,11 @@ function pathStart(i){
   openOverlay();next();
 }
 function finishPath(){
-  const P=pst(),total=ses.correct+ses.wrong,acc=total?ses.correct/total:1,need=ses.pathLv===5&&ses.pathKind==='w'?.8:.6;
+  const P=pst(),total=ses.correct+ses.wrong,acc=total?ses.correct/total:1,need=ses.pathKind==='r'?.75:ses.pathLv===5&&ses.pathKind==='w'?.8:.6;
   const pass=acc>=need,stars=pass?(ses.wrong===0?3:acc>=.85?2:1):0;
   const old=P.done[ses.pathKey]||0,first=old===0&&pass;
   if(pass&&stars>old)P.done[ses.pathKey]=stars;
-  const bonus=pass?(first?15+stars*5:5):0,fin=pass&&first&&ses.pathLv===5;
+  const bonus=pass?(first?15+stars*5:5):0,fin=pass&&first&&(ses.pathLv===5||ses.pathKind==='r');
   ses.xp+=10+bonus+(fin?25:0);
   const before=lvl(S.stats.xp),res=addXP(ses.xp,total),st=S.stats;
   st.sessions++;if(pass&&ses.wrong===0&&ses.items.length>=6)st.perfect++;st.maxCombo=Math.max(st.maxCombo,ses.maxCombo);
@@ -5340,7 +5377,7 @@ function finishPath(){
   if(end)extra+=noteCard('🏆',tx('You finished the whole path. New lessons will extend it.','Du hast den ganzen Pfad geschafft. Neue Lektionen verlängern ihn.'));
   if(!pass)extra+=noteCard('↻',tx(`You need ${Math.round(need*100)}% to pass. The words you missed come back sooner.`,`Zum Bestehen brauchst du ${Math.round(need*100)}%. Verpasste Wörter kommen früher wieder.`));
   extra+=extrasFor(res,got,lvl(st.xp)>before);
-  resultScreen({mood:pass?(stars>=2?'cheer':'happy'):'oops',title:pass?(stars===3?'Perfekt!':'Gut gemacht!'):'Noch nicht ganz',sub:`${esc(ses.pathKind==='g'?tx('Grammar','Grammatik'):tx(PATH_LV[ses.pathLv-1].en,PATH_LV[ses.pathLv-1].de))}`,stars:pass?stars:0,
+  resultScreen({mood:pass?(stars>=2?'cheer':'happy'):'oops',title:pass?(stars===3?'Perfekt!':'Gut gemacht!'):'Noch nicht ganz',sub:`${esc(pathLabel(cur))}`,stars:pass?stars:0,
     rows:[{v:0,id:'xpn',l:tx('points','Punkte'),c:'lantern'},{v:Math.round(acc*100)+'%',l:tx('accuracy','Genauigkeit'),c:'fern'},{v:Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0'),l:tx('time','Zeit'),c:'sky'}],
     count:{id:'xpn',to:ses.xp},extra,againLabel:pass&&nx?tx('Next level','Nächste Stufe'):pass?tx('Back to the path','Zurück zum Pfad'):tx('Try again','Nochmal'),
     again:()=>{closeSes();if(pass&&nx)pathStart(idx+1);else if(pass){tab='path';render()}else pathStart(idx)}});
@@ -5353,8 +5390,8 @@ function pathNodeHtml(st,n,pos){
   const P=st.P,s=pathStars(P,n),d=st.done(n),isCur=n.i===st.cur,locked=!d&&!isCur;
   const off=[0,-34,-48,-34,0,34,48,34][pos%8];
   const cls=d?'done':isCur?'cur':'lock';
-  const lab=n.kind==='g'?'G':PATH_LV[n.lv-1].ic;
-  return `<div class="pn-row" style="--off:${off}px"><button class="pn ${cls} ${n.lv===5&&n.kind==='w'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}">${isCur?`<span class="pn-go">${tx('START','LOS')}</span>`:''}<span class="pn-i">${locked?'🔒':d&&n.lv!==5?'✓':lab}</span>${d?`<span class="pn-s">${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span></span>`:''}</button></div>`;
+  const lab=n.kind==='g'?'G':n.kind==='r'?'↻':PATH_LV[n.lv-1].ic;
+  return `<div class="pn-row" style="--off:${off}px"><button class="pn ${cls} ${n.lv===5&&n.kind!=='g'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}">${isCur?`<span class="pn-go">${tx('START','LOS')}</span>`:''}<span class="pn-i">${locked?'🔒':d&&n.lv!==5?'✓':lab}</span>${d?`<span class="pn-s">${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span></span>`:''}</button></div>`;
 }
 function vPath(){
   const st=pathState(),{units,nodes}=st;
@@ -5365,7 +5402,9 @@ function vPath(){
   <p class="sub" style="margin-bottom:12px">${tx('Start easy, finish hard. Each level you pass opens the next one.','Leicht anfangen, schwer enden. Jede bestandene Stufe öffnet die nächste.')}</p>
   <div class="pbar"><i style="width:${Math.round(dn/total*100)}%"></i></div>`;
   if(curN)h+=`<button class="btn shine" style="margin:14px 0 4px" data-a="pathgo">${tx('Continue','Weiter')}: ${esc(units[curN.unit].name)} · ${esc(pathLabel(curN))}</button>`;
+  let lastStage=0;
   units.forEach(u=>{
+    if(u.stage!==lastStage){lastStage=u.stage;const S0=PATH_STAGES[u.stage-1];h+=`<div class="pstage"><b>${tx(S0.en,S0.de)}</b><span>${tx(S0.sub.en,S0.sub.de)}</span></div>`}
     const un=nodes.slice(u.from,u.to+1),ud=un.filter(n=>st.done(n)).length,complete=ud===un.length,isCur=u.ui===curUnit&&!st.all;
     const open=pathUi.open[u.name]!==undefined?pathUi.open[u.name]:isCur;
     const stars=un.reduce((a,n)=>a+pathStars(st.P,n),0);
@@ -5374,7 +5413,7 @@ function vPath(){
       h+='<div class="ptrack">';
       u.chs.forEach(ch=>{
         const cn=nodes.slice(ch.from,ch.to+1);
-        h+=`<div class="pch">${ch.g?tx('Grammar','Grammatik'):tx('Chapter','Kapitel')+' '+(ch.ci+1)}${ch.g?'':` · ${ch.ids.length} ${tx('words','Wörter')}`}</div>`;
+        h+=`<div class="pch">${ch.g?tx('Grammar','Grammatik'):ch.r?tx('Checkpoint · mixes in earlier units','Checkpoint · mit älteren Einheiten gemischt'):tx('Chapter','Kapitel')+' '+(ch.ci+1)}${ch.g||ch.r?'':` · ${ch.ids.length} ${tx('words','Wörter')}`}</div>`;
         cn.forEach((n,k)=>h+=pathNodeHtml(st,n,k));
       });
       h+='</div>';
@@ -5391,7 +5430,7 @@ function pathNodeSheet(i){
     2:tx('Pick the right translation, listen, choose articles.','Übersetzung wählen, zuhören, Artikel wählen.'),
     3:tx('Drag pairs together, sort nouns into der, die, das, plurals and gaps.','Paare zusammenziehen, Nomen in der, die, das sortieren, Plural und Lücken.'),
     4:tx('Drag word blocks into sentences, fill gaps, unscramble words.','Wortblöcke zu Sätzen ziehen, Lücken füllen, Wörter ordnen.'),
-    5:tx('No options: type the words, listen and write, build sentences. Needs 80%.','Keine Auswahl: Wörter tippen, hören und schreiben, Sätze bauen. Mindestens 80%.')}[n.lv];
+    5:n.kind==='r'?tx('Words and sentences from this unit mixed with older ones, so nothing fades. Needs 75%.','Wörter und Sätze dieser Einheit gemischt mit älteren, damit nichts verblasst. Mindestens 75%.'):tx('Everything from this chapter at test pace, with at most a little writing. Needs 80%.','Alles aus diesem Kapitel im Testtempo, höchstens ein bisschen Schreiben. Mindestens 80%.')}[n.lv];
   sheet(`<div class="kick">${esc(u.name)} · ${n.kind==='g'?tx('Grammar','Grammatik'):tx('Chapter','Kapitel')+' '+(n.ch+1)}</div><h3 style="font-size:30px">${esc(pathLabel(n))}</h3>
   <p class="sub" style="margin-top:6px">${n.kind==='g'?tx('Fill the gaps from your grammar notes.','Fülle die Lücken aus deinen Grammatiknotizen.'):body}</p>
   <div class="sub" style="margin:12px 0;font-size:14px">${names}</div>
@@ -7246,73 +7285,6 @@ function gmWsItem(ws,k){const p=ws.filter(gmWord);return p.length>=3?[{kind:'wse
 function gmMemoItem(ws){const p=ws.filter(c=>c.type!=='g'&&String(c.de).length<=18);return p.length>=4?[{kind:'memo',cids:shuffle(p).slice(0,6).map(c=>c.id)}]:[]}
 function gmBubbleItem(ws){const p=ws.filter(c=>c.type!=='g'&&String(c.en).length<=24);return p.length>=3?[{kind:'bubble',cids:shuffle(p).slice(0,5).map(c=>c.id)}]:[]}
 function gmSnItem(ws){const p=ws.filter(gmWord);return p.length>=2?[{kind:'snake',cids:shuffle(p).slice(0,4).map(c=>c.id)}]:[]}
-function pathBuild(n){
-  const ws=n.ids.map(byId).filter(c=>c&&act(c));
-  if(n.kind==='g')return shuffle(ws).map(c=>({cid:c.id,kind:'gcl'}));
-  const items=[],keep=new Set(),spk=canSpeak(),enough=WALL().length>=4,L=n.lv;
-  const nouns=ws.filter(pathNoun),pl=ws.filter(c=>pluralOf(c)),cl=ws.filter(c=>clozeOf(c)),sn=ws.filter(c=>sentenceOf(c)),sc=ws.filter(scrOK),gw=ws.filter(gmWord);
-  const K=(x)=>{keep.add(x);return x};
-  if(L===1){
-    const fresh=ws.filter(c=>!c.srs.seen);
-    shuffle(fresh).forEach(c=>items.push({cid:c.id,kind:'intro'}));
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc1':'tf'}));
-    ws.forEach(c=>body.push({cid:c.id,kind:'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===2){
-    const body=[];
-    ws.forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    shuffle(ws).slice(0,4).forEach(c=>body.push({cid:c.id,kind:spk&&enough?'hear':'tf'}));
-    shuffle(nouns).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    shuffle(gw).slice(0,2).forEach(c=>body.push(K({cid:c.id,kind:'gapl'})));
-    qvRegItems(n,1).forEach(x=>body.push(K(x)));
-    items.push(...pathSpread(body));
-  }else if(L===3){
-    const body=[];
-    if(ws.length>=4)body.push({kind:'dmatch',cids:shuffle(ws).slice(0,6).map(c=>c.id)});
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    gmWsItem(ws,4).forEach(x=>body.push(K(x)));
-    gmMemoItem(ws).forEach(x=>body.push(K(x)));
-    shuffle(pl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'plu'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(gw).slice(0,2).forEach(c=>body.push(K({cid:c.id,kind:'gapl'})));
-    [...qvOddItems(n,ws,1),...qvRegItems(n,1)].forEach(x=>body.push(K(x)));
-    shuffle(ws).slice(0,Math.max(3,8-body.length)).forEach(c=>body.push({cid:c.id,kind:enough?'mc2':'tf'}));
-    items.push(...pathSpread(body));
-  }else if(L===4){
-    const body=[];
-    shuffle(sn).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push(K({cid:c.id,kind:'fix'})));
-    shuffle(sc).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'scr'}));
-    gmSnItem(ws).forEach(x=>body.push(K(x)));
-    gmBubbleItem(ws).forEach(x=>body.push(K(x)));
-    shuffle(gw).slice(0,2).forEach(c=>body.push(K({cid:c.id,kind:'gapl'})));
-    qvRegItems(n,1).forEach(x=>body.push(K(x)));
-    const have=new Set(body.map(b=>b.cid));
-    shuffle(ws.filter(c=>!have.has(c.id))).slice(0,Math.max(3,9-body.length)).forEach(c=>body.push({cid:c.id,kind:'mc2'}));
-    items.push(...pathSpread(body));
-  }else{
-    const body=[];
-    shuffle(ws).slice(0,4).forEach(c=>body.push({cid:c.id,kind:'type'}));
-    if(spk)shuffle(ws).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'listen'}));
-    shuffle(sn).slice(0,2).forEach(c=>body.push(K({cid:c.id,kind:'tsen'})));
-    shuffle(sn).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'drag'}));
-    shuffle(cl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
-    shuffle(cl).slice(0,1).forEach(c=>body.push(K({cid:c.id,kind:'fix'})));
-    shuffle(nouns).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'art'}));
-    gmWsItem(ws,4).forEach(x=>body.push(K(x)));
-    gmSnItem(ws).forEach(x=>body.push(K(x)));
-    gmMemoItem(ws).forEach(x=>body.push(K(x)));
-    gmBubbleItem(ws).forEach(x=>body.push(K(x)));
-    qvRegItems(n,1).forEach(x=>body.push(K(x)));
-    if(nouns.length>=3)body.push({kind:'sortart',cids:shuffle(nouns).slice(0,5).map(c=>c.id)});
-    items.push(...pathSpread(body));
-  }
-  const intro=items.filter(i=>i.kind==='intro'),rest=items.filter(i=>i.kind!=='intro'),max=L===5?20:16;
-  for(let k=rest.length-1;k>=0&&rest.length>max;k--)if(!keep.has(rest[k]))rest.splice(k,1);
-  return intro.concat(rest.slice(0,max));
-}
 /*@@end js-games*/
 /*@@js-settings*/
 /* ───────── Profile and Settings, redesigned (3.2.0) ─────────
@@ -7433,6 +7405,244 @@ function hdrBtns(){
 }
 const SET3_ACTIONS={settab:t=>{SETTAB=t.dataset.k;render();try{window.scrollTo(0,0)}catch(e){}}};
 /*@@end js-settings*/
+/*@@js-distract*/
+/* ───────── Smarter wrong answers (3.3.0) ─────────
+   A wrong option must look like the right one: same kind of word (noun, verb, phrase, adjective), same subject (the same lesson or a
+   neighbouring one), similar length and word count, similar spelling and ending, and for nouns a mix of articles. Candidates are filtered
+   first (hard rules, relaxed step by step only when a small lesson has too few look-alikes) and then ranked.
+   Replaces smartEn, smartDe, pluralWrong and gapOptions from the base file (later declarations win). */
+let DX_ORD=null,DX_N=-1;
+function dxOrd(){
+  if(DX_ORD&&DX_N===S.cards.length)return DX_ORD;
+  const o={};let k=0;
+  try{pathNodes().units.forEach(u=>{o[u.name]=k++})}catch(e){}
+  S.cards.forEach(c=>{if(!(c.lesson in o))o[c.lesson]=k++});
+  DX_ORD=o;DX_N=S.cards.length;return o;
+}
+const dxClean=s=>String(s||'').replace(/\([^)]*\)/g,' ').replace(/[?!.,…]/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+const dxWords=s=>dxClean(s).split(' ').filter(Boolean);
+/* word class used for look-alike matching: noun (has an article), verb, phrase/sentence, question word, or "other" (greetings, adjectives, numbers) */
+function dxPos(c){
+  if(c.art)return'n';
+  if(/^to\s/i.test(c.en||''))return'v';
+  const de=String(c.de||'');
+  if(/[?.!]$/.test(de)||/\s/.test(de.replace(/^(der|die|das)\s+/i,'')))return Q_WORDS.test(de)?'q':'p';
+  if(Q_WORDS.test(de))return'q';
+  if(/\((?:m|f|n)\.?\)/.test(c.en||''))return'n';
+  return'a';
+}
+const dxFirst=s=>String(s||'').split(/\s\/\s/)[0];
+const dxAlts=s=>String(s||'').split(/\s\/\s/).length;
+const dxEnd=(s,k=2)=>dxClean(s).replace(/\s/g,'').slice(-k);
+/* too close in meaning or form to be a fair wrong answer (one contains the other, or they share every content word) */
+function dxClash(a,b){
+  const x=dxClean(a),y=dxClean(b);if(!x||!y)return true;
+  if(x===y)return true;
+  if(x.length>=4&&y.length>=4&&(x.includes(y)||y.includes(x)))return true;
+  const wa=dxWords(a).filter(w=>w.length>2&&w!=='the'&&w!=='and'),wb=dxWords(b).filter(w=>w.length>2&&w!=='the'&&w!=='and');
+  if(wa.length&&wb.length&&wa.every(w=>wb.includes(w)))return true;
+  return false;
+}
+function dxPick(c,side,n){
+  const own=side==='en'?c.en:disDe(c),pos=dxPos(c),ord=dxOrd(),lo=ord[c.lesson];
+  const val=x=>side==='en'?x.en:disDe(x);
+  const L=dxClean(dxFirst(own)).length,W=dxWords(dxFirst(own)).length,shape=/^to\s/i.test(c.en||'');
+  let pool=WALL().filter(x=>x.id!==c.id&&!isG(x)&&val(x)&&!dxClash(own,val(x)));
+  const tiers=[
+    x=>dxPos(x)===pos&&Math.abs(dxClean(dxFirst(val(x))).length-L)<=Math.max(3,Math.round(L*.45))&&dxWords(dxFirst(val(x))).length===W&&(side!=='en'||/^to\s/i.test(x.en||'')===shape),
+    x=>dxPos(x)===pos&&Math.abs(dxClean(dxFirst(val(x))).length-L)<=Math.max(4,Math.round(L*.6))&&Math.abs(dxWords(dxFirst(val(x))).length-W)<=1,
+    x=>dxPos(x)===pos||Math.abs(dxClean(dxFirst(val(x))).length-L)<=Math.max(3,Math.round(L*.5)),
+    x=>true];
+  let cand=[];
+  for(const t of tiers){cand=pool.filter(t);if(cand.length>=n+2)break}
+  const rel=x=>{
+    let s=0;const d=Math.abs((ord[x.lesson]??50)-(lo??50));
+    s+=x.lesson===c.lesson?3.6:d<=1?2:d<=3?1:0;
+    s-=Math.abs(dxAlts(val(x))-dxAlts(own))*.8;
+    const a=val(x);
+    s+=strSim(own,a)*(side==='de'?2.4:1.2);
+    s+=dxEnd(own)===dxEnd(a)?1.1:0;
+    s+=lenSim(own,a,Math.max(4,L*.6))*1.2;
+    if(pos==='n'&&c.art)s+=x.art===c.art?.9:.5;      // nouns: a mix of articles, so the article never gives it away
+    if(pos==='p'||pos==='q'){const fa=dxWords(own)[0],fb=dxWords(a)[0];if(fa&&fa===fb)s+=1.6;if(/[?]$/.test(side==='en'?c.en:c.de)===/[?]$/.test(side==='en'?x.en:x.de))s+=.6}
+    if(pos==='v'&&side==='de')s+=/en$/i.test(own)===/en$/i.test(a)?.8:0;
+    s+=(x.srs&&x.srs.seen>0)?.7:0;                    // words you already met make fairer wrong answers
+    return s+Math.random()*.7;
+  };
+  const out=[],seen=[own];
+  for(const o of cand.map(x=>({x,s:rel(x)})).sort((a,b)=>b.s-a.s)){
+    const v=val(o.x);if(seen.some(y=>dxClash(y,v)))continue;
+    seen.push(v);out.push(side==='en'?v:o.x);if(out.length>=n)break;
+  }
+  return out;
+}
+function smartEn(c,n=3){return dxPick(c,'en',n)}
+function smartDe(c,n=3){return dxPick(c,'de',n)}
+
+/* plural options: shapes that are plausible for the ending of the word */
+function pluralWrong(c,right,n){
+  const b=c.de,um=umlaut(b);let cand;
+  if(/e$/i.test(b))cand=[b+'n',b+'s',b,um+'n'];
+  else if(/(er|el|en)$/i.test(b))cand=[b,um,b+'s',b+'n',um+'n'];
+  else if(/in$/i.test(b))cand=[b+'nen',b+'en',b+'s',b+'e'];
+  else if(/(ung|heit|keit|schaft|tion|ität)$/i.test(b))cand=[b+'en',b+'e',b+'s',b+'er'];
+  else cand=[b+'e',b+'en',b+'er',um+'e',um+'er',b+'s',b+'n',um];
+  const u=[...new Set(cand)].filter(x=>x&&x!==right);
+  /* keep the look-alikes: forms that differ from the right one by one change come first */
+  u.sort((a,z)=>strSim(right,z)-strSim(right,a)+(Math.random()-.5)*.3);
+  return u.slice(0,n);
+}
+/* gap answers: families of look-alike words first, then words of the same shape from the same topic */
+function gapOptions(c,ans,n=3,topic=''){
+  const low=ans.toLowerCase(),cap=/^[A-ZÄÖÜ]/.test(ans),seen=new Set([low]),out=[];
+  const fix=v=>cap?v[0].toUpperCase()+v.slice(1):v[0].toLowerCase()+v.slice(1);
+  const add=v=>{if(!v)return false;const k=v.toLowerCase();if(seen.has(k))return false;seen.add(k);out.push(v);return out.length>=n};
+  const set=GAP_SETS.find(s=>s.some(w=>w.toLowerCase()===low));
+  const near=set?shuffle(set.filter(w=>w.toLowerCase()!==low)).map(fix):(/\s/.test(ans)||cap?[]:shuffle(verbVariants(ans)));
+  for(const v of near)if(add(v))return out;
+  const multi=/\s/.test(ans),lo=dxOrd()[c&&c.lesson];
+  const pool=gapPool().filter(o=>/\s/.test(o.v)===multi&&Math.abs(o.v.length-ans.length)<=Math.max(2,Math.round(ans.length*.4))).map(o=>({v:o.v,s:strSim(ans,o.v)*2+(/^[A-ZÄÖÜ]/.test(o.v)===cap?.8:0)+lenSim(ans,o.v,5)+(topic&&o.t===topic?1.5:0)+(dxEnd(ans)===dxEnd(o.v)?1:0)+Math.random()*.7}));
+  pool.sort((a,b)=>b.s-a.s);
+  for(const o of pool)if(add(o.v))break;
+  if(out.length<n){const rest=gapPool().filter(o=>/\s/.test(o.v)===multi).map(o=>({v:o.v,s:strSim(ans,o.v)+lenSim(ans,o.v,6)+Math.random()}));rest.sort((a,b)=>b.s-a.s);for(const o of rest)if(add(o.v))break}
+  return out;
+}
+/*@@end js-distract*/
+/*@@js-roadmap*/
+/* ───────── Roadmap: what every path node asks ─────────
+   Stage 1 starts with short words and no writing; stage 4 mixes everything at test pace.
+   Inside a node:  fresh target words (the chapter) + a few spiral-review words from earlier units, picked in a
+   round-robin cycle (S.stats.pcy counts how often a word was used, the least used and the due ones come first),
+   sentences are drawn from the whole path so they keep changing, a word never gets the same exercise twice in a
+   row (S.stats.pkh), a word appears at most twice per node, and writing exercises stay at 12% or less. */
+const RD_WRITE=new Set(['type','tsen','scr','gapl','listen']);
+const RD_SHARE=.12;
+function rdStats(){const st=S.stats;if(!st.pcy||typeof st.pcy!=='object')st.pcy={};if(!st.pkh||typeof st.pkh!=='object')st.pkh={};return st}
+/* earlier words of the path, in path order, without the ones the node is about */
+function rdEarlier(n){
+  const st=pathState(),seen=new Set(n.ids),out=[];
+  for(let i=0;i<n.i&&i<st.nodes.length;i++){const m=st.nodes[i];if(m.kind==='g')continue;m.ids.forEach(id=>{if(!seen.has(id)){seen.add(id);const c=byId(id);if(c&&act(c)&&!isG(c))out.push(c)}})}
+  return out;
+}
+/* least used first (cycling), words that are due come before the rest */
+function rdCycle(pool,k,bump){
+  const st=rdStats(),now=Date.now();
+  const a=shuffle(pool.slice()).sort((x,y)=>{
+    const dx=x.srs&&x.srs.seen>0&&x.srs.due<=now?-1:0,dy=y.srs&&y.srs.seen>0&&y.srs.due<=now?-1:0;
+    return (st.pcy[x.id]||0)-(st.pcy[y.id]||0)+(dx-dy)*.5;
+  }).slice(0,k);
+  if(bump)a.forEach(c=>st.pcy[c.id]=(st.pcy[c.id]||0)+1);
+  return a;
+}
+/* choose a kind this word did not just get */
+function rdKind(c,list){
+  const st=rdStats(),last=st.pkh[c.id],ok=list.filter(k=>k!==last),k=(ok.length?ok:list)[rnd((ok.length?ok:list).length)];
+  st.pkh[c.id]=k;return k;
+}
+/* regional du/Sie and odd-one-out items, rotated through the whole path instead of always hitting the same cards */
+function rdReg(n,k){
+  const rk=qvUnitRank(),pool=S.cards.filter(c=>act(c)&&(rk[c.lesson]===undefined||rk[c.lesson]<=n.unit)&&qvRegOf(c));
+  return rdCycle(pool,k,true).map(c=>({cid:c.id,kind:'reg'}));
+}
+function rdOdd(n){
+  const rk=qvUnitRank(),st=rdStats();
+  const nouns=S.cards.filter(c=>act(c)&&!isG(c)&&pathNoun(c)&&/^[A-ZÄÖÜ][\p{L}-]+$/u.test(c.de||'')&&(rk[c.lesson]===undefined||rk[c.lesson]<=n.unit));
+  const by={};nouns.forEach(c=>(by[c.art]=by[c.art]||[]).push(c));
+  const arts=Object.keys(by);if(arts.length<2)return[];
+  const A=shuffle(arts.filter(a=>by[a].length>=3))[0];if(!A)return[];
+  const others=arts.filter(a=>a!==A),oddArt=others[rnd(others.length)];
+  const trio=rdCycle(by[A],3,true),odd=rdCycle(by[oddArt],1,true)[0];
+  return trio.length===3&&odd?[{cid:odd.id,kind:'odd',cids:[...trio.map(x=>x.id),odd.id]}]:[];
+}
+const rdShort=(c,m)=>{const w=gmWord(c);return w&&w.length<=(m||6)};
+const rdSent=c=>{const s=sentenceOf(c);return s&&s.de.split(/\s+/).length<=7?s:null};
+function pathBuild(n){
+  const own=n.ids.map(byId).filter(c=>c&&act(c));
+  if(n.kind==='g')return shuffle(own).map(c=>({cid:c.id,kind:'gcl'}));
+  const enough=WALL().length>=4,spk=canSpeak(),L=n.lv,stg=n.stage||1,isR=n.kind==='r';
+  const early=rdEarlier(n);
+  /* review words: more of them in later levels and stages */
+  const rvN=isR?6:L<=1?0:Math.min(5,L-1+(stg>2?1:0));
+  const rv=rvN&&early.length?rdCycle(early,rvN,true):[];
+  const ws=isR?rdCycle(own,Math.min(own.length,8),true):own;
+  const base=ws.concat(rv);
+  const nouns=ws.filter(pathNoun),allNouns=base.filter(pathNoun),pl=base.filter(c=>pluralOf(c)),gw=ws.filter(c=>rdShort(c,stg<2?5:6));
+  /* sentences come from the whole path so they rotate: own first, then least used */
+  const sentPool=rdCycle(base.concat(early.filter(c=>rdSent(c)).slice(-60)).filter((c,i,a)=>a.indexOf(c)===i&&rdSent(c)),12,false);
+  const sn=sentPool.filter(c=>rdSent(c)),cl=base.filter(c=>clozeOf(c)&&c.ex);
+  const body=[],keep=new Set(),K=x=>{keep.add(x);return x};
+  const MC=['mc2','mc2','hear','tf'],MC1=['mc1','tf'];
+  const rec=(cs,kinds)=>cs.forEach(c=>{const k=rdKind(c,kinds.filter(x=>(x!=='mc1'&&x!=='mc2'&&x!=='hear')||enough).filter(x=>x!=='hear'||spk));body.push({cid:c.id,kind:k})});
+  const intro=[];
+  if(L===1&&!isR){
+    shuffle(own.filter(c=>!c.srs.seen)).forEach(c=>intro.push({cid:c.id,kind:'intro'}));
+    own.forEach(c=>body.push({cid:c.id,kind:enough?'mc1':'tf'}));
+    shuffle(own).slice(0,Math.ceil(own.length*.7)).forEach(c=>body.push({cid:c.id,kind:'tf'}));
+    gmMemoItem(own).forEach(x=>body.push(K(x)));
+  }else if(L===2&&!isR){
+    rec(own,['mc2','mc2','hear','tf']);
+    rec(rv,['mc2','tf','hear']);
+    shuffle(nouns).slice(0,3).forEach(c=>body.push({cid:c.id,kind:'art'}));
+    if(own.length>=4)body.push(K({kind:'dmatch',cids:shuffle(own).slice(0,5).map(c=>c.id)}));
+    gmBubbleItem(own).forEach(x=>body.push(K(x)));
+    rdReg(n,1).forEach(x=>body.push(K(x)));
+  }else if(L===3&&!isR){
+    if(own.length>=4)body.push(K({kind:'dmatch',cids:shuffle(base).slice(0,6).map(c=>c.id)}));
+    if(allNouns.length>=3)body.push(K({kind:'sortart',cids:shuffle(allNouns).slice(0,5).map(c=>c.id)}));
+    gmWsItem(own,4).forEach(x=>body.push(K(x)));
+    gmMemoItem(base).forEach(x=>body.push(K(x)));
+    gmSnItem(own).forEach(x=>body.push(K(x)));
+    shuffle(pl).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'plu'}));
+    cl.slice(0,2).forEach(c=>body.push({cid:c.id,kind:'cloze'}));
+    rdOdd(n).forEach(x=>body.push(K(x)));
+    rdReg(n,1).forEach(x=>body.push(K(x)));
+    rec(rv.slice(0,3),['mc2','hear']);
+    rec(shuffle(own).slice(0,3),['mc2','tf']);
+  }else if(L===4&&!isR){
+    sn.slice(0,3).forEach(c=>body.push({cid:c.id,kind:rdKind(c,['drag','drag','cloze'])}));
+    cl.slice(0,3).forEach(c=>body.push({cid:c.id,kind:rdKind(c,['cloze','fix'])}));
+    gmSnItem(base).forEach(x=>body.push(K(x)));
+    gmBubbleItem(base).forEach(x=>body.push(K(x)));
+    shuffle(gw).slice(0,stg<2?0:1).forEach(c=>body.push(K({cid:c.id,kind:'gapl'})));
+    rdReg(n,1).forEach(x=>body.push(K(x)));
+    rdOdd(n).forEach(x=>body.push(K(x)));
+    rec(shuffle(rv).slice(0,3),['mc2','tf']);
+    rec(shuffle(own).slice(0,3),['mc2','hear']);
+  }else{
+    /* chapter test (L5) and unit checkpoint (r): everything at a faster pace, a little writing at the end */
+    rec(shuffle(base).slice(0,isR?5:4),['mc2','mc2','hear']);
+    sn.slice(0,2).forEach(c=>body.push({cid:c.id,kind:'drag'}));
+    cl.slice(0,2).forEach(c=>body.push({cid:c.id,kind:rdKind(c,['cloze','fix'])}));
+    shuffle(allNouns).slice(0,2).forEach(c=>body.push({cid:c.id,kind:'art'}));
+    shuffle(pl).slice(0,1).forEach(c=>body.push({cid:c.id,kind:'plu'}));
+    if(base.length>=4)body.push(K({kind:'dmatch',cids:shuffle(base).slice(0,6).map(c=>c.id)}));
+    if(allNouns.length>=3)body.push(K({kind:'sortart',cids:shuffle(allNouns).slice(0,5).map(c=>c.id)}));
+    gmWsItem(base,4).forEach(x=>body.push(K(x)));
+    gmSnItem(base).forEach(x=>body.push(K(x)));
+    rdReg(n,1).forEach(x=>body.push(K(x)));
+    if(isR)rdOdd(n).forEach(x=>body.push(K(x)));
+    /* the writing slots: one short word to complete (stage 2 and up), one short sentence to order by typing */
+    if(stg>=2)shuffle(gw).slice(0,1).forEach(c=>body.push(K({cid:c.id,kind:'gapl'})));
+    if(stg>=3)shuffle(base.filter(c=>scrOK(c)&&c.de.length<=7)).slice(0,1).forEach(c=>body.push(K({cid:c.id,kind:'scr'})));
+  }
+  let list=body.slice();
+  /* at most 2 appearances per word, and no word right after itself */
+  const cnt={};list=list.filter(x=>{if(!x.cid||keep.has(x))return true;cnt[x.cid]=(cnt[x.cid]||0)+1;return cnt[x.cid]<=2});
+  const max=L===5||isR?18:L===1?16:15;
+  list=pathSpread(list);
+  /* trim to size, dropping plain ones first */
+  for(let k=list.length-1;k>=0&&list.length>max;k--)if(!keep.has(list[k]))list.splice(k,1);
+  while(list.length>max)list.pop();
+  /* writing budget */
+  const cap=Math.floor((list.length+intro.length)*RD_SHARE);let w=list.filter(x=>RD_WRITE.has(x.kind)).length;
+  for(let k=list.length-1;k>=0&&w>cap;k--)if(RD_WRITE.has(list[k].kind)){list.splice(k,1);w--}
+  /* sentence cards that were used count as used, so the next node picks other sentences */
+  const st2=rdStats();list.forEach(x=>{if(x.cid&&(x.kind==='drag'||x.kind==='cloze'||x.kind==='fix'))st2.pcy[x.cid]=(st2.pcy[x.cid]||0)+1});
+  return intro.concat(list);
+}
+/* quick summary used by tests and docs */
+function pathPlanStats(n){const it=pathBuild(n),k={};it.forEach(x=>k[x.kind]=(k[x.kind]||0)+1);const wr=it.filter(x=>RD_WRITE.has(x.kind)).length;return{n:it.length,kinds:k,write:wr,share:it.length?wr/it.length:0}}
+/*@@end js-roadmap*/
 /* ───────── events ───────── */
 const A={
   tab:t=>{tab=t.dataset.k;render();window.scrollTo(0,0)},
@@ -7501,7 +7711,7 @@ load();applyTheme();setLang(S.settings.lang);
 // hooks called by the Android shell
 window.onKobelBack=()=>{if($('#sheet')){closeSheet();return true}if($('#dl')){if(dlPlaying())toast(tx('Finish the game: your clock keeps running.','Spiel beenden: deine Uhr läuft weiter.'));else dlClose();return true}if($('#tr')){trClose();return true}if(ses){quit();return true}if(tab!=='home'){tab='home';render();return true}return false};
 window.onKobelVoice=()=>{if(tab==='settings'||tab==='arcade')render()};
-if(location.hash==='#debug')window.__k={sfx,qvKind,qvVary,regFix,qvRegOf,next,openOverlay,R:()=>R,widgetData,stageIco,celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,pathState,pathStart,pathBuild,S:()=>S,WALL,smartEn,smartDe,gapOptions,clozeOf,rushPick,rushDirTranslate,requeue,startSession,ses:()=>ses,setSes:v=>{ses=v},settle,LS,knowledge,render,startExam,openExam,closeMatchday,endSeason,lpNow,tierInfo,newsSheet,go:(t,s)=>{tab=t;if(s)statTab=s;render()},lang:l=>{S.settings.lang=l;setLang(l);render()}};
+if(location.hash==='#debug')window.__k={smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,pathPlanStats,byId,rdEarlier,smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,sfx,qvKind,smartEn,smartDe,posOf,pluralWrong,gapOptions,sfx,qvKind,qvVary,regFix,qvRegOf,next,openOverlay,R:()=>R,widgetData,stageIco,celebrate,streakRisk,poOpen,poBuild,PO,b3Banner,addXP,render,curStreak,pathState,pathStart,pathBuild,S:()=>S,WALL,smartEn,smartDe,gapOptions,clozeOf,rushPick,rushDirTranslate,requeue,startSession,ses:()=>ses,setSes:v=>{ses=v},settle,LS,knowledge,render,startExam,openExam,closeMatchday,endSeason,lpNow,tierInfo,newsSheet,go:(t,s)=>{tab=t;if(s)statTab=s;render()},lang:l=>{S.settings.lang=l;setLang(l);render()}};
 render();
 startI18n();
 setTimeout(showWelcome,60);

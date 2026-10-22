@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'3.2.0',title:{en:'Kobel 3.2.0: games, new settings, nudges',de:'Kobel 3.2.0: Spiele, neue Einstellungen, Anstupser'},body:{\n  en:'Game update. Typing exercises are gone: every old typed question is now a tile game (letter crumble with decoy letters, listen and spell, build the sentence), and the streak Play-Off is tile-based too. New games in Paths and Minigames: Word search, Word snake, Missing letters, Memory and Bubble pop. Squad moved into Settings, and Settings and Profile are redesigned. Study groups can send a nudge to their members, streak reminders now come twice (evening and last call), and the screen no longer flickers when it refreshes in the background.',\n  de:'Spiele-Update. Tippen ist weg: jede frühere Tippfrage ist jetzt ein Kachelspiel (Buchstabensalat mit Zusatzbuchstaben, Hören und buchstabieren, Satz bauen), auch das Serien-Play-off. Neue Spiele in Pfad und Minispielen: Wortsuche, Wortschlange, Fehlende Buchstaben, Memory und Blasenjagd. Der Kader ist jetzt in den Einstellungen, Einstellungen und Profil sind neu gestaltet. Lerngruppen können ihre Mitglieder anstupsen, Serien-Erinnerungen kommen zweimal (Abend und letzter Aufruf), und der Bildschirm flackert beim Auffrischen im Hintergrund nicht mehr.'}};\n"
+_CL = "const CHANGELOG={v:'3.3.0',title:{en:'Kobel 3.3.0: a real roadmap',de:'Kobel 3.3.0: ein echter Lernweg'},body:{\n  en:'The Path is rebuilt as a four-stage roadmap from first words to confident sentences. Every unit now ends with a review checkpoint, words and sentences rotate through the whole path instead of repeating, writing exercises are capped at about 12% and use short words, and wrong answers in multiple choice are now close to the right one in length, type and form.',\n  de:'Der Pfad ist jetzt ein Lernweg in vier Stufen, von den ersten Wörtern bis zu sicheren Sätzen. Jede Einheit endet mit einem Rückblick, Wörter und Sätze wechseln sich über den ganzen Pfad ab statt sich zu wiederholen, Schreibaufgaben machen höchstens etwa 12% aus und nutzen kurze Wörter, und falsche Antworten sind der richtigen jetzt in Länge, Art und Form ähnlich.'\n}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.2.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.3.0';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -139,3 +139,14 @@ src = sub(src, "    case'search':return w.filter(gmWord).length>=5?null:'Needs 5
  "    case'search':return w.filter(gmWord).length>=5?null:'Needs 5+ single words';\n    case'memo':return w.length>=6?null:'Needs 6+ words';\n    case'bubble':return w.length>=6?null:'Needs 6+ words';")
 src = sub(src, "  else if(id==='search'){const p=shuffle(words.filter(gmWord));",
  "  else if(id==='memo'){const p=shuffle(words.filter(c=>String(c.de).length<=18));for(let r=0;r<3;r++){const g=p.slice(r*6,r*6+6);if(g.length>=4)items.push({kind:'memo',cids:g.map(c=>c.id)})}}\n  else if(id==='bubble'){const p=shuffle(words);for(let r=0;r<2;r++){const g=p.slice(r*6,r*6+6);if(g.length>=3)items.push({kind:'bubble',cids:g.map(c=>c.id)})}}\n  else if(id==='search'){const p=shuffle(words.filter(gmWord));")
+
+# ---- 3.3.0: expose helpers for tests ----
+if "{smartEn," not in src:
+    src = src.replace("window.__k={", "window.__k={smartEn,smartDe,posOf,dxPos,pluralWrong,gapOptions,", 1)
+
+if "dxPos," not in src.split("window.__k={",1)[1][:120]:
+    src = src.replace("window.__k={smartEn,", "window.__k={dxPos,smartEn,", 1)
+
+# roadmap: expose the planner for simulations
+if "window.__k={" in src and "pathPlanStats," not in src.split("window.__k={",1)[1][:200]:
+    src = src.replace("window.__k={", "window.__k={pathPlanStats,byId,rdEarlier,", 1)
