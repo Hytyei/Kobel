@@ -12,8 +12,8 @@ const PATH_LV=[
   {en:'Chapter test',de:'Kapiteltest',ic:'★'}
 ];
 const PATH_STAGES=[
-  {en:'Stage 1 · Arrive',de:'Stufe 1 · Ankommen',sub:{en:'Short words, pictures of meaning, no writing',de:'Kurze Wörter, Bedeutung erkennen, kein Schreiben'}},
-  {en:'Stage 2 · Everyday German',de:'Stufe 2 · Alltag',sub:{en:'Articles, plurals, small sentences',de:'Artikel, Plural, kleine Sätze'}},
+  {en:'Stage 1 · Arrive',de:'Stufe 1 · Ankommen',sub:{en:'Rules first, then short words and their meanings',de:'Kurze Wörter, Bedeutung erkennen, kein Schreiben'}},
+  {en:'Stage 2 · Everyday German',de:'Stufe 2 · Alltag',sub:{en:'Articles, plurals, rules you can recall, small sentences',de:'Artikel, Plural, Regeln abrufen, kleine Sätze'}},
   {en:'Stage 3 · Build up',de:'Stufe 3 · Ausbauen',sub:{en:'Word order, gaps and polite forms',de:'Wortstellung, Lücken und Höflichkeit'}},
   {en:'Stage 4 · Confident',de:'Stufe 4 · Sicher werden',sub:{en:'Mixed review, longer sentences, test pace',de:'Gemischte Wiederholung, längere Sätze, Testtempo'}}
 ];
@@ -158,7 +158,7 @@ function pathNodeSheet(i){
     2:tx('Pick the right translation, listen, choose articles.','Übersetzung wählen, zuhören, Artikel wählen.'),
     3:tx('Drag pairs together, sort nouns into der, die, das, plurals and gaps.','Paare zusammenziehen, Nomen in der, die, das sortieren, Plural und Lücken.'),
     4:tx('Drag word blocks into sentences, fill gaps, unscramble words.','Wortblöcke zu Sätzen ziehen, Lücken füllen, Wörter ordnen.'),
-    5:n.kind==='r'?tx('Words and sentences from this unit mixed with older ones, so nothing fades. Needs 75%.','Wörter und Sätze dieser Einheit gemischt mit älteren, damit nichts verblasst. Mindestens 75%.'):tx('Everything from this chapter at test pace, with at most a little writing. Needs 80%.','Alles aus diesem Kapitel im Testtempo, höchstens ein bisschen Schreiben. Mindestens 80%.')}[n.lv];
+    5:n.kind==='r'?tx('Words and sentences from this unit mixed with older ones, so nothing fades. Needs 75%.','Wörter und Sätze dieser Einheit gemischt mit älteren, damit nichts verblasst. Mindestens 75%.'):tx('Everything from this chapter at test pace, plus a rule question. Needs 80%.','Alles aus diesem Kapitel im Testtempo, dazu eine Regelfrage. Mindestens 80%.')}[n.lv];
   sheet(`<div class="kick">${esc(u.name)} · ${n.kind==='g'?tx('Grammar','Grammatik'):tx('Chapter','Kapitel')+' '+(n.ch+1)}</div><h3 style="font-size:30px">${esc(pathLabel(n))}</h3>
   <p class="sub" style="margin-top:6px">${n.kind==='g'?tx('Fill the gaps from your grammar notes.','Fülle die Lücken aus deinen Grammatiknotizen.'):body}</p>
   <div class="sub" style="margin:12px 0;font-size:14px">${names}</div>

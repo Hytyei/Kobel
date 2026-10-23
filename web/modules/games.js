@@ -160,8 +160,8 @@ R.memo=it=>{
   const picks=(it.cids||[]).map(byId).filter(c=>c&&c.type!=='g'&&c.de&&c.en&&String(c.de).length<=18&&String(c.en).length<=22);
   const seen=new Set(),P=picks.filter(c=>{const k=c.de.toLowerCase()+'|'+c.en.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6);
   if(P.length<4)return P[0]&&R.mc2?R.mc2({cid:P[0].id,kind:'mc2'}):advance();
-  const cards=shuffle(P.flatMap(c=>[{id:c.id,side:'de',t:fmtDe(c)},{id:c.id,side:'en',t:c.en}]));
-  const cols=cards.length>8?3:2;
+  const cards=shuffle(P.flatMap(c=>[{id:c.id,side:'de',t:disDe(c)},{id:c.id,side:'en',t:c.en}]));
+  const cols=cards.length%4===0?4:cards.length%5===0?5:cards.length>8?3:2;
   setMain(`${tagH(tx('Memory','Memory'),'lilac')}<h2 class="q" style="font-size:24px">${tx('Match the pairs','Finde die Paare')}</h2><p class="sub">${tx('Flip two cards: a German word and its meaning.','Drehe zwei Karten: ein deutsches Wort und seine Bedeutung.')}</p>
   <div class="mm-g" id="mmg" style="grid-template-columns:repeat(${cols},1fr)">${cards.map((c,i)=>`<button type="button" class="mm-c ${c.side}" data-i="${i}" data-id="${c.id}"><span class="mm-in"><i class="mm-f">?</i><b class="mm-b" style="font-size:${c.t.length>12?11:c.t.length>9?13:15}px">${esc(c.t)}</b></span></button>`).join('')}</div>
   <p class="mm-s" id="mms"></p>`);
@@ -191,10 +191,11 @@ R.bubble=it=>{
   let r=0,miss={},busy=false,pops=0;
   const draw=()=>{
     const c=P[r],opts=[c],low=new Set([String(c.en).toLowerCase()]);
-    for(const d of shuffle(pool.slice())){if(opts.length>=4)break;const k=String(d.en).toLowerCase();if(!low.has(k)&&d.id!==c.id){low.add(k);opts.push(d)}}
+    smartEn(c,5).forEach(v=>{const k=String(v).toLowerCase();if(opts.length<4&&!low.has(k)&&k.length<=24){low.add(k);opts.push({id:'x'+opts.length+'_'+c.id,en:v})}});
+    for(const d of shuffle(pool.slice())){if(opts.length>=4)break;const k=String(d.en).toLowerCase();if(!low.has(k)&&d.id!==c.id&&!/[?!.]/.test(d.en)){low.add(k);opts.push(d)}}
     const xs=shuffle([3,27,51,73]);
-    setMain(`${tagH(tx('Bubble pop','Blasenjagd'),'sky')}<h2 class="q" style="font-size:30px">${esc(fmtDe(c))} ${speakBtn(disDe(c))}</h2><p class="sub">${tx('Pop the bubble with the right meaning.','Platze die Blase mit der richtigen Bedeutung.')} · ${r+1}/${P.length}</p>
-    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="left:${xs[i]}%;animation-duration:${(9.5+i*.5).toFixed(1)}s;animation-delay:${(i*.35).toFixed(2)}s"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
+    setMain(`${tagH(tx('Bubble pop','Blasenjagd'),'sky')}<h2 class="q" style="font-size:30px">${fmtDe(c)} ${speakBtn(disDe(c))}</h2><p class="sub">${tx('Pop the bubble with the right meaning.','Platze die Blase mit der richtigen Bedeutung.')} · ${r+1}/${P.length}</p>
+    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="left:${xs[i]}%;animation-duration:${(8.5+i*.6).toFixed(1)}s;animation-delay:${(i*.18).toFixed(2)}s"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
     setFoot('');busy=false;
     const sky=$('#bbs');
     sky.querySelectorAll('.bb').forEach(b=>{

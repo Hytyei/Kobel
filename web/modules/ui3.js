@@ -29,6 +29,9 @@ function render(){
   const html=`<div class="view">${({home:vHome,arcade:vArcade,library:vLib,stats:vStats,teach:vTeach,path:vPath,friends:vFriends,settings:vSet,about:vAbout,profile:vProfile,inbox:vInbox})[tab]()}</div>`;
   /* no flicker: an identical screen is left alone, and a refresh of the same screen is drawn without the entrance animation */
   const same=RN.tab===tab&&app.firstChild&&app.firstChild.classList&&app.firstChild.classList.contains('view');
+  /* behind an open question screen nothing is visible: do not rebuild the page under it (that caused flashes), just mark it stale */
+  if(document.getElementById('ses')){RN.html='';return}
+  if(same&&RN.html===html&&app.firstChild&&app.firstChild.isConnected){drawTabs();return}
   app.innerHTML=html;RN.tab=tab;RN.html=html;
   if(same){app.firstChild.classList.add('still');if(window.scrollY!==keepY)window.scrollTo(0,keepY)}
   drawTabs();

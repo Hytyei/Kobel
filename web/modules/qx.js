@@ -8,7 +8,7 @@ const qxSoundOn=()=>{try{return !!S.settings.sound}catch(e){return false}};
 function qxDecorate(el){
   if(!el||el.querySelector('.qx-bg'))return;
   const bg=document.createElement('div');bg.className='qx-bg';bg.setAttribute('aria-hidden','true');
-  bg.innerHTML='<i class="qx-str"></i><i class="qx-hl"></i><i class="qx-rg"></i><i class="qx-rg r2"></i><i class="qx-rg r3"></i><i class="qx-rail"></i>';
+  bg.innerHTML='<i class="qx-str"></i><i class="qx-hl"></i><i class="qx-rail"></i>';
   el.insertBefore(bg,el.firstChild);
   const fl=document.createElement('div');fl.className='qx-flash';fl.id='qxf';el.insertBefore(fl,bg.nextSibling);
   const top=el.querySelector('.ses-top');if(top){const d=document.createElement('div');d.className='qx-dots';d.id='qxd';top.appendChild(d)}
@@ -80,6 +80,7 @@ function resolve(it,res,info={}){
   if(ses.locked)return;
   const c0=ses.combo|0;
   resolve0(it,res,info);
+  S.stats.qn=(S.stats.qn|0)+1;
   try{
     if(!ses.qxHist)ses.qxHist=[];ses.qxHist[Math.min(ses.i,99)]=res;
     const m=$('#sMain'),good=res!=='bad';

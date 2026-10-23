@@ -8,7 +8,7 @@
 .qx-bg i{position:absolute;display:block}
 .qx-rail{left:0;top:0;bottom:0;width:4px;background:var(--club,#D20515);opacity:.9;transform-origin:top;animation:qxRail 1.1s var(--qx-ease) both}
 @keyframes qxRail{from{transform:scaleY(0)}to{transform:none}}
-.qx-str{inset:-20% -20%;opacity:.5;background:repeating-linear-gradient(115deg,transparent 0 46px,rgba(255,255,255,.028) 46px 48px);animation:qxStr 40s linear infinite;will-change:transform}
+.qx-str{inset:-20% -20%;opacity:.5;background:repeating-linear-gradient(115deg,transparent 0 46px,rgba(255,255,255,.028) 46px 48px);animation:qxStr 40s linear infinite;will-change:transform;backface-visibility:hidden}
 @keyframes qxStr{to{transform:translate3d(96px,0,0)}}
 :root[data-theme="light"] .qx-str{background:repeating-linear-gradient(115deg,transparent 0 46px,rgba(0,0,0,.035) 46px 48px)}
 .qx-rg{left:50%;top:44%;width:min(150vmin,820px);aspect-ratio:1;margin:calc(min(150vmin,820px)/-2) 0 0 calc(min(150vmin,820px)/-2);border-radius:50%;border:1.5px solid var(--club,#D20515);opacity:0;animation:qxRg 15s cubic-bezier(.3,.1,.3,1) infinite;will-change:transform,opacity}
@@ -24,14 +24,14 @@
 @keyframes qxFlash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
 
 /* ---- question enters ---- */
-.sMain.qx-in>*{animation:qxUp .5s var(--qx-ease) both}
-.sMain.qx-in>*:nth-child(2){animation-delay:.05s}.sMain.qx-in>*:nth-child(3){animation-delay:.1s}.sMain.qx-in>*:nth-child(4){animation-delay:.15s}
-.sMain.qx-in .opt:not(.ok):not(.no):not(.sel){animation:qxSlide .45s var(--qx-ease) both;animation-delay:calc(.12s + var(--i,0)*.06s)}
-.sMain.qx-in .tag{animation:qxUp .4s var(--qx-ease) both}
-.sMain.qx-in .qx-t.in{animation:qxTile .5s var(--qx-ease) both;animation-delay:calc(.1s + var(--i,0)*.035s)}
-@keyframes qxUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes qxSlide{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
-@keyframes qxTile{from{opacity:0;transform:translateY(24px) scale(.7) rotate(-6deg)}to{opacity:1;transform:none}}
+.sMain.qx-in>*{animation:qxUp .3s var(--qx-ease) backwards}
+.sMain.qx-in>*:nth-child(2){animation-delay:.03s}.sMain.qx-in>*:nth-child(3){animation-delay:.06s}.sMain.qx-in>*:nth-child(4){animation-delay:.09s}
+.sMain.qx-in .opt:not(.ok):not(.no):not(.sel){animation:qxSlide .3s var(--qx-ease) backwards;animation-delay:calc(.04s + var(--i,0)*.035s)}
+.sMain.qx-in .tag{animation:qxUp .25s var(--qx-ease) backwards}
+.sMain.qx-in .qx-t.in{animation:qxTile .32s var(--qx-ease) backwards;animation-delay:calc(.03s + var(--i,0)*.02s)}
+@keyframes qxUp{from{opacity:.5;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+@keyframes qxSlide{from{opacity:.5;transform:translate3d(18px,0,0)}to{opacity:1;transform:none}}
+@keyframes qxTile{from{opacity:.4;transform:translate3d(0,12px,0) scale(.85)}to{opacity:1;transform:none}}
 
 /* ---- touch feedback and answer states ---- */
 .opt{transition:transform .18s var(--qx-ease),background .2s,box-shadow .25s}
@@ -41,17 +41,17 @@
 .opt.ok{animation:qxOk .7s var(--qx-ease);box-shadow:0 0 0 0 rgba(40,200,110,.55),inset 5px 0 0 #2fd27a}
 .opt.ok::after{content:'';position:absolute;right:16px;top:50%;width:20px;height:11px;margin-top:-9px;border-left:4px solid #2fd27a;border-bottom:4px solid #2fd27a;transform:rotate(-45deg) scale(0);animation:qxCheck .4s .12s var(--qx-ease) forwards}
 .opt.no{animation:shake .45s,qxRed .6s}
-@keyframes qxOk{0%{transform:scale(1)}30%{transform:scale(1.035);box-shadow:0 0 0 0 rgba(40,200,110,.6)}100%{transform:scale(1);box-shadow:0 0 0 18px rgba(40,200,110,0)}}
+@keyframes qxOk{0%{transform:scale(1)}35%{transform:scale(1.03)}100%{transform:scale(1)}}
 @keyframes qxCheck{to{transform:rotate(-45deg) scale(1)}}
-@keyframes qxRed{0%{filter:brightness(1.5)}100%{filter:none}}
+@keyframes qxRed{0%{opacity:.6}100%{opacity:1}}
 .inp.qx-good{border-color:#2fd27a!important;animation:qxOk .7s var(--qx-ease)}
 .inp.qx-bad{border-color:var(--red)!important;animation:shake .45s}
 .blank.filled{animation:qxPop .45s var(--qx-ease)}
 @keyframes qxPop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}
-.foot.fb .in{animation:qxFoot .45s var(--qx-ease) both}
+.foot.fb .in{animation:qxFoot .3s var(--qx-ease) backwards}
 .foot.fb .mk{animation:qxBounce .7s .1s var(--qx-ease) both}
-.foot.good .fb .h{animation:qxUp .4s .15s both}
-@keyframes qxFoot{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+.foot.good .fb .h{animation:qxUp .25s .08s backwards}
+@keyframes qxFoot{from{transform:translate3d(0,30%,0);opacity:.6}to{transform:none;opacity:1}}
 @keyframes qxBounce{0%{transform:scale(.3) rotate(-20deg)}55%{transform:scale(1.2) rotate(6deg)}100%{transform:none}}
 .xpf{animation:qxXp 1s var(--qx-ease) both!important;font-size:30px!important}
 @keyframes qxXp{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}20%{opacity:1;transform:translate(-50%,-12px) scale(1.25)}100%{opacity:0;transform:translate(-50%,-90px) scale(1)}}
@@ -156,10 +156,10 @@
 .qxs-tag{font:600 12px var(--fb);letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.55);opacity:0;animation:qxUp .6s 1.4s both;margin-top:-14px}
 
 /* ---- logo motion: kick-off wipe when a session starts ---- */
-.qx-kick{position:fixed;inset:0;z-index:300;pointer-events:none;background:var(--club,var(--qx-red));display:grid;place-items:center;animation:qxKick .95s cubic-bezier(.7,0,.2,1) both}
-.qx-kick i{width:150px;height:150px;background:url(brand/eagle.png) center/contain no-repeat;filter:drop-shadow(0 10px 30px rgba(0,0,0,.3));animation:qxKickEg .95s var(--qx-ease) both}
-@keyframes qxKick{0%{clip-path:circle(0% at 50% 55%)}28%{clip-path:circle(75% at 50% 55%)}62%{clip-path:circle(75% at 50% 55%);transform:none}100%{clip-path:inset(0 0 100% 0);transform:none}}
-@keyframes qxKickEg{0%{transform:scale(.4) rotate(-12deg);opacity:0}30%{transform:scale(1.05);opacity:1}62%{transform:scale(1);opacity:1}100%{transform:translateY(-40px) scale(.9);opacity:0}}
+.qx-kick{position:fixed;inset:0;z-index:300;pointer-events:none;background:var(--club,var(--qx-red));display:grid;place-items:center;animation:qxKick .7s ease-out both}
+.qx-kick i{width:150px;height:150px;background:url(brand/eagle.png) center/contain no-repeat;filter:drop-shadow(0 10px 30px rgba(0,0,0,.3));animation:qxKickEg .7s var(--qx-ease) both}
+@keyframes qxKick{0%{opacity:0}22%{opacity:1}60%{opacity:1}100%{opacity:0}}
+@keyframes qxKickEg{0%{transform:scale(.6);opacity:0}30%{transform:scale(1.04);opacity:1}60%{transform:scale(1);opacity:1}100%{transform:scale(.96);opacity:0}}
 
 /* ---- logo motion: stamp on the result screen, shine on the header logo ---- */
 .qx-stamp{position:relative;width:76px;height:76px;margin:0 auto 6px;background:var(--qx-red);overflow:hidden;animation:qxStamp .8s .1s var(--qx-ease) both}

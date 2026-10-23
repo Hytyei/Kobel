@@ -49,3 +49,9 @@
 .pstage{margin:22px 2px 8px;padding:10px 14px;border-left:4px solid var(--lantern);background:var(--card,rgba(255,255,255,.04));border-radius:0 12px 12px 0;display:flex;flex-direction:column;gap:2px}
 .pstage b{font-family:var(--disp,inherit);font-size:17px;letter-spacing:.02em}
 .pstage span{font-size:13px;opacity:.7}
+.rulec{display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow:auto;padding-bottom:8px}
+.rl-t{font:800 20px/1.1 var(--fd);margin-top:8px}
+.rl-l{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:16px;line-height:1.35}
+.rl-ex{padding:8px 12px;border-left:3px solid var(--lilac,#9b7bff);background:rgba(255,255,255,.04);font-weight:700}
+.rl-ex small{display:block;font-weight:500;opacity:.65;margin-top:2px}
+.rl-q{font:700 21px/1.3 var(--fb);padding:6px 0}

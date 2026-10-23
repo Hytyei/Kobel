@@ -38,3 +38,11 @@ Units are split evenly into four stages. The stage changes how hard the nodes ar
 ## Simulation (whole path, 409 nodes)
 
 Writing share 1.8% overall, 11.8% in the busiest node; average 6.5 uses per word across the whole path, at most 16.
+
+## 3.3.1 additions: rules first, writing is rare
+
+* **Rule card.** The first chapter of every unit opens with the unit's rules and example sentences ("Rule first"). Grammar nodes open with a rule card per topic.
+* **Rule recall.** Two question types keep rules in memory: *Which rule is this?* (rule text, pick the topic) and *Pick the rule* (topic, pick the rule text). They appear in levels 3 and 4, in chapter tests, in checkpoints and in grammar nodes, and rotate through all rules you have already met (least recently used first). About 5% of all path questions are rule questions.
+* **Grammar gaps** always offer options now.
+* **Writing and letter exercises** (spell, missing letters, unscramble, word search, word snake, listen-and-spell, typing) are limited to one in every 50 answered questions across the whole app (`S.stats.qn` counts answers, `S.stats.wlast` marks the last one). In between, the same slots are filled with choice, article, plural, gap and matching questions. The Minigames in the Training tab still offer them on demand.
+* **Smoother questions.** Entrance animations no longer start fully transparent (that caused a blank flash), the intro wipe and the background rings are gone, answer feedback uses transforms only, and the page under an open question screen is no longer rebuilt.

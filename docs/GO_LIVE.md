@@ -214,3 +214,8 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 * **Saved progress stays valid:** existing path nodes keep their keys. Each unit gains one new review checkpoint at its end; it counts as done automatically for units you have already passed.
 * **Check on a phone:** the stage banners on the Path tab, a checkpoint node, and a few multiple-choice questions (options should look alike).
 
+
+## Version 3.3.1 (rules first, fixes): release checklist
+
+* Same as 3.3.0: no backend change. Tag `v3.3.1` (version code 30301), build with your **existing** release keystore.
+* **Check on a phone:** Bubble pop and Memory in Training, a question screen for flicker, the "Rule first" card at the start of a unit and a grammar node.
