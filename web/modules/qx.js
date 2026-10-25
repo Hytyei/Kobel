@@ -17,7 +17,6 @@ function openOverlay(rush){
   openOverlay0(rush);
   QX.lc=0;
   const el=$('#ses');qxDecorate(el);
-  if(!qxReduce()){const k=document.createElement('div');k.className='qx-kick';k.innerHTML='<i></i>';document.body.appendChild(k);setTimeout(()=>k.remove(),1000)}
 }
 function setMain(h){
   setMain0(h);

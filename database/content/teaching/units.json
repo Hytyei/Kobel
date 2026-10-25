@@ -5528,5 +5528,444 @@
     "subject": "Phone calls at the office"
    }
   ]
+ },
+ {
+  "id": "koennen",
+  "md": 29,
+  "tag": "Skill check",
+  "title": "Can do: können",
+  "de": "Können: Was kannst du?",
+  "sub": "Say what you can do, and ask others.",
+  "subject": "Hobbies & activities",
+  "covers": [
+   "Can-do sentences",
+   "Can you help? (everyday)"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Skill check",
+    "say": "Every player has a strength. With können you say what you can do. It sits in position 2 like a captain, and the action verb runs to the very end of the pitch.",
+    "pts": [
+     "können is in position 2",
+     "The action verb goes to the end, as an infinitive",
+     "Yes/no question: können moves to position 1"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Hobbies & activities",
+    "say": "Your squad of skills.",
+    "items": [
+     [
+      "kochen",
+      "to cook"
+     ],
+     [
+      "backen",
+      "to bake"
+     ],
+     [
+      "singen",
+      "to sing"
+     ],
+     [
+      "schwimmen",
+      "to swim"
+     ],
+     [
+      "fotografieren",
+      "to photograph"
+     ],
+     [
+      "Schach spielen",
+      "to play chess"
+     ],
+     [
+      "malen",
+      "to paint"
+     ],
+     [
+      "Rad fahren",
+      "to ride a bike"
+     ],
+     [
+      "Fußball spielen",
+      "to play football"
+     ],
+     [
+      "tanzen",
+      "to dance"
+     ],
+     [
+      "Tennis spielen",
+      "to play tennis"
+     ],
+     [
+      "Gitarre spielen",
+      "to play the guitar"
+     ],
+     [
+      "Ski fahren",
+      "to ski"
+     ],
+     [
+      "reiten",
+      "to ride a horse"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "können: the line-up",
+    "say": "Watch ich and er/sie/es: no ending. The rest follow the usual endings.",
+    "rows": [
+     [
+      "ich",
+      "kann"
+     ],
+     [
+      "du",
+      "kannst"
+     ],
+     [
+      "er / sie / es",
+      "kann"
+     ],
+     [
+      "wir",
+      "können"
+     ],
+     [
+      "ihr",
+      "könnt"
+     ],
+     [
+      "sie / Sie",
+      "können"
+     ]
+    ],
+    "hi": [
+     0,
+     2
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "The sentence frame",
+    "say": "Position 2 and the end.",
+    "rows": [
+     {
+      "line": "Statement",
+      "parts": [
+       [
+        "Sie",
+        "you"
+       ],
+       [
+        "können",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "wirklich super",
+        "really super"
+       ],
+       [
+        "tanzen",
+        "end",
+        "hi"
+       ]
+      ]
+     },
+     {
+      "line": "Statement",
+      "parts": [
+       [
+        "Ich",
+        "I"
+       ],
+       [
+        "kann",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "super",
+        "great"
+       ],
+       [
+        "kochen",
+        "end",
+        "hi"
+       ]
+      ]
+     },
+     {
+      "line": "Yes/no question",
+      "parts": [
+       [
+        "Kannst",
+        "pos. 1",
+        "hi"
+       ],
+       [
+        "du",
+        "you"
+       ],
+       [
+        "mir",
+        "me"
+       ],
+       [
+        "helfen",
+        "end",
+        "hi"
+       ],
+       [
+        "?",
+        ""
+       ]
+      ]
+     },
+     {
+      "line": "W-question",
+      "parts": [
+       [
+        "Wer",
+        "who"
+       ],
+       [
+        "kann",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "gut",
+        "well"
+       ],
+       [
+        "kochen",
+        "end",
+        "hi"
+       ],
+       [
+        "?",
+        ""
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: a compliment",
+    "say": "Compliment and thank you.",
+    "lines": [
+     [
+      "A",
+      "Sie können wirklich super tanzen!",
+      "You can really dance super!"
+     ],
+     [
+      "B",
+      "Vielen Dank! Meine Enkelin kann auch gut tanzen!",
+      "Thank you very much! My granddaughter can dance well too!"
+     ],
+     [
+      "A",
+      "Wer kann gut kochen?",
+      "Who can cook well?"
+     ],
+     [
+      "B",
+      "Ich kann super kochen.",
+      "I can cook great."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which form is right? \"Du ... toll Schach spielen.\"",
+    "opts": [
+     "kannst",
+     "kann",
+     "können"
+    ],
+    "a": 0,
+    "why": "du → kannst"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which sentence is correct?",
+    "opts": [
+     "Ich kann super kochen.",
+     "Ich kochen kann super.",
+     "Ich kann kochen super."
+    ],
+    "a": 0,
+    "why": "können in position 2, kochen at the end."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "You want to ask for help. What do you say?",
+    "opts": [
+     "Kannst du mir helfen?",
+     "Du kannst mir helfen?",
+     "Helfen kannst du mir."
+    ],
+    "a": 0,
+    "why": "Yes/no question: können first."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can say what you can do. Train the hobby words and the can-do sentences.",
+    "subject": "Hobbies & activities"
+   }
+  ]
+ },
+ {
+  "id": "degree",
+  "md": 30,
+  "tag": "Press conference",
+  "title": "How well? And what do you think?",
+  "de": "Wie gut? Wie finden Sie das?",
+  "sub": "Say how well you can do something and give an opinion.",
+  "subject": "How well? (degrees)",
+  "covers": [
+   "Opinions: Wie finden Sie das?",
+   "Compliments & thanks"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Press conference",
+    "say": "After the match the reporter asks how it went. You say how well you can do something, and what you think about it.",
+    "pts": [
+     "sehr gut → gut → ein bisschen → nicht so gut → gar nicht",
+     "These phrases stand before the infinitive",
+     "Wie finden Sie das? asks for an opinion"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "How well?",
+    "say": "From strong to zero.",
+    "items": [
+     [
+      "sehr gut",
+      "very well"
+     ],
+     [
+      "gut",
+      "well"
+     ],
+     [
+      "ein bisschen",
+      "a little bit"
+     ],
+     [
+      "nicht so gut",
+      "not so well"
+     ],
+     [
+      "gar nicht",
+      "not at all"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "What do you think?",
+    "say": "Wie finden Sie das?",
+    "items": [
+     [
+      "toll / super",
+      "great"
+     ],
+     [
+      "normal",
+      "normal"
+     ],
+     [
+      "komisch",
+      "funny / strange"
+     ],
+     [
+      "blöd",
+      "stupid / annoying"
+     ],
+     [
+      "interessant",
+      "interesting"
+     ],
+     [
+      "lustig",
+      "funny"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Compliments & thanks",
+    "say": "Give a compliment, say thank you.",
+    "items": [
+     [
+      "Du kannst ja toll Ski fahren!",
+      "You can ski really great!"
+     ],
+     [
+      "Vielen Dank!",
+      "Thank you very much!"
+     ],
+     [
+      "Oh, danke!",
+      "Oh, thanks!"
+     ],
+     [
+      "Danke sehr!",
+      "Thank you very much!"
+     ],
+     [
+      "Herzlichen Dank!",
+      "Many thanks!"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "\"Sie können ... Fußball spielen.\" They cannot play at all.",
+    "opts": [
+     "gar nicht",
+     "sehr gut",
+     "ein bisschen"
+    ],
+    "a": 0,
+    "why": "gar nicht = not at all"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What does komisch mean?",
+    "opts": [
+     "funny / strange",
+     "normal",
+     "great"
+    ],
+    "a": 0,
+    "why": "komisch = funny / strange"
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! Train the degrees and the opinions.",
+    "subject": "How well? (degrees)"
+   }
+  ]
  }
 ]

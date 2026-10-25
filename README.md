@@ -35,6 +35,6 @@ The built-in content is one learner's notes. Anyone can add their own: see [docs
 | `/database` | D1 migrations, schema and the class notes content |
 | `/docs` | Guides |
 
-Guides: [build the APK](docs/BUILD_APK.md) · [go live](docs/GO_LIVE.md) · [local development](docs/LOCAL_DEVELOPMENT.md) · [architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [security](docs/SECURITY.md) · [leagues](docs/LEAGUES.md) · [friends and duels](docs/FRIENDS_AND_DUELS.md) · [Tactics Room](docs/TACTICS_ROOM.md)
+Guides: [build the APK](docs/BUILD_APK.md) · [go live](docs/GO_LIVE.md) · [local development](docs/LOCAL_DEVELOPMENT.md) · [architecture](docs/ARCHITECTURE.md) · [API](docs/API.md) · [accounts](docs/AUTH.md) · [security](docs/SECURITY.md) · [leagues](docs/LEAGUES.md) · [friends and duels](docs/FRIENDS_AND_DUELS.md) · [Tactics Room](docs/TACTICS_ROOM.md)
 
 Made by **Hytyei**, built with Claude (Anthropic).

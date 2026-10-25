@@ -225,3 +225,63 @@ Any member sends a notification to the other members ("time to practise"). Auth:
 The feed the phone polls for notifications. `since` is clamped to the last 7 days, at most 50 items are returned, and only your own data appears.
 * **Response 200:** `{ "alerts": [ { id, type, ts, ... } ], "now": 1760000000000, "since": 1759990000000 }`
 * **Types:** `friend` (someone added you), `duel_invite`, `duel_turn`, `duel_result`, `group_added`, `group_round`, `group_result`, `group_ping` (3.2.0). The `id` is stable so the phone can show each alert once.
+
+
+## Accounts (version 3.4.0, migration 0007)
+See `docs/AUTH.md` for the idea. Every endpoint below returns the same user shape:
+`{ "id": 7, "name": "Maren_K", "username": "Maren_K", "badge": null, "visible": true, "hasPassword": true, "google": null, "legacy": false }`
+(`badge` is `"founder"` only for the owner; `google` is a masked e-mail such as `ma***@gmail.com` or `null`; `legacy` is true while the account has neither username nor Google). All endpoints accept a **session token** (`kbs_…`) or an old Kobel ID as `Authorization: Bearer …`.
+
+### POST /v1/auth/signup
+* **Auth:** none (rate limited per connection per day and overall per day)
+* **Body:** `{ "username": "Maren_K", "password": "<64 hex chars: the key the app derives from the password>", "label": "Pixel 8" (optional), "founderKey": "…" (only to claim the founder name) }`
+* **Response 201:** `{ "token": "kbs_…", "user": { … } }`
+* **Errors:** `400 invalid_username` / `invalid_password` / `invalid_request`, `403 reserved` / `registration_closed`, `409 taken`, `429 rate_limited`
+
+### POST /v1/auth/login
+* **Auth:** none
+* **Body:** `{ "username": "Maren_K", "password": "<64 hex>", "label": "…" }`
+* **Response 200:** `{ "token": "kbs_…", "user": { … } }`
+* **Errors:** `401 invalid_credentials` (the same message for a wrong name and a wrong password), `429 rate_limited` (too many connections per hour, or 8 wrong tries per username per hour)
+
+### POST /v1/auth/logout
+* **Auth:** required. Ends this session. **Response 200:** `{ "ok": true }`
+
+### GET /v1/auth/username?u=Maren_K
+Live "is it free?" check while typing.
+* **Auth:** none (limited per connection per hour)
+* **Response 200:** `{ "available": true }` or `{ "available": false, "reason": "taken" | "reserved" | "invalid_username" }`
+* **Errors:** `429 rate_limited`
+
+### POST /v1/me/username
+* **Auth:** required
+* **Body:** `{ "username": "Maren_K", "founderKey": "…" (optional) }`. Allowed once a week (not for the founder key).
+* **Response 200:** `{ "user": { … } }` · **Errors:** `400 invalid_username`, `403 reserved`, `409 taken`, `429 cooldown`
+
+### POST /v1/me/password
+* **Auth:** required (needs a username first)
+* **Body:** `{ "password": "<64 hex>", "current": "<64 hex>" (required when a password already exists) }`
+* **Response 200:** `{ "ok": true }`. Other devices are signed out. · **Errors:** `400 username_first` / `invalid_password`, `403 wrong_password`
+
+### GET /v1/me
+Now returns the account: `{ "user": { … } }` (same shape as above).
+
+### POST /v1/auth/google/start
+* **Auth:** none for sign-in, required for `"intent":"link"`
+* **Body:** `{ "intent": "signin" | "link", "challenge": "<SHA-256 hex of a secret the app keeps>" }`
+* **Response 200:** `{ "url": "https://accounts.google.com/o/oauth2/v2/auth?..." }` (the app opens it in the browser)
+* **Errors:** `401 unauthorized` (link without being signed in), `400 invalid_request`, `429 rate_limited`, `503 google_not_configured`
+
+### GET /v1/auth/google/callback
+Called by Google, not by the app. Shows a small page that opens `kobel://auth?code=…` (or `?error=failed`).
+
+### POST /v1/auth/exchange
+* **Auth:** none
+* **Body:** `{ "code": "<from kobel://auth>", "verifier": "<the secret the app kept>", "label": "…" }`
+* **Response 200:** `{ "token": "kbs_…", "user": { … }, "isNew": true|false, "linked": true|false }`
+* **Errors:** `401 invalid_code` (wrong, used or older than 2 minutes: codes work once)
+
+### DELETE /v1/me/google
+* **Auth:** required. Unlinks Google. **Response 200:** `{ "ok": true }` · **Errors:** `409 only_sign_in` (set a username and password first)
+
+Users also carry `"badge": "founder" | null` in the rows of `/v1/leaderboard`, `/v1/friends`, `/v1/groups…` and `/v1/duels…`.

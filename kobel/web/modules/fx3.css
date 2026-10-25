@@ -1,0 +1,116 @@
+/* ═════════ celebrations ═════════ */
+.cel{position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px calc(28px + env(safe-area-inset-bottom,0px));background:rgba(2,9,15,.96);color:#fff;text-align:center;overflow:hidden;animation:celin .35s ease-out both}
+.cel.out{animation:celout .28s ease-in both}
+@keyframes celin{from{opacity:0}to{opacity:1}}
+@keyframes celout{to{opacity:0;transform:scale(1.04)}}
+.cel-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cel-bg .rays{position:absolute;left:50%;top:38%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.075) 0 7deg,transparent 7deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 55%);mask:radial-gradient(circle,#000 0,transparent 55%);animation:celrot 26s linear infinite}
+@keyframes celrot{to{transform:rotate(360deg)}}
+.cel-bg .glow{position:absolute;left:50%;top:38%;width:130vmin;height:130vmin;margin:-65vmin 0 0 -65vmin;background:radial-gradient(circle,var(--cc,#D20515) 0,transparent 62%);opacity:.55;animation:celglow 2.4s ease-in-out infinite}
+@keyframes celglow{50%{opacity:.85;transform:scale(1.08)}}
+.cel-bg .ring{position:absolute;left:50%;top:38%;width:40vmin;height:40vmin;margin:-20vmin 0 0 -20vmin;border:3px solid var(--cc,#D20515);border-radius:50%;opacity:0;animation:celring 2.8s ease-out infinite}
+.cel-bg .ring:nth-child(3){animation-delay:.9s}.cel-bg .ring:nth-child(4){animation-delay:1.8s}
+@keyframes celring{0%{transform:scale(.3);opacity:.9}100%{transform:scale(4.2);opacity:0}}
+.cel-cf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cel-in{position:relative;z-index:2;width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center}
+.cel-k{font:800 14px var(--fd);letter-spacing:.22em;text-transform:uppercase;opacity:0;animation:celup .5s .15s both}
+.cel-h{font:800 clamp(44px,15vw,72px)/.95 var(--fd);letter-spacing:-.04em;text-transform:uppercase;margin:12px 0 4px;display:flex;flex-wrap:wrap;justify-content:center}
+.cel-h span{display:inline-block;opacity:0;animation:celslam .55s cubic-bezier(.2,1.5,.4,1) both}
+.cel-h .sp{width:.3em}
+@keyframes celslam{0%{opacity:0;transform:translateY(-70px) scale(2.2)}100%{opacity:1;transform:none}}
+@keyframes celup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.cel-t{font:800 clamp(30px,9vw,44px)/1 var(--fd);letter-spacing:-.03em;text-transform:uppercase;margin-top:14px;opacity:0;animation:celup .5s var(--d,1.1s) both}
+.cel-s{font:400 17px/1.35 var(--fb);color:#C9D1D6;margin-top:10px;max-width:340px;opacity:0;animation:celup .5s var(--d,1.3s) both}
+.cel-ok{position:relative;z-index:3;margin-top:30px;min-width:220px;border:0;background:#fff;color:#0B141B;font:800 16px var(--fd);letter-spacing:.12em;text-transform:uppercase;padding:18px 22px;cursor:pointer;opacity:0;animation:celup .5s var(--d,2s) both}
+.cel-ok:active{transform:scale(.97)}
+.cel-ok.alt{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4);margin-top:10px}
+.cel-sh{position:relative;width:190px;height:210px;display:grid;place-items:center;opacity:0;animation:celshield 1s .35s cubic-bezier(.2,1.4,.4,1) both}
+.cel-sh .stg-i{width:100%!important;height:100%!important;filter:drop-shadow(0 12px 30px rgba(0,0,0,.6))}
+.cel-sh::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);-webkit-mask:var(--m);mask:var(--m);transform:translateX(-130%);animation:celshine 1.2s 1.3s ease-out 1 both}
+@keyframes celshield{0%{opacity:0;transform:translateY(120px) scale(.4) rotate(-10deg)}70%{transform:translateY(-8px) scale(1.12)}100%{opacity:1;transform:none}}
+@keyframes celshine{to{transform:translateX(130%)}}
+.cel-from{position:absolute;left:-8px;bottom:-4px;width:64px;height:70px;opacity:.55;filter:grayscale(.6)}
+.cel-from .stg-i{width:100%!important;height:100%!important}
+.cel-up{display:flex;flex-direction:column;align-items:center;gap:2px;margin-bottom:6px;animation:celbob 1s ease-in-out infinite;color:#2ED177}
+.cel-up svg{width:30px;height:30px}
+@keyframes celbob{50%{transform:translateY(-8px)}}
+.cel-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:100%;margin-top:22px;opacity:0;animation:celup .5s var(--d,1.5s) both}
+.cel-row>div{background:rgba(255,255,255,.08);padding:12px 4px}
+.cel-row b{display:block;font:800 30px/1 var(--fd);letter-spacing:-.03em}
+.cel-row span{font:800 10px var(--fd);letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.cel-row .w{box-shadow:inset 0 -3px 0 #1FB45A}.cel-row .d{box-shadow:inset 0 -3px 0 var(--orange)}.cel-row .l{box-shadow:inset 0 -3px 0 var(--red)}
+
+/* streak flame */
+.cel-fl{position:relative;width:190px;height:230px;display:grid;place-items:center}
+.cel-fl svg{width:100%;height:100%}
+.cel-fl .core{position:absolute;inset:0;color:#FF5A3C;transform-origin:50% 90%;opacity:0;animation:celflame 1.1s .2s cubic-bezier(.2,1.5,.4,1) both,celflick 1.4s 1.4s ease-in-out infinite}
+.cel-fl .core2{position:absolute;left:28%;right:28%;top:40%;bottom:8%;color:#FFD23C;transform-origin:50% 90%;opacity:0;animation:celflame 1s .45s cubic-bezier(.2,1.5,.4,1) both,celflick 1.1s 1.5s ease-in-out infinite reverse}
+.cel-fl .core3{position:absolute;left:38%;right:38%;top:58%;bottom:12%;color:#fff;transform-origin:50% 90%;opacity:0;animation:celflame .9s .6s cubic-bezier(.2,1.5,.4,1) both,celflick .9s 1.5s ease-in-out infinite}
+@keyframes celflame{0%{opacity:0;transform:scale(0) translateY(30px)}60%{transform:scale(1.2)}100%{opacity:1;transform:none}}
+@keyframes celflick{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.07,1.1) rotate(3deg)}}
+.cel-fl .spk{position:absolute;left:50%;bottom:30%;width:8px;height:8px;border-radius:50%;background:#FFD23C;opacity:0;animation:celspark 1.8s var(--sd,1s) ease-out infinite}
+@keyframes celspark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--sx,30px),-170px) scale(.2)}}
+.cel-num{font:800 clamp(96px,32vw,150px)/.9 var(--fd);letter-spacing:-.06em;margin-top:-6px;opacity:0;animation:celup .5s .8s both}
+.cel-num b{display:inline-block;transition:transform .3s}
+.cel-num b.pop{animation:celnum .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes celnum{0%{transform:scale(.5)}60%{transform:scale(1.3)}100%{transform:none}}
+.cel .b3-wk{width:100%;margin-top:18px;opacity:0;animation:celup .5s 1.5s both}
+.cel .b3-wk i{background:rgba(255,255,255,.1)}
+.cel .b3-wk .d i{background:#1FB45A}
+
+/* level slam, goal ring, stars */
+.cel-lv{width:170px;height:170px;background:var(--cc,#D20515);color:var(--ci,#fff);display:grid;place-items:center;font:800 100px/1 var(--fd);letter-spacing:-.05em;opacity:0;animation:celslam .7s .25s cubic-bezier(.2,1.4,.4,1) both;box-shadow:0 0 0 6px rgba(255,255,255,.14),0 20px 60px rgba(0,0,0,.5)}
+.cel-lvb{width:220px;height:8px;background:rgba(255,255,255,.14);margin-top:22px;opacity:0;animation:celup .5s 1.3s both}
+.cel-lvb i{display:block;height:100%;background:#fff;width:0;transition:width 1.2s 1.6s cubic-bezier(.2,.8,.2,1)}
+.cel-ring{position:relative;width:200px;height:200px;opacity:0;animation:celup .5s .2s both}
+.cel-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.cel-ring circle.v{stroke-dasharray:var(--C);stroke-dashoffset:var(--C);animation:celfill 1.4s .5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes celfill{to{stroke-dashoffset:0}}
+.cel-ring .ck{position:absolute;inset:0;display:grid;place-items:center}
+.cel-ring .ck svg{width:86px;height:86px;transform:none}
+.cel-ring .ck path{stroke-dasharray:60;stroke-dashoffset:60;animation:celfill .6s 1.7s ease-out forwards}
+.cel-stars{display:flex;gap:6px;margin:6px 0 0}
+.cel-stars span{font-size:76px;line-height:1;color:rgba(255,255,255,.18);display:inline-block;opacity:0}
+.cel-stars span.on{color:var(--gold);animation:celstar .7s cubic-bezier(.2,1.7,.4,1) both;text-shadow:0 0 30px rgba(255,210,0,.55)}
+.cel-stars span.off{opacity:.9;animation:celup .4s both}
+@keyframes celstar{0%{opacity:0;transform:translateY(-120px) scale(2.4) rotate(-40deg)}100%{opacity:1;transform:none}}
+.cel-badge{display:flex;align-items:center;justify-content:center;width:140px;height:140px;background:#fff;color:#0B141B;font:800 56px var(--fd);letter-spacing:-.04em;opacity:0;animation:celslam .7s .25s cubic-bezier(.2,1.4,.4,1) both}
+.cel-res{width:150px;height:150px;display:grid;place-items:center;font:800 96px/1 var(--fd);letter-spacing:-.04em;background:var(--rc);opacity:0;animation:celslam .7s .25s cubic-bezier(.2,1.4,.4,1) both}
+.cel-lp{font:800 44px var(--fd);letter-spacing:-.03em;margin-top:6px}
+
+/* banner (lower third) */
+.b3-ban{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 108px);z-index:250;display:flex;justify-content:center;pointer-events:none}
+.b3-ban>div{display:flex;align-items:stretch;background:#fff;color:#0B141B;box-shadow:0 12px 30px rgba(0,0,0,.45);max-width:92%;animation:banin .5s cubic-bezier(.2,1.2,.4,1) both,banout .4s 3.2s ease-in both}
+.b3-ban i{display:grid;place-items:center;width:46px;background:var(--club);color:var(--clubink);font:800 20px var(--fd);font-style:normal}
+.b3-ban span{padding:11px 16px;font:800 16px/1.2 var(--fd);letter-spacing:-.01em;text-transform:uppercase}
+.b3-ban small{display:block;font:400 13px var(--fb);text-transform:none;opacity:.7;letter-spacing:0;margin-top:2px}
+@keyframes banin{from{opacity:0;transform:translateX(-60px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes banout{to{opacity:0;transform:translateY(-14px)}}
+.b3-chip.bump{animation:celnum .7s cubic-bezier(.2,1.6,.4,1)}
+.b3-chip.risk{background:var(--red);animation:b3risk 1.2s ease-in-out infinite}
+@keyframes b3risk{50%{box-shadow:0 0 0 6px rgba(210,5,21,.35)}}
+@media (prefers-reduced-motion:reduce){.cel *,.cel{animation-duration:.01s!important;animation-delay:0s!important}.cel-bg .rays{animation:none}}
+
+/* ═════════ Play-Off ═════════ */
+.po{position:fixed;inset:0;z-index:280;background:var(--bg);display:flex;flex-direction:column;color:#fff;padding-top:env(safe-area-inset-top,0px);animation:celin .3s both}
+.po-top{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bar)}
+.po-top .x{color:#fff}
+.po-clock{flex:1;height:10px;background:rgba(0,0,0,.4);position:relative}
+.po-clock i{position:absolute;left:0;top:0;bottom:0;background:var(--red);width:100%;transition:width .25s linear}
+.po-t{font:800 20px var(--fd);min-width:46px;text-align:right;letter-spacing:-.02em}
+.po-main{flex:1;overflow:auto;padding:22px 20px;max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column}
+.po-tag{display:inline-block;align-self:flex-start;background:var(--red);color:#fff;font:800 12px var(--fd);letter-spacing:.16em;padding:6px 10px;text-transform:uppercase}
+.po-q{font:800 clamp(28px,8.4vw,38px)/1.08 var(--fd);letter-spacing:-.025em;margin:18px 0 8px}
+.po-en{font:500 22px/1.3 var(--fb);color:#fff;background:var(--surf);padding:18px 16px;border-left:4px solid var(--red);margin:8px 0}
+.po-hint{font:400 14px var(--fb);color:var(--mute)}
+.po-in{width:100%;border:0;border-bottom:3px solid #fff;background:var(--surf);color:#fff;font:500 24px var(--fb);padding:16px 14px;outline:none;margin-top:18px}
+.po-in.bad{border-color:var(--red);animation:shake .4s}
+.po-uml{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.po-rule{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:18px 0;font:400 16px/1.35 var(--fb);color:#C9D1D6;text-align:left}
+.po-rule b{font:800 15px var(--fd);color:#fff;letter-spacing:.04em;text-transform:uppercase}
+.po-foot{padding:14px 20px calc(18px + env(safe-area-inset-bottom,0px));max-width:560px;width:100%;margin:0 auto}
+.po-big{font:800 clamp(54px,18vw,84px)/.92 var(--fd);letter-spacing:-.045em;text-transform:uppercase;margin:8px 0}
+.po-ans{background:var(--surf);padding:14px 16px;margin-top:14px;font:500 20px var(--fb)}
+.po-ans small{display:block;font:800 11px var(--fd);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.po-ans.ok{background:var(--green)}.po-ans.no{background:var(--red)}
+.cel-h .wd{opacity:1;animation:none}

@@ -109,6 +109,23 @@ class KobelBridge(private val activity: MainActivity) {
         .put("repo", BuildConfig.GITHUB_REPO)
         .put("api", BuildConfig.API_URL).toString()
 
+    /** Opens the Google sign-in page in the phone's browser. Only Google's own sign-in address is allowed. */
+    @JavascriptInterface
+    fun openUrl(url: String) {
+        val u = android.net.Uri.parse(url)
+        if (u.scheme != "https" || u.host != "accounts.google.com") return
+        activity.runOnUiThread {
+            try {
+                activity.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, u).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    /** The one-time code that came back through kobel://auth, or "" (read once). */
+    @JavascriptInterface
+    fun takeAuth(): String = activity.takeAuth()
+
     @JavascriptInterface
     fun checkUpdate() = activity.updater.check()
 

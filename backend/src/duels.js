@@ -99,11 +99,11 @@ async function load(db, id, user) {
 async function names(db, ids) {
   const out = {};
   for (const id of ids) {
-    const r = await db.prepare('SELECT u.id AS id, u.name AS name, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id WHERE u.id = ?').bind(id).first();
+    const r = await db.prepare('SELECT u.id AS id, u.name AS name, u.badge AS badge, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id WHERE u.id = ?').bind(id).first();
     if (r) {
       let avatar = '';
       try { const a = JSON.parse(r.data || '{}').settings; if (a && typeof a.avatar === 'string' && /^[a-z0-9_-]{1,20}$/.test(a.avatar)) avatar = a.avatar; } catch { /* ignore */ }
-      out[id] = { id: r.id, name: String(r.name).slice(0, 40), avatar };
+      out[id] = { id: r.id, name: String(r.name).slice(0, 40), badge: r.badge || '', avatar };
     }
   }
   return out;

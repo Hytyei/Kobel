@@ -271,3 +271,84 @@ Sehr gern. Auf Wiederhören. = My pleasure. Goodbye.
 ! 1. Answer: Firma ..., ..., guten Tag. 2. Caller: Guten Tag, ... hier. 3. Answer: Was kann ich für Sie tun? 4. Caller: Ist Herr / Frau ... da? 5. Answer: Einen Moment bitte. / Er ist leider nicht da. 6. Caller: Vielen Dank. Auf Wiederhören.
 Guten Tag, Herr Müller. Was kann ich für {{Sie}} tun? | Good day, Mr Müller. What can I do for you? | formal: für Sie
 Vielen Dank. Auf {{Wiederhören}}. | Thank you very much. Goodbye. | on the phone: Wiederhören`;
+const N12=`@lesson Semester 2 · Session 1 (A1.2) · Können & hobbies
+@subject Hobbies & activities
+kochen = to cook | Ich kann super {{kochen}}. | I can cook great.
+backen = to bake | Er kann normal {{backen}}. | He can bake normally.
+singen = to sing | Kannst du {{singen}}? | Can you sing?
+schwimmen = to swim | Ihr könnt nicht so gut {{schwimmen}}. | You cannot swim so well.
+fotografieren = to photograph | Ich kann gut {{fotografieren}}. | I can photograph well.
+Schach spielen = to play chess | Du kannst toll {{Schach}} spielen. | You can play chess great.
+malen = to paint | Ich kann ein bisschen {{malen}}. | I can paint a little bit.
+Rad fahren = to ride a bike | Ich fahre {{Rad}}. | I ride a bike. | with können the verb goes to the end: Ich kann Rad fahren.
+Fußball spielen = to play football | Sie können gar nicht {{Fußball}} spielen. | They cannot play football at all.
+tanzen = to dance | Sie können wirklich super {{tanzen}}! | You can really dance super!
+Tennis spielen = to play tennis | Ich kann nicht so gut {{Tennis}} spielen. | I cannot play tennis so well.
+Gitarre spielen = to play the guitar | Wer kann {{Gitarre}} spielen? | Who can play the guitar?
+Ski fahren = to ski | Du kannst ja toll {{Ski}} fahren! | You can ski really great!
+reiten = to ride a horse | Wer kann {{reiten}}? | Who can ride a horse?
+@subject Can you help? (everyday)
+einkaufen = to go shopping | Kannst du morgen {{einkaufen}}? | Can you go shopping tomorrow?
+reparieren = to repair | Können Sie mein Auto {{reparieren}}? | Can you repair my car?
+helfen = to help | Kannst du mir {{helfen}}? | Can you help me?
+die Enkelin (Pl. -nen) = granddaughter | Meine {{Enkelin}} kann auch gut tanzen! | My granddaughter can dance well too!
+wirklich = really | Sie können {{wirklich}} super tanzen! | You can really dance super!
+auch = also / too | Meine Enkelin kann {{auch}} gut tanzen! | My granddaughter can also dance well!
+zurzeit = at the moment / currently | | | not "recently"
+auf der Straße = on the street | | | der is a case form you will learn later
+@subject How well? (degrees)
+sehr gut = very well | Wir können {{sehr}} gut Deutsch sprechen. | We can speak German very well.
+gut = well | Ich kann {{gut}} kochen. | I can cook well.
+ein bisschen = a little bit | Ich kann {{ein}} bisschen malen. | I can paint a little bit.
+nicht so gut = not so well | Ihr könnt {{nicht}} so gut schwimmen. | You cannot swim so well.
+gar nicht = not at all | Sie können {{gar}} nicht Fußball spielen. | They cannot play football at all.
+@subject Opinions: Wie finden Sie das?
+Wie finden Sie das? = What do you think of that? | | | formal; informal: Wie findest du das?
+toll = great
+super = super / great
+normal = normal
+komisch = funny / strange | Wer kann {{komisch}} reiten? | Who can ride in a funny way?
+blöd = stupid / annoying
+interessant = interesting
+lustig = funny
+@subject Compliments & thanks
+Du kannst ja toll Ski fahren! = You can ski really great!
+Vielen Dank! = Thank you very much!
+Oh, danke! = Oh, thanks!
+Danke sehr! = Thank you very much!
+Herzlichen Dank! = Many thanks! / Heartfelt thanks!
+@grammar The modal verb können (can)
+! können says what you can do or are able to do. It is conjugated in position 2, the action verb goes to the END as an infinitive: Sie können wirklich super tanzen.
+! Conjugation: ich kann · du kannst · er/sie/es kann · wir können · ihr könnt · sie/Sie können. Careful: ich and er/sie/es have no ending, and the vowel changes (a/ö).
+! Yes/no question: the modal verb is in position 1: Kannst du mir helfen? Können Sie mein Auto reparieren?
+! W-question: question word, then können, then the infinitive at the end: Wer kann gut kochen?
+! How well: sehr gut · gut · ein bisschen · nicht so gut · gar nicht. They stand before the infinitive.
+Ich {{kann}} super kochen. | I can cook great. | ich → kann
+Du {{kannst}} toll Schach spielen. | You can play chess great. | du → kannst
+Er {{kann}} normal backen. | He can bake normally. | er → kann
+Wir {{können}} sehr gut Deutsch sprechen. | We can speak German very well. | wir → können
+Ihr {{könnt}} nicht so gut schwimmen. | You cannot swim so well. | ihr → könnt
+Sie {{können}} gar nicht Fußball spielen. | They cannot play football at all. | sie → können
+{{Kannst}} du morgen einkaufen? | Can you go shopping tomorrow? | yes/no question: verb first
+{{Können}} Sie mein Auto reparieren? | Can you repair my car? | yes/no question: verb first
+Wer {{kann}} gut kochen? | Who can cook well? | wer → kann
+Meine Enkelin {{kann}} auch gut tanzen! | My granddaughter can dance well too! | she → kann
+Sie können wirklich super {{tanzen}}! | You can really dance super! | the action verb goes to the end
+Ich kann Rad {{fahren}}. | I can ride a bike. | infinitive at the end
+@subject Can-do sentences
+Sie können wirklich super tanzen! = You can really dance super!
+Meine Enkelin kann auch gut tanzen! = My granddaughter can dance well too!
+Ich kann super kochen. = I can cook great.
+Du kannst toll Schach spielen. = You can play chess great.
+Er kann normal backen. = He can bake normally.
+Wir können sehr gut Deutsch sprechen. = We can speak German very well.
+Ihr könnt nicht so gut schwimmen. = You cannot swim so well.
+Sie können gar nicht Fußball spielen. = They cannot play football at all.
+Kannst du morgen einkaufen? = Can you go shopping tomorrow?
+Können Sie mein Auto reparieren? = Can you repair my car?
+Kannst du mir helfen? = Can you help me?
+Wer kann gut kochen? = Who can cook well?
+Wer kann gut Fußball spielen? = Who can play football well?
+Wer kann komisch reiten? = Who can ride in a funny way?
+Wer kann nicht Gitarre spielen? = Who cannot play the guitar?
+Du kannst ja toll Ski fahren! = You can ski really great!`;

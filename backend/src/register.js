@@ -11,6 +11,7 @@
 //   * the caller is kept only as a salted hash per day, rows older than 3 days are deleted
 //   * new accounts are hidden from the league table until the player opts in
 import { HttpError } from './http.js';
+import { reservedName } from './auth.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 32 characters: no 0/O/1/I
 const NAME_RE = /^[\p{L}\p{N}][\p{L}\p{N} _.-]{0,22}[\p{L}\p{N}]$/u;
@@ -60,7 +61,7 @@ export async function register(db, env, request, body, now = Date.now()) {
 
   // Requested name (optional). A taken or invalid name never blocks sign-up: a free one is generated instead.
   let wanted = body && typeof body.name === 'string' ? body.name.trim().replace(/\s+/g, ' ') : '';
-  if (!NAME_RE.test(wanted)) wanted = '';
+  if (!NAME_RE.test(wanted) || reservedName(env, wanted)) wanted = '';
   const suffix = () => Array.from(crypto.getRandomValues(new Uint8Array(4)), (x) => ALPHABET[x & 31]).join('');
 
   for (let attempt = 0; attempt < 6; attempt++) {

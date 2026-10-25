@@ -66,7 +66,7 @@ const B3_ACTIONS={b3help:t=>toast(t.dataset.t),b3all:()=>{HL.all=!HL.all;render(
 function vHome(){
   const st=S.stats,L=lvl(st.xp),due=dueCount(),nw=newWords().length,ls=lessonList(),q=quests(),ti=tierInfo(),sc=scopeInfo(),LG0=LS(),ex=openExam(),tr=tricky().length,m=matchStats();
   const club=clubOf(myAvatar()),pn=pathNextTitle(),p=mdProgress(),goal=S.settings.goal||60,gp=Math.min(1,todayXp()/goal);
-  const hero=`<section class="b3-hero"><div><h1>${esc(myName())}</h1>
+  const hero=`<section class="b3-hero"><div><h1>${esc(myName())}${vbadge(myBadge())}</h1>
     <div class="b3-hv" style="font-weight:800;margin-top:12px"><span>${esc(club?club[1]:'Kobel FC')}</span></div>
     <div class="b3-hv" style="margin-top:6px">${club&&club[5]?stadIcon(club[0],24):STADIUM}<span>${esc(club&&club[5]?club[5]:tx('Kobel Park','Kobel-Stadion'))}</span></div>
     <div class="b3-hv" style="margin-top:8px;opacity:.9">${LEAGUE_LOGO(ti.i,24)}<span>${esc(ti.t.n)} · ${esc(ti.t.lv)} · ${esc(title(L))}</span></div></div>
@@ -123,7 +123,7 @@ function ladderHtml(){
 function leagueHtml(){
   const my={name:myName(),avatar:myAvatar(),points:LG.range==='week'?pointsSince(7):LG.range==='month'?pointsSince(30):S.stats.xp,streak:curStreak(),isMe:true};
   const online=LG.rows&&LG.rows.length,rows=online?LG.rows:[my];
-  const body=rows.map((r,i)=>{const av=r.isMe?myAvatar():r.avatar;return `<div class="b3-tr ${r.isMe?'me':''}" style="--cols:38px 1fr 56px 64px;--sc:${i<3?'var(--cl)':i<5?'var(--orange)':'transparent'}"><span class="rk">${i+1}</span><span class="nm">${badgeSvg(av,28)}<span>${esc(r.isMe?myName():r.name)}</span></span><span class="c">${r.streak||0}</span><span class="pt">${r.points}</span></div>`}).join('');
+  const body=rows.map((r,i)=>{const av=r.isMe?myAvatar():r.avatar;return `<div class="b3-tr ${r.isMe?'me':''}" style="--cols:38px 1fr 56px 64px;--sc:${i<3?'var(--cl)':i<5?'var(--orange)':'transparent'}"><span class="rk">${i+1}</span><span class="nm">${badgeSvg(av,28)}<span>${esc(r.isMe?myName():r.name)}${r.isMe?vbadge(myBadge()):vbadge(r.badge)}</span></span><span class="c">${r.streak||0}</span><span class="pt">${r.points}</span></div>`}).join('');
   return `<div class="seg">${[['week',tx('Week','Woche')],['month',tx('Month','Monat')],['all',tx('All time','Gesamt')]].map(([k,n])=>`<button class="${LG.range===k?'on':''}" data-a="lrange" data-k="${k}">${n}</button>`).join('')}</div>
   <div class="b3-tb"><div class="b3-th" style="--cols:38px 1fr 56px 64px"><span>#</span><span>${tx('Player','Spieler')}</span><span>${tx('Streak','Serie')}</span><span>${tx('Pts','Pkt')}</span></div>${body}</div>
   <p class="sub" style="font-size:13px;margin-top:10px">${online?tx('Live standings. Everyone with an account is in the table.','Live-Tabelle. Alle mit einem Konto sind dabei.'):(S.sync&&S.sync.url?(LG.err?esc(LG.err):tx('Loading standings…','Tabelle lädt…')):tx('Connect your server in Settings to compete with friends.','Verbinde deinen Server in den Einstellungen, um mit Freunden zu spielen.'))}</p>`;

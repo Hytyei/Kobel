@@ -113,7 +113,7 @@ function soAnnounce(){}   // alerts (below) announce challenges now
 const st2=f=>f.streak2&&f.streak2.n>0?`<em class="st2" title="${tx('Streak together','Serie zusammen')}">${FLAME(12)}${f.streak2.n}</em>`:'';
 function friendRow(f){
   const t=TIERS[f.tier]||TIERS[0];
-  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${f.id}">${avatarSvg(f.avatar,40)}</button><button class="dm lnk" data-a="frprof" data-id="${f.id}"><b>${esc(f.name)} ${st2(f)}</b><span>${esc(f.stage||t.n)} · ${f.week} ${tx('pts this week','Pkt. diese Woche')}${f.streak2&&f.streak2.n?'':' · '+(f.streak?f.streak+' '+tx('day streak','Tage Serie'):tx('no streak','keine Serie'))}</span></button><div class="da"><button class="btn sm" data-a="frchal" data-id="${f.id}" aria-label="Challenge">${tx('Duel','Duell')}</button></div></div>`;
+  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${f.id}">${avatarSvg(f.avatar,40)}</button><button class="dm lnk" data-a="frprof" data-id="${f.id}"><b>${esc(f.name)}${vbadge(f.badge)} ${st2(f)}</b><span>${esc(f.stage||t.n)} · ${f.week} ${tx('pts this week','Pkt. diese Woche')}${f.streak2&&f.streak2.n?'':' · '+(f.streak?f.streak+' '+tx('day streak','Tage Serie'):tx('no streak','keine Serie'))}</span></button><div class="da"><button class="btn sm" data-a="frchal" data-id="${f.id}" aria-label="Challenge">${tx('Duel','Duell')}</button></div></div>`;
 }
 function duelRow(d){
   const o=d.opponent,g=GAMES[d.game]||{n:d.game};
@@ -129,7 +129,7 @@ function duelRow(d){
   }else if(d.status==='declined'){line=tx('declined','abgelehnt')}
   else{const w=d.result&&d.result.winner;line=w==='me'?tx('You won','Gewonnen'):w==='them'?tx('You lost','Verloren'):w==='draw'?tx('Draw','Unentschieden'):tx('expired','abgelaufen');
     if(w)line+=` · ${d.my.score}–${d.their.score===null?'?':d.their.score}`;acts=`<button class="btn sm ghost" data-a="duelrematch" data-id="${d.id}">${tx('Rematch','Revanche')}</button>`}
-  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${o.id}">${avatarSvg(o.avatar,36)}</button><div class="dm"><b>${esc(o.name)}</b><span>${esc(g.n)} · ${line}</span></div><div class="da">${acts}</div></div>`;
+  return `<div class="drow"><button class="fav" data-a="frprof" data-id="${o.id}">${avatarSvg(o.avatar,36)}</button><div class="dm"><b>${esc(o.name)}${vbadge(o.badge)}</b><span>${esc(g.n)} · ${line}</span></div><div class="da">${acts}</div></div>`;
 }
 
 /* ---- duels: turn-based only, 9 questions, one goal per right answer ---- */
@@ -239,7 +239,7 @@ const gpName=id=>{const m=GP.g&&GP.g.members.find(x=>x.id===id);return m?m.name:
 function gpTable(g){
   const rows=g.table.map(r=>{
     const me=r.id===SO.meId,c=clubCol(r.avatar);
-    return `<tr class="${me?'me':''}" style="--rc:${c}"><td class="n"><i class="stripe" style="background:${c}"></i>${r.rank}</td><td class="tm"><div class="tmi">${badgeSvg(r.avatar,22)}<span>${esc(r.name)}</span></div></td><td>${r.p}</td><td class="wdl">${r.w}-${r.d}-${r.l}</td><td>${r.gf}:${r.ga}</td><td>${r.gd>0?'+':''}${r.gd}</td><td class="pts">${r.pts}</td></tr>`;
+    return `<tr class="${me?'me':''}" style="--rc:${c}"><td class="n"><i class="stripe" style="background:${c}"></i>${r.rank}</td><td class="tm"><div class="tmi">${badgeSvg(r.avatar,22)}<span>${esc(r.name)}${vbadge(r.badge)}</span></div></td><td>${r.p}</td><td class="wdl">${r.w}-${r.d}-${r.l}</td><td>${r.gf}:${r.ga}</td><td>${r.gd>0?'+':''}${r.gd}</td><td class="pts">${r.pts}</td></tr>`;
   }).join('');
   return `<table class="tbl bl"><thead><tr><th class="n">#</th><th>${tx('Team','Team')}</th><th>${tx('P','Sp')}</th><th>${tx('W-D-L','S-U-N')}</th><th>${tx('G','T')}</th><th>+/-</th><th class="pts">${tx('Pts','Pkt')}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -427,7 +427,7 @@ function notifyCard(){
 function leagueHtml(){
   const my={name:myName(),avatar:myAvatar(),points:LG.range==='week'?pointsSince(7):LG.range==='month'?pointsSince(30):S.stats.xp,streak:curStreak(),isMe:true};
   const online=LG.rows&&LG.rows.length,rows=online?LG.rows:[my];
-  const body=rows.map((r,i)=>{const av=r.isMe?myAvatar():r.avatar,c=clubCol(av);return `<tr class="${r.isMe?'me':''}"><td class="n"><i class="stripe" style="background:${c}"></i>${i+1}</td><td class="tm"><div class="tmi">${badgeSvg(av,22)}<span>${esc(r.isMe?myName():r.name)}</span></div></td><td class="pts">${r.points}</td><td>${r.streak||0}</td></tr>`}).join('');
+  const body=rows.map((r,i)=>{const av=r.isMe?myAvatar():r.avatar,c=clubCol(av);return `<tr class="${r.isMe?'me':''}"><td class="n"><i class="stripe" style="background:${c}"></i>${i+1}</td><td class="tm"><div class="tmi">${badgeSvg(av,22)}<span>${esc(r.isMe?myName():r.name)}${r.isMe?vbadge(myBadge()):vbadge(r.badge)}</span></div></td><td class="pts">${r.points}</td><td>${r.streak||0}</td></tr>`}).join('');
   return `<div class="seg" style="margin-bottom:10px">${[['week','Woche'],['month','Monat'],['all','Gesamt']].map(([k,n])=>`<button class="${LG.range===k?'on':''}" data-a="lrange" data-k="${k}">${n}</button>`).join('')}</div>
   <div class="card patch" style="padding:8px 10px 14px 14px"><table class="tbl bl"><thead><tr><th class="n">#</th><th>${tx('Player','Spieler')}</th><th class="pts">${tx('Pts','Pkt')}</th><th>${tx('Streak','Serie')}</th></tr></thead><tbody>${body}</tbody></table>
   <p class="sub" style="font-size:13px;margin-top:8px">${online?tx('Live standings. Everyone with an account is in the table.','Live-Tabelle. Alle mit einem Konto sind dabei.'):(S.sync&&S.sync.url?(LG.err?esc(LG.err):tx('Loading standings…','Tabelle lädt…')):tx('Connect your server in Settings to compete with friends.','Verbinde deinen Server in den Einstellungen, um mit Freunden zu spielen.'))}</p></div>`;

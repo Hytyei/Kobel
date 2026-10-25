@@ -36,6 +36,10 @@ class MainActivity : ComponentActivity() {
     val updater: Updater by lazy { Updater(this) { fn, arg -> js("window.$fn&&window.$fn($arg)") } }
     private var pendingSave: String? = null
 
+    /** One-time sign-in code (or "error") that came back through kobel://auth; the page collects it with takeAuth(). */
+    @Volatile private var pendingAuth: String = ""
+    fun takeAuth(): String = pendingAuth.also { pendingAuth = "" }
+
     private val saveLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
         val uri = res.data?.data
         val text = pendingSave
@@ -66,6 +70,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bridge = KobelBridge(this)
+        readAuthIntent(intent)
         setContent {
             // Android's Back button first closes sheets/sessions inside the app, then leaves the app.
             BackHandler {
@@ -115,6 +120,24 @@ class MainActivity : ComponentActivity() {
             }
             loadUrl("https://$APP_HOST/assets/www/index.html")
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (readAuthIntent(intent)) {
+            val v = takeAuth()
+            if (v.isNotEmpty()) js("window.kobelAuth&&window.kobelAuth(${JSONObject.quote(v)})")
+        }
+    }
+
+    /** kobel://auth?code=XYZ  (or ?error=failed). Only this exact shape is accepted; the code is useless without the app's secret verifier. */
+    private fun readAuthIntent(i: Intent?): Boolean {
+        val u = i?.data ?: return false
+        if (u.scheme != "kobel" || u.host != "auth") return false
+        val code = u.getQueryParameter("code")
+        pendingAuth = if (code != null && code.matches(Regex("[A-Za-z0-9_-]{16,128}"))) code else "error"
+        return true
     }
 
     // ---- file save / open (called from KobelBridge) ----

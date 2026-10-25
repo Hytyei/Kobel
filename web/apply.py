@@ -23,6 +23,8 @@ def put(src, name, body, anchor, before=True):
 def sub(src, old, new, count=1):
     if new and new in src:
         return src          # already applied
+    if new and new.endswith(old) and len(new) > len(old) and new[:-len(old)] in src:
+        return src          # the inserted part is already there (another patch added text after it)
     if old not in src and new == '':
         return src
     if old not in src:
@@ -40,6 +42,7 @@ src = put(src, 'css-fx3', mod('fx3.css'), '</style>')
 src = put(src, 'css-qx', mod('qx.css'), '</style>')
 src = put(src, 'css-settings', mod('settings.css'), '</style>')
 src = put(src, 'css-games', mod('games.css'), '</style>')
+src = put(src, 'css-auth', mod('auth.css'), '</style>')
 src = put(src, 'js-notes', mod('notes.js'), 'const BATCHES=[')
 src = put(src, 'js-path', mod('path.js'), '/* ───────── events ───────── */')
 src = put(src, 'js-social25', mod('social25.js'), '/* ───────── events ───────── */')
@@ -53,7 +56,11 @@ src = put(src, 'js-qx', mod('qx.js'), '/* ───────── events ─
 src = put(src, 'js-settings', mod('settings.js'), '/* ───────── events ───────── */')
 src = put(src, 'js-qv', mod('qv.js'), '/* ───────── events ───────── */')
 src = put(src, 'js-games', mod('games.js'), '/* ───────── events ───────── */')
+src = put(src, 'js-games2', mod('games2.js'), '/* ───────── events ───────── */')
 src = put(src, 'js-roadmap', mod('roadmap.js'), '/* ───────── events ───────── */')
+src = put(src, 'js-auth', mod('auth.js'), '/* ───────── events ───────── */')
+src = put(src, 'css-update', mod('update.css'), '</style>')
+src = put(src, 'js-update', mod('update.js'), '/* ───────── events ───────── */')
 exec((ROOT / 'patches.py').read_text(encoding='utf-8'))
 HTML.write_text(src, encoding='utf-8')
 print('applied;', len(src), 'bytes')

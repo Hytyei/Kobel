@@ -5,6 +5,7 @@ import { handleSync, exportAll, deleteAll } from './sync.js';
 import { leaderboard } from './leaderboard.js';
 import { listNotices, renameUser } from './profile.js';
 import { register, sha256Hex } from './register.js';
+import { userBySession, signup, login, logout, setUsername, setPassword, myAccount, usernameAvailable, googleStart, googleCallback, authExchange, unlinkGoogle } from './auth.js';
 import { createCode, addFriend, listFriends, friendProfile, removeFriend } from './friends.js';
 import { listAlerts } from './alerts.js';
 import { createGroup, listGroups, getGroup, renameGroup, deleteGroup, addMember, removeMember, createRound, getRound, startRound, answerRound, pingGroup } from './groups.js';
@@ -16,9 +17,17 @@ const MAX_BODY_BYTES = 262144; // 256 KB is far more than a 40-item sync needs
 async function authenticate(request, env) {
   const m = (request.headers.get('Authorization') || '').match(/^Bearer\s+([A-Za-z0-9_-]{20,128})$/);
   if (!m) throw new HttpError(401, 'unauthorized', 'Missing or invalid access code.');
-  const user = await env.DB.prepare('SELECT id, name, visible FROM users WHERE token_hash = ?').bind(await sha256Hex(m[1])).first();
+  const hash = await sha256Hex(m[1]);
+  // a device session (username, password or Google) first, then an old Kobel ID
+  const session = await userBySession(env.DB, hash);
+  if (session) return session;
+  const user = await env.DB.prepare('SELECT id, name, visible, username, badge, pw_hash, google_sub, email, username_changed_at FROM users WHERE token_hash = ?').bind(hash).first();
   if (!user) throw new HttpError(401, 'unauthorized', 'Missing or invalid access code.');
   return user;
+}
+/** Like authenticate(), but returns null when no code was sent (used where a login is optional). */
+async function maybeAuthenticate(request, env) {
+  return request.headers.get('Authorization') ? authenticate(request, env) : null;
 }
 
 async function readJson(request) {
@@ -33,7 +42,7 @@ async function readJson(request) {
   }
 }
 
-const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels', '/v1/groups', '/v1/alerts'];
+const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels', '/v1/groups', '/v1/alerts', '/v1/auth/signup', '/v1/auth/login', '/v1/auth/logout', '/v1/auth/username', '/v1/auth/google/start', '/v1/auth/google/callback', '/v1/auth/exchange', '/v1/me/username', '/v1/me/password', '/v1/me/google'];
 
 async function route(request, env) {
   const url = new URL(request.url);
@@ -53,12 +62,23 @@ async function route(request, env) {
   }
   if (path === '/v1/me' && method === 'GET') {
     const user = await authenticate(request, env);
-    return json({ user: { id: user.id, name: user.name, visible: true } });
+    return json(await myAccount(env.DB, user));
   }
   if (path === '/v1/me' && method === 'PATCH') {
     const user = await authenticate(request, env);
-    return json(await renameUser(env.DB, user, await readJson(request)));
+    return json(await renameUser(env.DB, user, await readJson(request), env));
   }
+  // ── accounts: username + password, Google, device sessions ──
+  if (path === '/v1/auth/signup' && method === 'POST') return json(await signup(env.DB, env, request, await readJson(request)), 201);
+  if (path === '/v1/auth/login' && method === 'POST') return json(await login(env.DB, env, request, await readJson(request)));
+  if (path === '/v1/auth/logout' && method === 'POST') return json(await logout(env.DB, await authenticate(request, env)));
+  if (path === '/v1/auth/username' && method === 'GET') return json(await usernameAvailable(env.DB, env, request, url));
+  if (path === '/v1/auth/google/start' && method === 'POST') return json(await googleStart(env.DB, env, request, await readJson(request), await maybeAuthenticate(request, env)));
+  if (path === '/v1/auth/google/callback' && method === 'GET') return googleCallback(env.DB, env, request);
+  if (path === '/v1/auth/exchange' && method === 'POST') return json(await authExchange(env.DB, env, await readJson(request)));
+  if (path === '/v1/me/username' && method === 'POST') return json(await setUsername(env.DB, env, await authenticate(request, env), await readJson(request)));
+  if (path === '/v1/me/password' && method === 'POST') return json(await setPassword(env.DB, env, await authenticate(request, env), await readJson(request)));
+  if (path === '/v1/me/google' && method === 'DELETE') return json(await unlinkGoogle(env.DB, await authenticate(request, env)));
   if (path === '/v1/notices' && method === 'GET') {
     await authenticate(request, env);
     return json(await listNotices(env.DB));

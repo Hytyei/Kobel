@@ -23,15 +23,11 @@
 .qx-flash.good{background:radial-gradient(circle at 50% 70%,rgba(40,200,110,.28),transparent 70%);animation:qxFlash .7s ease-out}
 @keyframes qxFlash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
 
-/* ---- question enters ---- */
-.sMain.qx-in>*{animation:qxUp .3s var(--qx-ease) backwards}
-.sMain.qx-in>*:nth-child(2){animation-delay:.03s}.sMain.qx-in>*:nth-child(3){animation-delay:.06s}.sMain.qx-in>*:nth-child(4){animation-delay:.09s}
-.sMain.qx-in .opt:not(.ok):not(.no):not(.sel){animation:qxSlide .3s var(--qx-ease) backwards;animation-delay:calc(.04s + var(--i,0)*.035s)}
-.sMain.qx-in .tag{animation:qxUp .25s var(--qx-ease) backwards}
-.sMain.qx-in .qx-t.in{animation:qxTile .32s var(--qx-ease) backwards;animation-delay:calc(.03s + var(--i,0)*.02s)}
-@keyframes qxUp{from{opacity:.5;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
-@keyframes qxSlide{from{opacity:.5;transform:translate3d(18px,0,0)}to{opacity:1;transform:none}}
-@keyframes qxTile{from{opacity:.4;transform:translate3d(0,12px,0) scale(.85)}to{opacity:1;transform:none}}
+/* the original per-child slide+fade (qin) read as a reload on every question: switched off, only the calm settle below remains */
+.sMain>*,.rush .sMain>*{animation:none}
+/* ---- question enters: one calm 6px settle of the whole block, no fades, no per-item animation (those looked like a reload) ---- */
+.sMain.qx-in{animation:qxIn .18s ease-out}
+@keyframes qxIn{from{transform:translate3d(0,6px,0)}to{transform:none}}
 
 /* ---- touch feedback and answer states ---- */
 .opt{transition:transform .18s var(--qx-ease),background .2s,box-shadow .25s}
@@ -174,7 +170,7 @@
 @media (prefers-reduced-motion:reduce){
   .qx-bg i,.combo .cf,.qx-slot.nx,#chk.ready{animation:none!important}
   .qxs,.qx-kick{display:none!important}
-  .sMain.qx-in>*,.sMain.qx-in .opt,.sMain.qx-in .qx-t.in{animation:none!important}
+  .sMain.qx-in{animation:none!important}
 }
 .qx-b:not(.word) .qx-slots,.qx-b:not(.word) .qx-bank{gap:calc(var(--ts) * .11)}
 .qx-t{padding:0!important}

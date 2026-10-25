@@ -10,7 +10,8 @@ import { createTestDb } from './d1-adapter.mjs';
 const port = Number(process.argv[2] || 8799);
 const htmlPath = process.argv[3];
 const db = createTestDb();
-const env = { DB: db, ALLOWED_ORIGINS: '' };
+// local testing only: fixed pepper, founder key "local-founder-key"
+const env = { DB: db, ALLOWED_ORIGINS: '', PASSWORD_PEPPER: 'local-pepper-0123456789', FOUNDER_KEY_SHA256: createHash('sha256').update('local-founder-key').digest('hex') };
 const code = 'kb_' + randomBytes(24).toString('base64url');
 db.sqlite.prepare('INSERT INTO users (name, token_hash, created_at) VALUES (?,?,?)').run('Test', createHash('sha256').update(code).digest('hex'), Date.now());
 

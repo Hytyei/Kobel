@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat
 object Notifier {
     const val CH_SOCIAL = "social"
     const val CH_STREAK = "streak"
-    const val CH_UPDATE = "update"
+    // "update2": the first channel was created as silent (IMPORTANCE_LOW) and Android never lets an app raise an existing channel,
+    // so updates use a new id with a pop-up (heads-up) importance
+    const val CH_UPDATE = "update2"
 
     fun ensureChannels(ctx: Context) {
         if (Build.VERSION.SDK_INT < 26) return
@@ -25,7 +27,8 @@ object Notifier {
         }
         ch(CH_SOCIAL, "Friends and study groups", "Friend requests, match requests, study group news", NotificationManager.IMPORTANCE_DEFAULT)
         ch(CH_STREAK, "Streak reminder", "An evening reminder when your streak is about to end", NotificationManager.IMPORTANCE_DEFAULT)
-        ch(CH_UPDATE, "App updates", "A new Kobel version is available", NotificationManager.IMPORTANCE_LOW)
+        ch(CH_UPDATE, "App updates", "A new Kobel version is available", NotificationManager.IMPORTANCE_HIGH)
+        if (nm.getNotificationChannel("update") != null) nm.deleteNotificationChannel("update")
     }
 
     /** Android 13+ asks the user once; before that notifications are allowed by default. */
@@ -47,7 +50,7 @@ object Notifier {
             .setAutoCancel(true)
             .setContentIntent(open)
             .setColor(0xFFD20515.toInt())
-            .setPriority(if (channel == CH_UPDATE) NotificationCompat.PRIORITY_LOW else NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(if (channel == CH_UPDATE) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_DEFAULT)
             .build()
         try {
             (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(id, n)

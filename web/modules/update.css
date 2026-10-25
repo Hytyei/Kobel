@@ -1,0 +1,15 @@
+#updpop{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px}
+#updpop .up-bk{position:absolute;inset:0;background:rgba(0,0,0,.66)}
+#updpop .up-box{position:relative;width:min(380px,100%);background:var(--card,#16161a);border:1px solid var(--line,rgba(255,255,255,.12));border-top:5px solid var(--red,#d20515);padding:22px 20px 18px;animation:upIn .22s cubic-bezier(.2,.9,.3,1);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+#updpop.out .up-box{opacity:0;transform:translateY(8px);transition:.18s}
+@keyframes upIn{from{transform:translate3d(0,14px,0);opacity:.0}to{transform:none;opacity:1}}
+.up-k{font:800 11px/1 var(--fd);letter-spacing:.14em;text-transform:uppercase;color:var(--red,#d20515)}
+.up-box h3{font:800 30px/1.05 var(--fd);margin:8px 0 2px}
+.up-c{color:var(--mute,#9a9aa5);font-size:13px;margin:0 0 12px}
+.up-n{margin:0 0 14px;padding-left:18px;font-size:14px;line-height:1.45}
+.up-s{font-size:14px;margin:6px 0 12px;line-height:1.4}
+.up-e{color:var(--badtxt,#ff6b78);font-size:13px;margin:0 0 10px}
+.up-bar{height:8px;background:rgba(255,255,255,.12);overflow:hidden}
+.up-bar i{display:block;height:100%;background:var(--red,#d20515);transition:width .25s}
+.up-p{display:block;font:800 22px var(--fd);margin-top:8px}
+.up-box .btn{width:100%;margin-top:8px}

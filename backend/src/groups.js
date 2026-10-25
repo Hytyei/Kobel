@@ -37,7 +37,7 @@ async function loadGroup(db, user, id) {
 
 async function members(db, groupId) {
   const { results } = await db
-    .prepare('SELECT u.id AS id, u.name AS name, p.data AS data, m.joined_at AS joined FROM group_members m JOIN users u ON u.id = m.user_id LEFT JOIN profiles p ON p.user_id = u.id WHERE m.group_id = ? ORDER BY m.joined_at, u.id')
+    .prepare('SELECT u.id AS id, u.name AS name, u.badge AS badge, p.data AS data, m.joined_at AS joined FROM group_members m JOIN users u ON u.id = m.user_id LEFT JOIN profiles p ON p.user_id = u.id WHERE m.group_id = ? ORDER BY m.joined_at, u.id')
     .bind(groupId)
     .all();
   return results;
@@ -56,7 +56,7 @@ async function settleRounds(db, groupId, now) {
 
 /** Table of all settled rounds. */
 function buildTable(mem, rounds) {
-  const rows = new Map(mem.map((m) => [m.id, { id: m.id, name: String(m.name).slice(0, 40), avatar: avatarOf(m.data), p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, form: [] }]));
+  const rows = new Map(mem.map((m) => [m.id, { id: m.id, name: String(m.name).slice(0, 40), badge: m.badge || '', avatar: avatarOf(m.data), p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, form: [] }]));
   for (const r of rounds) { // oldest first
     const list = r.plays.filter((x) => rows.has(x.user_id));
     for (let i = 0; i < list.length; i++) {
@@ -119,7 +119,7 @@ async function groupView(db, user, g, now) {
   const streak = sharedStreak(mem.map((m) => activeDays(m.data)), now);
   return {
     id: g.id, name: g.name, owner: g.owner, createdAt: g.created_at, isOwner: g.owner === user.id,
-    members: mem.map((m) => ({ id: m.id, name: String(m.name).slice(0, 40), avatar: avatarOf(m.data), joined: m.joined })),
+    members: mem.map((m) => ({ id: m.id, name: String(m.name).slice(0, 40), badge: m.badge || '', avatar: avatarOf(m.data), joined: m.joined })),
     streak: { n: streak.n, best: streak.best, today: streak.today },
     table: buildTable(mem, settledOldestFirst),
     rounds: rounds.slice(0, 12).map((r) => roundView(r, user, names)),

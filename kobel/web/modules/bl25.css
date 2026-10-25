@@ -1,0 +1,84 @@
+/* ───────── 2.5.0: one Bundesliga design (dark navy + light mode) ─────────
+   Learned from the Bundesliga screens: near-black navy ground, dark grey bars, heavy condensed capitals, flat panels with
+   a thin coloured edge, tables with a coloured left stripe and a bold points column, underlined tab selectors,
+   saturated stat tiles, broadcast scorebugs, lots of empty space. The club you pick is the accent in tables and scorebugs. */
+:root{
+  --bg:#03101A;--bg2:#08161F;--surf:#0D1B26;--surf2:#162633;--line:rgba(255,255,255,.09);--stitch:rgba(255,255,255,.12);
+  --bar:#161D23;--club:#D20515;--club2:#0B0B0B;--clubink:#fff;--cut:0px;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#EDEDED;--bg2:#FFFFFF;--surf:#FFFFFF;--surf2:#E4E4E4;--line:rgba(0,0,0,.12);--bar:#FFFFFF}}
+:root[data-theme="light"]{--bg:#EDEDED;--bg2:#FFFFFF;--surf:#FFFFFF;--surf2:#E4E4E4;--line:rgba(0,0,0,.12);--bar:#FFFFFF}
+body{background-image:none}
+.app{padding-top:14px}
+/* panels: flat, square, a thin edge instead of the cut corner */
+.patch{clip-path:none}
+.patch::before{width:3px}
+.card{padding:16px 16px 18px 20px;margin-bottom:14px}
+.hero,.cl-hero{clip-path:none}
+.sec{margin:34px 2px 12px;font-size:21px;letter-spacing:1.6px;color:var(--ink);opacity:.92;border-bottom:1px solid var(--line);padding-bottom:8px}
+.h1{font-size:40px;letter-spacing:.5px}
+.h1::before{transform:none;width:4px}
+.chip{background:var(--surf2);clip-path:none}
+.sb{border-top:0;border-left:3px solid var(--red);text-align:left;padding:10px 10px 10px 12px}
+.sb b{font-size:28px}
+/* tab selectors: underlined, red when active */
+.seg{gap:0;border-bottom:1px solid var(--line)}
+.seg button{background:none;clip-path:none;flex:1;padding:10px 6px 9px;font-size:16px;letter-spacing:1px;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-1px}
+.seg button.on{background:none;color:var(--ink);border-bottom-color:var(--red)}
+.seg.segx button{font-size:17px}
+/* bottom bar */
+#tabs{background:var(--bar)}
+.tab{font-size:11.5px;letter-spacing:.5px;padding:9px 0 7px}
+.tab.on{color:var(--ink)}
+.tab::before{background:var(--red)}
+.btn{clip-path:none}
+.btn.ghost{box-shadow:inset 0 0 0 1.5px var(--line)}
+.sheet{border-top-width:3px;background:var(--bg2)}
+.toast{background:var(--bar);color:var(--ink)}
+/* tables, as on the broadcast: 54 px rows, coloured left stripe, bold points */
+.tbl{font:600 15px var(--fb)}
+.tbl th{font:800 11.5px var(--fd);letter-spacing:1.3px;color:var(--mute);border-bottom:1px solid var(--line);padding:8px 6px}
+.tbl td{padding:0 6px;height:54px;border-bottom:1px solid var(--line)}
+.tbl .n{position:relative;width:38px;font:800 18px var(--fd)}
+.tbl tr.up .n::after{display:none}
+.tbl tr.me td{background:var(--club);color:var(--clubink)}
+.tbl tr.me .n{color:var(--clubink)}
+.tbl.bl td{text-align:center}.tbl.bl td.tm,.tbl.bl th:nth-child(2){text-align:left}.tbl.bl th{text-align:center}
+.tbl.bl td.pts{font:800 19px var(--fd);width:44px}.tbl.bl th.pts{width:44px}
+.tbl.bl td.wdl{white-space:nowrap}
+.tbl.bl .tmi{display:flex;align-items:center;gap:8px;height:54px;max-width:150px}.tbl.bl .tmi span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl .stripe{position:absolute;left:-6px;top:6px;bottom:6px;width:4px}
+.tbl tr.me .stripe{background:var(--clubink)!important}
+.gp-tbl{padding:8px 10px 12px 14px}
+/* club badges */
+.av.club{border-radius:0;box-shadow:none;overflow:visible;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.avgrid{grid-template-columns:repeat(5,1fr)}
+.avpick.on{box-shadow:none;outline:3px solid var(--red);outline-offset:2px;border-radius:4px}
+/* scorebug */
+.sbug{display:flex;align-items:stretch;font-family:var(--fd);margin:6px 0;width:100%}
+.sbug>div{flex:1;display:flex;align-items:center;gap:8px;padding:6px 14px;min-width:0}
+.sbl{clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%)}
+.sbr{clip-path:polygon(12px 0,100% 0,100% 100%,0 100%);justify-content:flex-end}
+.sbug b{font:800 24px var(--fd);letter-spacing:1px;flex:1}
+.sbr b{text-align:right}
+.sbug em{font:800 34px var(--fd);font-style:normal;min-width:30px;text-align:center}
+.sbug.big{margin:14px 0}.sbug.big>div{padding:10px 16px}.sbug.big b{font-size:34px}.sbug.big em{font-size:60px;min-width:44px}
+.dl-top{background:var(--bar);border-bottom:0}
+.dl-sc{padding:10px 14px 4px;background:var(--bar)}
+.dl-pr{display:flex;gap:6px;margin-top:4px}.dl-pr i{display:block;flex:1;height:3px;background:var(--red);max-width:100%;transition:width .3s}.dl-pr i+i{background:var(--ink);opacity:.5}
+.dl-body .fin{font-size:30px;letter-spacing:1.5px;margin-bottom:4px}
+/* friends and groups */
+.st2{display:inline-flex;align-items:center;gap:2px;font:800 13px var(--fd);font-style:normal;color:var(--badtxt);margin-left:4px}
+.gp-row{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer}
+.gp-av{display:flex;flex:none}.gp-av .av{margin-right:-8px}
+.gp-todo{flex:none;min-width:22px;height:22px;display:grid;place-items:center;background:var(--red);color:#fff;font:800 13px var(--fd);padding:0 6px}
+.gp-streak{display:flex;gap:14px;align-items:center}
+.gp-streak .gs-n{display:flex;align-items:center;gap:6px;color:var(--badtxt)}.gp-streak .gs-n b{font:800 46px/1 var(--fd);color:var(--ink)}
+.gp-streak>div:last-child span{display:block;color:var(--mute);font-size:13px;margin-top:2px}.gp-streak em{font-style:normal;color:var(--ink);font-weight:700}
+.gp-round{padding:10px 0;border-bottom:1px solid var(--line)}.gp-round:last-child{border-bottom:0}
+.gp-round .gh{display:flex;align-items:center;gap:10px}.gp-round .gh b{font:800 17px var(--fd);text-transform:uppercase;letter-spacing:.8px}.gp-round .gh span{flex:1;color:var(--mute);font-size:13px}
+.gp-res{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:14px}.gp-res b{font-weight:700}.gp-res .me{color:var(--club)}
+.gp-pick{cursor:pointer}.gp-pick input{width:20px;height:20px;accent-color:var(--red)}
+.gp-body{max-width:540px}
+.gp .dl-body{padding-bottom:40px}
+.hero .btn.ghost{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}

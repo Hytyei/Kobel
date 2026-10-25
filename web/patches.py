@@ -28,13 +28,13 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'3.3.1',title:{en:'Kobel 3.3.1: rules first, smoother questions',de:'Kobel 3.3.1: erst die Regeln, flüssigere Fragen'},body:{\n  en:'Rules first: every unit opens with its rules, and rule questions keep coming back so you memorise them. Letter and writing exercises are now rare, about one in 50 questions. Games no longer show blank or raw text, and the flicker between questions is fixed with lighter, smoother animations. The Path is a four-stage roadmap from first words to confident sentences. Every unit now ends with a review checkpoint, words and sentences rotate through the whole path instead of repeating, writing exercises are capped at about 12% and use short words, and wrong answers in multiple choice are now close to the right one in length, type and form.',\n  de:'Erst die Regeln: jede Einheit beginnt mit ihren Regeln, und Regelfragen kommen immer wieder, damit du sie dir merkst. Buchstaben- und Schreibaufgaben sind jetzt selten, etwa jede 50. Frage. Spiele zeigen keine leeren Seiten oder rohen Text mehr, und das Flackern zwischen Fragen ist mit leichteren, flüssigeren Animationen behoben. Der Pfad ist jetzt ein Lernweg in vier Stufen, von den ersten Wörtern bis zu sicheren Sätzen. Jede Einheit endet mit einem Rückblick, Wörter und Sätze wechseln sich über den ganzen Pfad ab statt sich zu wiederholen, Schreibaufgaben machen höchstens etwa 12% aus und nutzen kurze Wörter, und falsche Antworten sind der richtigen jetzt in Länge, Art und Form ähnlich.'\n}};\n"
-if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'", src):
-    src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]\.0'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
+_CL = "const CHANGELOG={v:'3.4.0',title:{en:'Kobel 3.4.0: accounts, a simpler Settings page, new games',de:'Kobel 3.4.0: Konten, einfachere Einstellungen, neue Spiele'},body:{\n  en:'Sign up once with a username and password, or continue with Google (old Kobel IDs can be linked). Settings are now one simple page with the everyday switches on top. New games: Fehlerjagd (find and fix the mistake) and Satzbau (put the words in order). New lesson: Semester 2, session 1 with können and hobbies. Fixes: questions no longer flash when they load, Bubble pop is back on screen, and the new-version pop-up and notification work again.',\n  de:'Einmal mit Benutzername und Passwort anmelden oder mit Google weitermachen (alte Kobel-IDs lassen sich verknüpfen). Die Einstellungen sind jetzt eine einfache Seite mit den wichtigsten Schaltern oben. Neue Spiele: Fehlerjagd (Fehler finden und verbessern) und Satzbau (Wörter in die richtige Reihenfolge). Neue Lektion: Semester 2, Stunde 1 mit können und Hobbys. Korrekturen: Fragen blitzen beim Laden nicht mehr auf, Blasenjagd ist wieder sichtbar, und Pop-up und Benachrichtigung für neue Versionen funktionieren wieder.'\n}};\n"
+if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]+\.[0-9]+'", src):
+    src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
 # ---- Sessions 7-10 and the Tactics Room list (classroom instructions are excluded from path and teaching) ----
 import re as _re0
-src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11];", src, count=1)
+src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11,N12];", src, count=1)
 import json as _json
 _units = _json.load(open(ROOT.parent / 'database/content/teaching/units.json', encoding='utf-8'))
 _line = 'const TEACH=' + _json.dumps(_units, ensure_ascii=False) + ';'
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.3.1';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.4.0';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -157,3 +157,41 @@ if "function pickKindOld0(" not in src:
 
 if "function firstKind0(" not in src:
     src = src.replace("function firstKind(c){", "function firstKind0(c){", 1)
+
+# 3.4.0: accounts (username, Google, founder badge)
+if "...AUTH_ACTIONS," not in src:
+    src = src.replace("  ...SET3_ACTIONS,\n", "  ...SET3_ACTIONS,\n  ...AUTH_ACTIONS,\n", 1)
+src = src.replace('<h2 style="margin:0">${esc(p.name)}</h2>', '<h2 style="margin:0">${esc(p.name)}${vbadge(p.badge,true)}</h2>')
+
+# debug hook: keep each exposed name once (earlier patches prepend to it)
+_m = _re.search(r"window\.__k=\{([^}]*)\}", src)
+if _m:
+    _seen, _keep = set(), []
+    for _t in _m.group(1).split(','):
+        if _t and _t not in _seen:
+            _seen.add(_t); _keep.append(_t)
+    src = src[:_m.start(1)] + ','.join(_keep) + src[_m.end(1):]
+
+# 3.4.0: the start-up update check now lives in update.js (popup, retry, return-to-app check)
+src = src.replace("if(NATIVE&&NATIVE.checkUpdate&&Date.now()-(S.lastUpdateCheck||0)>12*36e5)setTimeout(()=>checkUpdate(false),2500);\n", "")
+
+# clean-up: earlier builds repeated the Minigame entries (search, snake, memo, bubble); keep each once
+_seen_g, _out_g = set(), []
+for _ln in src.split('\n'):
+    if _re.match(r"^  (search|snake|memo|bubble):(IC\(|\{n:)", _ln):
+        if _ln in _seen_g:
+            continue
+        _seen_g.add(_ln)
+    _out_g.append(_ln)
+src = '\n'.join(_out_g)
+
+# ---- 3.4.0: new minigames: Fehlerjagd (fix the mistake), Satzbau (word order), Stimmt's? (true or false) ----
+if "fixit:IC(" not in src:
+    src = sub(src, "  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>",
+     "  fixit:IC('<path d=\"M5 6h9M5 10h6M5 14h9M5 18h5\" stroke-width=\"1.6\"/><circle cx=\"17\" cy=\"14\" r=\"3.4\"/><path d=\"M15.6 12.6l2.8 2.8M18.4 12.6l-2.8 2.8\" stroke-width=\"1.5\"/>'),\n  satz:IC('<rect x=\"3\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"11\" y=\"4\" width=\"10\" height=\"6\" rx=\"1\"/><rect x=\"3\" y=\"12\" width=\"10\" height=\"6\" rx=\"1\"/><path d=\"M15 15h6M18 12.5 21 15l-3 2.5\" stroke-width=\"1.6\"/>'),\n  truth:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/><path d=\"M7 12.5l2.6 2.6L16 8.5\" stroke-width=\"2\"/>'),\n  scramble:IC('<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"1.5\"/>")
+    src = sub(src, "  scramble:{n:'Aufstellung',",
+     "  fixit:{n:'Fehlerjagd',ic:GICON.fixit,col:'berry',kind:'sess',stars:[60,100,140],tag:'Spot and correct the mistake.',how:'Eight sentences with a mistake: tap the wrong word, or pick the correct version.'},\n  satz:{n:'Satzbau',ic:GICON.satz,col:'lantern',kind:'sess',stars:[60,100,140],tag:'Put the words in the right order.',how:'Build each sentence from its words, or pick the right word order. The verb sits in position 2.'},\n  truth:{n:'Stimmt\\u2019s?',ic:GICON.truth,col:'sky',kind:'sess',stars:[60,100,140],tag:'True or false?',how:'Does the German sentence mean what it says? Ten quick answers.'},\n  scramble:{n:'Aufstellung',")
+    src = sub(src, "    case'gap':return poolG(lesson).length>=3?null:'Needs 3+ grammar items';",
+     "    case'gap':return poolG(lesson).length>=3?null:'Needs 3+ grammar items';\n    case'fixit':case'truth':return G2_SENT(lesson).length>=4?null:'Needs 4+ example sentences';\n    case'satz':return poolW(lesson).filter(c=>{const s=g2Sent(c);return s&&s.de.split(/\\s+/).length<=8}).length>=4?null:'Needs 4+ example sentences';")
+    src = sub(src, "  else if(id==='gap')items=shuffle(poolG(lesson)).slice(0,8).map(c=>({cid:c.id,kind:'gcl'}));",
+     "  else if(id==='gap')items=shuffle(poolG(lesson)).slice(0,8).map(c=>({cid:c.id,kind:'gcl'}));\n  else if(id==='fixit'||id==='satz'||id==='truth')items=g2Items(id,lesson);")

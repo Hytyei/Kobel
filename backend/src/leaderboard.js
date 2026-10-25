@@ -8,7 +8,7 @@ export async function leaderboard(db, me, rangeRaw, now = Date.now()) {
   const days = RANGES[range];
   const cutoff = days ? dayKey(now - (days - 1) * 86400000) : '';
   const { results } = await db
-    .prepare('SELECT u.id AS id, u.name AS name, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id LIMIT 50')
+    .prepare('SELECT u.id AS id, u.name AS name, u.badge AS badge, p.data AS data FROM users u LEFT JOIN profiles p ON p.user_id = u.id LIMIT 50')
     .all();
   const today = dayKey(now), yesterday = dayKey(now - 86400000);
   const rows = results.map((r) => {
@@ -26,7 +26,7 @@ export async function leaderboard(db, me, rangeRaw, now = Date.now()) {
       points = Number.isFinite(stats.xp) ? stats.xp : 0;
     }
     const alive = stats.last === today || stats.last === yesterday;
-    return { name: String(r.name).slice(0, 40), points: Math.round(points), streak: alive && Number.isFinite(stats.streak) ? stats.streak : 0, avatar, isMe: r.id === me.id };
+    return { name: String(r.name).slice(0, 40), badge: r.badge || '', points: Math.round(points), streak: alive && Number.isFinite(stats.streak) ? stats.streak : 0, avatar, isMe: r.id === me.id };
   });
   rows.sort((a, b) => b.points - a.points || b.streak - a.streak || a.name.localeCompare(b.name));
   return { range, rows };

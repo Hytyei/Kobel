@@ -219,3 +219,29 @@ Your words, progress, league, trophies and profile come back. If you set `kobelA
 
 * Same as 3.3.0: no backend change. Tag `v3.3.1` (version code 30301), build with your **existing** release keystore.
 * **Check on a phone:** Bubble pop and Memory in Training, a question screen for flicker, the "Rule first" card at the start of a unit and a grammar node.
+
+## Version 3.3.0 (path roadmap, better answer options): release checklist (nothing here has been done for you)
+
+* **Backend:** unchanged. No new migrations or endpoints. Migrations `0003` to `0006` must already be applied if you want 3.2.0 features.
+* **Release:** tag `v3.3.0` (version code 30300), build with your **existing** release keystore, upload `kobelapp.apk`.
+* **Saved progress stays valid:** existing path nodes keep their keys. Each unit gains one new review checkpoint at its end; it counts as done automatically for units you have already passed.
+* **Check on a phone:** the stage banners on the Path tab, a checkpoint node, and a few multiple-choice questions (options should look alike).
+
+
+
+## Version 3.4.0 (accounts, new Settings page, games, lesson): release checklist (nothing here has been done for you)
+Nothing was deployed and no database was changed. Do these in order when you are ready:
+
+1. **Apply the migrations** you have not applied yet (they only add things): `0003` to `0007` (the new one is `0007_auth.sql`).
+   `cd backend` then `npx wrangler d1 migrations apply kobel --remote`  (answer `y` when it lists them).
+2. **Make the secrets** (each command asks you to paste the value; nothing goes into a file):
+   * `npx wrangler secret put PASSWORD_PEPPER`: paste a long random text (for example 40+ random characters). Keep a copy somewhere safe.
+   * `npx wrangler secret put FOUNDER_KEY_SHA256`: the SHA-256 of a founder key only you know. Get the hash with `node -e "console.log(require('crypto').createHash('sha256').update('YOUR-FOUNDER-KEY').digest('hex'))"`.
+   * Optional: `npx wrangler secret put FOUNDER_EMAIL_SHA256`: the same command with your lower-case Google e-mail instead of the key.
+   * For Google: follow `docs/AUTH.md` → "Google Cloud Console", then `npx wrangler secret put GOOGLE_CLIENT_ID` and `npx wrangler secret put GOOGLE_CLIENT_SECRET`.
+3. **Deploy the Worker:** `npx wrangler deploy`
+4. **Build and publish the APK** (version 3.4.0): see Part B. The version name in `android/app/build.gradle.kts` is already 3.4.0.
+5. **Claim your name:** open Kobel › Settings › Account › Create account, username `Hytyei`, and when the founder key box appears paste your key. Or sign in with the Google account whose e-mail hash you set.
+6. **Existing users:** nothing is lost. They see a gentle "Make it a real account" card once; their old Kobel ID keeps working.
+
+What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), lesson Semester 2 · Session 1 (können, hobbies), no more flash when questions load, Bubble pop visible again, working new-version pop-up and notification (new channel "App updates" with pop-up importance).

@@ -54,13 +54,14 @@
 .mm-c.no .mm-b{background:#b3101e;color:#fff;animation:gmShake .3s}
 @keyframes mmOk{50%{transform:rotateY(180deg) scale(1.08)}}
 /* bubbles */
-.bb-sky{position:relative;height:min(52vh,420px);margin:10px -4px 0;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 70%)}
-.bb{position:absolute;bottom:6px;will-change:transform;width:92px;height:92px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.38),rgba(255,255,255,.08) 60%,rgba(43,163,224,.18));color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:6px;animation:bbRise 10s linear both;box-shadow:inset 0 -8px 14px rgba(43,163,224,.18),0 0 18px rgba(255,255,255,.05)}
+.bb-sky{position:relative;height:min(52vh,420px);min-height:300px;margin:10px -4px 0;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 70%)}
+
+.bb{position:absolute;top:0;will-change:transform;width:92px;height:92px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.38),rgba(255,255,255,.08) 60%,rgba(43,163,224,.18));color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:6px;box-shadow:inset 0 -8px 14px rgba(43,163,224,.18),0 0 18px rgba(255,255,255,.05)}
 .bb span{font:800 14px/1.1 var(--fd);text-align:center;overflow-wrap:anywhere;pointer-events:none}
-@keyframes bbRise{0%{transform:translate(0,0)}25%{transform:translate(10px,-110px)}50%{transform:translate(-10px,-230px)}75%{transform:translate(8px,-340px)}100%{transform:translate(0,-470px)}}
+.bb-sky.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;place-items:center;align-content:center}
+.bb-sky.grid .bb{position:relative;left:auto!important}
 .bb.pop{animation:bbPop .45s ease-out forwards!important;pointer-events:none}
 .bb.pop.bad{border-color:#ff4455;background:rgba(210,5,21,.35)}
 .bb.away{animation:bbAway .5s ease-in forwards!important;pointer-events:none}
-@keyframes bbPop{0%{transform:scale(1)}40%{transform:scale(1.3);opacity:1}100%{transform:scale(1.7);opacity:0}}
-@keyframes bbAway{to{opacity:0;transform:translateY(-60px) scale(.6)}}
-@media (prefers-reduced-motion:reduce){.bb{animation-duration:30s!important}}
+@keyframes bbPop{0%{scale:1}40%{scale:1.3;opacity:1}100%{scale:1.7;opacity:0}}
+@keyframes bbAway{to{opacity:0;scale:.6}}

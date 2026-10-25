@@ -55,3 +55,13 @@ Optional later hardening if the app becomes public: a Cloudflare Turnstile check
 | Streak data | Only whole local day numbers (max 90) are published, never times; the shared streak is computed on the server |
 | Alert feed | `GET /v1/alerts` only returns the caller's own events, at most 50, from the last 7 days |
 | Phone notifications | Polling uses the access code already stored on the phone; no push service, no extra keys or secrets in the app |
+
+
+## Accounts (version 3.4.0)
+* Passwords are stretched on the phone (PBKDF2, 150 000 rounds, salt = `kobel|lowercase username`) and the Worker stores `HMAC-SHA256(PASSWORD_PEPPER, random salt + key)`. The plain password is never sent or stored. The pepper is a Worker secret (not in the app, not on GitHub).
+* Sessions: random `kbs_…` tokens, only the SHA-256 hash is stored, max 10 per user, deleted on sign-out and on password change (other devices).
+* Login: the same answer for a wrong username and a wrong password, constant-work comparison, limits per connection per hour and 8 wrong tries per username per hour. Sign-up: limits per connection per day and overall per day.
+* Google: authorization code + PKCE done by the Worker (client secret is a Worker secret); `state` is single use and expires after 10 minutes; the ID token is read only after Google's own token endpoint returned it over HTTPS and its issuer is checked; the app receives a one-time handoff code (2 minutes, single use) that needs the app's secret verifier. Only `openid email` is requested; the e-mail is stored (masked in responses) only to recognise the account again.
+* The founder badge cannot be requested: it is granted only by `FOUNDER_KEY_SHA256` / `FOUNDER_EMAIL_SHA256` (hashes in secrets). Reserved names are refused.
+* The Android bridge opens only `https://accounts.google.com/…` and accepts only `kobel://auth` with a code of the expected shape.
+* Old Kobel IDs keep working until their owner upgrades them; nothing is deleted.

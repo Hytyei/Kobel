@@ -24,77 +24,162 @@ const STI={
   info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>'
 };
 const stIco=(k,s=22)=>`<svg class="st-ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${STI[k]||''}</svg>`;
-let SETTAB='general';
-const SET_TABS=()=>[['general',tx('General','Allgemein'),'gear'],['learn',tx('Learning','Lernen'),'goal'],['sound',tx('Sound','Ton'),'speaker'],['alerts',tx('Alerts','Alarme'),'bell'],['account',tx('Account','Konto'),'user'],['data',tx('Data','Daten'),'save']];
-/* one row: icon, title, explanation, control */
+let SETTAB='home';
+/* ---- building blocks ----
+   row: icon, title, one short line, and on the right either the current value + chevron (opens a picker),
+   a switch, a button, or just a chevron (opens a page). */
 const stRow=(ic,t,d,ctl,cls='')=>`<div class="st-row ${cls}"><span class="st-i">${stIco(ic,20)}</span><div class="st-t"><b>${t}</b>${d?`<small>${d}</small>`:''}</div><div class="st-c">${ctl||''}</div></div>`;
-const stSeg=(k,vals,labels)=>`<div class="st-seg">${vals.map((v,i)=>`<button class="${String(S.settings[k])===String(v)?'on':''}" data-a="set" data-k="${k}" data-v="${v}">${labels?labels[i]:v}</button>`).join('')}</div>`;
 const stGroup=(h,rows)=>`<section class="st-g">${h?`<h3 class="st-h">${h}</h3>`:''}<div class="st-card">${rows}</div></section>`;
 const stNote=()=>{try{return noteOn()}catch(e){return true}};
+const sxChev='<i class="sx-ch" aria-hidden="true">›</i>';
+const sxGo=(ic,t,d,attrs,val)=>`<button type="button" class="st-row sx-go" ${attrs}><span class="st-i">${stIco(ic,20)}</span><span class="st-t"><b>${t}</b>${d?`<small>${d}</small>`:''}</span><span class="st-c">${val?`<em class="sx-v">${val}</em>`:''}${sxChev}</span></button>`;
+const sxSw=(ic,t,d,on,attrs)=>`<div class="st-row"><span class="st-i">${stIco(ic,20)}</span><div class="st-t"><b>${t}</b>${d?`<small>${d}</small>`:''}</div><div class="st-c"><button type="button" class="sw ${on?'on':''}" role="switch" aria-checked="${on?'true':'false'}" ${attrs} aria-label="${t}"></button></div></div>`;
+/* choices (with a plain explanation each) that open in a sheet instead of a tiny toggle bar */
+const SX_PICK=()=>({
+  lang:{t:tx('App language','App-Sprache'),o:[['en','English',''],['de','Deutsch','']]},
+  theme:{t:tx('Theme','Design'),o:[['auto',tx('Automatic','Automatisch'),tx('Follows your phone','Folgt deinem Handy')],['light',tx('Light','Hell'),''],['dark',tx('Dark','Dunkel'),'']]},
+  goal:{t:tx('Daily points goal','Tagesziel'),o:[[30,'30',tx('Relaxed: a few minutes a day','Entspannt: ein paar Minuten am Tag')],[60,'60',tx('Steady: about one short session','Stetig: etwa eine kurze Einheit')],[100,'100',tx('Serious: two or three sessions','Ernsthaft: zwei bis drei Einheiten')],[200,'200',tx('Intense: a proper workout','Intensiv: ein richtiges Training')]]},
+  newPer:{t:tx('New words per session','Neue Wörter pro Einheit'),o:[[4,'4',tx('Gentle','Sanft')],[8,'8',tx('Balanced','Ausgewogen')],[12,'12',tx('Fast','Schnell')]]},
+  challenge:{t:tx('New-word challenge','Schwierigkeit neuer Wörter'),o:[['easy',tx('Easy','Leicht'),tx('Kobel waits longer before testing a new word','Kobel wartet länger, bevor ein neues Wort abgefragt wird')],['normal',tx('Normal','Normal'),''],['hard',tx('Hard','Schwer'),tx('New words are tested quickly','Neue Wörter werden schnell abgefragt')]]},
+  gShare:{t:tx('Grammar in practice','Grammatik im Training'),o:[[0,tx('Off','Aus'),tx('Words only','Nur Wörter')],[.1,'10%',''],[.2,'20%',''],[.3,'30%',tx('A lot of grammar','Viel Grammatik')]]},
+  dir:{t:tx('Flashcard direction','Karteikarten-Richtung'),o:[['both',tx('Both ways','Beide Richtungen'),''],['de',tx('DE → EN','DE → EN'),''],['en',tx('EN → DE','EN → DE'),'']]}
+});
+const sxLabel=k=>{const p=SX_PICK()[k],v=S.settings[k],o=p.o.find(x=>String(x[0])===String(v));return o?o[1]:String(v)};
+const sxPick=k=>{const p=SX_PICK()[k];return sxGo(({lang:'globe',theme:'sun',goal:'goal',newPer:'plus',challenge:'sens',gShare:'gram',dir:'card'})[k],p.t,'',`data-a="setpick" data-k="${k}"`,esc(sxLabel(k)))};
+function sxPickSheet(k){
+  const p=SX_PICK()[k];if(!p)return;
+  sheet(`<h3>${p.t}</h3><div class="sx-opts">${p.o.map(o=>`<button type="button" class="sx-o ${String(S.settings[k])===String(o[0])?'on':''}" data-a="setval" data-k="${k}" data-v="${o[0]}"><span><b>${o[1]}</b>${o[2]?`<small>${o[2]}</small>`:''}</span><i>${String(S.settings[k])===String(o[0])?'✓':''}</i></button>`).join('')}</div>`);
+}
 
-function stGeneral(){
-  return stGroup(tx('Language and look','Sprache und Aussehen'),
-    stRow('globe',tx('App language','App-Sprache'),tx('Menus and hints','Menüs und Hinweise'),stSeg('lang',['en','de'],['EN','DE']))+
-    stRow('sun',tx('Theme','Design'),tx('Auto follows your phone','Auto folgt deinem Handy'),stSeg('theme',['auto','light','dark'],[tx('Auto','Auto'),tx('Light','Hell'),tx('Dark','Dunkel')])))+
-  stGroup(tx('Shortcuts','Kürzel'),
-    stRow('squad',tx('Squad (your words)','Kader (deine Wörter)'),`${S.cards.filter(c=>!isG(c)).length} ${tx('words','Wörter')} · ${S.cards.filter(isG).length} ${tx('grammar items','Grammatik')}`,`<button class="btn sm ghost" data-a="tab" data-k="library">${tx('Open','Öffnen')}</button>`)+
-    stRow('trophy',tx('Trophy cabinet','Vitrine'),'',`<button class="btn sm ghost" data-a="cabinet">${tx('Open','Öffnen')}</button>`)+
-    stRow('info',tx('About Kobel','Über Kobel'),'v'+APP_VER,`<button class="btn sm ghost" data-a="tab" data-k="about">${tx('Open','Öffnen')}</button>`));
+/* ---- pages ---- */
+function stLook(){
+  return stGroup('',sxPick('lang')+sxPick('theme'));
 }
 function stLearn(){
-  const sc=scopeInfo();
-  return stGroup(tx('Daily routine','Tagesroutine'),
-    stRow('goal',tx('Daily points goal','Tagesziel'),tx('Reach it to keep your day green','Erreiche es für einen grünen Tag'),stSeg('goal',[30,60,100,200]))+
-    stRow('plus',tx('New words per session','Neue Wörter pro Einheit'),'',stSeg('newPer',[4,8,12]))+
-    stRow('sens',tx('New-word challenge','Neue Wörter: Schwierigkeit'),tx('How long Kobel waits before testing a new word','Wie lange Kobel vor dem Abfragen wartet'),stSeg('challenge',['easy','normal','hard'],[tx('Easy','Leicht'),tx('Normal','Normal'),tx('Hard','Schwer')])))+
-  stGroup(tx('What you practise','Was du übst'),
-    stRow('gram',tx('Grammar share','Grammatikanteil'),tx('How much of a session is grammar','Wie viel einer Einheit Grammatik ist'),stSeg('gShare',[0,.1,.2,.3],[tx('Off','Aus'),'10%','20%','30%']))+
-    stRow('list',tx('Lessons in training','Lektionen im Training'),`${sc.n} ${tx('of','von')} ${sc.total} ${tx('active','aktiv')}`,`<button class="btn sm ghost" data-a="scope">${tx('Choose','Wählen')}</button>`)+
-    stRow('card',tx('Flashcard direction','Karteikarten-Richtung'),'',stSeg('dir',['both','de','en'],[tx('Both','Beide'),'DE→EN','EN→DE'])));
+  return stGroup(tx('Daily routine','Tagesroutine'),sxPick('goal')+sxPick('newPer')+sxPick('challenge'))+
+    stGroup(tx('What you practise','Was du übst'),sxPick('gShare')+sxPick('dir'));
 }
 function stSound(){
-  return stGroup(tx('Sound and voice','Ton und Stimme'),
-    stRow('speaker',tx('Sound effects','Soundeffekte'),tx('Clicks, correct and wrong, celebrations','Klicks, richtig und falsch, Feiern'),sw('sound'))+
-    stRow('mic',tx('Speak German aloud','Deutsch vorlesen'),germanOK()?tx('German voice ready','Deutsche Stimme bereit'):tx('No German voice found on this device','Keine deutsche Stimme gefunden'),sw('tts'))+
-    stRow('speaker',tx('Test the German voice','Stimme testen'),'',`<button class="btn sm ghost" data-a="testvoice">${germanOK()?tx('Play','Abspielen'):NATIVE?tx('Install voice','Stimme installieren'):tx('Help','Hilfe')}</button>`));
+  return stGroup('',
+    sxSw('speaker',tx('Sound effects','Soundeffekte'),tx('Taps, right and wrong answers, celebrations','Tippen, richtig und falsch, Feiern'),!!S.settings.sound,'data-a="tog" data-k="sound"')+
+    sxSw('mic',tx('Speak German aloud','Deutsch vorlesen'),germanOK()?tx('German voice ready','Deutsche Stimme bereit'):tx('No German voice found on this device','Keine deutsche Stimme gefunden'),!!S.settings.tts,'data-a="tog" data-k="tts"')+
+    sxGo('speaker',tx('Test the German voice','Stimme testen'),'','data-a="testvoice"',germanOK()?tx('Play','Abspielen'):NATIVE?tx('Install voice','Stimme installieren'):tx('Help','Hilfe')));
 }
 function stAlerts(){
   const n=unreadN();
-  return stGroup(tx('Phone notifications','Handy-Benachrichtigungen'),
-    stRow('bell',tx('Notifications','Benachrichtigungen'),tx('Friend requests, match requests, study group news and nudges, updates','Freundschaftsanfragen, Spielanfragen, Lerngruppen-News und Anstupser, Updates'),`<div class="st-seg"><button class="${noteOn()?'on':''}" data-a="notify" data-v="1">${tx('On','An')}</button><button class="${noteOn()?'':'on'}" data-a="notify" data-v="0">${tx('Off','Aus')}</button></div>`)+
-    stRow('fire',tx('Streak reminders','Serien-Erinnerungen'),tx('An evening reminder and a last call a few hours before your streak ends','Eine Erinnerung am Abend und ein letzter Aufruf, bevor deine Serie endet'),`<div class="st-seg"><button class="${noteStreakOn()?'on':''}" data-a="notifystreak" data-v="1">${tx('On','An')}</button><button class="${noteStreakOn()?'':'on'}" data-a="notifystreak" data-v="0">${tx('Off','Aus')}</button></div>`))+
-  stGroup(tx('Inbox','Postfach'),stRow('bell',tx('Notifications inside the app','Mitteilungen in der App'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),`<button class="btn sm ghost" data-a="tab" data-k="inbox">${tx('Open','Öffnen')}</button>`))+
-  `<p class="st-foot">${tx('Study group members can also nudge each other: open Table › Friends › Study groups and use "Nudge the group".','Mitglieder einer Lerngruppe können sich anstupsen: Tabelle › Freunde › Lerngruppen › „Gruppe anstupsen“.')}</p>`;
+  return stGroup('',
+    sxSw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)+
+    sxSw('fire',tx('Streak reminders','Serien-Erinnerungen'),tx('An evening reminder and a last call before your streak ends','Abendliche Erinnerung und ein letzter Aufruf vor dem Ende deiner Serie'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`))+
+  stGroup('',sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"'))+
+  `<p class="st-foot">${tx('Tip: study group members can nudge each other from Table › Friends › Study groups.','Tipp: Mitglieder einer Lerngruppe können sich unter Tabelle › Freunde › Lerngruppen anstupsen.')}</p>`;
 }
-function stAccount(){
-  return `<div class="st-card st-wrap">${idCard()}</div>${syncCard()}${updateCard()}`;
+function stWords(){
+  const sc=scopeInfo();
+  return stGroup('',
+    sxGo('squad',tx('Squad (your words)','Kader (deine Wörter)'),`${S.cards.filter(c=>!isG(c)).length} ${tx('words','Wörter')} · ${S.cards.filter(isG).length} ${tx('grammar items','Grammatik')}`,'data-a="tab" data-k="library"')+
+    sxGo('list',tx('Lessons in training','Lektionen im Training'),`${sc.n} ${tx('of','von')} ${sc.total} ${tx('active','aktiv')}`,'data-a="scope"')+
+    sxGo('trophy',tx('Trophy cabinet','Vitrine'),'','data-a="cabinet"'))+
+  stGroup(tx('Class notes','Klassennotizen'),sxGo('list',tx('Re-add my built-in class notes','Meine Klassennotizen neu hinzufügen'),tx('Adds lessons you are missing; nothing is removed','Fügt fehlende Lektionen hinzu; nichts wird entfernt'),'data-a="classnotes"'));
 }
 function stData(){
   return stGroup(tx('Backup','Sicherung'),
-    stRow('save',tx('Backup file','Sicherungsdatei'),S.stats.lastBackup?tx('Last backup: ','Letzte Sicherung: ')+new Date(S.stats.lastBackup).toLocaleDateString():tx('No backup file saved yet','Noch keine Sicherung'),`<button class="btn sm c-fern" data-a="savebk">${tx('Save','Sichern')}</button>`)+
-    stRow('download',tx('Load or import','Laden oder importieren'),'',`<button class="btn sm c-sky" data-a="imp">${tx('Import','Import')}</button>`)+
-    stRow('card',tx('Copy backup as text','Sicherung als Text kopieren'),'',`<button class="btn sm ghost" data-a="exp">${tx('Copy','Kopieren')}</button>`)+
-    stRow('card',tx('Export for Anki (TSV)','Export für Anki (TSV)'),'',`<button class="btn sm ghost" data-a="anki">${tx('Export','Export')}</button>`))+
+    sxGo('save',tx('Save a backup file','Sicherungsdatei speichern'),S.stats.lastBackup?tx('Last backup: ','Letzte Sicherung: ')+new Date(S.stats.lastBackup).toLocaleDateString():tx('No backup file yet','Noch keine Sicherung'),'data-a="savebk"')+
+    sxGo('download',tx('Load a backup','Sicherung laden'),'','data-a="imp"')+
+    sxGo('card',tx('Copy backup as text','Sicherung als Text kopieren'),'','data-a="exp"')+
+    sxGo('card',tx('Export for Anki (TSV)','Export für Anki (TSV)'),'','data-a="anki"'))+
   stGroup(tx('Careful','Vorsicht'),
-    stRow('list',tx('Re-add my built-in class notes','Meine Klassennotizen neu hinzufügen'),'',`<button class="btn sm ghost" data-a="classnotes">${tx('Re-add','Hinzufügen')}</button>`)+
-    stRow('fire',tx('Reset progress (keep words)','Fortschritt zurücksetzen (Wörter bleiben)'),'',`<button class="btn sm ghost" data-a="reset">${tx('Reset','Zurücksetzen')}</button>`)+
-    stRow('fire',tx('Erase everything (empty library)','Alles löschen (leere Bibliothek)'),'',`<button class="btn sm ghost st-danger" data-a="wipe">${tx('Erase','Löschen')}</button>`));
+    sxGo('fire',tx('Reset progress','Fortschritt zurücksetzen'),tx('Keeps your words','Deine Wörter bleiben'),'data-a="reset"')+
+    sxGo('fire',tx('Erase everything','Alles löschen'),tx('Empties the library too','Leert auch die Bibliothek'),'data-a="wipe" data-danger="1"'));
+}
+function stAbout(){
+  const i=U.info||{};
+  const upd=U.state==='available'||U.state==='ready'?tx('New version ','Neue Version ')+esc(String(i.latest||'')):U.state==='checking'?tx('Checking…','Prüfe …'):U.state==='uptodate'?tx('You have the latest version','Du hast die neueste Version'):tx('Tap to check','Tippen zum Prüfen');
+  return stGroup('',sxGo('download',tx('Check for updates','Nach Updates suchen'),upd,'data-a="updcheck"',''))+
+    stGroup('',sxGo('info',tx('About Kobel','Über Kobel'),'v'+APP_VER,'data-a="tab" data-k="about"'));
+}
+const SX_PAGES=()=>({
+  account:[tx('Account and sync','Konto und Sync'),()=>stAccountPage()],
+  learn:[tx('Learning','Lernen'),stLearn],
+  sound:[tx('Sound and voice','Ton und Stimme'),stSound],
+  alerts:[tx('Notifications','Benachrichtigungen'),stAlerts],
+  look:[tx('Language and look','Sprache und Aussehen'),stLook],
+  words:[tx('Words and lessons','Wörter und Lektionen'),stWords],
+  data:[tx('Backup and data','Sicherung und Daten'),stData],
+  about:[tx('Updates and about','Updates und Info'),stAbout]
+});
+/* the account page is the one from auth.js (without the update card: updates have their own page now) */
+function stAccountPage(){return stAccount().replace(/<h2 class="sec">App-Update<\/h2>[\s\S]*$/,'')}
+function sxSummary(){
+  const S0=S.settings,on=v=>v?tx('On','An'):tx('Off','Aus');
+  return {
+    learn:`${tx('Goal','Ziel')} ${S0.goal} · ${S0.newPer} ${tx('new words','neue Wörter')}`,
+    sound:`${tx('Sound','Ton')} ${on(S0.sound).toLowerCase()} · ${tx('voice','Stimme')} ${on(S0.tts).toLowerCase()}`,
+    alerts:stNote()?tx('On','An'):tx('Off','Aus'),
+    look:`${sxLabel('lang')} · ${sxLabel('theme')}`,
+    words:`${S.cards.filter(c=>!isG(c)).length} ${tx('words','Wörter')}`,
+    data:S.stats.lastBackup?tx('Last backup ','Letzte Sicherung ')+new Date(S.stats.lastBackup).toLocaleDateString():tx('No backup yet','Noch keine Sicherung'),
+    about:'v'+APP_VER+(U.state==='available'?' · '+tx('update ready','Update bereit'):'')
+  };
+}
+/* ---- Settings home: ONE page, the everyday controls are right here (no digging through sub-pages) ---- */
+function sxSeg(k,ic,desc){
+  const p=SX_PICK()[k],cur=String(S.settings[k]),sel=p.o.find(o=>String(o[0])===cur);
+  return `<div class="sxg-blk"><div class="sxg-hd"><span class="st-i">${stIco(ic,20)}</span><b>${p.t}</b></div>
+    <div class="sxg" role="radiogroup" aria-label="${p.t}">${p.o.map(o=>`<button type="button" role="radio" aria-checked="${String(o[0])===cur}" class="${String(o[0])===cur?'on':''}" data-a="setv" data-k="${k}" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+    <p class="sxg-d">${sel&&sel[2]?sel[2]:(desc||'')}</p></div>`;
+}
+const SX_JUMP=()=>[['learn',tx('Learning','Lernen')],['sound',tx('Sound','Ton')],['alerts',tx('Alerts','Hinweise')],['look',tx('Look','Look')],['lib',tx('Words','Wörter')],['about',tx('About','Info')]];
+function stHome(){
+  let signed=false,uname='';try{signed=hasAccount();const u=myInfo()||{};uname=u.username?'@'+u.username:''}catch(e){}
+  const hasUpd=(U.state==='available'||U.state==='ready')&&U.info&&U.info.latest;
+  const upd=hasUpd?`<button type="button" class="sx-upd" data-a="updcheck"><b>${tx('Update available','Update verfügbar')}</b><span>Kobel ${esc(String(U.info.latest).replace(/^v/i,''))} · ${tx('tap to install','tippen zum Installieren')}</span><i>›</i></button>`:'';
+  const sc=scopeInfo(),n=unreadN();
+  const sw=(ic,t,d,on,attrs)=>sxSw(ic,t,d,on,attrs);
+  const updTxt=U.state==='checking'?tx('Checking…','Prüfe …'):U.state==='uptodate'?tx('You have the latest version','Du hast die neueste Version'):hasUpd?tx('New version ','Neue Version ')+esc(String(U.info.latest)):tx('Tap to check','Tippen zum Prüfen');
+  return `<div class="st-me2"><button class="st-who" data-a="setpage" data-k="account">${avatarSvg(myAvatar(),56)}<span><b>${esc(myName())}${vbadge(myBadge())}</b><small>${signed?(uname||tx('Signed in','Angemeldet')):tx('Not signed in','Nicht angemeldet')}</small></span></button>
+    ${signed?`<button class="st-pill" data-a="setpage" data-k="account">${tx('Account','Konto')}</button>`:`<button class="st-pill hot" data-a="authin">${tx('Sign in','Anmelden')}</button>`}</div>
+  <button class="sx-prof" data-a="tab" data-k="profile">${stIco('user',18)}<span>${tx('View my profile','Mein Profil ansehen')}</span><i>›</i></button>
+  ${upd}
+  <nav class="st-jump" aria-label="${tx('Jump to','Springe zu')}">${SX_JUMP().map(j=>`<button type="button" data-a="setjump" data-k="${j[0]}">${j[1]}</button>`).join('')}</nav>
+
+  <section class="st-g" id="sx-learn"><h3 class="st-h">${tx('Learning','Lernen')}</h3><div class="st-card st-pad">
+    ${sxSeg('goal','goal')}${sxSeg('newPer','plus')}${sxSeg('challenge','sens')}${sxSeg('gShare','gram')}${sxSeg('dir','card')}</div></section>
+
+  <section class="st-g" id="sx-sound"><h3 class="st-h">${tx('Sound and voice','Ton und Stimme')}</h3><div class="st-card">
+    ${sw('speaker',tx('Sound effects','Soundeffekte'),tx('Taps, right and wrong answers, celebrations','Tippen, richtig und falsch, Feiern'),!!S.settings.sound,'data-a="tog" data-k="sound"')}
+    ${sw('mic',tx('Speak German aloud','Deutsch vorlesen'),germanOK()?tx('German voice ready','Deutsche Stimme bereit'):tx('No German voice found on this device','Keine deutsche Stimme gefunden'),!!S.settings.tts,'data-a="tog" data-k="tts"')}
+    ${sxGo('speaker',tx('Test the German voice','Stimme testen'),'','data-a="testvoice"',germanOK()?tx('Play','Abspielen'):NATIVE?tx('Install voice','Stimme installieren'):tx('Help','Hilfe'))}</div></section>
+
+  <section class="st-g" id="sx-alerts"><h3 class="st-h">${tx('Notifications','Benachrichtigungen')}</h3><div class="st-card">
+    ${sw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)}
+    ${sw('fire',tx('Streak reminders','Serien-Erinnerungen'),tx('An evening reminder and a last call before your streak ends','Abendliche Erinnerung und ein letzter Aufruf vor dem Ende deiner Serie'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`)}
+    ${sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"')}</div></section>
+
+  <section class="st-g" id="sx-look"><h3 class="st-h">${tx('Language and look','Sprache und Aussehen')}</h3><div class="st-card st-pad">${sxSeg('lang','globe')}${sxSeg('theme','sun')}</div></section>
+
+  <section class="st-g" id="sx-lib"><h3 class="st-h">${tx('Your words','Deine Wörter')}</h3><div class="st-card">
+    ${sxGo('squad',tx('Squad (your words)','Kader (deine Wörter)'),`${S.cards.filter(c=>!isG(c)).length} ${tx('words','Wörter')} · ${S.cards.filter(isG).length} ${tx('grammar items','Grammatik')}`,'data-a="tab" data-k="library"')}
+    ${sxGo('list',tx('Lessons in training','Lektionen im Training'),`${sc.n} ${tx('of','von')} ${sc.total} ${tx('active','aktiv')}`,'data-a="scope"')}
+    ${sxGo('trophy',tx('Trophy cabinet','Vitrine'),'','data-a="cabinet"')}
+    ${sxGo('save',tx('Backup and data','Sicherung und Daten'),S.stats.lastBackup?tx('Last backup ','Letzte Sicherung ')+new Date(S.stats.lastBackup).toLocaleDateString():tx('No backup yet','Noch keine Sicherung'),'data-a="setpage" data-k="data"')}</div></section>
+
+  <section class="st-g" id="sx-about"><h3 class="st-h">${tx('About','Info')}</h3><div class="st-card">
+    ${sxGo('download',tx('Check for updates','Nach Updates suchen'),updTxt,'data-a="updcheck"','')}
+    ${sxGo('info',tx('About Kobel','Über Kobel'),'v'+APP_VER,'data-a="tab" data-k="about"')}</div></section>`;
 }
 function vSet(){
-  if(!SET_TABS().some(t=>t[0]===SETTAB))SETTAB='general';
-  const body={general:stGeneral,learn:stLearn,sound:stSound,alerts:stAlerts,account:stAccount,data:stData}[SETTAB]();
-  const ti=tierInfo();
-  return `<div class="top"><h1 class="h1">${tx('Settings','Einstellungen')}</h1></div>
-  <button class="st-me" data-a="tab" data-k="profile">${avatarSvg(myAvatar(),44)}<span><b>${esc(myName())}</b><small>${esc(ti.t.n)} · ${tx('Open profile','Profil öffnen')}</small></span><i>›</i></button>
-  <nav class="st-tabs" role="tablist">${SET_TABS().map(t=>`<button role="tab" class="${SETTAB===t[0]?'on':''}" data-a="settab" data-k="${t[0]}">${stIco(t[2],18)}<span>${t[1]}</span></button>`).join('')}</nav>
-  <div class="st-body" id="st-body">${body}</div>
-  <button class="btn ghost" style="margin-top:18px" data-a="tab" data-k="home">${tx('Back to the start','Zurück zum Start')}</button>`;
+  const pages=SX_PAGES();
+  try{if(RN.tab!=='settings')SETTAB='home'}catch(e){}
+  if(!pages[SETTAB])SETTAB='home';
+  if(SETTAB==='home')return `<div class="top st-top"><h1 class="h1">${tx('Settings','Einstellungen')}</h1></div><div class="st-body" id="st-body">${stHome()}</div>`;
+  const pg=pages[SETTAB];
+  return `<button class="st-back" data-a="setpage" data-k="home">‹ ${tx('Settings','Einstellungen')}</button><div class="top st-top"><h1 class="h1">${pg[0]}</h1></div><div class="st-body" id="st-body">${pg[1]()}</div>`;
 }
 function vProfile(){
   const st=S.stats,ti=tierInfo(),tc=trophyCount(),L=lvl(st.xp),wk=Math.floor(curStreak()/7),n=unreadN();
   const cl=(typeof clubOf==='function'&&clubOf(myAvatar()))||null;
   return `<div class="top"><h1 class="h1">${tx('Profile','Profil')}</h1></div>
-  <div class="pf-hero"><div class="pf-av">${avatarSvg(myAvatar(),92)}</div><div class="pf-id"><b>${esc(myName())}</b><span>${esc(title(L))} · ${tx('Level','Stufe')} ${L}</span><em>${cl?esc(cl[1]):''} ${esc(ti.t.n)}</em></div>
+  <div class="pf-hero"><div class="pf-av">${avatarSvg(myAvatar(),92)}</div><div class="pf-id"><b>${esc(myName())}${vbadge(myBadge(),true)}</b><span>${esc(title(L))} · ${tx('Level','Stufe')} ${L}</span><em>${cl?esc(cl[1]):''} ${esc(ti.t.n)}</em></div>
     <button class="pf-ed" data-a="pfedit" aria-label="${tx('Edit profile','Profil bearbeiten')}">${stIco('gear',20)}<span>${tx('Edit','Ändern')}</span></button></div>
   <div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(curStreak(),tx('Streak','Serie'),wk?`${wk} ${tx(wk===1?'week':'weeks',wk===1?'Woche':'Wochen')}`:tx('days','Tage'))}${sCell(ti.lp,'LP',esc(ti.t.lv))}${sCell(knowledge(),tx('Words known','Wörter'),tx('equivalents','Äquivalente'))}</div>
   <div class="statgrid" style="grid-template-columns:repeat(3,1fr)">${sCell(tc.gold,tx('Gold','Gold'),'')}${sCell(tc.silver,tx('Silver','Silber'),'')}${sCell(tc.bronze,'Bronze','')}</div>
@@ -108,10 +193,18 @@ function vProfile(){
   <button class="btn ghost" style="margin-top:14px" data-a="tab" data-k="home">${tx('Back to the start','Zurück zum Start')}</button>`;
 }
 /* the library page gets a way back, since it is no longer in the top nav */
-function vLib(){return `<button class="st-back" data-a="tab" data-k="settings">‹ ${tx('Settings','Einstellungen')}</button>`+vLib0()}
+function vLib(){return `<button class="st-back" data-a="setpage" data-k="words">‹ ${tx('Words and lessons','Wörter und Lektionen')}</button>`+vLib0()}
 const GEAR_B='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+STI.gear+'</svg>';
 function hdrBtns(){
   const n=unreadN();
   return `<button class="iconbtn bellb" data-a="tab" data-k="inbox" aria-label="Notifications">${BELL}${n?`<i class="bdot">${n>9?'9+':n}</i>`:''}</button><button class="iconbtn" data-a="tab" data-k="settings" aria-label="Settings">${GEAR_B}</button><button class="avbtn" data-a="tab" data-k="profile" aria-label="Profile">${avatarSvg(myAvatar(),38)}</button>`;
 }
-const SET3_ACTIONS={settab:t=>{SETTAB=t.dataset.k;render();try{window.scrollTo(0,0)}catch(e){}}};
+const SET3_ACTIONS={
+  setpage:t=>{SETTAB=t.dataset.k;render();try{window.scrollTo(0,0)}catch(e){}},
+  setpick:t=>sxPickSheet(t.dataset.k),
+  setval:t=>{A.set(t);closeSheet()},
+  updcheck:()=>checkUpdate(true),
+  /* a choice made inside the page keeps the scroll position */
+  setv:t=>{const y=window.scrollY;A.set(t);requestAnimationFrame(()=>window.scrollTo(0,y))},
+  setjump:t=>{const e=document.getElementById('sx-'+t.dataset.k);if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}
+};

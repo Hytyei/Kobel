@@ -83,9 +83,11 @@ object NotifyWork {
         val p = NotifyPrefs.get(ctx)
         if (!p.on) return
         Notifier.ensureChannels(ctx)
-        alerts(ctx, p)
-        if (p.streakOn) streak(ctx, p)
-        updates(ctx, p)
+        // each part on its own: a network failure in one (for example the friends feed) must never skip the others,
+        // that used to stop the "new version" notification from ever being reached
+        try { alerts(ctx, p) } catch (_: Exception) { }
+        try { if (p.streakOn) streak(ctx, p) } catch (_: Exception) { }
+        try { updates(ctx, p) } catch (_: Exception) { }
     }
 
     /** The server feed: friend requests, match requests, study groups. */
@@ -196,17 +198,31 @@ object NotifyWork {
         sp.edit().putLong("updAt", nowMs).apply()
         val repo = BuildConfig.GITHUB_REPO
         if (!repo.matches(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+")) || repo.startsWith("YOUR_")) return
-        val c = URL("https://api.github.com/repos/$repo/releases/latest").openConnection() as HttpURLConnection
+        val c = URL("https://api.github.com/repos/$repo/releases?per_page=15").openConnection() as HttpURLConnection
         try {
             c.connectTimeout = 15000; c.readTimeout = 20000
             c.setRequestProperty("User-Agent", "Kobel-Notify")
             c.setRequestProperty("Accept", "application/vnd.github+json")
-            if (c.responseCode != 200) return
-            val tag = JSONObject(c.inputStream.bufferedReader().use { it.readText() }).optString("tag_name")
-            val m = Regex("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?").find(tag) ?: return
-            val n = m.groupValues.drop(1).map { it.toIntOrNull() ?: 0 }
-            val code = n[0] * 10000 + n[1] * 100 + n[2]
-            if (code <= BuildConfig.VERSION_CODE || sp.getInt("updTold", 0) >= code) return
+            if (c.responseCode != 200) { sp.edit().putLong("updAt", 0L).apply(); return }
+            val list = org.json.JSONArray(c.inputStream.bufferedReader().use { it.readText() })
+            var tag = ""
+            var code = -1
+            for (k in 0 until list.length()) {
+                val r = list.getJSONObject(k)
+                if (r.optBoolean("draft")) continue
+                val arr = r.optJSONArray("assets") ?: continue
+                var has = false
+                for (x in 0 until arr.length()) if (arr.getJSONObject(x).optString("name").endsWith(".apk")) has = true
+                if (!has) continue
+                val m = Regex("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?").find(r.optString("tag_name")) ?: continue
+                val n = m.groupValues.drop(1).map { it.toIntOrNull() ?: 0 }
+                val cd = n[0] * 10000 + n[1] * 100 + n[2]
+                if (cd > code) { code = cd; tag = r.optString("tag_name") }
+            }
+            val cur = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: ""
+            val cm = Regex("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?").find(cur)
+            val curCode = if (cm != null) cm.groupValues.drop(1).map { it.toIntOrNull() ?: 0 }.let { it[0] * 10000 + it[1] * 100 + it[2] } else BuildConfig.VERSION_CODE
+            if (code <= curCode || sp.getInt("updTold", 0) >= code) return
             sp.edit().putInt("updTold", code).apply()
             Notifier.show(
                 ctx, 7002, Notifier.CH_UPDATE,

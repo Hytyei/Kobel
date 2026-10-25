@@ -1,0 +1,26 @@
+/* ───────── accounts ───────── */
+.vb{display:inline-flex;align-items:center;gap:4px;margin-left:5px;vertical-align:-3px;line-height:1}
+.vb svg{width:16px;height:16px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.vb.big{margin-left:8px;padding:3px 9px 3px 5px;border-radius:999px;background:rgba(245,197,24,.14);vertical-align:middle}
+.vb.big svg{width:20px;height:20px}
+.vb i{font:800 11px var(--fd,inherit);letter-spacing:.08em;text-transform:uppercase;color:#F5C518;font-style:normal}
+.au-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:12px 0 14px;border:1.5px solid var(--line,rgba(255,255,255,.18))}
+.au-tabs button{background:none;border:0;color:var(--mute,#aaa);font:800 13px var(--fd,inherit);letter-spacing:.06em;text-transform:uppercase;padding:11px 6px;cursor:pointer}
+.au-tabs button.on{background:var(--ink,#fff);color:var(--inv,#000)}
+.au-g{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#1f1f1f;border:0;font-weight:800}
+.au-g svg{flex:none}
+.au-or{display:flex;align-items:center;gap:10px;margin:14px 0 10px;color:var(--mute,#aaa);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.au-or::before,.au-or::after{content:'';flex:1;height:1px;background:var(--line,rgba(255,255,255,.16))}
+.au-l{display:block;margin:10px 0 4px}
+.au-h{font-size:13px;margin:6px 0 0;min-height:16px}
+.au-pw{position:relative}
+.au-pw .inp{padding-right:78px}
+.au-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mute,#aaa);font:700 13px var(--fb,inherit);padding:8px 10px;cursor:pointer}
+.au-old{display:block;margin:14px auto 0;background:none;border:0;color:var(--mute,#aaa);font:700 13px var(--fb,inherit);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.au-card{padding:14px}
+.au-h1{font:800 20px/1.15 var(--fd,inherit)}
+.au-me{display:flex;align-items:center;gap:12px}
+.au-me b{display:block;font:800 22px/1.1 var(--fd,inherit)}
+.au-me small{display:block;color:var(--mute,#aaa);margin-top:3px;font-size:14px}
+.au-warn{margin-top:12px;padding:10px 12px;border-left:4px solid var(--lantern,#F5C518);background:rgba(245,197,24,.08);display:flex;flex-direction:column;gap:3px;font-size:14px;line-height:1.35}
+.wl-in2{display:block;width:100%;margin-top:10px}

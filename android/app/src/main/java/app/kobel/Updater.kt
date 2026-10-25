@@ -42,8 +42,25 @@ class Updater(private val ctx: Context, private val report: (String, String) -> 
                     send(JSONObject().put("error", "Set your GitHub repository first (see docs/DEPLOYMENT.md)"))
                     return@Thread
                 }
-                val body = httpGet("https://api.github.com/repos/$repo/releases/latest")
-                val j = JSONObject(body)
+                // The newest release that really has an .apk, newest version number first. ("releases/latest" skips
+                // pre-releases and could point at an old build, so the list is read instead.)
+                val list = org.json.JSONArray(httpGet("https://api.github.com/repos/$repo/releases?per_page=15"))
+                var j: JSONObject? = null
+                var best = -1
+                for (k in 0 until list.length()) {
+                    val r = list.getJSONObject(k)
+                    if (r.optBoolean("draft")) continue
+                    val arr = r.optJSONArray("assets") ?: continue
+                    var has = false
+                    for (x in 0 until arr.length()) if (arr.getJSONObject(x).optString("name").endsWith(".apk")) has = true
+                    if (!has) continue
+                    val cd = codeOf(r.optString("tag_name")) ?: codeOf(r.optString("name")) ?: 0
+                    if (cd > best) { best = cd; j = r }
+                }
+                if (j == null) {
+                    send(JSONObject().put("ok", true).put("newer", false).put("latest", "").put("current", versionName()).put("noApk", true))
+                    return@Thread
+                }
                 val tag = j.optString("tag_name")
                 val assets = j.optJSONArray("assets")
                 var apk: JSONObject? = null
@@ -55,8 +72,8 @@ class Updater(private val ctx: Context, private val report: (String, String) -> 
                     if (n.endsWith(".apk.sha256")) sha = a.optString("browser_download_url")
                 }
                 val cur = versionName()
-                val latestCode = codeOf(tag)
-                val curCode = BuildConfig.VERSION_CODE
+                val latestCode = codeOf(tag) ?: codeOf(j.optString("name"))
+                val curCode = codeOf(cur) ?: BuildConfig.VERSION_CODE
                 val newer = apk != null && latestCode != null && latestCode > curCode
                 if (apk != null) info = Info(tag, j.optString("body"), apk.optString("browser_download_url"), apk.optLong("size"), sha)
                 send(

@@ -194,11 +194,11 @@ test('PATCH /v1/me renames without touching data; names are unique', async () =>
   const { call, addUser, db } = setup();
   const a = addUser('Hadi'), b = addUser('Sara');
   await call('POST', '/v1/sync', { code: a, body: { since: 0, cards: [card()] } });
-  assert.equal((await call('PATCH', '/v1/me', { code: a, body: { name: 'Hytyei' } })).json.user.name, 'Hytyei');
-  assert.equal((await call('GET', '/v1/me', { code: a })).json.user.name, 'Hytyei');
+  assert.equal((await call('PATCH', '/v1/me', { code: a, body: { name: 'Maren' } })).json.user.name, 'Maren');
+  assert.equal((await call('GET', '/v1/me', { code: a })).json.user.name, 'Maren');
   const exp = await call('GET', '/v1/export', { code: a });
   assert.equal(exp.json.cards.length, 1);
-  assert.equal((await call('PATCH', '/v1/me', { code: b, body: { name: 'hytyei' } })).status, 409);
+  assert.equal((await call('PATCH', '/v1/me', { code: b, body: { name: 'maren' } })).status, 409);
   assert.equal((await call('PATCH', '/v1/me', { code: b, body: { name: "x'; DROP TABLE users;--" } })).status, 400);
   assert.equal((await call('PATCH', '/v1/me', { code: b, body: { name: 'A' } })).status, 400);
   assert.equal((await call('PATCH', '/v1/me', { body: { name: 'Nope' } })).status, 401);

@@ -195,16 +195,31 @@ R.bubble=it=>{
     for(const d of shuffle(pool.slice())){if(opts.length>=4)break;const k=String(d.en).toLowerCase();if(!low.has(k)&&d.id!==c.id&&!/[?!.]/.test(d.en)){low.add(k);opts.push(d)}}
     const xs=shuffle([3,27,51,73]);
     setMain(`${tagH(tx('Bubble pop','Blasenjagd'),'sky')}<h2 class="q" style="font-size:30px">${fmtDe(c)} ${speakBtn(disDe(c))}</h2><p class="sub">${tx('Pop the bubble with the right meaning.','Platze die Blase mit der richtigen Bedeutung.')} · ${r+1}/${P.length}</p>
-    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="left:${xs[i]}%;animation-duration:${(8.5+i*.6).toFixed(1)}s;animation-delay:${(i*.18).toFixed(2)}s"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
+    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="left:${xs[i]}%"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
     setFoot('');busy=false;
     const sky=$('#bbs');
-    sky.querySelectorAll('.bb').forEach(b=>{
+    /* bubbles drift up slowly and wrap round (nothing is lost by waiting); they always start inside the sky, and a watchdog falls back to a plain grid if they were ever not visible */
+    const bs=[...sky.querySelectorAll('.bb')];
+    const H=()=>Math.max(sky.clientHeight||0,300),W=()=>Math.max(sky.clientWidth||0,260);
+    const slots=shuffle(bs.map((_,i)=>i));
+    const st=bs.map((b,i)=>({b,y:Math.max(0,(H()-96)*(slots[i]/Math.max(1,bs.length-1))),ph:Math.random()*6,sp:.035+Math.random()*.02}));
+    let raf=0,last=performance.now(),dead=false,fallback=false;
+    const paint=()=>st.forEach(o=>{o.b.style.transform=`translate3d(${fallback?0:Math.sin(o.ph)*9}px,${fallback?0:o.y.toFixed(1)}px,0)`});
+    const tick=t=>{
+      if(dead||!sky.isConnected){dead=true;return}
+      const dt=Math.min(40,t-last);last=t;
+      st.forEach(o=>{if(o.b.classList.contains('pop')||o.b.classList.contains('away'))return;o.y-=o.sp*dt;o.ph+=dt*.002;if(o.y<-100)o.y=H()+10});
+      paint();raf=requestAnimationFrame(tick)};
+    paint();raf=requestAnimationFrame(tick);
+    setTimeout(()=>{if(dead||!sky.isConnected||fallback)return;const R0=sky.getBoundingClientRect();
+      const seen=bs.some(b=>{const q=b.getBoundingClientRect();return q.width>0&&q.bottom>R0.top+10&&q.top<R0.bottom-10&&q.right>R0.left&&q.left<R0.right});
+      if(!seen){fallback=true;dead=true;sky.classList.add('grid');paint()}},450);
+    bs.forEach(b=>{
       b.onclick=()=>{
         if(busy||ses.locked)return;
         if(b.dataset.id===String(c.id)){busy=true;b.classList.add('pop');sfx('ok',++pops);vib(12);sky.querySelectorAll('.bb:not(.pop)').forEach(x=>x.classList.add('away'));setTimeout(next2,520)}
         else{miss[c.id]=1;b.classList.add('pop','bad');sfx('back');vib(15)}
       };
-      b.addEventListener('animationend',e=>{if(e.animationName==='bbRise'&&b.dataset.id===String(c.id)&&!busy){busy=true;miss[c.id]=1;b.classList.add('pop','bad');sky.querySelectorAll('.bb:not(.pop)').forEach(x=>x.classList.add('away'));sfx('bad');setTimeout(next2,600)}});
     });
   };
   const next2=()=>{r++;if(r>=P.length){multiDone(P,miss,P.map(c=>`${esc(c.de)} = ${esc(c.en)}`).join(' · '),3)}else draw()};
