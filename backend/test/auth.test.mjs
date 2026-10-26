@@ -225,3 +225,34 @@ test('unlinking Google needs another way to sign in', async () => {
   await ctx.call('POST', '/v1/me/password', { token: ex.json.token, body: { password: key('zed12345') } });
   assert.equal((await ctx.call('DELETE', '/v1/me/google', { token: ex.json.token })).status, 200);
 });
+
+test('founder name: with no founder key or email set, the first person to register it becomes the founder', async () => {
+  const ctx = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
+  const s = await signup(ctx.call, 'Hytyei', 'pass1234');
+  assert.equal(s.status, 201, s.text);
+  assert.equal(s.json.user.badge, 'founder');
+  assert.equal((await signup(ctx.call, 'hytyei', 'pass1234')).status, 409); // and nobody can take it after that
+  const withKey = setup(); // a configured key still protects the name
+  assert.equal((await signup(withKey.call, 'Hytyei', 'pass1234')).status, 403);
+});
+
+test('Google: the app can collect the sign-in by itself (poll) when the kobel:// link never reaches it', async () => {
+  const ctx = setup();
+  const verifier = 'app-secret-poll';
+  const start = await ctx.call('POST', '/v1/auth/google/start', { body: { intent: 'signin', challenge: sha(verifier) } });
+  assert.match(start.json.ref, /^[0-9a-f]{64}$/);
+  const pending = await ctx.call('POST', '/v1/auth/google/poll', { body: { ref: start.json.ref, verifier } });
+  assert.equal(pending.json.pending, true);
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ id_token: idToken({ sub: 'g-poll', email: 'poll@gmail.com' }) }), { status: 200 });
+  try { await ctx.call('GET', '/v1/auth/google/callback?code=abc&state=' + encodeURIComponent(new URL(start.json.url).searchParams.get('state'))); } finally { globalThis.fetch = realFetch; }
+  assert.equal((await ctx.call('POST', '/v1/auth/google/poll', { body: { ref: start.json.ref, verifier: 'wrong' } })).status, 401);
+  const start2 = await ctx.call('POST', '/v1/auth/google/start', { body: { intent: 'signin', challenge: sha(verifier) } });
+  globalThis.fetch = async () => new Response(JSON.stringify({ id_token: idToken({ sub: 'g-poll', email: 'poll@gmail.com' }) }), { status: 200 });
+  try { await ctx.call('GET', '/v1/auth/google/callback?code=abc&state=' + encodeURIComponent(new URL(start2.json.url).searchParams.get('state'))); } finally { globalThis.fetch = realFetch; }
+  const ok = await ctx.call('POST', '/v1/auth/google/poll', { body: { ref: start2.json.ref, verifier } });
+  assert.equal(ok.status, 200, ok.text);
+  assert.ok(ok.json.token);
+  assert.equal((await ctx.call('GET', '/v1/me', { token: ok.json.token })).status, 200);
+  assert.equal((await ctx.call('POST', '/v1/auth/google/poll', { body: { ref: start2.json.ref, verifier } })).json.pending, true); // single use
+});

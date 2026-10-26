@@ -269,11 +269,17 @@ Now returns the account: `{ "user": { … } }` (same shape as above).
 ### POST /v1/auth/google/start
 * **Auth:** none for sign-in, required for `"intent":"link"`
 * **Body:** `{ "intent": "signin" | "link", "challenge": "<SHA-256 hex of a secret the app keeps>" }`
-* **Response 200:** `{ "url": "https://accounts.google.com/o/oauth2/v2/auth?..." }` (the app opens it in the browser)
+* **Response 200:** `{ "ref": "<64 hex>", "url": "https://accounts.google.com/o/oauth2/v2/auth?..." }` (the app opens it in the browser)
 * **Errors:** `401 unauthorized` (link without being signed in), `400 invalid_request`, `429 rate_limited`, `503 google_not_configured`
 
 ### GET /v1/auth/google/callback
 Called by Google, not by the app. Shows a small page that opens `kobel://auth?code=…` (or `?error=failed`).
+
+### POST /v1/auth/google/poll
+Backup way to finish Google sign-in when the `kobel://` link did not reach the app. Auth: none (the verifier is the proof).
+Body: `{ "ref": "<64 hex from google/start>", "verifier": "<app secret>", "label": "Pixel 8" }`.
+Response: `{ "pending": true }` while the sign-in is not finished, otherwise the same as `/v1/auth/exchange` (once).
+Errors: 400 `invalid_request`, 401 `invalid_code`, 429 `rate_limited`.
 
 ### POST /v1/auth/exchange
 * **Auth:** none

@@ -21,8 +21,8 @@ const RESERVED = new Set([
   'security', 'bot', 'null', 'undefined', 'claude', 'anthropic', 'founder', 'owner', 'creator', 'verified', 'kobelapp',
 ]);
 const USERNAME_COOLDOWN_MS = 7 * 86400000;
-const HANDOFF_TTL_MS = 2 * 60000;
-const STATE_TTL_MS = 10 * 60000;
+const HANDOFF_TTL_MS = 10 * 60000;
+const STATE_TTL_MS = 30 * 60000;
 const GOOGLE_AUTH = 'https://accounts.google.com/o/oauth2/v2/auth';
 const GOOGLE_TOKEN = 'https://oauth2.googleapis.com/token';
 
@@ -114,6 +114,9 @@ export async function userBySession(db, tokenHash, now = Date.now()) {
 async function founderProof(env, { email, founderKey }) {
   if (email && env.FOUNDER_EMAIL_SHA256 && same(await sha256Hex(String(email).toLowerCase()), String(env.FOUNDER_EMAIL_SHA256).toLowerCase())) return true;
   if (typeof founderKey === 'string' && founderKey && env.FOUNDER_KEY_SHA256 && same(await sha256Hex(founderKey), String(env.FOUNDER_KEY_SHA256).toLowerCase())) return true;
+  // Nobody has set a founder key or founder email yet: the first person to register the founder name is the founder.
+  // (Set FOUNDER_KEY_SHA256 or FOUNDER_EMAIL_SHA256 to switch this off. Taken names are still refused further down.)
+  if (!env.FOUNDER_KEY_SHA256 && !env.FOUNDER_EMAIL_SHA256) return true;
   return false;
 }
 const founderName = (env) => String(env.FOUNDER_USERNAME || 'Hytyei');
@@ -302,7 +305,7 @@ export async function googleStart(db, env, request, body, user, now = Date.now()
     client_id: env.GOOGLE_CLIENT_ID, redirect_uri: redirectUri(request), response_type: 'code', scope: 'openid email',
     state, code_challenge: challenge, code_challenge_method: 'S256', prompt: 'select_account',
   });
-  return { url: GOOGLE_AUTH + '?' + q };
+  return { url: GOOGLE_AUTH + '?' + q, ref: await sha256Hex(state) };
 }
 
 function page(title, text, href) {
@@ -332,7 +335,7 @@ export async function googleCallback(db, env, request, now = Date.now()) {
     const sh = await sha256Hex(state);
     const st = await db.prepare('SELECT * FROM oauth_states WHERE state_hash = ?').bind(sh).first();
     await db.prepare('DELETE FROM oauth_states WHERE state_hash = ?').bind(sh).run();
-    if (!st || now - st.created_at > STATE_TTL_MS) return fail('This sign-in link has expired. Go back to the app and try again.');
+    if (!st || now - st.created_at > STATE_TTL_MS) return fail('This sign-in was already used or timed out. If Kobel did not sign you in, go back to the app and tap Continue with Google again.');
     const res = await fetch(GOOGLE_TOKEN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -377,7 +380,10 @@ export async function googleCallback(db, env, request, now = Date.now()) {
     }
     await applyFounderByEmail(db, env, userId, email);
     const handoff = randomToken('', 24);
-    await db.prepare('INSERT INTO auth_handoffs (code_hash, challenge, user_id, is_new, linked, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(await sha256Hex(handoff), st.challenge, userId, isNew, linked, now).run();
+    const ins = db.prepare('INSERT INTO auth_handoffs (code_hash, challenge, user_id, is_new, linked, created_at) VALUES (?, ?, ?, ?, ?, ?)');
+    await ins.bind(await sha256Hex(handoff), st.challenge, userId, isNew, linked, now).run();
+    // a second copy the app can collect by itself (poll) when the kobel:// link does not reach it
+    await ins.bind('p:' + sh, st.challenge, userId, isNew, linked, now).run();
     return page('Signed in', 'Returning to Kobel…', 'kobel://auth?code=' + encodeURIComponent(handoff));
   } catch (e) {
     if (e instanceof HttpError) return fail(e.message);
@@ -390,9 +396,26 @@ export async function authExchange(db, env, body, now = Date.now()) {
   const h = await sha256Hex(body.code);
   const row = await db.prepare('SELECT * FROM auth_handoffs WHERE code_hash = ?').bind(h).first();
   await db.prepare('DELETE FROM auth_handoffs WHERE code_hash = ?').bind(h).run(); // single use, also when the check below fails
+  if (row) await db.prepare('DELETE FROM auth_handoffs WHERE challenge = ? AND user_id = ?').bind(row.challenge, row.user_id).run(); // and its poll copy
   if (!row || now - row.created_at > HANDOFF_TTL_MS || !same(await sha256Hex(body.verifier), row.challenge)) {
     throw new HttpError(401, 'invalid_code', 'This sign-in code is not valid any more. Please try again.');
   }
+  const token = await createSession(db, row.user_id, body.label, now);
+  const u = await db.prepare('SELECT id, name, username, badge, pw_hash, google_sub, email FROM users WHERE id = ?').bind(row.user_id).first();
+  return { token, user: userView(u), isNew: Boolean(row.is_new), linked: Boolean(row.linked) };
+}
+
+/** The app asks "did my Google sign-in finish?" with the ref from google/start and its secret verifier. */
+export async function authPoll(db, env, body, now = Date.now()) {
+  if (!body || typeof body !== 'object' || typeof body.ref !== 'string' || !HEX64.test(body.ref) || typeof body.verifier !== 'string') throw new HttpError(400, 'invalid_request', 'Missing ref.');
+  const key = 'p:' + body.ref;
+  const row = await db.prepare('SELECT * FROM auth_handoffs WHERE code_hash = ?').bind(key).first();
+  if (!row) return { pending: true };
+  if (now - row.created_at > HANDOFF_TTL_MS || !same(await sha256Hex(body.verifier), row.challenge)) {
+    await db.prepare('DELETE FROM auth_handoffs WHERE code_hash = ?').bind(key).run();
+    throw new HttpError(401, 'invalid_code', 'This sign-in is not valid any more. Please try again.');
+  }
+  await db.prepare('DELETE FROM auth_handoffs WHERE challenge = ? AND user_id = ?').bind(row.challenge, row.user_id).run();
   const token = await createSession(db, row.user_id, body.label, now);
   const u = await db.prepare('SELECT id, name, username, badge, pw_hash, google_sub, email FROM users WHERE id = ?').bind(row.user_id).first();
   return { token, user: userView(u), isNew: Boolean(row.is_new), linked: Boolean(row.linked) };

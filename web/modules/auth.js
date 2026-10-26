@@ -126,33 +126,55 @@ async function googleStart(intent){
   try{
     const verifier=hexOf(crypto.getRandomValues(new Uint8Array(32)));
     const r=await authApi('POST','/v1/auth/google/start',{intent,challenge:await sha256Hex(verifier)},intent==='link'&&hasAccount()?S.sync.code:null);
-    try{localStorage.setItem(GKEY,JSON.stringify({verifier,intent,t:Date.now()}))}catch(e){}
+    try{localStorage.setItem(GKEY,JSON.stringify({verifier,intent,ref:r.ref||'',t:Date.now()}))}catch(e){}
     toast(tx('Opening Google…','Öffne Google…'));
     NATIVE.openUrl(r.url);
   }catch(e){toast(e.code==='google_not_configured'?tx('Google sign-in is not set up on the server yet.','Die Google-Anmeldung ist auf dem Server noch nicht eingerichtet.'):e.message)}
 }
-let gDone=false;
+let gDone=false,gLast='';
+function gStored(){try{return JSON.parse(localStorage.getItem(GKEY)||'null')}catch(e){return null}}
+async function gFinish(res){
+  try{localStorage.removeItem(GKEY)}catch(e){}
+  if(res.linked&&hasAccount()){
+    rememberUser(res.user);closeSheet();render();
+    toast(tx('Google account linked','Google-Konto verknüpft'));
+    if(!res.user.username)setTimeout(()=>usernameSheet({first:true}),600);
+  }else await finishAuth(res,{chooseName:true});
+}
 async function googleDone(code){
-  if(gDone||!code)return;gDone=true;
-  let st=null;try{st=JSON.parse(localStorage.getItem(GKEY)||'null');localStorage.removeItem(GKEY)}catch(e){}
+  if(gDone||!code||code===gLast)return;gDone=true;gLast=code;
+  const st=gStored();
   try{
-    if(!st||Date.now()-st.t>15*60000)throw new Error(tx('This sign-in expired. Please try again.','Diese Anmeldung ist abgelaufen. Bitte versuche es erneut.'));
-    const res=await authApi('POST','/v1/auth/exchange',{code,verifier:st.verifier,label:deviceLabel()});
-    if(res.linked&&hasAccount()){
-      rememberUser(res.user);closeSheet();render();
-      toast(tx('Google account linked','Google-Konto verknüpft'));
-      if(!res.user.username)setTimeout(()=>usernameSheet({first:true}),600);
-    }else await finishAuth(res,{chooseName:true});
-  }catch(e){toast(e.message)}
+    if(!st)throw new Error(tx('Google sign-in did not start from this app. Please tap Continue with Google again.','Die Google-Anmeldung wurde nicht aus dieser App gestartet. Bitte tippe erneut auf Mit Google fortfahren.'));
+    await gFinish(await authApi('POST','/v1/auth/exchange',{code,verifier:st.verifier,label:deviceLabel()}));
+  }catch(e){
+    // the one-time link code did not work (used twice, or the page was reloaded): ask the server directly
+    if(!(await googlePoll(1)))toast(e.message)
+  }
   finally{gDone=false}
+}
+/* Backup path: after coming back from the browser, ask the server whether the Google sign-in finished (no kobel:// link needed). */
+let gPolling=false;
+async function googlePoll(tries){
+  const st=gStored();if(!st||!st.ref||gPolling)return false;
+  gPolling=true;
+  try{
+    for(let i=0;i<(tries||6);i++){
+      if(!gStored())return false;
+      const r=await authApi('POST','/v1/auth/google/poll',{ref:st.ref,verifier:st.verifier,label:deviceLabel()});
+      if(r&&r.token){await gFinish(r);return true}
+      await new Promise(f=>setTimeout(f,1500));
+    }
+  }catch(e){try{localStorage.removeItem(GKEY)}catch(x){}}
+  finally{gPolling=false}
+  return false;
 }
 function googleFailed(){toast(tx('Google sign-in did not finish. Please try again.','Die Google-Anmeldung wurde nicht abgeschlossen. Bitte versuche es erneut.'));try{localStorage.removeItem(GKEY)}catch(e){}}
 /* called by the Android shell (and at start-up / on return to the app) */
 function checkPendingAuth(){
   try{
-    if(!NATIVE||!NATIVE.takeAuth)return;
-    const v=String(NATIVE.takeAuth()||'');
-    if(!v)return;
+    const v=NATIVE&&NATIVE.takeAuth?String(NATIVE.takeAuth()||''):'';
+    if(!v){const st=gStored();if(st&&st.ref&&Date.now()-st.t<30*60000)googlePoll(6);return}
     if(v.indexOf('error')===0)googleFailed();else googleDone(v);
   }catch(e){}
 }

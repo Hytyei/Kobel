@@ -5,7 +5,7 @@ import { handleSync, exportAll, deleteAll } from './sync.js';
 import { leaderboard } from './leaderboard.js';
 import { listNotices, renameUser } from './profile.js';
 import { register, sha256Hex } from './register.js';
-import { userBySession, signup, login, logout, setUsername, setPassword, myAccount, usernameAvailable, googleStart, googleCallback, authExchange, unlinkGoogle } from './auth.js';
+import { userBySession, signup, login, logout, setUsername, setPassword, myAccount, usernameAvailable, googleStart, googleCallback, authExchange, authPoll, unlinkGoogle } from './auth.js';
 import { createCode, addFriend, listFriends, friendProfile, removeFriend } from './friends.js';
 import { listAlerts } from './alerts.js';
 import { createGroup, listGroups, getGroup, renameGroup, deleteGroup, addMember, removeMember, createRound, getRound, startRound, answerRound, pingGroup } from './groups.js';
@@ -42,7 +42,7 @@ async function readJson(request) {
   }
 }
 
-const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels', '/v1/groups', '/v1/alerts', '/v1/auth/signup', '/v1/auth/login', '/v1/auth/logout', '/v1/auth/username', '/v1/auth/google/start', '/v1/auth/google/callback', '/v1/auth/exchange', '/v1/me/username', '/v1/me/password', '/v1/me/google'];
+const PATHS = ['/v1/health', '/v1/register', '/v1/me', '/v1/notices', '/v1/sync', '/v1/export', '/v1/data', '/v1/leaderboard', '/v1/friends', '/v1/friends/code', '/v1/duels', '/v1/groups', '/v1/alerts', '/v1/auth/signup', '/v1/auth/login', '/v1/auth/logout', '/v1/auth/username', '/v1/auth/google/start', '/v1/auth/google/callback', '/v1/auth/exchange', '/v1/auth/google/poll', '/v1/me/username', '/v1/me/password', '/v1/me/google'];
 
 async function route(request, env) {
   const url = new URL(request.url);
@@ -75,6 +75,7 @@ async function route(request, env) {
   if (path === '/v1/auth/username' && method === 'GET') return json(await usernameAvailable(env.DB, env, request, url));
   if (path === '/v1/auth/google/start' && method === 'POST') return json(await googleStart(env.DB, env, request, await readJson(request), await maybeAuthenticate(request, env)));
   if (path === '/v1/auth/google/callback' && method === 'GET') return googleCallback(env.DB, env, request);
+  if (path === '/v1/auth/google/poll' && method === 'POST') return json(await authPoll(env.DB, env, await readJson(request)));
   if (path === '/v1/auth/exchange' && method === 'POST') return json(await authExchange(env.DB, env, await readJson(request)));
   if (path === '/v1/me/username' && method === 'POST') return json(await setUsername(env.DB, env, await authenticate(request, env), await readJson(request)));
   if (path === '/v1/me/password' && method === 'POST') return json(await setPassword(env.DB, env, await authenticate(request, env), await readJson(request)));

@@ -18,7 +18,7 @@ No e-mail is sent by Kobel and no domain is needed. Google sign-in is free and w
 * **Google.** The Worker does the OAuth dance (code + PKCE) with its own client secret (never in the app). It finishes on a small page that opens `kobel://auth?code=…`. That one-time code (valid 2 minutes) is useless without the secret verifier that only the app holds. The app exchanges it for a session.
 * **Linking.** Signed in with an old ID or a username? Settings › Account › "Link Google" adds the Google account to the *same* user: all progress stays. Signing in with Google later gives the same account. A Google account can belong to one Kobel account only.
 * **Usernames.** 3–20 characters, letters, numbers, `.` and `_`, unique ignoring upper/lower case, changeable once a week. Reserved names (admin, support, kobel, bundesliga …) are blocked.
-* **Founder badge.** Username `Hytyei` is reserved. It can only be claimed with the founder key you set (or by signing in with your Google account whose e-mail hash you set). The badge shows as a small shield next to the name in tables, friends, groups and profiles. Nobody else can get it, and it cannot be requested through any endpoint.
+* **Founder badge.** Username `Hytyei` is reserved. **If you have not set `FOUNDER_KEY_SHA256` or `FOUNDER_EMAIL_SHA256`, the first person to register `Hytyei` becomes the founder** (so register it yourself right after deploying; afterwards nobody else can take it). Once either secret is set, it can only be claimed with the founder key you set (or by signing in with your Google account whose e-mail hash you set). The badge shows as a small shield next to the name in tables, friends, groups and profiles. Nobody else can get it, and it cannot be requested through any endpoint.
 
 ## Settings you add on Cloudflare (once)
 
@@ -50,3 +50,12 @@ Without `GOOGLE_CLIENT_ID/SECRET` the Google button shows "not set up on the ser
 * `AndroidManifest.xml`: `MainActivity` is `singleTask` and handles `kobel://auth`.
 * `MainActivity` reads the code (only `[A-Za-z0-9_-]{16,128}`), hands it to the page (`window.kobelAuth(code)` or `KobelAndroid.takeAuth()` when the app was closed).
 * `KobelBridge.openUrl(url)` opens **only** `https://accounts.google.com/...` in the browser.
+
+## Google sign-in: how the app gets the result back
+
+1. `POST /v1/auth/google/start` returns `{ url, ref }`. The app opens `url` in the browser and keeps its secret verifier and `ref`.
+2. After you choose your account, Google calls the Worker, which stores a one-time result and sends the browser to `kobel://auth?code=...`.
+3. The app exchanges the code with `POST /v1/auth/exchange { code, verifier }`.
+4. Backup: when you come back to the app and no code arrived, it asks `POST /v1/auth/google/poll { ref, verifier }`. The answer is `{ pending: true }` until the sign-in finished, then the session token (once). No auth header; the verifier is the proof. Errors: 400 `invalid_request`, 401 `invalid_code`.
+
+Results are kept for 10 minutes, the start of a sign-in for 30.
