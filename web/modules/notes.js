@@ -443,3 +443,65 @@ Ich gehe in einen Klub. = I go to a club.
 am Wochenende = at the weekend | | | am Samstag und am Sonntag = am Wochenende
 Meine Hobbys sind Sport treiben und Freunde treffen. = My hobbies are doing sport and meeting friends.
 Ich liebe Schwimmen. = I love swimming.`;
+
+const N14=`@lesson Semester 2 · Session 3 (A1.2) · Times of day, telling time, wissen
+@subject Parts of the day
+der Morgen (Pl. -) = morning | Am {{Morgen}} trinke ich Kaffee. | In the morning I drink coffee. | am Morgen
+der Vormittag (Pl. -e) = late morning | Am {{Vormittag}} lerne ich Deutsch. | In the late morning I learn German. | am Vormittag
+der Mittag (Pl. -e) = noon | Am {{Mittag}} esse ich. | At noon I eat. | am Mittag
+der Nachmittag (Pl. -e) = afternoon | Am {{Nachmittag}} gehe ich ins Café. | In the afternoon I go to the café. | am Nachmittag
+der Abend (Pl. -e) = evening | Am {{Abend}} sehe ich fern. | In the evening I watch TV. | am Abend
+die Nacht (Pl. -"e) = night | In der {{Nacht}} schlafe ich. | At night I sleep. | the only one with in der Nacht
+@subject Telling time: official (24 hours)
+Wie spät ist es? = What time is it? | | | also: Wie viel Uhr ist es?
+Wie viel Uhr ist es? = What time is it? | | | also: Wie spät ist es?
+die Uhr (Pl. -en) = clock / o'clock | Es ist drei {{Uhr}}. | It is three o'clock. | Uhr stands between hours and minutes
+drei Uhr fünfzehn = 3:15 (a.m.) | Es ist drei Uhr {{fünfzehn}}. | It is 3:15. | official: hours Uhr minutes
+fünfzehn Uhr fünfzehn = 15:15 | Es ist {{fünfzehn}} Uhr fünfzehn. | It is 15:15. | 24-hour clock
+fünfzehn Uhr = 15:00 | | | or simply: drei Uhr
+Um wie viel Uhr? = At what time? | {{Um}} wie viel Uhr gehst du ins Kino? | At what time do you go to the cinema? | answer with um
+@subject Telling time: everyday (12 hours)
+viertel nach drei = a quarter past three (15:15) | Es ist {{viertel}} nach drei. | It is a quarter past three. | nach = past
+fünf vor halb vier = 15:25 | Es ist fünf {{vor}} halb vier. | It is 3:25. | five before half-four
+halb vier = 3:30 (half to four) | Es ist {{halb}} vier. | It is half past three. | halb + the NEXT hour
+fünf nach halb vier = 15:35 | Es ist fünf {{nach}} halb vier. | It is 3:35. | five past half-four
+viertel vor vier = a quarter to four (15:45) | Es ist {{viertel}} vor vier. | It is a quarter to four. | vor = to / before
+zehn vor vier = ten to four (15:50) | Es ist zehn {{vor}} vier. | It is ten to four. | vor = to / before
+fünf vor vier = five to four (15:55) | Es ist fünf {{vor}} vier. | It is five to four. | vor = to / before
+nach = past / after | | | viertel nach drei
+vor = to / before | | | viertel vor vier
+halb = half (to the next hour) | | | halb vier = 3:30
+Um halb vier = at half past three | {{Um}} halb vier gehe ich ins Kino. | At half past three I go to the cinema. | um + time
+Um viertel nach eins = at a quarter past one | {{Um}} viertel nach eins esse ich. | At a quarter past one I eat.
+@subject wissen: to know a fact
+wissen (weiß, wusste, hat gewusst) = to know (a fact) | Das {{weiß}} ich noch nicht. | I do not know that yet. | irregular: ich weiß, du weißt
+Weißt du das? = Do you know that? | {{Weißt}} du das? | Do you know that?
+Er weiß es. = He knows it. | Er {{weiß}} es. | He knows it. | er weiß
+Das weiß ich noch nicht. = I do not know that yet. | Das {{weiß}} ich noch nicht. | I do not know that yet. | ich weiß
+noch nicht = not yet | Das weiß ich {{noch}} nicht. | I do not know that yet.
+@subject Goodbyes
+Bis bald! = See you soon!
+Bis gleich! = See you in a moment!
+Bis dann! = See you then!
+Bis später! = See you later!
+@grammar Parts of the day
+! Parts of the day use am: am Morgen, am Vormittag, am Mittag, am Nachmittag, am Abend. Only the night is different: in der Nacht.
+Am {{Abend}} lese ich. | In the evening I read. | am Abend
+In der {{Nacht}} schlafe ich. | At night I sleep. | in der Nacht
+@grammar Telling the time
+! Official time (24 hours): hours, the word Uhr, minutes: 15:15 = fünfzehn Uhr fünfzehn. Uhr stands in the middle.
+! Everyday time (12 hours): nach = past, vor = to. 15:15 = viertel nach drei, 15:45 = viertel vor vier, 15:50 = zehn vor vier.
+! halb counts to the NEXT hour: halb vier = 3:30, not 4:30. 15:25 = fünf vor halb vier, 15:35 = fünf nach halb vier.
+! When? is answered with um: Um halb vier. Um viertel nach eins. Um drei Uhr.
+Es ist {{halb}} vier. | It is half past three. | halb vier = 3:30
+Es ist viertel {{nach}} drei. | It is a quarter past three. | 15:15
+Es ist viertel {{vor}} vier. | It is a quarter to four. | 15:45
+{{Um}} wie viel Uhr? | At what time? | when? → um
+@grammar The verb wissen (to know a fact)
+! wissen is irregular: ich weiß · du weißt · er/sie/es weiß · wir wissen · ihr wisst · sie/Sie wissen. Ich and er/sie/es have no ending.
+Ich {{weiß}} es noch nicht. | I do not know it yet. | ich → weiß
+Du {{weißt}} das. | You know that. | du → weißt
+Er {{weiß}} es. | He knows it. | er → weiß
+Wir {{wissen}} das. | We know that. | wir → wissen
+Ihr {{wisst}} das. | You know that. | ihr → wisst
+Sie {{wissen}} das. | They know that. | sie → wissen`;

@@ -28,13 +28,13 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'3.5.0',title:{en:'Kobel 3.5.0: matchday clock, fewer repeats, new lesson',de:'Kobel 3.5.0: Spieltag-Uhr, weniger Wiederholungen, neue Lektion'},body:{\n  en:'Your streak is now a match against the clock: notifications count the minutes (second half, 75th, 85th, 90th minute, injury time) and the widgets show the match clock and a kick-off to full-time line. Friend and group alerts use football words. Questions repeat much less: a word is asked once per node and recent words and rules are skipped. New lesson: Semester 2, session 2 (places, days, how often, verbs sorted by type).',\n  de:'Deine Serie ist jetzt ein Spiel gegen die Uhr: Benachrichtigungen zählen die Minuten (zweite Halbzeit, 75., 85., 90. Minute, Nachspielzeit) und die Widgets zeigen die Spieluhr samt Anstoß-bis-Abpfiff-Linie. Freundes- und Gruppen-Meldungen nutzen Fußballwörter. Fragen wiederholen sich viel seltener: Ein Wort kommt pro Station nur einmal vor, kürzlich gefragte Wörter und Regeln werden übersprungen. Neue Lektion: Semester 2, Stunde 2 (Orte, Tage, wie oft, Verben nach Typ sortiert).'\n}};\n"
+_CL = "const CHANGELOG={v:'3.5.1',title:{en:'Kobel 3.5.1: new lesson on telling time',de:'Kobel 3.5.1: Neue Lektion zur Uhrzeit'},body:{\n  en:'New lesson: Semester 2, session 3 with parts of the day, telling the time (official and everyday, viertel, halb, nach, vor), the verb wissen and goodbyes.',\n  de:'Neue Lektion: Semester 2, Stunde 3 mit Tageszeiten, Uhrzeit (offiziell und umgangssprachlich, viertel, halb, nach, vor), dem Verb wissen und Verabschiedungen.'\n}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[23]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[23]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
 # ---- Sessions 7-10 and the Tactics Room list (classroom instructions are excluded from path and teaching) ----
 import re as _re0
-src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11,N12,N13];", src, count=1)
+src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11,N12,N13,N14];", src, count=1)
 import json as _json
 _units = _json.load(open(ROOT.parent / 'database/content/teaching/units.json', encoding='utf-8'))
 _line = 'const TEACH=' + _json.dumps(_units, ensure_ascii=False) + ';'
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.5.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='3.5.1';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
