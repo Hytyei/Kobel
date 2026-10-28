@@ -352,3 +352,94 @@ Wer kann gut Fußball spielen? = Who can play football well?
 Wer kann komisch reiten? = Who can ride in a funny way?
 Wer kann nicht Gitarre spielen? = Who cannot play the guitar?
 Du kannst ja toll Ski fahren! = You can ski really great!`;
+
+const N13=`@lesson Semester 2 · Session 2 (A1.2) · Going out, days & how often
+@subject Places to go (noun table)
+das Kino (Pl. -s) = cinema | Ich gehe {{ins}} Kino. | I go to the cinema. | in + das = ins
+das Museum (Pl. Museen) = museum | Ich gehe ins {{Museum}}. | I go to the museum. | in + das = ins
+das Theater (Pl. -) = theater | Wir gehen ins {{Theater}}. | We go to the theater.
+das Café (Pl. -s) = café | Ich gehe ins {{Café}}. | I go to the café.
+die Ausstellung (Pl. -en) = exhibition | Ich gehe in eine {{Ausstellung}}. | I go to an exhibition. | in + eine (feminine)
+die Disco (Pl. -s) = disco | Ich gehe in eine {{Disco}}. | I go to a disco. | in + eine (feminine)
+der Klub (Pl. -s) = club | Ich gehe in einen {{Klub}}. | I go to a club. | in + einen (masculine)
+das Schwimmbad (Pl. -"er) = swimming pool | Ich gehe ins {{Schwimmbad}}. | I go to the swimming pool.
+das Konzert (Pl. -e) = concert | Ich gehe ins {{Konzert}}. | I go to a concert.
+das Restaurant (Pl. -s) = restaurant | Wir gehen ins {{Restaurant}}. | We go to the restaurant.
+die Bar (Pl. -s) = bar | Ich gehe in eine {{Bar}}. | I go to a bar.
+das Fitnessstudio (Pl. -s) = gym | Ich gehe ins {{Fitnessstudio}}. | I go to the gym.
+@subject Days of the week
+der Montag (Pl. -e) = Monday | Am {{Montag}} gehe ich ins Kino. | On Monday I go to the cinema. | am + day
+der Dienstag (Pl. -e) = Tuesday | Am {{Dienstag}} gehe ich ins Museum. | On Tuesday I go to the museum.
+der Mittwoch (Pl. -e) = Wednesday | Am {{Mittwoch}} gehe ich ins Café. | On Wednesday I go to the café.
+der Donnerstag (Pl. -e) = Thursday | Am {{Donnerstag}} gehe ich ins Theater. | On Thursday I go to the theater.
+der Freitag (Pl. -e) = Friday | Am {{Freitag}} gehe ich in eine Disco. | On Friday I go to a disco.
+der Samstag (Pl. -e) = Saturday | Am {{Samstag}} gehe ich ins Konzert. | On Saturday I go to a concert.
+der Sonntag (Pl. -e) = Sunday | Am {{Sonntag}} gehe ich ins Schwimmbad. | On Sunday I go to the swimming pool.
+das Wochenende (Pl. -n) = weekend | Am {{Wochenende}} treffe ich Freunde. | At the weekend I meet friends. | am Samstag und am Sonntag = am Wochenende
+@subject Time words: when? how often?
+vorgestern = the day before yesterday | | | two days ago: vorgestern → gestern → heute
+gestern = yesterday | | | the past forms (war, habe ... gemacht) come in a later lesson
+heute = today | {{Heute}} gehe ich ins Museum. | Today I go to the museum.
+morgen = tomorrow | {{Morgen}} gehe ich ins Theater. | Tomorrow I go to the theater.
+übermorgen = the day after tomorrow | {{Übermorgen}} gehe ich ins Konzert. | The day after tomorrow I go to a concert.
+immer = always (100%) | Ich gehe {{immer}} am Samstag ins Kino. | I always go to the cinema on Saturday.
+oft = often | Ich gehe {{oft}} ins Café. | I often go to the café.
+manchmal = sometimes | Ich gehe {{manchmal}} in eine Disco. | I sometimes go to a disco.
+nie = never (0%) | Ich gehe {{nie}} ins Fitnessstudio. | I never go to the gym.
+Wie oft? = How often?
+@subject Verbs 1: going and meeting (movement and people)
+gehen (geht, ging, ist gegangen) = to go | Ich {{gehe}} ins Kino. | I go to the cinema. | irregular, uses sein in the perfect
+fahren (fährt, fuhr, ist gefahren) = to ride / drive / go by vehicle | Ich {{fahre}} Rad. | I ride a bike. | du fährst, er fährt
+treffen (trifft, traf, hat getroffen) = to meet | Ich {{treffe}} am Samstag Freunde. | I meet friends on Saturday. | du triffst, er trifft
+die Freunde (Pl.) = friends | Ich treffe {{Freunde}}. | I meet friends.
+@subject Verbs 2: doing, playing and sport
+machen (macht, machte, hat gemacht) = to do / make | Was {{machst}} du gern? | What do you like to do? | regular
+spielen (spielt, spielte, hat gespielt) = to play | Ich {{spiele}} gern Tennis. | I like playing tennis. | regular
+treiben (treibt, trieb, hat getrieben) = to do (sport) | Ich {{treibe}} gern Sport. | I like doing sport. | Sport treiben
+der Sport (no plural) = sport | Ich treibe gern {{Sport}}. | I like doing sport.
+Spaß machen = to be fun | Das {{macht}} Spaß. | That is fun.
+@subject Verbs 3: feelings and music (regular verbs)
+lieben (liebt, liebte, hat geliebt) = to love | Ich {{liebe}} Schwimmen. | I love swimming. | regular
+mixen (mixt, mixte, hat gemixt) = to mix | Ich kann Musik {{mixen}}. | I can mix music. | regular
+gern = gladly / like to | Ich schwimme {{gern}}. | I like swimming. | gern after the verb
+@subject Verbs 4: separable verbs (the prefix jumps to the end)
+auflegen (legt auf, legte auf, hat aufgelegt) = to play records / DJ | Ich {{lege}} Musik auf. | I play music (as a DJ). | auf- goes to the end: ich lege ... auf
+Musik auflegen und mixen = to play and mix music | Ich kann Musik auflegen und {{mixen}}. | I can play and mix music.
+Kickboxen = kickboxing | Ich liebe {{Kickboxen}}. | I love kickboxing.
+Freunde treffen = to meet friends | Am Wochenende {{treffe}} ich Freunde. | At the weekend I meet friends.
+@subject Talking about your free time
+Was sind deine Hobbys? = What are your hobbies? | | | answer: Meine Hobbys sind ... und ...
+Was machst du gern? = What do you like to do? | | | answer: Ich ... gern. Mein Lieblings... ist ...
+Was machst du in deiner Freizeit? = What do you do in your free time? | | | answer: Ich liebe Schwimmen. Das macht Spaß.
+Meine Hobbys sind Schwimmen und Tennis. = My hobbies are swimming and tennis.
+Das macht Spaß. = That is fun.
+@grammar Going somewhere: in + accusative (contractions)
+! After gehen the place is in the accusative: Ich gehe in + article + place. Neuter: in + das = ins (ins Kino). Feminine: in eine (in eine Disco). Masculine: in einen (in einen Klub).
+! Remember the pattern by gender: das → ins · die → in die / in eine · der → in den / in einen.
+Ich gehe {{ins}} Kino. | I go to the cinema. | in + das
+Ich gehe in {{eine}} Disco. | I go to a disco. | feminine: eine
+Ich gehe in {{einen}} Klub. | I go to a club. | masculine: einen
+Wir gehen {{ins}} Museum. | We go to the museum. | in + das
+@grammar Days and times
+! All days of the week are masculine (der). With a day you say am: am Montag, am Freitag. am Samstag und am Sonntag = am Wochenende.
+! Time line: vorgestern → gestern → heute → morgen → übermorgen.
+Am {{Freitag}} gehe ich in eine Disco. | On Friday I go to a disco. | am + day
+{{Heute}} gehe ich ins Kino. | Today I go to the cinema. | heute = today
+@grammar How often? (Wie oft?)
+! The scale: immer (100%) → oft → manchmal → nie (0%). The adverb stands after the verb: Ich gehe oft ins Kino.
+Ich gehe {{manchmal}} ins Café. | I sometimes go to the café. | between oft and nie
+Ich gehe {{nie}} in eine Bar. | I never go to a bar. | 0%
+@grammar Verbs by type: how to learn them
+! Regular verbs (machen, spielen, lieben, mixen): ich -e, du -st, er -t. Learn them first, they never surprise you.
+! Irregular movement verbs (gehen, fahren, treffen): the vowel changes with du/er (fahren → du fährst, treffen → du triffst). Learn the du/er form together with the verb.
+! Separable verbs (auflegen): the prefix goes to the end of the sentence: Ich lege Musik auf.
+Du {{fährst}} gern Rad. | You like riding a bike. | du fährst
+Er {{trifft}} Freunde. | He meets friends. | er trifft
+Ich {{lege}} Musik auf. | I play music. | separable: auflegen
+@subject Sentences from the notes
+Ich gehe ins Kino. = I go to the cinema.
+Ich gehe in eine Disco. = I go to a disco.
+Ich gehe in einen Klub. = I go to a club.
+am Wochenende = at the weekend | | | am Samstag und am Sonntag = am Wochenende
+Meine Hobbys sind Sport treiben und Freunde treffen. = My hobbies are doing sport and meeting friends.
+Ich liebe Schwimmen. = I love swimming.`;

@@ -31,6 +31,9 @@ object NotifyPrefs {
             .putInt("streak", j.optInt("streak", 0))
             .putString("last", j.optString("last").take(10))
             .apply()
+        // a goal was scored today: take down the "final whistle" reminder that may still be showing
+        val t = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        if (j.optString("last") == t) try { (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager).cancel(7001) } catch (_: Exception) { }
     }
     fun get(ctx: Context): SharedPreferencesView = SharedPreferencesView(sp(ctx))
     fun raw(ctx: Context) = sp(ctx)
@@ -123,30 +126,30 @@ object NotifyWork {
         val name = a.optString("name").take(40)
         val group = a.optString("groupName").take(40)
         return when (a.optString("type")) {
-            "friend" -> if (de) "Neuer Freund" to "$name hat dich als Freund hinzugefügt." else "New friend" to "$name added you as a friend."
+            "friend" -> if (de) "Neuzugang" to "$name ist jetzt in deinem Kader." else "New signing" to "$name joined your squad as a friend."
             "duel_invite" -> {
                 val g = game(a.optString("game"), de)
-                if (de) "Spielanfrage" to "$name fordert dich heraus: $g." else "Match request" to "$name challenges you: $g."
+                if (de) "Anstoß-Anfrage" to "$name fordert dich heraus: $g." else "Kick-off request" to "$name challenges you: $g."
             }
             "duel_result" -> {
                 val g = a.optJSONArray("goals")
                 val s = if (g != null && g.length() == 2) "${g.optInt(0)}–${g.optInt(1)}" else ""
                 if (de) "Abpfiff" to "Du gegen $name: $s." else "Full time" to "You vs $name: $s."
             }
-            "group_added" -> if (de) "Lerngruppe" to "Du wurdest zu $group hinzugefügt." else "Study group" to "You were added to $group."
-            "group_round" -> if (de) "Neue Runde" to "$name hat in $group eine Runde gestartet." else "New round" to "$name started a round in $group."
+            "group_added" -> if (de) "Kader-Berufung" to "Du wurdest in $group berufen." else "Squad call-up" to "You were called up to $group."
+            "group_round" -> if (de) "Spieltag in $group" to "$name hat eine Runde angepfiffen." else "Matchday in $group" to "$name has kicked off a round."
             "group_ping" -> {
                 val kind = a.optString("kind")
                 val msg = a.optString("text").take(60)
                 if (de) {
-                    "Anstupser von $name" to when (kind) {
+                    "Zuruf von $name" to when (kind) {
                         "custom" -> "$group: $msg"
                         "round" -> "In $group wartet eine Runde."
                         "streak" -> "Halten wir heute die Serie von $group am Leben."
                         else -> "$group: Zeit zum Üben!"
                     }
                 } else {
-                    "Nudge from $name" to when (kind) {
+                    "Shout from the bench: $name" to when (kind) {
                         "custom" -> "$group: $msg"
                         "round" -> "A round is waiting in $group."
                         "streak" -> "Let's keep the $group streak alive today."
@@ -154,40 +157,48 @@ object NotifyWork {
                     }
                 }
             }
-            "group_result" -> if (de) "Runde beendet" to "Die Ergebnisse für $group sind da." else "Round over" to "The results are in for $group."
+            "group_result" -> if (de) "Schlusspfiff" to "Die Ergebnisse für $group sind da." else "Final whistle" to "The results are in for $group."
             else -> null
         }
     }
 
     /**
-     * Two reminders while your streak is alive from yesterday and you have not practised today:
-     * an evening one (17:00 to 20:59) and a last call (21:00 to 23:59). Each is shown once per day.
+     * The streak as a football match: the day is the match, midnight is the final whistle.
+     * While your streak is alive from yesterday and you have not practised today you get up to five calls,
+     * each shown once per day (a later one replaces the earlier one): second half (17:00), 75th minute (20:30),
+     * 85th minute (22:00), 90th minute / final whistle incoming (23:00) and injury time (23:40).
      */
     private fun streak(ctx: Context, p: SharedPreferencesView) {
         val now = Calendar.getInstance()
-        val h = now.get(Calendar.HOUR_OF_DAY)
-        if (h < 17 || p.streak < 1) return
+        val mins = now.get(Calendar.HOUR_OF_DAY) * 60 + now.get(Calendar.MINUTE)
+        if (p.streak < 1) return
         val today = day()
         val yesterday = day(System.currentTimeMillis() - 86400000L)
-        if (p.last != yesterday) return        // already practised today, or the streak is gone
+        if (p.last != yesterday) return        // already practised today (a goal was scored), or the streak is gone
+        val stage = when {
+            mins >= 23 * 60 + 40 -> 5
+            mins >= 23 * 60 -> 4
+            mins >= 22 * 60 -> 3
+            mins >= 20 * 60 + 30 -> 2
+            mins >= 17 * 60 -> 1
+            else -> 0
+        }
+        if (stage == 0) return
         val sp = NotifyPrefs.raw(ctx)
-        val lastCall = h >= 21
-        val key = if (lastCall) "streakDay2" else "streakDay"
-        if (sp.getString(key, "") == today) return
-        sp.edit().putString(key, today).apply()
-        if (lastCall) sp.edit().putString("streakDay", today).apply()   // no evening reminder after the last call
+        val told = sp.getString("streakStage", "") ?: ""
+        val doneToday = if (told.startsWith("$today:")) told.substringAfter(':').toIntOrNull() ?: 0 else 0
+        if (stage <= doneToday) return
+        sp.edit().putString("streakStage", "$today:$stage").apply()
         val n = p.streak
-        val title = if (lastCall) {
-            if (p.de) "Letzter Aufruf: Serie endet um Mitternacht" else "Last call: your streak ends at midnight"
-        } else {
-            if (p.de) "Deine Serie endet heute" else "Your streak ends tonight"
+        val run = if (p.de) "$n Tage ungeschlagen" else "$n-day unbeaten run"
+        val (title, body) = when (stage) {
+            1 -> if (p.de) "Zweite Halbzeit läuft" to "Dein Spiel gegen die Uhr: $run. Ein Tor (eine Übung) reicht." else "Second half is under way" to "Your match against the clock: $run. One goal (one session) is enough."
+            2 -> if (p.de) "75. Minute: Zeit für ein Tor" to "$run steht auf dem Spiel. Ein kurzes Training bringt den Sieg." else "75th minute: time for a goal" to "Your $run is on the line. One short session wins it."
+            3 -> if (p.de) "85. Minute: Es wird eng" to "Nur noch kurz bis zum Schlusspfiff. Rette $run jetzt." else "85th minute: it is getting tight" to "Not long until the final whistle. Save your $run now."
+            4 -> if (p.de) "90. Minute: Abpfiff naht!" to "Gleich ist Schluss. Ein paar Fragen retten $run." else "90th minute: final whistle incoming!" to "Time is almost up. A few questions save your $run."
+            else -> if (p.de) "Nachspielzeit!" to "Letzte Chance: Jetzt spielen, sonst ist $run vorbei." else "Injury time!" to "Last chance: play now or your $run ends."
         }
-        val body = if (lastCall) {
-            if (p.de) "$n Tage in Folge. Schon ein paar Fragen reichen." else "$n days in a row. A few questions are enough."
-        } else {
-            if (p.de) "$n Tage in Folge. Ein kurzes Training rettet sie." else "$n days in a row. One short session keeps it alive."
-        }
-        Notifier.show(ctx, if (lastCall) 7003 else 7001, Notifier.CH_STREAK, title, body)
+        Notifier.show(ctx, 7001, if (stage >= 3) Notifier.CH_WHISTLE else Notifier.CH_STREAK, title, body)
     }
 
     /** A new release on GitHub (checked at most twice a day, same numeric version rule as the in-app updater). */

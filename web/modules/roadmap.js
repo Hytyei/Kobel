@@ -67,9 +67,11 @@ function rdRuleQ(n,k){
   const u=pathState().units[n.unit],rk=qvUnitRank(),st=rdStats(),out=[];
   const pool=S.rules.filter(r=>r.text&&r.topic&&(rk[r.lesson]===undefined||rk[r.lesson]<=n.unit)&&rdGcardFor(r.topic));
   if(pool.length<4)return out;
-  const mine=pool.filter(r=>u&&r.lesson===u.name),src=mine.length&&Math.random()<.6?mine:pool;
+  if(!Array.isArray(st.rrh))st.rrh=[];
+  const rec=new Set(st.rrh.slice(-14)),fresh=pool.filter(r=>!rec.has(r.id)),base=fresh.length>=Math.max(k,4)?fresh:pool;
+  const mine=base.filter(r=>u&&r.lesson===u.name),src=mine.length>=k&&Math.random()<.6?mine:base;
   const picks=shuffle(src.slice()).sort((a,b)=>(st.pcy['r'+a.id]||0)-(st.pcy['r'+b.id]||0)).slice(0,k);
-  picks.forEach((r,i)=>{st.pcy['r'+r.id]=(st.pcy['r'+r.id]|0)+1;const g=rdGcardFor(r.topic);out.push({cid:g.id,kind:(i+(st.pcy['r'+r.id]|0))%2?'rrec':'rtop',rid:r.id})});
+  picks.forEach((r,i)=>{st.rrh.push(r.id);if(st.rrh.length>40)st.rrh.shift();st.pcy['r'+r.id]=(st.pcy['r'+r.id]|0)+1;const g=rdGcardFor(r.topic);out.push({cid:g.id,kind:(i+(st.pcy['r'+r.id]|0))%2?'rrec':'rtop',rid:r.id})});
   return out;
 }
 const rdShort=(c,m)=>{const w=gmWord(c);return w&&w.length<=(m||6)};
@@ -146,8 +148,9 @@ function pathBuild(n){
   /* rules first: the unit's rule card opens its first chapter, rule recall questions come back in later levels and checkpoints */
   const rulePre=[];
   if(!isR&&L===1&&n.ch===0){const rc=rdRuleCard(n);if(rc)rulePre.push(rc)}
-  if(!isR&&(L===3||L===4)){rdRuleQ(n,1).forEach(x=>body.push(K(x)))}
-  if(isR||L===5){rdRuleQ(n,2).forEach(x=>body.push(K(x)))}
+  if(!isR&&L===4){rdRuleQ(n,1).forEach(x=>body.push(K(x)))}
+  if(isR){rdRuleQ(n,2).forEach(x=>body.push(K(x)))}
+  else if(L===5){rdRuleQ(n,1).forEach(x=>body.push(K(x)))}
   /* letter and writing exercises are rare on purpose: about one in every 50 answers */
   if(wrDue()){
     const cand=[];
@@ -158,7 +161,15 @@ function pathBuild(n){
   }
   let list=body.slice();
   /* at most 2 appearances per word, and no word right after itself */
-  const cnt={};list=list.filter(x=>{if(!x.cid||keep.has(x))return true;cnt[x.cid]=(cnt[x.cid]||0)+1;return cnt[x.cid]<=2});
+  /* 3.5: fewer repeats. A word is asked once per node (twice only in the first learning level), words asked in the last
+     ~30 questions are left out when enough fresh ones exist, and the node refills from the cut items only if it would get too short. */
+  const rq=rdStats();if(!Array.isArray(rq.rqh))rq.rqh=[];
+  const recent=new Set(rq.rqh.slice(-30)),capW=(L===1&&!isR)?2:1,cnt={},cut=[];
+  list=list.filter(x=>{if(!x.cid||keep.has(x))return true;cnt[x.cid]=(cnt[x.cid]||0)+1;if(cnt[x.cid]<=capW)return true;cut.push(x);return false});
+  {const fresh=list.filter(x=>!x.cid||keep.has(x)||!recent.has(x.cid)),old=list.filter(x=>x.cid&&!keep.has(x)&&recent.has(x.cid));
+   if(fresh.length>=10)list=fresh;else if(fresh.length>=6)list=fresh.concat(old.slice(0,10-fresh.length));}
+  if(list.length<9){const c2={};list.forEach(x=>{if(x.cid)c2[x.cid]=(c2[x.cid]||0)+1});
+    cut.forEach(x=>{if(list.length<9&&(c2[x.cid]||0)<2&&!list.some(y=>y.cid===x.cid&&y.kind===x.kind)){list.push(x);c2[x.cid]=(c2[x.cid]||0)+1}})}
   const max=L===5||isR?18:L===1?16:15;
   list=pathSpread(list);
   /* trim to size, dropping plain ones first */
@@ -170,6 +181,7 @@ function pathBuild(n){
   const st2=rdStats();list.forEach(x=>{if(x.cid&&(x.kind==='drag'||x.kind==='cloze'||x.kind==='fix'))st2.pcy[x.cid]=(st2.pcy[x.cid]||0)+1});
   /* the node counts as played for the writing clock */
   S.stats.qn=(S.stats.qn|0)+0;
+  list.forEach(x=>{if(x.cid)rq.rqh.push(x.cid)});if(rq.rqh.length>120)rq.rqh.splice(0,rq.rqh.length-120);
   return rulePre.concat(intro,list);
 }
 /* quick summary used by tests and docs */

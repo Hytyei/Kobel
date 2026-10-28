@@ -39,3 +39,17 @@ Ich {{habe}} zwei Jobs. | I have two jobs. | ich → habe     gap sentence | tra
 * Verb forms go in parentheses without `Pl.`.
 * `{{ }}` marks the gap word for fill-in games.
 * Only the first two fields (German, English) are required.
+
+## Matchday clock (notifications and widgets, 3.5.0)
+
+The day is a match: kick-off 00:00, half-time 12:00, final whistle at midnight. While your streak is alive from yesterday and you have not practised today, the phone shows up to five calls (each once per day, a later one replaces the earlier one):
+
+| Time | Call |
+|---|---|
+| 17:00 | Second half is under way |
+| 20:30 | 75th minute: time for a goal |
+| 22:00 | 85th minute: it is getting tight |
+| 23:00 | 90th minute: final whistle incoming! (pop-up channel "Final whistle") |
+| 23:40 | Injury time! |
+
+Practising cancels the call that is still showing. Android decides when the background job runs (about every 15 to 30 minutes, later in battery saver), so a call can arrive a little late. The widgets draw the match clock (minute, time to the whistle, a kick-off to full-time line with a half-time mark; green "full time" once you played today) and refresh about every 30 minutes and whenever the app pushes new numbers.

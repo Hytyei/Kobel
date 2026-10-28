@@ -69,7 +69,7 @@ function stAlerts(){
   const n=unreadN();
   return stGroup('',
     sxSw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)+
-    sxSw('fire',tx('Streak reminders','Serien-Erinnerungen'),tx('An evening reminder and a last call before your streak ends','Abendliche Erinnerung und ein letzter Aufruf vor dem Ende deiner Serie'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`))+
+    sxSw('fire',tx('Matchday clock','Spieltag-Uhr'),tx('Second half, 75th, 85th and 90th minute calls before your streak ends at midnight','Calls in der zweiten Halbzeit, 75., 85. und 90. Minute, bevor deine Serie um Mitternacht endet'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`))+
   stGroup('',sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"'))+
   `<p class="st-foot">${tx('Tip: study group members can nudge each other from Table › Friends › Study groups.','Tipp: Mitglieder einer Lerngruppe können sich unter Tabelle › Freunde › Lerngruppen anstupsen.')}</p>`;
 }
@@ -152,7 +152,7 @@ function stHome(){
 
   <section class="st-g" id="sx-alerts"><h3 class="st-h">${tx('Notifications','Benachrichtigungen')}</h3><div class="st-card">
     ${sw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)}
-    ${sw('fire',tx('Streak reminders','Serien-Erinnerungen'),tx('An evening reminder and a last call before your streak ends','Abendliche Erinnerung und ein letzter Aufruf vor dem Ende deiner Serie'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`)}
+    ${sw('fire',tx('Matchday clock','Spieltag-Uhr'),tx('Second half, 75th, 85th and 90th minute calls before your streak ends at midnight','Calls in der zweiten Halbzeit, 75., 85. und 90. Minute, bevor deine Serie um Mitternacht endet'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`)}
     ${sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"')}</div></section>
 
   <section class="st-g" id="sx-look"><h3 class="st-h">${tx('Language and look','Sprache und Aussehen')}</h3><div class="st-card st-pad">${sxSeg('lang','globe')}${sxSeg('theme','sun')}</div></section>

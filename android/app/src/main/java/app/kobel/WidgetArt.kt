@@ -115,6 +115,32 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         "warn" -> t(d, "Danger zone", "Gefahrenzone"); else -> t(d, "Safe", "Klassenerhalt")
     }
 
+    // ───────── the day as a football match: kick-off 00:00, half-time 12:00, final whistle at midnight ─────────
+    private class Clock(val minute: Int, val safe: Boolean, val left: String, val frac: Float, val streak: Boolean)
+
+    private fun clock(d: WData): Clock {
+        val cal = java.util.Calendar.getInstance()
+        val mins = cal.get(java.util.Calendar.HOUR_OF_DAY) * 60 + cal.get(java.util.Calendar.MINUTE)
+        val rest = 1440 - mins
+        val left = if (d.de) (if (rest >= 60) "${rest / 60} Std ${rest % 60} Min" else "$rest Min") else (if (rest >= 60) "${rest / 60}h ${rest % 60}m" else "${rest}m")
+        return Clock((mins * 90 / 1440).coerceIn(0, 90), d.today > 0, left, mins / 1440f, d.streak > 0)
+    }
+
+    /** "78'" while the streak is on the line, "FULL TIME" once you have played today (the streak is safe). */
+    private fun clockText(d: WData, k: Clock): String = when {
+        k.safe -> t(d, "FULL TIME · STREAK SAFE", "ABPFIFF · SERIE SICHER")
+        !k.streak -> t(d, "KICK-OFF · START A RUN", "ANSTOSS · NEUE SERIE")
+        else -> "${k.minute}' · ${t(d, "WHISTLE IN ", "ABPFIFF IN ")}${k.left}"
+    }
+    private fun clockColor(k: Clock) = if (k.safe) GREEN else if (!k.streak) BLUE else if (k.minute >= 80) RED_HI else if (k.minute >= 62) AMBER else WHITE
+
+    /** The match line: elapsed time in colour, a tick at half-time. */
+    private fun matchBar(c: Canvas, x: Float, y: Float, w: Float, k: Clock) {
+        fill(c, x, y, x + w, y + dp(4f), dp(2f), alpha(WHITE, 0.12f))
+        fill(c, x, y, x + maxOf(dp(4f), w * k.frac), y + dp(4f), dp(2f), clockColor(k))
+        fill(c, x + w / 2 - dp(0.5f), y - dp(2f), x + w / 2 + dp(0.5f), y + dp(6f), 0f, alpha(WHITE, 0.45f))
+    }
+
     private fun letters(d: WData) = if (d.de) "MDMDFSS" else "MTWTFSS"
 
     /** Seven bars, the day with index [hi] highlighted, an optional dashed goal line. */
@@ -163,6 +189,8 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         background(c, w, h)
         val pad = dp(13f)
         text(c, d.tier.uppercase(), pad, pad + dp(9f), 11f, MUTE, cond, 0, 0.8f)
+        val ck = clock(d)
+        pill(c, if (ck.safe) "FT" else if (!ck.streak) "KO" else "${ck.minute}'", w - pad, pad + dp(6f), 8f, clockColor(ck), alpha(clockColor(ck), 0.16f), 2)
         val cx = w / 2; val cy = h * 0.5f + dp(2f); val r = minOf(w, h) * 0.30f
         ring(c, cx, cy, r, 9f, d.today.toFloat() / maxOf(1, d.goal), if (d.today >= d.goal) GREEN else RED_HI)
         val s = d.streak.toString()
@@ -188,7 +216,8 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val s = d.streak.toString()
         text(c, s, cx, cy + dp(9f), if (s.length > 2) 26f else 32f, WHITE, cond, 1)
         text(c, t(d, "DAY STREAK", "TAGE SERIE"), cx, cy + dp(22f), 7.5f, MUTE, cond, 1, 0.6f)
-        text(c, "${d.today}/${d.goal} XP", cx, cy + rr + dp(16f), 9f, if (d.today >= d.goal) GREEN else MUTE, cond, 1, 0.3f)
+        val ck = clock(d)
+        text(c, "${d.today}/${d.goal} XP", cx, cy + rr + dp(14f), 8.5f, if (d.today >= d.goal) GREEN else MUTE, cond, 1, 0.3f)
         // divider
         val x0 = cx + rr + dp(16f)
         fill(c, x0 - dp(8f), pad, x0 - dp(7f), h - pad, 0f, alpha(WHITE, 0.08f))
@@ -203,7 +232,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val sub = d.tierLv + " · " + (if (d.next.isNotEmpty()) "${d.left} LP ${t(d, "to", "bis")} ${d.next}" else zoneText(d))
         text(c, sub, x0, py + dp(17f), 9f, MUTE, cond, 0, 0.2f)
         // week bars
-        val bt = py + dp(26f); val bb = h - pad - dp(24f)
+        val bt = py + dp(26f); val bb = h - pad - dp(40f)
         val cw = (xr - x0)
         bars(c, x0, bt, x0 + cw * 0.58f, bb + dp(8f), d.xp7, letters(d).map { it.toString() }, d.dow, RED_HI, WHITE, d.goal, 8.5f)
         // chips
@@ -215,6 +244,9 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         formDots(c, d, x0, fy, dp(13f))
         val md = "${t(d, "MD", "ST")} ${d.md} · ${(d.mdTore * 100 / maxOf(1, d.mdTarget)).coerceAtMost(999)}%"
         text(c, md, xr, fy + dp(4f), 10f, WHITE, cond, 2, 0.4f)
+        // the match clock under the dots
+        text(c, clockText(d, ck), x0, fy - dp(15f), 8.5f, clockColor(ck), cond, 0, 0.5f)
+        matchBar(c, x0, fy - dp(11f), (xr - x0) * 0.58f, ck)
     }
 
     private fun chip(c: Canvas, l: Float, tp: Float, r: Float, b: Float, value: String, label: String, accent: Int) {
@@ -257,7 +289,10 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
 
         // three stat tiles
         val tw = (inner - dp(16f)) / 3; val th = dp(52f)
-        tile(c, pad, y, tw, th, d.streak.toString(), t(d, "DAY STREAK", "TAGE SERIE"), RED_HI)
+        val ck = clock(d)
+        tile(c, pad, y, tw, th, d.streak.toString(), t(d, "DAY STREAK", "TAGE SERIE"), clockColor(ck))
+        matchBar(c, pad + dp(12f), y + th - dp(19f), tw - dp(24f), ck)
+        text(c, if (ck.safe) "FT" else if (!ck.streak) "KO" else "${ck.minute}'", pad + tw - dp(10f), y + dp(22f), 13f, clockColor(ck), cond, 2)
         tile(c, pad + tw + dp(8f), y, tw, th, d.due.toString(), t(d, "DUE", "FÄLLIG"), if (d.due > 0) AMBER else GREEN)
         tile(c, pad + 2 * (tw + dp(8f)), y, tw, th, d.fresh.toString(), t(d, "NEW WORDS", "NEUE WÖRTER"), BLUE)
         y += th + dp(12f) + extra
