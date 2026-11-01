@@ -111,15 +111,17 @@ export async function userBySession(db, tokenHash, now = Date.now()) {
 
 // ───────── usernames and the founder badge ─────────
 
+/** 'proved': the linked email or the private key matched. 'open': no secret is set, so the first claim wins. false: refused. */
 async function founderProof(env, { email, founderKey }) {
-  if (email && env.FOUNDER_EMAIL_SHA256 && same(await sha256Hex(String(email).toLowerCase()), String(env.FOUNDER_EMAIL_SHA256).toLowerCase())) return true;
-  if (typeof founderKey === 'string' && founderKey && env.FOUNDER_KEY_SHA256 && same(await sha256Hex(founderKey), String(env.FOUNDER_KEY_SHA256).toLowerCase())) return true;
+  if (email && env.FOUNDER_EMAIL_SHA256 && same(await sha256Hex(String(email).toLowerCase()), String(env.FOUNDER_EMAIL_SHA256).toLowerCase())) return 'proved';
+  if (typeof founderKey === 'string' && founderKey && env.FOUNDER_KEY_SHA256 && same(await sha256Hex(founderKey), String(env.FOUNDER_KEY_SHA256).toLowerCase())) return 'proved';
   // Nobody has set a founder key or founder email yet: the first person to register the founder name is the founder.
   // (Set FOUNDER_KEY_SHA256 or FOUNDER_EMAIL_SHA256 to switch this off. Taken names are still refused further down.)
-  if (!env.FOUNDER_KEY_SHA256 && !env.FOUNDER_EMAIL_SHA256) return true;
+  if (!env.FOUNDER_KEY_SHA256 && !env.FOUNDER_EMAIL_SHA256) return 'open';
   return false;
 }
 const founderName = (env) => String(env.FOUNDER_USERNAME || 'Hytyei');
+const generatedName = () => 'Player-' + randomToken('', 4).replace(/[^A-Za-z0-9]/g, 'x').slice(0, 6);
 /** Names nobody may take as a plain display name (the founder name and the reserved list). */
 export function reservedName(env, name) {
   const l = String(name || '').trim().toLowerCase();
@@ -129,39 +131,45 @@ export function reservedName(env, name) {
 /**
  * Checks a username and returns what the account becomes: { username, badge }.
  * The founder name is reserved: only the owner can take it, proved by the linked Google email or the private founder key.
+ * Proof always wins: an older account holding the name (often the owner's own) keeps its data under a generated name.
+ * dryRun only answers the question and writes nothing.
  */
-export async function checkUsername(db, env, raw, { userId = 0, email = null, founderKey = null } = {}) {
+export async function checkUsername(db, env, raw, { userId = 0, email = null, founderKey = null, dryRun = false } = {}) {
   const username = typeof raw === 'string' ? raw.trim() : '';
   if (!USERNAME_RE.test(username)) {
     throw new HttpError(400, 'invalid_username', 'Use 3 to 20 letters, numbers, dots or underscores, starting with a letter or number.', 'username');
   }
   const lower = username.toLowerCase();
-  let badge = null;
+  let badge = null, proof = false;
   if (lower === founderName(env).toLowerCase()) {
-    if (!(await founderProof(env, { email, founderKey }))) throw new HttpError(403, 'reserved', 'That username is reserved.', 'username');
+    proof = await founderProof(env, { email, founderKey });
+    if (!proof) throw new HttpError(403, 'reserved', 'That username is reserved.', 'username');
     badge = 'founder';
   } else if (RESERVED.has(lower)) {
     throw new HttpError(403, 'reserved', 'That username is reserved.', 'username');
   }
-  const clash = await db
+  const { results: clashes } = await db
     .prepare('SELECT id, username FROM users WHERE (username = ?1 COLLATE NOCASE OR name = ?1 COLLATE NOCASE) AND id <> ?2')
     .bind(username, userId)
-    .first();
-  if (clash) {
-    if (badge === 'founder' && !clash.username) {
-      // the owner wins over an old display name: the other player just gets a generated name
-      await db.prepare('UPDATE users SET name = ? WHERE id = ?').bind('Player-' + randomToken('', 4).replace(/[^A-Za-z0-9]/g, 'x').slice(0, 6), clash.id).run();
-    } else {
+    .all();
+  if (clashes.length) {
+    // the owner wins over an old display name, and with proof over an older account too
+    if (proof !== 'proved' && !(badge === 'founder' && clashes.every((c) => !c.username))) {
       throw new HttpError(409, 'taken', 'That username is already taken.', 'username');
+    }
+    if (!dryRun) {
+      for (const c of clashes) {
+        await db.prepare('UPDATE users SET name = ?, username = NULL, badge = NULL, username_changed_at = NULL WHERE id = ?').bind(generatedName(), c.id).run();
+      }
     }
   }
   return { username, badge };
 }
 
-export async function usernameAvailable(db, env, request, url, now = Date.now()) {
+export async function usernameAvailable(db, env, request, url, user = null, now = Date.now()) {
   await limit(db, 'uname:' + (await callerHash(env, request, 'uname', hourOf(now))), hourOf(now), limitOf(env.USERNAME_CHECK_HOURLY, 60));
   try {
-    await checkUsername(db, env, url.searchParams.get('u') || '', { userId: -1 });
+    await checkUsername(db, env, url.searchParams.get('u') || '', { userId: user ? user.id : -1, email: user && user.email, dryRun: true });
     return { available: true };
   } catch (e) {
     if (e instanceof HttpError && e.status < 500) return { available: false, reason: e.code };
@@ -171,7 +179,7 @@ export async function usernameAvailable(db, env, request, url, now = Date.now())
 
 async function applyFounderByEmail(db, env, userId, email) {
   // the owner's Google account gets the reserved name and the badge by itself, when the account has no username yet
-  if (!email || !(await founderProof(env, { email }))) return;
+  if (!email || (await founderProof(env, { email })) !== 'proved') return;
   const u = await db.prepare('SELECT username FROM users WHERE id = ?').bind(userId).first();
   if (!u || u.username) return;
   try {
@@ -184,7 +192,8 @@ async function applyFounderByEmail(db, env, userId, email) {
 
 export async function setUsername(db, env, user, body, now = Date.now()) {
   if (!body || typeof body !== 'object') throw new HttpError(400, 'invalid_request', 'Body must be a JSON object.');
-  if (user.username && now - (user.username_changed_at || 0) < USERNAME_COOLDOWN_MS && !(typeof body.founderKey === 'string' && body.founderKey)) {
+  const claimsFounder = String(body.username || '').trim().toLowerCase() === founderName(env).toLowerCase();
+  if (user.username && now - (user.username_changed_at || 0) < USERNAME_COOLDOWN_MS && !claimsFounder) {
     throw new HttpError(429, 'cooldown', 'You can change your username once a week.');
   }
   const r = await checkUsername(db, env, body.username, { userId: user.id, email: user.email, founderKey: body.founderKey });

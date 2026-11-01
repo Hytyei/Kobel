@@ -1,0 +1,125 @@
+/* ═════════ Kobel 4.0 design layer ═════════
+   Takes what the Bundesliga broadcast package does and the app did not yet do:
+   - the score bug: time cell, club ticks on top, jersey strip under it (question screen, results, widget)
+   - fixture rows instead of round game nodes on the path
+   - solid club-colour leader tiles in Training
+   - hard-edged full-time and streak moments instead of glow, rays and pulsing rings
+   Motion: one curve, under 300ms for anything you see every day, transform and opacity only. */
+:root{--e-out:cubic-bezier(.23,1,.32,1);--bug-g:#C9CDD1;--bug-gi:#14181C}
+
+/* tabs change many times a day: a short fade, no rise and no stagger */
+.view>*{animation:v4fade .16s ease-out both!important;animation-delay:0s!important}
+.view.still>*{animation:none!important}
+@keyframes v4fade{from{opacity:0}to{opacity:1}}
+.b3-nav button::after{transition:transform .18s var(--e-out)}
+
+/* every pressable thing answers the finger */
+.btn,.opt,.b3-wb,.b3-fx,.b3-tr,.pn,.v4-g,.seg button,.cel-ok{transition:transform .12s ease-out,background-color .15s ease,border-color .15s ease,color .15s ease}
+.btn:active:not(:disabled),.opt:active:not(:disabled),.b3-wb:active,.b3-fx:active,button.b3-tr:active,.pn:active,.v4-g:active{transform:scale(.98)}
+
+/* toasts stack */
+#toasts{position:fixed;left:16px;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:400;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+#toasts .toast{position:static;transform:none;left:auto;right:auto;bottom:auto;max-width:420px;width:100%;margin:0;background:#fff;color:#0B141B;border-left:6px solid var(--red);padding:12px 16px;font:500 15px/1.3 var(--fb);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:v4toast .22s var(--e-out) both}
+@keyframes v4toast{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── score bug ── */
+.ses.v4-bug .ses-top{position:relative;padding-bottom:7px}
+.ses.v4-bug .track{position:absolute;left:0;right:0;bottom:0;height:5px;margin:0;background:rgba(255,255,255,.14);border-radius:0;flex:none}
+.ses.v4-bug .track i{background:var(--club,#D20515);border-radius:0;transition:width .3s var(--e-out)}
+.ses.v4-bug .track.perfect i{background:#1FB45A}
+.ses.v4-bug .qx-dots{display:none}
+.v4b{display:flex;align-items:stretch;height:42px;margin:0 auto;font-family:var(--fd);font-variant-numeric:tabular-nums}
+.v4b small{font:800 12px/1 var(--fd);letter-spacing:.04em}
+.v4b b{font:800 25px/1 var(--fd);display:block;min-width:20px;text-align:center}
+.v4b-m{display:grid;place-items:center;min-width:48px;padding:0 8px;background:var(--bug-g);color:var(--bug-gi);font:800 18px/1 var(--fd)}
+.v4b-h,.v4b-a{position:relative;display:flex;align-items:center;gap:8px;padding:0 10px}
+.v4b-h{background:var(--club,#0B0B0B);color:var(--clubink,#fff)}
+.v4b-a{background:#fff;color:#0B141B}
+.v4b-tk{position:absolute;left:0;right:0;top:-5px;height:5px;display:flex;gap:2px}
+.v4b-tk u{flex:1;background:rgba(255,255,255,.14);text-decoration:none;transition:background-color .15s ease}
+.v4b-tk u.on{background:var(--club,#D20515)}
+.v4b b.hit{animation:v4hit .26s var(--e-out)}
+@keyframes v4hit{from{transform:translateY(-6px);opacity:.3}to{transform:none;opacity:1}}
+.ses.v4-bug .combo{display:none}
+
+/* ── full time ── */
+.v4-ft{width:100%;margin:0 0 18px;text-align:center}
+.v4-ft-k{display:inline-block;background:var(--bug-g);color:var(--bug-gi);font:800 13px/1 var(--fd);letter-spacing:.12em;text-transform:uppercase;padding:8px 14px}
+.v4-ft-b{display:flex;justify-content:center;font-variant-numeric:tabular-nums}
+.v4-ft-b span{display:flex;flex-direction:column;align-items:center;gap:4px;width:112px;padding:14px 0 12px}
+.v4-ft-b small{font:800 15px/1 var(--fd);letter-spacing:.04em}
+.v4-ft-b b{font:800 68px/.95 var(--fd)}
+.v4-ft-b .h{background:var(--club,#0B0B0B);color:var(--clubink,#fff);box-shadow:inset 0 -6px 0 rgba(0,0,0,.28)}
+.v4-ft-b .a{background:#fff;color:#0B141B;box-shadow:inset 0 -6px 0 #C9CDD1}
+.v4-miss{width:100%;background:var(--surf);border-left:6px solid var(--red);padding:14px 16px;margin:0 0 12px;text-align:left}
+.v4-miss h3{font:800 15px/1.1 var(--fd);letter-spacing:.06em;margin:0 0 8px}
+.v4-miss ul{list-style:none;margin:0;padding:0}
+.v4-miss li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.v4-miss li b{font-weight:500}.v4-miss li span{color:var(--mute);text-align:right}
+
+/* ── path: a fixture list, not a board game ── */
+.ptrack{padding:0;margin:0 0 14px;background:none}
+.ptrack::before{display:none}
+.pn-row{display:block;margin:0 0 2px!important;padding:0!important;height:auto!important;transform:none!important}
+.pstage{border-radius:0!important}
+.pch{display:flex;justify-content:space-between;background:none;margin:18px 0 8px;padding:0;font:800 13px var(--fd);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);text-align:left}
+.pch::before,.pch::after{display:none}
+.pn.v4f,.pn.v4f.cur{box-shadow:none!important;outline:0;animation:none!important}
+.pn.v4f{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;width:100%;min-height:60px;height:auto;padding:0 14px 0 0;border:0;border-radius:0;background:var(--surf);color:var(--ink);text-align:left;box-shadow:none;cursor:pointer}
+.pn.v4f::before,.pn.v4f::after{display:none}
+.pn.v4f .v4f-n{align-self:stretch;display:grid;place-items:center;background:var(--surf3);font:800 20px/1 var(--fd);font-variant-numeric:tabular-nums}
+.pn.v4f .v4f-t b{display:block;font:800 17px/1.1 var(--fd);text-transform:uppercase;letter-spacing:-.005em}
+.pn.v4f .v4f-t small{display:block;font:400 13px/1.25 var(--fb);color:var(--mute);margin-top:2px}
+.pn.v4f .v4f-r{font:800 14px var(--fd);letter-spacing:.06em;color:var(--mute)}
+.pn.v4f .v4f-r svg{display:block;width:18px;height:18px}
+.pn.v4f .v4f-r .o{opacity:.25}
+.pn.v4f.done .v4f-n{background:#00693E;color:#fff}
+.pn.v4f.done .v4f-r{color:var(--gold)}
+.pn.v4f.cur{background:#fff;color:#0B141B}
+.pn.v4f.cur .v4f-n{background:var(--red);color:#fff}
+.pn.v4f.cur .v4f-t small{color:#5E6A73}
+.pn.v4f.cur .v4f-r{color:var(--red)}
+.pn.v4f.lock{opacity:.62}
+.pn.v4f.fin:not(.done):not(.cur) .v4f-n{background:var(--bug-g);color:var(--bug-gi)}
+
+/* ── training: leader tiles ── */
+.v4-gs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.v4-g{position:relative;display:flex;flex-direction:column;min-height:148px;border:0;padding:0;text-align:left;color:#fff;background:var(--tc,#0F1A22);overflow:hidden;cursor:pointer}
+.v4-g::before{content:'';position:absolute;right:-46px;top:-34px;width:168px;height:168px;border-radius:50%;box-shadow:0 0 0 18px rgba(255,255,255,.05),0 0 0 40px rgba(255,255,255,.035),inset 0 0 0 20px rgba(255,255,255,.05)}
+.v4-g .n{position:relative;padding:14px 12px 0;font:800 clamp(16px,5vw,21px)/1.02 var(--fd);overflow-wrap:anywhere;text-transform:uppercase;letter-spacing:-.01em}
+.v4-g .i{position:absolute;right:12px;top:44px;width:42px;height:42px;opacity:.95}
+.v4-g .i svg{width:100%;height:100%}
+.v4-g .f{margin-top:auto;position:relative;display:flex;justify-content:space-between;align-items:center;gap:6px;padding:9px 12px;background:rgba(0,0,0,.26);font:800 14px var(--fd);font-variant-numeric:tabular-nums}
+.v4-g .f span{color:rgba(255,255,255,.75);font:500 12px/1.2 var(--fb)}
+.v4-g.off{opacity:.5}
+.v4-g.berry{--tc:#D20515}.v4-g.fern{--tc:#00693E}.v4-g.sky{--tc:#0A57A6}.v4-g.lantern{--tc:#B8123A}.v4-g.lilac{--tc:#1E2A33}
+
+/* ── streak and big moments: a hard broadcast card, no rays, no glow, no pulsing rings ── */
+.cel-bg .rays,.cel-bg .glow,.cel-bg .ring{display:none!important}
+.cel{background:#020B12}
+.cel::before{content:'';position:absolute;left:0;right:0;top:0;height:42%;background:var(--cc,#D20515)}
+.cel-in{z-index:2}
+
+.fin:has(.v4-ft) .qx-stamp{display:none}
+.ses:has(.v4-ft) .v4b{visibility:hidden}
+.ses:has(.v4-ft) .track{display:none}
+.qx-ms::before{display:none}
+.qx-ms b{text-shadow:none;background:var(--red);padding:6px 14px}
+
+.b3-cmp .a{min-width:72px}
+.pn.v4f.fin,.pn.v4f.fin>*{transform:none!important}
+.pn.v4f.fin{width:100%!important;height:auto!important;border-radius:0!important}
+.punit.c-lantern,.punit.c-lantern .pu-n,.punit.c-lantern .kick,.punit.c-lantern .sub,.punit.c-lantern .pu-c{color:#fff}
+
+/* ── clock question ── */
+.v4-clock{display:block;width:172px;height:172px;margin:4px 0}
+.v4-clock rect:first-child{fill:#fff}
+.v4-clock .t path{stroke:#0B141B;stroke-width:1.6}
+.v4-clock .h,.v4-clock .m{stroke:#0B141B;stroke-linecap:butt}
+.v4-clock .h{stroke-width:4}.v4-clock .m{stroke-width:2.4}
+.v4-clock .c{fill:#D20515}
+
+@media (prefers-reduced-motion:reduce){
+  .v4b b.hit,#toasts .toast,.view>*{animation:none!important}
+  .btn:active,.opt:active,.b3-wb:active,.b3-fx:active,.pn:active,.v4-g:active{transform:none}
+}

@@ -89,10 +89,60 @@ test('founder: Hytyei is reserved and only the private key gets the badge', asyn
   // nobody can fake the name as a plain display name either
   const other = await signup(call, 'someone');
   assert.equal((await call('PATCH', '/v1/me', { token: other.json.token, body: { name: 'Hytyei' } })).status, 403);
-  assert.equal((await call('POST', '/v1/auth/signup', { body: { username: 'Hytyei', password: key('x'), founderKey: FOUNDER_KEY } })).status, 409);
   // the badge shows up on the league table and friend lists
   const lb = await call('GET', '/v1/leaderboard', { token: s.json.token });
   assert.equal(lb.json.rows.find((r) => r.name === 'Hytyei').badge, 'founder');
+});
+
+test('founder: the private key takes the name back from an older account, the old account keeps its data', async () => {
+  const open = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
+  const old = await signup(open.call, 'Hytyei', 'pass1234'); // claimed before any key existed
+  assert.equal(old.status, 201);
+  const now = await signup(open.call, 'new_phone', 'pass1234');
+  assert.equal((await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei' } })).status, 409);
+
+  open.env.FOUNDER_KEY_SHA256 = sha(FOUNDER_KEY);
+  assert.equal((await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei', founderKey: 'wrong' } })).status, 403);
+  const r = await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei', founderKey: FOUNDER_KEY } });
+  assert.equal(r.status, 200, r.text);
+  assert.equal(r.json.user.username, 'Hytyei');
+  assert.equal(r.json.user.badge, 'founder');
+  const was = (await open.call('GET', '/v1/me', { token: old.json.token })).json.user;
+  assert.equal(was.username, null);
+  assert.equal(was.badge, null);
+  assert.match(was.name, /^Player-/);
+});
+
+test('founder: the linked owner Google account can also take the name back, inside the weekly cooldown', async () => {
+  const ctx = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
+  const old = await signup(ctx.call, 'Hytyei', 'pass1234');
+  ctx.env.FOUNDER_EMAIL_SHA256 = sha('owner@example.com');
+  const now = await signup(ctx.call, 'new_phone', 'pass1234');
+  ctx.db.sqlite.prepare('UPDATE users SET email = ? WHERE username = ?').run('owner@example.com', 'new_phone');
+  const r = await ctx.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei' } });
+  assert.equal(r.status, 200, r.text);
+  assert.equal(r.json.user.badge, 'founder');
+  assert.equal((await ctx.call('GET', '/v1/me', { token: old.json.token })).json.user.username, null);
+});
+
+test('the availability check only looks: it never renames anybody, and your own name counts as free', async () => {
+  const ctx = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
+  const reg = await ctx.call('POST', '/v1/register', { body: { name: 'Oldtimer' } });
+  ctx.db.sqlite.prepare('UPDATE users SET name = ? WHERE name = ?').run('hytyei', 'Oldtimer');
+  await ctx.call('GET', '/v1/auth/username?u=Hytyei');
+  assert.equal(ctx.db.sqlite.prepare('SELECT COUNT(*) AS n FROM users WHERE name = ?').get('hytyei').n, 1);
+  const mine = await ctx.call('GET', '/v1/auth/username?u=Hytyei', { token: reg.json.token });
+  assert.equal(mine.json.available, true);
+  const theirs = await ctx.call('GET', '/v1/auth/username?u=hytyei');
+  assert.equal(theirs.json.available, true); // an old display name does not block the founder name
+});
+
+test('with no founder secrets a new Google user does not quietly become the founder', async () => {
+  const ctx = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
+  const r = await googleFlow(ctx, { intent: 'signin', claims: { sub: 'g-any', email: 'anyone@gmail.com' } });
+  const ex = await ctx.call('POST', '/v1/auth/exchange', { body: { code: r.query.get('code'), verifier: r.verifier } });
+  assert.equal(ex.json.user.username, null);
+  assert.equal(ex.json.user.badge, null);
 });
 
 test('legacy Kobel ID accounts keep working and can claim a username and password', async () => {

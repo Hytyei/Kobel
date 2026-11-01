@@ -7,7 +7,7 @@ const STADIUM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const NAV3=()=>[['home',tx('Start','Start')],['path',tx('Path','Pfad')],['arcade',tx('Training','Training')],['library',tx('Squad','Kader')],['stats',tx('Table','Tabelle')],['friends',tx('Friends','Freunde')],['teach',tx('Tactics','Taktik')]];
 const lvlPct=()=>{const x=S.stats.xp,L=lvl(x),a=60*(L-1)*(L-1),b=60*L*L;return Math.max(2,Math.min(100,(x-a)/(b-a)*100))};
 function drawTop(){
-  if(typeof ses!=='undefined'&&ses&&$('#ses')){drawSesTop();qxCombo();qxDots();return}
+  if(typeof ses!=='undefined'&&ses&&$('#ses')){drawSesTop();qxCombo();qxDots();v4Bug();return}
   let h=$('#b3top');
   if(!h){h=document.createElement('header');h.id='b3top';h.className='b3-top';document.body.insertBefore(h,$('#app'))}
   const old=h.querySelector('.b3-nav'),sl=old?old.scrollLeft:0,n=unreadN();

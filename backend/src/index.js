@@ -72,7 +72,11 @@ async function route(request, env) {
   if (path === '/v1/auth/signup' && method === 'POST') return json(await signup(env.DB, env, request, await readJson(request)), 201);
   if (path === '/v1/auth/login' && method === 'POST') return json(await login(env.DB, env, request, await readJson(request)));
   if (path === '/v1/auth/logout' && method === 'POST') return json(await logout(env.DB, await authenticate(request, env)));
-  if (path === '/v1/auth/username' && method === 'GET') return json(await usernameAvailable(env.DB, env, request, url));
+  if (path === '/v1/auth/username' && method === 'GET') {
+    // signed in: your own current name counts as free. A stale session just gets the public answer.
+    const user = await maybeAuthenticate(request, env).catch(() => null);
+    return json(await usernameAvailable(env.DB, env, request, url, user));
+  }
   if (path === '/v1/auth/google/start' && method === 'POST') return json(await googleStart(env.DB, env, request, await readJson(request), await maybeAuthenticate(request, env)));
   if (path === '/v1/auth/google/callback' && method === 'GET') return googleCallback(env.DB, env, request);
   if (path === '/v1/auth/google/poll' && method === 'POST') return json(await authPoll(env.DB, env, await readJson(request)));

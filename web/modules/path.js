@@ -11,6 +11,7 @@ const PATH_LV=[
   {en:'Sentences',de:'Sätze',ic:'4'},
   {en:'Chapter test',de:'Kapiteltest',ic:'★'}
 ];
+const PATH_SUB=[['Meet the words','Wörter kennenlernen'],['Recognise and listen','Erkennen und hören'],['Pairs, articles, plurals','Paare, Artikel, Plural'],['Build sentences','Sätze bauen'],['Test at match pace','Test im Spieltempo']];
 const PATH_STAGES=[
   {en:'Stage 1 · Arrive',de:'Stufe 1 · Ankommen',sub:{en:'Rules first, then short words and their meanings',de:'Kurze Wörter, Bedeutung erkennen, kein Schreiben'}},
   {en:'Stage 2 · Everyday German',de:'Stufe 2 · Alltag',sub:{en:'Articles, plurals, rules you can recall, small sentences',de:'Artikel, Plural, Regeln abrufen, kleine Sätze'}},
@@ -79,7 +80,8 @@ function pathSpread(a){
 function pathStart(i){
   const st=pathState(),n=st.nodes[i];if(!n)return;
   const items=pathBuild(n);
-  if(items.length<3){toast(tx('Not enough material for this level','Zu wenig Material für diese Stufe'));return}
+  /* a level with almost nothing left to ask (suspended cards) must not block the path */
+  if(items.length<3){st.P.done[n.key]=st.P.done[n.key]||1;save();render();toast(tx('Nothing to practise here, moved on','Hier gibt es nichts zu üben, weiter geht es'));return}
   closeSheet();
   ses={mode:'path',path:true,pathKey:n.key,pathIdx:i,pathLv:n.lv,pathKind:n.kind,lesson:'',opt:{},items,i:0,correct:0,wrong:0,xp:0,combo:0,maxCombo:0,graded:new Set(),t0:Date.now(),learned:0,locked:false,lastKind:'',startLvl:lvl(S.stats.xp)};
   openOverlay();next();
@@ -102,7 +104,7 @@ function finishPath(){
   try{b3PathCelebrate({pass,first,improved:pass&&stars>old,stars,label:pathLabel(cur),unit:ps.units[cur.unit]&&ps.units[cur.unit].name,newCh,newUnit,end})}catch(e){}
   let extra='';
   if(pass&&first&&nx)extra+=noteCard('▶',newUnit?tx('New unit: '+ps.units[nx.unit].name,'Neue Einheit: '+ps.units[nx.unit].name):newCh?tx('Next chapter unlocked','Nächstes Kapitel freigeschaltet'):tx('Next level unlocked: ','Nächste Stufe frei: ')+pathLabel(nx));
-  if(end)extra+=noteCard('🏆',tx('You finished the whole path. New lessons will extend it.','Du hast den ganzen Pfad geschafft. Neue Lektionen verlängern ihn.'));
+  if(end)extra+=noteCard('★',tx('You finished the whole path. New lessons will extend it.','Du hast den ganzen Pfad geschafft. Neue Lektionen verlängern ihn.'));
   if(!pass)extra+=noteCard('↻',tx(`You need ${Math.round(need*100)}% to pass. The words you missed come back sooner.`,`Zum Bestehen brauchst du ${Math.round(need*100)}%. Verpasste Wörter kommen früher wieder.`));
   extra+=extrasFor(res,got,lvl(st.xp)>before);
   resultScreen({mood:pass?(stars>=2?'cheer':'happy'):'oops',title:pass?(stars===3?'Perfekt!':'Gut gemacht!'):'Noch nicht ganz',sub:`${esc(pathLabel(cur))}`,stars:pass?stars:0,
@@ -116,10 +118,11 @@ const PATH_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 ICON.path=PATH_ICON;
 function pathNodeHtml(st,n,pos){
   const P=st.P,s=pathStars(P,n),d=st.done(n),isCur=n.i===st.cur,locked=!d&&!isCur;
-  const off=[0,-34,-48,-34,0,34,48,34][pos%8];
   const cls=d?'done':isCur?'cur':'lock';
   const lab=n.kind==='g'?'G':n.kind==='r'?'↻':PATH_LV[n.lv-1].ic;
-  return `<div class="pn-row" style="--off:${off}px"><button class="pn ${cls} ${n.lv===5&&n.kind!=='g'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}">${isCur?`<span class="pn-go">${tx('START','LOS')}</span>`:''}<span class="pn-i">${locked?'🔒':d&&n.lv!==5?'✓':lab}</span>${d?`<span class="pn-s">${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span></span>`:''}</button></div>`;
+  const sub=n.kind==='g'?tx('Fill the gaps','Lücken füllen'):n.kind==='r'?tx('Mixed with older units','Mit älteren Einheiten gemischt'):tx(PATH_SUB[n.lv-1][0],PATH_SUB[n.lv-1][1]);
+  const end=isCur?`${tx('Start','Los')}`:locked?(typeof stIco==='function'?stIco('lock',18):''):`${'★'.repeat(s)}<span class="o">${'★'.repeat(Math.max(0,3-s))}</span>`;
+  return `<div class="pn-row"><button class="pn v4f ${cls} ${n.lv===5&&n.kind!=='g'?'fin':''}" data-a="pathnode" data-i="${n.i}" aria-label="${esc(pathLabel(n))}"><span class="v4f-n">${lab}</span><span class="v4f-t"><b>${esc(pathLabel(n))}</b><small>${sub}</small></span><span class="v4f-r">${end}</span></button></div>`;
 }
 function vPath(){
   const st=pathState(),{units,nodes}=st;
@@ -270,7 +273,7 @@ function multiDone(cs,miss,msg,ptsPer){
   setFoot(`<div class="fb">${emil('cheer',54)}<div class="grow"><div class="h">${PRAISE[rnd(PRAISE.length)]}</div><div class="b">${msg}</div></div></div><button class="btn c-fern" id="cont">${tx('Continue','Weiter')}</button>`,'good fb');
   $('#cont').onclick=advance;
 }
-function multiMiss(c,miss){miss[c.id]=(miss[c.id]||0)+1;ses.wrong++;ses.combo=0;track(c,'bad');c.bad=(c.bad||0)+1;sfx('bad');vib(30);drawTop()}
+function multiMiss(c,miss){v4Miss(c.id);miss[c.id]=(miss[c.id]||0)+1;ses.wrong++;ses.combo=0;track(c,'bad');c.bad=(c.bad||0)+1;sfx('bad');vib(30);drawTop()}
 /* sort nouns into der / die / das */
 R.sortart=it=>{
   const cs=it.cids.map(byId).filter(c=>c&&c.art);let placed=0;const miss={};

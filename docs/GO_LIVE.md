@@ -245,3 +245,8 @@ Nothing was deployed and no database was changed. Do these in order when you are
 6. **Existing users:** nothing is lost. They see a gentle "Make it a real account" card once; their old Kobel ID keeps working.
 
 What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), lesson Semester 2 · Session 1 (können, hobbies), no more flash when questions load, Bubble pop visible again, working new-version pop-up and notification (new channel "App updates" with pop-up importance).
+
+## Release notes: 4.0.0
+* **Release:** tag `v4.0.0` (version code 40000), build with `android\sign-release.ps1`, upload `kobelapp.apk`.
+* **Backend:** pushing to `main` deploys it. The founder name can now be taken back from an older account with the founder key.
+* **To claim `Hytyei`:** set `FOUNDER_KEY_SHA256` (`npx wrangler secret put FOUNDER_KEY_SHA256`, value: the SHA-256 of a key only you know), then Settings › Account › Change username, type `Hytyei` and enter the key.

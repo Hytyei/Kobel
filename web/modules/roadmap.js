@@ -182,7 +182,7 @@ function pathBuild(n){
   /* the node counts as played for the writing clock */
   S.stats.qn=(S.stats.qn|0)+0;
   list.forEach(x=>{if(x.cid)rq.rqh.push(x.cid)});if(rq.rqh.length>120)rq.rqh.splice(0,rq.rqh.length-120);
-  return rulePre.concat(intro,list);
+  return rulePre.concat(intro,v4Extra(n,list));
 }
 /* quick summary used by tests and docs */
 function pathPlanStats(n){const it=pathBuild(n),k={};it.forEach(x=>k[x.kind]=(k[x.kind]||0)+1);const wr=it.filter(x=>RD_WRITE.has(x.kind)).length;return{n:it.length,kinds:k,write:wr,share:it.length?wr/it.length:0}}

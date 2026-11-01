@@ -16,7 +16,7 @@ function qxDecorate(el){
 function openOverlay(rush){
   openOverlay0(rush);
   QX.lc=0;
-  const el=$('#ses');qxDecorate(el);
+  const el=$('#ses');qxDecorate(el);v4BugMount();
 }
 function setMain(h){
   setMain0(h);
@@ -78,7 +78,8 @@ function qxBurst(el,good){
 function resolve(it,res,info={}){
   if(ses.locked)return;
   const c0=ses.combo|0;
-  resolve0(it,res,info);
+  if(res==='bad')v4Miss(it.cid);
+  resolve0(it,res,v4Info(it,res,info));
   S.stats.qn=(S.stats.qn|0)+1;
   try{
     if(!ses.qxHist)ses.qxHist=[];ses.qxHist[Math.min(ses.i,99)]=res;
@@ -97,7 +98,9 @@ function resultScreen(cfg){
     if(ses&&(ses.maxCombo|0)>=3)cfg.extra=noteCard(FLAME(20),tx(`Best run: ${ses.maxCombo} correct in a row`,`Beste Serie: ${ses.maxCombo} richtige in Folge`))+(cfg.extra||'');
     if(ses&&ses.wrong===0&&(ses.correct|0)>=5)cfg.extra=noteCard('★',tx('A perfect run, no mistakes.','Perfekter Lauf, kein Fehler.'))+(cfg.extra||'');
   }catch(e){}
+  try{cfg.extra=v4MissCard()+(cfg.extra||'')}catch(e){}
   resultScreen0(cfg);
+  try{const f0=$('#sMain .fin');if(f0)f0.insertAdjacentHTML('afterbegin',v4FullTime())}catch(e){}
   try{const f=$('#sMain .fin');if(f&&cfg.mood!=='oops'&&!qxReduce()){f.insertAdjacentHTML('afterbegin','<div class="qx-stamp"></div>');setTimeout(()=>sfx('stamp'),330)}}catch(e){}
 }
 

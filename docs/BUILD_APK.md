@@ -35,6 +35,8 @@ keyAlias=...
 keyPassword=...
 ```
 
+From the command line, `android\sign-release.ps1` asks for the passwords, keeps them out of every file and checks the APK carries the Kobel release key. It needs JDK 17 to 23: Gradle 8.9 cannot run on the Java 25 bundled with current Android Studio.
+
 ## 5. Updates through GitHub (no Google Play)
 1. Raise the version when you build: `./gradlew assembleRelease -PversionName=2.3.0` (or edit the default `versionName` in `app/build.gradle.kts`). The version code is derived from the name (2.3.0 becomes 20300) and the in-app updater compares the same number from your release tag, so always tag releases `v<major>.<minor>.<patch>`. Always sign with the **same key**.
 2. On GitHub: `Releases > Draft a new release`, tag `v1.1.0`, attach the APK (any file name ending in `.apk`).

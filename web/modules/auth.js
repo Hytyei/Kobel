@@ -198,8 +198,9 @@ function usernameSheet(o){
     U.oninput=()=>{$('#un-fk',sh).style.display=U.value.trim().toLowerCase()==='hytyei'&&!myBadge()?'':'none';clearTimeout(t);const v=U.value.trim();
       if(!USER_RE.test(v)){bad(tx('Use 3 to 20 letters, numbers, dot or underscore.','Nutze 3 bis 20 Buchstaben, Zahlen, Punkt oder Unterstrich.'));return}
       if(v.toLowerCase()===cur.toLowerCase()){H.textContent='';return}
-      t=setTimeout(async()=>{try{const r=await authApi('GET','/v1/auth/username?u='+encodeURIComponent(v));if(U.value.trim()!==v)return;
-        H.textContent=r.available?tx('Available','Verfügbar'):r.reason==='reserved'?tx('That name is reserved.','Dieser Name ist reserviert.'):tx('Already taken.','Schon vergeben.');H.style.color=r.available?'var(--goodtxt,#2fd27a)':(v.toLowerCase()==='hytyei'?'':'var(--badtxt)')}catch(e){}},450)};
+      t=setTimeout(async()=>{try{const r=await authApi('GET','/v1/auth/username?u='+encodeURIComponent(v),null,S.sync&&S.sync.code);if(U.value.trim()!==v)return;
+        const own=v.toLowerCase()==='hytyei';
+        H.textContent=r.available?tx('Available','Verfügbar'):own?tx('Protected name. Enter your founder key below to claim it, even from an older account.','Geschützter Name. Gib unten deinen Gründerschlüssel ein, um ihn zu holen, auch von einem älteren Konto.'):r.reason==='reserved'?tx('That name is reserved.','Dieser Name ist reserviert.'):tx('Already taken.','Schon vergeben.');H.style.color=r.available?'var(--goodtxt,#2fd27a)':(own?'':'var(--badtxt)')}catch(e){}},450)};
     const sk=$('#un-skip',sh);if(sk)sk.onclick=()=>closeSheet();
     go.onclick=async()=>{
       const v=U.value.trim();if(!USER_RE.test(v)){bad(tx('Enter a valid username.','Gib einen gültigen Benutzernamen ein.'));return}
@@ -207,7 +208,7 @@ function usernameSheet(o){
       try{const body={username:v},k=$('#un-k',sh);if(k&&k.value)body.founderKey=k.value;
         const r=await api('POST','/v1/me/username',body);rememberUser(r.user);closeSheet();render();toast(tx('Username saved','Benutzername gespeichert'));
         if(!r.user.hasPassword&&!r.user.google)setTimeout(()=>passwordSheet(),500);
-      }catch(e){go.disabled=false;bad(e.message)}
+      }catch(e){go.disabled=false;bad(v.toLowerCase()==='hytyei'&&(e.code==='taken'||e.code==='reserved')?tx('This name needs your founder key. Enter it above and save again.','Dieser Name braucht deinen Gründerschlüssel. Gib ihn oben ein und speichere erneut.'):e.message)}
     };
   });
 }

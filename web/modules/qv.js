@@ -34,7 +34,9 @@ const QV_OVR={
 };
 
 /* "it" in English hides er / sie / es in German: show which one so two sentences never share one translation */
-const QV_IT=/\((?:masculine|feminine|neuter)(?: it)?\)/i;
+const QV_IT=/\((?:[^()]*,\s*)?(?:masculine|feminine|neuter)(?: it)?\)/i;
+/* 3.x added ", neuter it" again on every start, so one card could grow past the server limit: keep one tag */
+const qvUntwin=s=>String(s||'').replace(/(,\s*(?:masculine|feminine|neuter) it)(?:\1)+/gi,'$1');
 function qvIt(de,en){
   en=String(en||'');if(!/\bit\b/i.test(en)||QV_IT.test(en))return en;
   const raw=String(de||''),s=raw.replace(/\{\{|\}\}/g,'');
@@ -47,6 +49,8 @@ function qvIt(de,en){
 }
 function regFix(c){
   if(!c)return;
+  v4Fix(c);
+  c.en=qvUntwin(c.en);if(c.exEn)c.exEn=qvUntwin(c.exEn);
   if(c.type==='g'){const k=qvKind(c.sentence);if(k)c.en=qvTag(c.en,k);c.en=qvIt(c.sentence,c.en);return}
   const o=QV_OVR[c.de];if(o&&c.en===o[0]&&!(c.lesson==='Everyday objects'&&false))c.en=o[1];
   const k=qvKind(c.de);if(k)c.en=qvTag(c.en,k);

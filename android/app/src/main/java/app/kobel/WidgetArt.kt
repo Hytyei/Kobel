@@ -1,10 +1,8 @@
 package app.kobel
 
 import android.graphics.Canvas
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.Shader
 import android.graphics.Typeface
 
 /** Everything a widget shows. Parsed from the JSON the web UI pushes (see WidgetCore). */
@@ -23,14 +21,15 @@ class WData(
 
 /**
  * Draws the three widgets with plain android.graphics calls (no Views, no network). Each draw function paints a whole
- * widget onto a canvas of [w] x [h] pixels; [u] is pixels per dp. Bundesliga broadcast look: near-black navy,
- * red accent, condensed heavy type, thin dividers.
+ * widget onto a canvas of [w] x [h] pixels; [u] is pixels per dp. Bundesliga broadcast look (4.0): near-black navy,
+ * hard square blocks, condensed heavy type, and the score bug: time cell, your run, today's points, club ticks on top.
  */
 class WidgetArt(private val u: Float, private val cond: Typeface, private val body: Typeface) {
     companion object {
-        const val BG1 = 0xFF121C27.toInt()
-        const val BG2 = 0xFF060A0F.toInt()
-        const val CARD = 0xFF1A2531.toInt()
+        const val BG2 = 0xFF020B12.toInt()
+        const val CARD = 0xFF0F1A22.toInt()
+        const val BUG = 0xFFC9CDD1.toInt()
+        const val INK = 0xFF14181C.toInt()
         const val RED = 0xFFD20515.toInt()
         const val RED_HI = 0xFFFF3B47.toInt()
         const val WHITE = 0xFFFFFFFF.toInt()
@@ -54,12 +53,12 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
     // ───────── primitives ─────────
     private fun fill(c: Canvas, l: Float, tp: Float, r: Float, b: Float, rad: Float, color: Int) {
         p.style = Paint.Style.FILL; p.shader = null; p.color = color
-        rf.set(l, tp, r, b); c.drawRoundRect(rf, rad, rad, p)
+        rf.set(l, tp, r, b); c.drawRect(rf, p)
     }
 
     private fun stroke(c: Canvas, l: Float, tp: Float, r: Float, b: Float, rad: Float, color: Int, wpx: Float) {
         p.style = Paint.Style.STROKE; p.shader = null; p.color = color; p.strokeWidth = wpx
-        rf.set(l, tp, r, b); c.drawRoundRect(rf, rad, rad, p)
+        rf.set(l, tp, r, b); c.drawRect(rf, p)
         p.style = Paint.Style.FILL
     }
 
@@ -79,21 +78,36 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val w = p.measureText(s); p.letterSpacing = 0f; return w
     }
 
-    private fun ring(c: Canvas, cx: Float, cy: Float, r: Float, strokeDp: Float, frac: Float, color: Int) {
-        val sw = dp(strokeDp)
-        p.style = Paint.Style.STROKE; p.shader = null; p.strokeWidth = sw; p.strokeCap = Paint.Cap.ROUND
-        p.color = alpha(WHITE, 0.10f); rf.set(cx - r, cy - r, cx + r, cy + r); c.drawArc(rf, 0f, 360f, false, p)
-        val f = frac.coerceIn(0f, 1f)
-        if (f > 0.004f) { p.color = color; c.drawArc(rf, -90f, 360f * f, false, p) }
-        p.style = Paint.Style.FILL; p.strokeCap = Paint.Cap.BUTT
+    private fun background(c: Canvas, w: Float, h: Float) {
+        val rad = dp(8f)
+        p.style = Paint.Style.FILL; p.shader = null; p.color = BG2
+        rf.set(0f, 0f, w, h); c.drawRoundRect(rf, rad, rad, p)
     }
 
-    private fun background(c: Canvas, w: Float, h: Float) {
-        val rad = dp(22f)
-        p.style = Paint.Style.FILL; p.color = WHITE
-        p.shader = LinearGradient(0f, 0f, 0f, h, BG1, BG2, Shader.TileMode.CLAMP)
-        rf.set(0f, 0f, w, h); c.drawRoundRect(rf, rad, rad, p); p.shader = null
-        stroke(c, dp(0.5f), dp(0.5f), w - dp(0.5f), h - dp(0.5f), rad, alpha(WHITE, 0.10f), dp(1f))
+    /**
+     * The score bug: match minute, your streak, today's points. Five ticks on top fill towards the daily goal, the strip
+     * under it runs with the day. Same object as the question screen in the app.
+     */
+    private fun scoreBug(c: Canvas, x: Float, y: Float, w: Float, h: Float, d: WData, k: Clock) {
+        val tw = w * 0.30f; val cw = (w - tw) / 2
+        val hx = x + tw; val ax = hx + cw; val r = x + w
+        fill(c, x, y, hx, y + h, 0f, BUG)
+        val mins = if (k.safe) "FT" else if (!k.streak) "KO" else "${k.minute}'"
+        text(c, mins, x + tw / 2, y + h / 2 + dp(6f), 18f, INK, cond, 1)
+        fill(c, hx, y, ax, y + h, 0f, RED)
+        fill(c, ax, y, r, y + h, 0f, WHITE)
+        text(c, t(d, "DAYS", "TAGE"), hx + cw / 2, y + dp(12f), 8.5f, alpha(WHITE, 0.85f), cond, 1, 0.4f)
+        text(c, d.streak.toString(), hx + cw / 2, y + h - dp(7f), 22f, WHITE, cond, 1)
+        text(c, "XP", ax + cw / 2, y + dp(12f), 8.5f, alpha(INK, 0.7f), cond, 1, 0.4f)
+        text(c, d.today.toString(), ax + cw / 2, y + h - dp(7f), 22f, INK, cond, 1)
+        val on = (d.today * 5 / maxOf(1, d.goal)).coerceIn(0, 5)
+        val tick = (w - tw - dp(8f)) / 5
+        for (i in 0 until 5) {
+            val l = hx + i * (tick + dp(2f))
+            fill(c, l, y - dp(5f), l + tick, y - dp(1f), 0f, if (i < on) RED else alpha(WHITE, 0.14f))
+        }
+        fill(c, x, y + h, r, y + h + dp(4f), 0f, alpha(WHITE, 0.14f))
+        fill(c, x, y + h, x + w * k.frac, y + h + dp(4f), 0f, clockColor(k))
     }
 
     private fun title(c: Canvas, s: String, x: Float, y: Float, color: Int = WHITE, size: Float = 13f) {
@@ -138,7 +152,6 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
     private fun matchBar(c: Canvas, x: Float, y: Float, w: Float, k: Clock) {
         fill(c, x, y, x + w, y + dp(4f), dp(2f), alpha(WHITE, 0.12f))
         fill(c, x, y, x + maxOf(dp(4f), w * k.frac), y + dp(4f), dp(2f), clockColor(k))
-        fill(c, x + w / 2 - dp(0.5f), y - dp(2f), x + w / 2 + dp(0.5f), y + dp(6f), 0f, alpha(WHITE, 0.45f))
     }
 
     private fun letters(d: WData) = if (d.de) "MDMDFSS" else "MTWTFSS"
@@ -170,7 +183,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
             val res = last.getOrNull(i)
             val col = when (res) { "W" -> GREEN; "D" -> AMBER; "L", "X" -> RED_HI; else -> alpha(WHITE, 0.14f) }
             val cx = x + i * (size + dp(4f)) + size / 2
-            p.style = Paint.Style.FILL; p.shader = null; p.color = col; c.drawCircle(cx, cy, size / 2, p)
+            fill(c, cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2, 0f, col)
             if (res != null) text(c, if (res == "X") "L" else res, cx, cy + dp(3.2f), 8.5f, 0xFF081018.toInt(), cond, 1)
         }
     }
@@ -180,73 +193,52 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         for ((n, col) in listOf(d.bronze to BRONZE, d.silver to SILVER, d.gold to GOLD)) {
             val s = n.toString(); val tw = measure(s, 12f)
             text(c, s, x, cy + dp(4f), 12f, WHITE, cond, 2); x -= tw + dp(4f)
-            p.style = Paint.Style.FILL; p.shader = null; p.color = col; c.drawCircle(x - dp(3.5f), cy, dp(4.5f), p); x -= dp(16f)
+            fill(c, x - dp(8f), cy - dp(4.5f), x + dp(1f), cy + dp(4.5f), 0f, col); x -= dp(16f)
         }
     }
 
     // ───────── 2x2 ─────────
     fun small(c: Canvas, w: Float, h: Float, d: WData) {
         background(c, w, h)
-        val pad = dp(13f)
-        text(c, d.tier.uppercase(), pad, pad + dp(9f), 11f, MUTE, cond, 0, 0.8f)
-        val ck = clock(d)
-        pill(c, if (ck.safe) "FT" else if (!ck.streak) "KO" else "${ck.minute}'", w - pad, pad + dp(6f), 8f, clockColor(ck), alpha(clockColor(ck), 0.16f), 2)
-        val cx = w / 2; val cy = h * 0.5f + dp(2f); val r = minOf(w, h) * 0.30f
-        ring(c, cx, cy, r, 9f, d.today.toFloat() / maxOf(1, d.goal), if (d.today >= d.goal) GREEN else RED_HI)
-        val s = d.streak.toString()
-        text(c, s, cx, cy + dp(5f), if (s.length > 2) 26f else 32f, WHITE, cond, 1)
-        text(c, t(d, "DAY STREAK", "TAGE SERIE"), cx, cy + dp(18f), 7.5f, MUTE, cond, 1, 0.6f)
-        text(c, "${d.today}/${d.goal} XP", cx, cy + dp(30f), 8.5f, if (d.today >= d.goal) GREEN else RED_HI, cond, 1, 0.3f)
-        // bottom: due + progress to next tier
-        val by = h - pad
-        fill(c, pad, by - dp(4f), w - pad, by, dp(2f), alpha(WHITE, 0.12f))
-        fill(c, pad, by - dp(4f), pad + (w - 2 * pad) * d.tierPct.coerceIn(0, 100) / 100f, by, dp(2f), RED_HI)
-        text(c, "${d.due}", pad, by - dp(11f), 14f, WHITE, cond, 0)
-        text(c, t(d, "DUE", "FÄLLIG"), pad + measure("${d.due}", 14f) + dp(4f), by - dp(11f), 8.5f, MUTE, cond, 0, 0.6f)
-        text(c, "${d.lp} LP", w - pad, by - dp(11f), 10f, WHITE, cond, 2)
+        val pad = dp(11f); val ck = clock(d); val top = pad + dp(5f)
+        scoreBug(c, pad, top, w - 2 * pad, dp(44f), d, ck)
+        // what is waiting today, large, then the league underneath
+        val by = h - pad; val mid = top + dp(48f) + (by - dp(26f) - top - dp(48f)) / 2
+        text(c, "${d.due}", pad, mid + dp(14f), 38f, WHITE, cond, 0)
+        text(c, t(d, "DUE", "FÄLLIG"), pad + measure("${d.due}", 38f) + dp(6f), mid + dp(14f), 11f, MUTE, cond, 0, 0.6f)
+        text(c, d.tier.uppercase(), pad, by - dp(11f), 11f, WHITE, cond, 0, 0.5f)
+        text(c, "${d.lp} LP", w - pad, by - dp(11f), 11f, WHITE, cond, 2)
+        fill(c, pad, by - dp(5f), w - pad, by, 0f, alpha(WHITE, 0.14f))
+        fill(c, pad, by - dp(5f), pad + (w - 2 * pad) * d.tierPct.coerceIn(0, 100) / 100f, by, 0f, RED)
     }
 
     // ───────── 4x2 ─────────
     fun wide(c: Canvas, w: Float, h: Float, d: WData) {
         background(c, w, h)
-        val pad = dp(14f)
-        // left: goal ring with the streak inside
-        val rr = minOf(h * 0.30f, dp(46f)); val cx = pad + rr + dp(4f); val cy = h / 2 - dp(2f)
-        ring(c, cx, cy, rr, 9f, d.today.toFloat() / maxOf(1, d.goal), if (d.today >= d.goal) GREEN else RED_HI)
-        val s = d.streak.toString()
-        text(c, s, cx, cy + dp(9f), if (s.length > 2) 26f else 32f, WHITE, cond, 1)
-        text(c, t(d, "DAY STREAK", "TAGE SERIE"), cx, cy + dp(22f), 7.5f, MUTE, cond, 1, 0.6f)
-        val ck = clock(d)
-        text(c, "${d.today}/${d.goal} XP", cx, cy + rr + dp(14f), 8.5f, if (d.today >= d.goal) GREEN else MUTE, cond, 1, 0.3f)
-        // divider
-        val x0 = cx + rr + dp(16f)
-        fill(c, x0 - dp(8f), pad, x0 - dp(7f), h - pad, 0f, alpha(WHITE, 0.08f))
-        // right column
-        val xr = w - pad
-        title(c, d.tier, x0, pad + dp(11f))
-        text(c, "${d.lp} LP", xr, pad + dp(11f), 14f, WHITE, cond, 2)
-        // tier progress
-        val py = pad + dp(24f)
-        fill(c, x0, py, xr, py + dp(5f), dp(2.5f), alpha(WHITE, 0.12f))
-        fill(c, x0, py, x0 + (xr - x0) * d.tierPct.coerceIn(0, 100) / 100f, py + dp(5f), dp(2.5f), RED_HI)
-        val sub = d.tierLv + " · " + (if (d.next.isNotEmpty()) "${d.left} LP ${t(d, "to", "bis")} ${d.next}" else zoneText(d))
-        text(c, sub, x0, py + dp(17f), 9f, MUTE, cond, 0, 0.2f)
-        // week bars
-        val bt = py + dp(26f); val bb = h - pad - dp(40f)
-        val cw = (xr - x0)
-        bars(c, x0, bt, x0 + cw * 0.58f, bb + dp(8f), d.xp7, letters(d).map { it.toString() }, d.dow, RED_HI, WHITE, d.goal, 8.5f)
-        // chips
-        val chx = x0 + cw * 0.64f; val chw = (xr - chx - dp(6f)) / 2
-        chip(c, chx, bt, chx + chw, bb + dp(8f), d.due.toString(), t(d, "DUE", "FÄLLIG"), if (d.due > 0) AMBER else WHITE)
-        chip(c, chx + chw + dp(6f), bt, xr, bb + dp(8f), d.fresh.toString(), t(d, "NEW", "NEU"), BLUE)
-        // bottom row: form + matchday
-        val fy = h - pad - dp(5f)
-        formDots(c, d, x0, fy, dp(13f))
+        val pad = dp(13f); val ck = clock(d); val xr = w - pad; val top = pad + dp(5f)
+        val bw = (xr - pad) * 0.56f
+        scoreBug(c, pad, top, bw, dp(44f), d, ck)
+        // right of the bug: league, points, progress to the next league
+        val rx = pad + bw + dp(12f)
+        title(c, d.tier, rx, top + dp(12f))
+        text(c, "${d.lp} LP", xr, top + dp(12f), 13f, WHITE, cond, 2)
+        val py = top + dp(19f)
+        fill(c, rx, py, xr, py + dp(5f), 0f, alpha(WHITE, 0.14f))
+        fill(c, rx, py, rx + (xr - rx) * d.tierPct.coerceIn(0, 100) / 100f, py + dp(5f), 0f, RED)
+        val sub = if (d.next.isNotEmpty()) "${d.left} LP ${t(d, "to", "bis")} ${d.next}" else zoneText(d)
+        text(c, sub, rx, py + dp(18f), 9f, MUTE, cond, 0, 0.2f)
+        // the week and what is waiting
+        val fy = h - pad - dp(7f)
+        val bt = top + dp(58f); val bb = fy - dp(12f)
+        bars(c, pad, bt, pad + bw, bb, d.xp7, letters(d).map { it.toString() }, d.dow, RED_HI, WHITE, d.goal, 8.5f)
+        val chw = (xr - rx - dp(6f)) / 2
+        chip(c, rx, bt, rx + chw, bb, d.due.toString(), t(d, "DUE", "FÄLLIG"), if (d.due > 0) AMBER else WHITE)
+        chip(c, rx + chw + dp(6f), bt, xr, bb, d.fresh.toString(), t(d, "NEW", "NEU"), BLUE)
+        // bottom row: form and matchday
+        formDots(c, d, pad, fy, dp(13f))
         val md = "${t(d, "MD", "ST")} ${d.md} · ${(d.mdTore * 100 / maxOf(1, d.mdTarget)).coerceAtMost(999)}%"
         text(c, md, xr, fy + dp(4f), 10f, WHITE, cond, 2, 0.4f)
-        // the match clock under the dots
-        text(c, clockText(d, ck), x0, fy - dp(15f), 8.5f, clockColor(ck), cond, 0, 0.5f)
-        matchBar(c, x0, fy - dp(11f), (xr - x0) * 0.58f, ck)
+        text(c, clockText(d, ck), pad + dp(92f), fy + dp(4f), 8.5f, clockColor(ck), cond, 0, 0.5f)
     }
 
     private fun chip(c: Canvas, l: Float, tp: Float, r: Float, b: Float, value: String, label: String, accent: Int) {
@@ -287,14 +279,11 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         text(c, "${d.tierPct}%", xr, y + dp(19f), 9f, WHITE, cond, 2)
         y += dp(30f) + extra
 
-        // three stat tiles
+        // the score bug, then what is waiting
         val tw = (inner - dp(16f)) / 3; val th = dp(52f)
         val ck = clock(d)
-        tile(c, pad, y, tw, th, d.streak.toString(), t(d, "DAY STREAK", "TAGE SERIE"), clockColor(ck))
-        matchBar(c, pad + dp(12f), y + th - dp(19f), tw - dp(24f), ck)
-        text(c, if (ck.safe) "FT" else if (!ck.streak) "KO" else "${ck.minute}'", pad + tw - dp(10f), y + dp(22f), 13f, clockColor(ck), cond, 2)
-        tile(c, pad + tw + dp(8f), y, tw, th, d.due.toString(), t(d, "DUE", "FÄLLIG"), if (d.due > 0) AMBER else GREEN)
-        tile(c, pad + 2 * (tw + dp(8f)), y, tw, th, d.fresh.toString(), t(d, "NEW WORDS", "NEUE WÖRTER"), BLUE)
+        scoreBug(c, pad, y + dp(2f), 2 * tw + dp(8f), th - dp(6f), d, ck)
+        tile(c, pad + 2 * (tw + dp(8f)), y, tw, th, d.due.toString(), t(d, "DUE", "FÄLLIG"), if (d.due > 0) AMBER else GREEN)
         y += th + dp(12f) + extra
 
         // this week's XP and matchday progress
@@ -304,8 +293,9 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val rx = pad + colW + dp(18f); val rw = xr - rx; val rc = rx + rw / 2; val rr = minOf(rw / 2 - dp(4f), dp(24f))
         text(c, t(d, "MATCHDAY", "SPIELTAG"), rc, y + dp(8f), 8.5f, MUTE, cond, 1, 0.7f)
         val cy = y + dp(24f) + rr + dp(2f)
-        ring(c, rc, cy, rr, 7f, d.mdTore.toFloat() / maxOf(1, d.mdTarget), if (d.mdTore >= d.mdTarget) GREEN else BLUE)
-        text(c, "${(d.mdTore * 100 / maxOf(1, d.mdTarget)).coerceAtMost(999)}%", rc, cy + dp(5f), 15f, WHITE, cond, 1)
+        text(c, "${(d.mdTore * 100 / maxOf(1, d.mdTarget)).coerceAtMost(999)}%", rc, cy + dp(8f), 26f, WHITE, cond, 1)
+        fill(c, rx, cy + dp(16f), xr, cy + dp(21f), 0f, alpha(WHITE, 0.14f))
+        fill(c, rx, cy + dp(16f), rx + rw * (d.mdTore.toFloat() / maxOf(1, d.mdTarget)).coerceIn(0f, 1f), cy + dp(21f), 0f, if (d.mdTore >= d.mdTarget) GREEN else BLUE)
         text(c, "${d.mdDays}/${d.mdNeed} ${t(d, "DAYS", "TAGE")} · ${d.mdLeft}${t(d, "d left", "T übrig")}", rc, cy + rr + dp(15f), 8f, MUTE, cond, 1, 0.2f)
         y += dp(94f) + extra
 
@@ -368,7 +358,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         }
         var lx = x; val ly = by + bh + dp(12f)
         for (i in 0 until 4) {
-            p.style = Paint.Style.FILL; p.shader = null; p.color = cols[i]; c.drawCircle(lx + dp(3f), ly - dp(3f), dp(3f), p)
+            fill(c, lx, ly - dp(6f), lx + dp(6f), ly, 0f, cols[i])
             val tw = text(c, "${names[i]} ${d.cnt[i]}", lx + dp(9f), ly, 8.5f, WHITE, cond, 0, 0.2f)
             lx += tw + dp(20f)
         }

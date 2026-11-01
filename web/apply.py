@@ -61,6 +61,8 @@ src = put(src, 'js-roadmap', mod('roadmap.js'), '/* ───────── 
 src = put(src, 'js-auth', mod('auth.js'), '/* ───────── events ───────── */')
 src = put(src, 'css-update', mod('update.css'), '</style>')
 src = put(src, 'js-update', mod('update.js'), '/* ───────── events ───────── */')
+src = put(src, 'css-v4', mod('v4.css'), '</style>')
+src = put(src, 'js-v4', mod('v4.js'), '/* ───────── events ───────── */')
 exec((ROOT / 'patches.py').read_text(encoding='utf-8'))
 HTML.write_text(src, encoding='utf-8')
 print('applied;', len(src), 'bytes')
