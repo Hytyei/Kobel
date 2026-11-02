@@ -174,7 +174,6 @@
 }
 .qx-b:not(.word) .qx-slots,.qx-b:not(.word) .qx-bank{gap:calc(var(--ts) * .11)}
 .qx-t{padding:0!important}
-.qx-t.ser{font-family:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;font-weight:700}
 .qx-b:not(.word) .qx-bank{padding:16px 2px 10px}
 .qxs-in{gap:0}
 .qxs-word{margin-top:48px}

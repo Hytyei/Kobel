@@ -21,6 +21,7 @@ function openOverlay(rush){
 function setMain(h){
   setMain0(h);
   const m=$('#sMain');if(!m)return;
+  m.classList.remove('v41');v41Stage(m);
   m.classList.remove('qx-in');void m.offsetWidth;m.classList.add('qx-in');if(ses&&ses.i>0)sfx('whoosh');
   m.querySelectorAll('.opt').forEach((e,i)=>e.style.setProperty('--i',i));
   const tk=m.dataset.qt=String(Date.now());
@@ -84,9 +85,8 @@ function resolve(it,res,info={}){
   try{
     if(!ses.qxHist)ses.qxHist=[];ses.qxHist[Math.min(ses.i,99)]=res;
     const m=$('#sMain'),good=res!=='bad';
-    const t=m&&m.querySelector('.opt.ok,.qx-slots,.ansline,.blank.filled,.inp,.qx-tok.right,.dline');
-    if(good)qxBurst(t,true);
     const f=$('#qxf');if(f){f.className='qx-flash '+(good?'good':'bad');void f.offsetWidth;}
+    v41Fx(good);
     const i=m&&m.querySelector('.inp');if(i)i.classList.add(good?'qx-good':'qx-bad');
     qxDots();
     const trk=$('#trk');if(trk)trk.classList.toggle('perfect',ses.wrong===0&&(ses.correct|0)>=3);
@@ -109,19 +109,21 @@ function resultScreen(cfg){
    forgiven (right letters turn green and stay), a hint locks the next correct letter, a correct word submits itself. */
 const QX_ICO={hint:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>',clear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>'};
 function qxBuild(it,o){
-  const U=o.units,sol=o.sol||U,n=sol.length,m=U.length,word=!!o.word,ts=word?0:(m<=6?54:m<=8?44:m<=10?34:m<=12?29:26);
+  const U=o.units,sol=o.sol||U,n=sol.length,m=U.length,word=!!o.word;
+  /* the answer row always fits on one line, the keys stay big enough for a thumb however long the word is */
+  const room=Math.min(innerWidth,560)-32,sw=Math.max(20,Math.min(46,Math.floor((room-4*(n-1))/n))),cols=m<=5?Math.max(m,4):m<=10?5:6;
   let order=U.map((_,i)=>i),tries=0;
   do{order=shuffle(order.slice());tries++}while(n>1&&m===n&&order.every((v,i)=>U[v]===sol[i])&&tries<8);
   const T=U.map((u,i)=>({id:i,u,slot:-1,lock:false})),slots=Array(n).fill(null);
   let hints=0,attempts=0,done=false,busy=false;
-  setMain(`${o.head}<div class="qx-b ${word?'word':''}" style="--ts:${ts}px" id="qxb"><div class="qx-slots" id="qxs">${sol.map((_,k)=>`<div class="qx-slot" data-k="${k}"></div>`).join('')}</div><div class="qx-meter" id="qxm"></div>
+  setMain(`${o.head}<div class="qx-b ${word?'word':''}" style="--sw:${sw}px;--cols:${cols}" id="qxb"><div class="qx-slots" id="qxs">${sol.map((_,k)=>`<div class="qx-slot" data-k="${k}"></div>`).join('')}</div><div class="qx-meter" id="qxm"></div>
     <div class="qx-bank">${order.map(id=>`<div class="qx-cell" data-id="${id}"></div>`).join('')}</div>
     <div class="qx-acts">${o.hint?`<button type="button" id="qxh">${QX_ICO.hint}${tx('Hint','Tipp')}</button>`:''}<button type="button" id="qxc">${QX_ICO.clear}${tx('Reset','Neu')}</button></div><div class="qx-msg" id="qxg"></div></div>`);
   setFoot(`<div class="row2"><button class="btn ghost" id="skp" style="flex:none;width:34%">${tx('Skip','Weiter')}</button><button class="btn" id="chk" disabled>${tx('Check','Prüfen')}</button></div>`);
   const root=$('#qxb'),slotEl=[...root.querySelectorAll('.qx-slot')],cellEl={};
   root.querySelectorAll('.qx-cell').forEach(c=>cellEl[c.dataset.id]=c);
   order.forEach((id,k)=>{
-    const t=T[id],b=document.createElement('button');b.type='button';b.className='qx-t in'+(t.u==='I'||t.u==='l'?' ser':'');b.textContent=t.u;b.style.setProperty('--i',k);b.dataset.id=id;
+    const t=T[id],b=document.createElement('button');b.type='button';b.className='qx-t';b.textContent=t.u;b.style.setProperty('--i',k);b.dataset.id=id;
     b.addEventListener('animationend',()=>b.classList.remove('in'),{once:true});
     t.el=b;cellEl[id].appendChild(b);
   });

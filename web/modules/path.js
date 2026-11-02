@@ -269,7 +269,10 @@ function multiDone(cs,miss,msg,ptsPer){
   ses.locked=true;
   cs.forEach(c=>{track(c,miss[c.id]?'close':'ok');c.ok=(c.ok||0)+1;if(!ses.arcade&&!ses.graded.has(c.id)){ses.graded.add(c.id);const was=c.srs.seen===0;grade(c,miss[c.id]?1:2,false);if(was)ses.learned++}});
   ses.correct+=cs.length;ses.combo+=1;ses.maxCombo=Math.max(ses.maxCombo,ses.combo);
-  const pts=cs.length*(ptsPer||3);ses.xp+=pts;floatXP(pts);sfx('ok');save();drawTop();
+  /* a minigame counts on its own scoreboard: stars need the score, not the session points */
+  const nm=Object.keys(miss).length,pts=ses.arcade?Math.max(cs.length*4,cs.length*12-nm*6):cs.length*(ptsPer||3);
+  if(ses.arcade)ses.score+=pts;else ses.xp+=pts;
+  floatXP(pts);sfx('ok');save();v41Fx(true);drawTop();
   setFoot(`<div class="fb">${emil('cheer',54)}<div class="grow"><div class="h">${PRAISE[rnd(PRAISE.length)]}</div><div class="b">${msg}</div></div></div><button class="btn c-fern" id="cont">${tx('Continue','Weiter')}</button>`,'good fb');
   $('#cont').onclick=advance;
 }

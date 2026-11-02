@@ -250,3 +250,6 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 * **Release:** tag `v4.0.0` (version code 40000), build with `android\sign-release.ps1`, upload `kobelapp.apk`.
 * **Backend:** pushing to `main` deploys it. The founder name can now be taken back from an older account with the founder key.
 * **To claim `Hytyei`:** set `FOUNDER_KEY_SHA256` (`npx wrangler secret put FOUNDER_KEY_SHA256`, value: the SHA-256 of a key only you know), then Settings › Account › Change username, type `Hytyei` and enter the key.
+
+## Release notes: 4.1.0
+* **Release:** tag `v4.1.0` (version code 40100), build with `android\sign-release.ps1`, upload `kobelapp.apk`. No backend change.

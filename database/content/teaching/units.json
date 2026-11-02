@@ -6104,5 +6104,99 @@
         ]
       }
     ]
+  },
+  {
+    "id": "cafe",
+    "md": 32,
+    "tag": "Players' lounge",
+    "title": "Ordering in a café",
+    "de": "Im Café bestellen",
+    "sub": "Order politely, handle a missing item and build compound nouns.",
+    "subject": "Ordering in a café",
+    "covers": [
+      "The menu",
+      "Café dialogues"
+    ],
+    "boards": [
+      {
+        "k": "talk",
+        "h": "Players' lounge",
+        "say": "After training the team goes to the café. The waiter asks, you order, and sometimes the cake has run out.",
+        "pts": [
+          "Order in the accusative: einen, ein, eine",
+          "kein ... mehr means it has run out",
+          "In a compound noun the last noun gives the article"
+        ]
+      },
+      {
+        "k": "words",
+        "h": "The conversation",
+        "say": "Waiter and guest.",
+        "items": [
+          [
+            "Guten Tag, Sie wünschen?",
+            "Good day, what would you like?"
+          ],
+          [
+            "Einen Kaffee, bitte.",
+            "A coffee, please."
+          ],
+          [
+            "Tut mir leid.",
+            "I am sorry."
+          ],
+          [
+            "Schade!",
+            "Too bad!"
+          ],
+          [
+            "Gern.",
+            "Sure."
+          ]
+        ]
+      },
+      {
+        "k": "words",
+        "h": "The menu",
+        "say": "Die Speisekarte.",
+        "items": [
+          [
+            "die Vorspeise",
+            "starter"
+          ],
+          [
+            "das Hauptgericht",
+            "main course"
+          ],
+          [
+            "das Dessert",
+            "dessert"
+          ],
+          [
+            "das Getränk",
+            "drink"
+          ]
+        ]
+      },
+      {
+        "k": "words",
+        "h": "Compound nouns",
+        "say": "The last noun decides.",
+        "items": [
+          [
+            "die Nuss + der Kuchen",
+            "der Nusskuchen"
+          ],
+          [
+            "der Apfel + der Saft",
+            "der Apfelsaft"
+          ],
+          [
+            "die Schokolade + der Kuchen",
+            "der Schokoladenkuchen"
+          ]
+        ]
+      }
+    ]
   }
 ]

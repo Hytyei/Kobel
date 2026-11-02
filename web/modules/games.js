@@ -69,7 +69,7 @@ R.wsearch=it=>{
   const seen=new Set();picks=picks.filter(c=>{const w=gmWord(c);if(seen.has(w))return false;seen.add(w);return true});
   const G=picks.length>=3&&gmGrid(picks.map(gmWord));
   if(!G)return pool[0]&&R.mc2?R.mc2({cid:pool[0].id,kind:'mc2'}):advance();
-  const N=G.N,cs=Math.floor(Math.min(46,(Math.min(innerWidth,520)-44)/N)),words=picks.map(gmWord);
+  const N=G.N,cs=Math.floor(Math.min(52,(Math.min(innerWidth,520)-32-3*(N-1))/N)),words=picks.map(gmWord);
   setMain(`${tagH(tx('Word search','Wortsuche'),'fern')}<h2 class="q" style="font-size:24px">${tx('Find the German words','Finde die deutschen Wörter')}</h2><p class="sub">${tx('Swipe over the letters, or tap the first and the last one.','Wische über die Buchstaben oder tippe den ersten und den letzten an.')}</p>
   <div class="ws-g" id="wsg" style="--cs:${cs}px;grid-template-columns:repeat(${N},var(--cs))">${G.g.map((row,r)=>row.map((ch,c)=>`<div class="ws-c" data-r="${r}" data-c="${c}">${esc(ch)}</div>`).join('')).join('')}</div>
   <ul class="ws-l" id="wsl">${picks.map((c,k)=>`<li data-k="${k}"><span>${esc(c.en)}</span><b>${words[k].length}</b></li>`).join('')}</ul>`);
@@ -131,14 +131,18 @@ R.snake=it=>{
   if(picks.length<2)return pool[0]&&R.mc2?R.mc2({cid:pool[0].id,kind:'mc2'}):advance();
   const ws=picks.map(gmWord),all=[...ws.join('')],cuts=[];let acc=0;ws.slice(0,-1).forEach(w=>{acc+=w.length;cuts.push(acc)});
   const sel=new Set();let tries=0,done=false;
-  const cs=Math.floor(Math.min(34,(Math.min(innerWidth,520)-40)/all.length*1.15));
+  const cs=34;
   setMain(`${tagH(tx('Word snake','Wortschlange'),'berry')}<h2 class="q" style="font-size:24px">${tx(`Cut the snake into ${picks.length} words`,`Teile die Schlange in ${picks.length} Wörter`)}</h2><p class="sub">${tx('Tap between two letters to cut.','Tippe zwischen zwei Buchstaben, um zu teilen.')}</p>
   <div class="sn-row" id="snr" style="--cs:${cs}px">${all.map((ch,i)=>`<span class="sn-l">${esc(ch)}</span>${i<all.length-1?`<button type="button" class="sn-g" data-i="${i+1}" aria-label="cut"></button>`:''}`).join('')}</div>
   <ul class="ws-l" style="margin-top:22px">${picks.map((c,k)=>`<li class="on0"><span>${k+1}. ${esc(c.en)}</span><b>${ws[k].length}</b></li>`).join('')}</ul>`);
   setFoot(`<div class="row2"><button class="btn ghost" id="snc" style="flex:none;width:34%">${tx('Reset','Neu')}</button><button class="btn" id="chk" disabled>${tx('Check','Prüfen')}</button></div>`);
   const gaps=[...document.querySelectorAll('#snr .sn-g')];
   const paint=()=>{gaps.forEach(g=>g.classList.toggle('cut',sel.has(+g.dataset.i)));$('#chk').disabled=sel.size!==picks.length-1};
-  gaps.forEach(g=>g.onclick=()=>{if(done||ses.locked)return;const i=+g.dataset.i;sel.has(i)?sel.delete(i):sel.add(i);sfx(sel.has(i)?'slot':'back',sel.size);vib(6);paint()});
+  $('#snr').addEventListener('click',e=>{
+    if(done||ses.locked)return;let best=null,bd=1e9;
+    gaps.forEach(g=>{const r=g.getBoundingClientRect();if(e.clientY<r.top-10||e.clientY>r.bottom+10)return;const d=Math.abs(r.left+r.width/2-e.clientX);if(d<bd){bd=d;best=g}});
+    if(!best)return;const i=+best.dataset.i;sel.has(i)?sel.delete(i):sel.add(i);sfx(sel.has(i)?'slot':'back',sel.size);vib(6);paint();
+  });
   $('#snc').onclick=()=>{if(done)return;sel.clear();paint()};
   $('#chk').onclick=()=>{
     if(done||ses.locked)return;
@@ -158,12 +162,12 @@ R.snake=it=>{
 /* ---- memory: flip two cards, match a German word with its meaning ---- */
 R.memo=it=>{
   const picks=(it.cids||[]).map(byId).filter(c=>c&&c.type!=='g'&&c.de&&c.en&&String(c.de).length<=18&&String(c.en).length<=22);
-  const seen=new Set(),P=picks.filter(c=>{const k=c.de.toLowerCase()+'|'+c.en.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).slice(0,6);
+  const seen=new Set(),P=picks.filter(c=>{const a=disDe(c).toLowerCase(),b=c.en.toLowerCase();if(seen.has(a)||seen.has(b))return false;seen.add(a);seen.add(b);return true}).slice(0,6);
   if(P.length<4)return P[0]&&R.mc2?R.mc2({cid:P[0].id,kind:'mc2'}):advance();
   const cards=shuffle(P.flatMap(c=>[{id:c.id,side:'de',t:disDe(c)},{id:c.id,side:'en',t:c.en}]));
-  const cols=cards.length%4===0?4:cards.length%5===0?5:cards.length>8?3:2;
+  const cols=cards.length>10?3:2;
   setMain(`${tagH(tx('Memory','Memory'),'lilac')}<h2 class="q" style="font-size:24px">${tx('Match the pairs','Finde die Paare')}</h2><p class="sub">${tx('Flip two cards: a German word and its meaning.','Drehe zwei Karten: ein deutsches Wort und seine Bedeutung.')}</p>
-  <div class="mm-g" id="mmg" style="grid-template-columns:repeat(${cols},1fr)">${cards.map((c,i)=>`<button type="button" class="mm-c ${c.side}" data-i="${i}" data-id="${c.id}"><span class="mm-in"><i class="mm-f">?</i><b class="mm-b" style="font-size:${c.t.length>12?11:c.t.length>9?13:15}px">${esc(c.t)}</b></span></button>`).join('')}</div>
+  <div class="mm-g" id="mmg" style="grid-template-columns:repeat(${cols},1fr)">${cards.map((c,i)=>`<button type="button" class="mm-c ${c.side}" data-i="${i}" data-id="${c.id}"><span class="mm-in"><i class="mm-f">?</i><b class="mm-b" style="font-size:${c.t.length>16?14:c.t.length>11?16:18}px">${esc(c.t)}</b></span></button>`).join('')}</div>
   <p class="mm-s" id="mms"></p>`);
   setFoot(`<div class="row2"><span class="sub" id="mmt" style="align-self:center">${tx('Pairs','Paare')}: 0 / ${P.length}</span></div>`);
   const el=[...document.querySelectorAll('#mmg .mm-c')];let open=[],done=0,moves=0,busy=false;const bad={};
@@ -193,31 +197,16 @@ R.bubble=it=>{
     const c=P[r],opts=[c],low=new Set([String(c.en).toLowerCase()]);
     smartEn(c,5).forEach(v=>{const k=String(v).toLowerCase();if(opts.length<4&&!low.has(k)&&k.length<=24){low.add(k);opts.push({id:'x'+opts.length+'_'+c.id,en:v})}});
     for(const d of shuffle(pool.slice())){if(opts.length>=4)break;const k=String(d.en).toLowerCase();if(!low.has(k)&&d.id!==c.id&&!/[?!.]/.test(d.en)){low.add(k);opts.push(d)}}
-    const xs=shuffle([3,27,51,73]);
+    const spots=shuffle([[2,6],[52,0],[6,50],[54,44]]);
     setMain(`${tagH(tx('Bubble pop','Blasenjagd'),'sky')}<h2 class="q" style="font-size:30px">${fmtDe(c)} ${speakBtn(disDe(c))}</h2><p class="sub">${tx('Pop the bubble with the right meaning.','Platze die Blase mit der richtigen Bedeutung.')} · ${r+1}/${P.length}</p>
-    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="left:${xs[i]}%"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
+    <div class="bb-sky" id="bbs">${shuffle(opts.slice()).map((o,i)=>`<button type="button" class="bb" data-id="${o.id}" style="--x:${spots[i][0]}%;--y:${spots[i][1]}%;--i:${i}"><span>${esc(o.en)}</span></button>`).join('')}</div>`);
     setFoot('');busy=false;
     const sky=$('#bbs');
-    /* bubbles drift up slowly and wrap round (nothing is lost by waiting); they always start inside the sky, and a watchdog falls back to a plain grid if they were ever not visible */
     const bs=[...sky.querySelectorAll('.bb')];
-    const H=()=>Math.max(sky.clientHeight||0,300),W=()=>Math.max(sky.clientWidth||0,260);
-    const slots=shuffle(bs.map((_,i)=>i));
-    const st=bs.map((b,i)=>({b,y:Math.max(0,(H()-96)*(slots[i]/Math.max(1,bs.length-1))),ph:Math.random()*6,sp:.035+Math.random()*.02}));
-    let raf=0,last=performance.now(),dead=false,fallback=false;
-    const paint=()=>st.forEach(o=>{o.b.style.transform=`translate3d(${fallback?0:Math.sin(o.ph)*9}px,${fallback?0:o.y.toFixed(1)}px,0)`});
-    const tick=t=>{
-      if(dead||!sky.isConnected){dead=true;return}
-      const dt=Math.min(40,t-last);last=t;
-      st.forEach(o=>{if(o.b.classList.contains('pop')||o.b.classList.contains('away'))return;o.y-=o.sp*dt;o.ph+=dt*.002;if(o.y<-100)o.y=H()+10});
-      paint();raf=requestAnimationFrame(tick)};
-    paint();raf=requestAnimationFrame(tick);
-    setTimeout(()=>{if(dead||!sky.isConnected||fallback)return;const R0=sky.getBoundingClientRect();
-      const seen=bs.some(b=>{const q=b.getBoundingClientRect();return q.width>0&&q.bottom>R0.top+10&&q.top<R0.bottom-10&&q.right>R0.left&&q.left<R0.right});
-      if(!seen){fallback=true;dead=true;sky.classList.add('grid');paint()}},450);
     bs.forEach(b=>{
       b.onclick=()=>{
         if(busy||ses.locked)return;
-        if(b.dataset.id===String(c.id)){busy=true;b.classList.add('pop');sfx('ok',++pops);vib(12);sky.querySelectorAll('.bb:not(.pop)').forEach(x=>x.classList.add('away'));setTimeout(next2,520)}
+        if(b.dataset.id===String(c.id)){busy=true;b.classList.add('pop','good');sfx('ok',++pops);vib(12);const q=b.getBoundingClientRect();v41Burst(q.left+q.width/2,q.top+q.height/2,['#fff','#2fd27a','#6ec1ff'],14);sky.querySelectorAll('.bb:not(.pop)').forEach(x=>x.classList.add('away'));setTimeout(next2,520)}
         else{miss[c.id]=1;b.classList.add('pop','bad');sfx('back');vib(15)}
       };
     });

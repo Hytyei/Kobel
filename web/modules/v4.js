@@ -212,7 +212,9 @@ const V4_REPLY=[
   ['like','Liking and agreeing','Ich mag Schokolade.','I like chocolate.','Ich auch!','Me too!'],
   ['dislike','Liking and agreeing','Ich mag keinen Fisch.','I do not like fish.','Ich auch nicht!','Me neither!'],
   ['plan','Making plans','Gehen wir ins Kino?','Shall we go to the cinema?','Oh ja! Gute Idee.','Oh yes! Good idea.'],
-  ['late','Making plans','Um acht Uhr?','At eight o’clock?','Nein, das ist zu spät.','No, that is too late.']
+  ['late','Making plans','Um acht Uhr?','At eight o’clock?','Nein, das ist zu spät.','No, that is too late.'],
+  ['order','Ordering in a café','Guten Tag, Sie wünschen?','Good day, what would you like?','Einen Kaffee, bitte.','A coffee, please.'],
+  ['out','Ordering in a café','Tut mir leid, wir haben keinen Kuchen mehr.','I am sorry, we have no more cake.','Schade! Dann nehme ich ein Eis.','Too bad! Then I will take an ice cream.']
 ];
 R.reply=it=>{
   const r=V4_REPLY[it.r],rk=qvUnitRank();
@@ -298,6 +300,8 @@ function v4Bug(){
   const n=Math.max(1,ses.items.length),min=Math.min(90,Math.round(ses.i/n*90)),h=ses.correct|0,a=ses.wrong|0;
   document.getElementById('v4bm').textContent=min+"'";
   const hE=document.getElementById('v4bh'),aE=document.getElementById('v4ba');
+  /* the score changes when the ball lands */
+  const wait=V41.until-Date.now();if(wait>0){clearTimeout(V41.t);V41.t=setTimeout(v4Bug,wait);return}
   if(hE.textContent!==String(h)){hE.textContent=h;hE.classList.remove('hit');void hE.offsetWidth;hE.classList.add('hit')}
   if(aE.textContent!==String(a)){aE.textContent=a;aE.classList.remove('hit');void aE.offsetWidth;aE.classList.add('hit')}
   b.setAttribute('aria-label',`${min}. ${tx('minute','Minute')}, ${h} : ${a}`);

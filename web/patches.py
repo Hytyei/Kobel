@@ -28,13 +28,13 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'4.0.0',title:{en:'Kobel 4.0: matchday look, better lessons',de:'Kobel 4.0: Spieltag-Look, bessere Lektionen'},body:{\n  en:'New lesson on food, drink and mögen. Every question is now a match with a live score bug. The path is a fixture list, the widgets are rebuilt, and new reply and clock questions train real conversations. Sync and username fixes included.',\n  de:'Neue Lektion zu Essen, Trinken und mögen. Jede Frage ist jetzt ein Spiel mit Live-Spielstand. Der Pfad ist ein Spielplan, die Widgets sind neu, und neue Antwort- und Uhr-Fragen üben echte Gespräche. Dazu Fehlerbehebungen bei Sync und Benutzernamen.'\n}};\n"
+_CL = "const CHANGELOG={v:'4.1.0',title:{en:'Kobel 4.1: new question page and a café lesson',de:'Kobel 4.1: neue Fragenseite und eine Café-Lektion'},body:{\n  en:'New lesson: ordering in a café, the menu and compound nouns. Every question has a new look that fills the screen, letter tiles are bigger and easier to tap, and right answers now send the ball into the score. Minigames earn real scores and stars again.',\n  de:'Neue Lektion: im Café bestellen, die Speisekarte und zusammengesetzte Nomen. Jede Frage hat einen neuen Look, der den Bildschirm füllt, die Buchstaben sind größer und leichter zu treffen, und richtige Antworten schießen den Ball ins Ergebnis. Minispiele geben wieder echte Punkte und Sterne.'\n}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
 # ---- Sessions 7-10 and the Tactics Room list (classroom instructions are excluded from path and teaching) ----
 import re as _re0
-src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11,N12,N13,N14,N15];", src, count=1)
+src = _re0.sub(r"const BATCHES=\[[^\]]*\];", "const BATCHES=[SEED,N4,N5,N6,N7,N9,N10,N11,N12,N13,N14,N15,N16];", src, count=1)
 import json as _json
 _units = _json.load(open(ROOT.parent / 'database/content/teaching/units.json', encoding='utf-8'))
 _line = 'const TEACH=' + _json.dumps(_units, ensure_ascii=False) + ';'
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.0.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.1.0';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -207,3 +207,4 @@ src = src.replace("t:n=>`Meet ${n} new words`", "t:n=>tx(`Meet ${n} new words`,`
 src = src.replace("t:n=>`Score ${n}+ in a minigame`", "t:n=>tx(`Score ${n}+ in a minigame`,`Hole ${n}+ in einem Minispiel`)")
 src = src.replace("t:()=>'Finish a practice with no mistakes'", "t:()=>tx('Finish a practice with no mistakes','Beende ein Training ohne Fehler')")
 src = src.replace("rows=cur.map(([need,n,d])=>{const i=", "rows=cur.map(([need,n,d0])=>{const d=v4Stage(d0),i=")
+if "__k={startGame," not in src: src = src.replace("if(location.hash==='#debug')window.__k={", "if(location.hash==='#debug')window.__k={startGame,", 1)
