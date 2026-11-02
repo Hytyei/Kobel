@@ -121,17 +121,20 @@ async function founderProof(env, { email, founderKey }) {
   return false;
 }
 const founderName = (env) => String(env.FOUNDER_USERNAME || 'Hytyei');
+// one row in signups remembers that the founder name was claimed; this day is never cleaned up
+const FOUNDER_CLAIM = 'founder-claim';
+const FOUNDER_DAY = '9999-12-31';
 const generatedName = () => 'Player-' + randomToken('', 4).replace(/[^A-Za-z0-9]/g, 'x').slice(0, 6);
+export const isFounderName = (env, name) => String(name || '').trim().toLowerCase() === founderName(env).toLowerCase();
 /** Names nobody may take as a plain display name (the founder name and the reserved list). */
 export function reservedName(env, name) {
-  const l = String(name || '').trim().toLowerCase();
-  return l === founderName(env).toLowerCase() || RESERVED.has(l);
+  return isFounderName(env, name) || RESERVED.has(String(name || '').trim().toLowerCase());
 }
 
 /**
  * Checks a username and returns what the account becomes: { username, badge }.
- * The founder name is reserved: only the owner can take it, proved by the linked Google email or the private founder key.
- * Proof always wins: an older account holding the name (often the owner's own) keeps its data under a generated name.
+ * The founder name is open and carries the founder badge. The first claim takes it from any older account, which keeps
+ * its data under a generated name. After that it is protected like any taken name, and only proof can move it again.
  * dryRun only answers the question and writes nothing.
  */
 export async function checkUsername(db, env, raw, { userId = 0, email = null, founderKey = null, dryRun = false } = {}) {
@@ -140,10 +143,10 @@ export async function checkUsername(db, env, raw, { userId = 0, email = null, fo
     throw new HttpError(400, 'invalid_username', 'Use 3 to 20 letters, numbers, dots or underscores, starting with a letter or number.', 'username');
   }
   const lower = username.toLowerCase();
-  let badge = null, proof = false;
+  let badge = null, proof = false, firstClaim = false;
   if (lower === founderName(env).toLowerCase()) {
     proof = await founderProof(env, { email, founderKey });
-    if (!proof) throw new HttpError(403, 'reserved', 'That username is reserved.', 'username');
+    firstClaim = !(await db.prepare('SELECT 1 AS y FROM signups WHERE bucket = ? AND day = ?').bind(FOUNDER_CLAIM, FOUNDER_DAY).first());
     badge = 'founder';
   } else if (RESERVED.has(lower)) {
     throw new HttpError(403, 'reserved', 'That username is reserved.', 'username');
@@ -153,8 +156,8 @@ export async function checkUsername(db, env, raw, { userId = 0, email = null, fo
     .bind(username, userId)
     .all();
   if (clashes.length) {
-    // the owner wins over an old display name, and with proof over an older account too
-    if (proof !== 'proved' && !(badge === 'founder' && clashes.every((c) => !c.username))) {
+    // the founder name wins over an old display name, and on its first claim or with proof over an older account too
+    if (proof !== 'proved' && !firstClaim && !(badge === 'founder' && clashes.every((c) => !c.username))) {
       throw new HttpError(409, 'taken', 'That username is already taken.', 'username');
     }
     if (!dryRun) {
@@ -163,6 +166,7 @@ export async function checkUsername(db, env, raw, { userId = 0, email = null, fo
       }
     }
   }
+  if (badge === 'founder' && firstClaim && !dryRun) await take(db, FOUNDER_CLAIM, FOUNDER_DAY, 1);
   return { username, badge };
 }
 

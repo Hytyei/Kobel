@@ -1,6 +1,6 @@
 // Username changes and the notification inbox.
 import { HttpError } from './http.js';
-import { reservedName } from './auth.js';
+import { isFounderName, reservedName, setUsername } from './auth.js';
 
 const NAME_RE = /^[\p{L}\p{N}][\p{L}\p{N} _.-]{0,22}[\p{L}\p{N}]$/u;
 
@@ -13,6 +13,11 @@ export async function updateMe(db, user, body, env = {}) {
     name = typeof body.name === 'string' ? body.name.trim().replace(/\s+/g, ' ') : '';
     if (!NAME_RE.test(name)) {
       throw new HttpError(400, 'invalid_request', 'Username: 2-24 characters, letters, numbers, space, dot, dash or underscore.', 'name');
+    }
+    // the founder name is a real username with the badge, whichever screen sets it
+    if (isFounderName(env, name) && name.toLowerCase() !== user.name.toLowerCase()) {
+      const r = await setUsername(db, env, user, { username: name });
+      return { user: { name: r.user.name, visible: true } };
     }
     if (reservedName(env, name) && !(user.badge === 'founder' && name.toLowerCase() === user.name.toLowerCase())) throw new HttpError(403, 'reserved', 'That name is reserved.', 'name');
     if (user.username) throw new HttpError(409, 'use_username', 'Your name is your username. Change it from the account screen.', 'name');

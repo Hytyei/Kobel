@@ -73,36 +73,61 @@ test('usernames: format, case-insensitive uniqueness, reserved words, availabili
   assert.equal((await signup(call, 'anna_b', 'x12345678')).status, 409);
   assert.equal((await call('GET', '/v1/auth/username?u=anna_B')).json.available, false);
   assert.equal((await call('GET', '/v1/auth/username?u=free_name')).json.available, true);
-  assert.equal((await call('GET', '/v1/auth/username?u=Hytyei')).json.reason, 'reserved');
+  assert.equal((await call('GET', '/v1/auth/username?u=Hytyei')).json.available, true);
   const bad = await call('POST', '/v1/auth/signup', { body: { username: 'okname', password: 'plain' } });
   assert.equal(bad.status, 400);
 });
 
-test('founder: Hytyei is reserved and only the private key gets the badge', async () => {
+test('founder: Hytyei is not reserved, adding it gives the badge with no key, and then it is taken', async () => {
   const { call } = setup();
-  assert.equal((await signup(call, 'Hytyei')).status, 403);
-  assert.equal((await signup(call, 'hytyei', 'pass1234', { founderKey: 'wrong' })).status, 403);
-  const s = await signup(call, 'Hytyei', 'pass1234', { founderKey: FOUNDER_KEY });
-  assert.equal(s.status, 201);
+  const s = await signup(call, 'Hytyei');
+  assert.equal(s.status, 201, s.text);
   assert.equal(s.json.user.badge, 'founder');
   assert.equal((await call('GET', '/v1/me', { token: s.json.token })).json.user.badge, 'founder');
-  // nobody can fake the name as a plain display name either
+  // after the claim nobody else can have it, by any route
+  assert.equal((await signup(call, 'hytyei', 'pass1234')).status, 409);
   const other = await signup(call, 'someone');
-  assert.equal((await call('PATCH', '/v1/me', { token: other.json.token, body: { name: 'Hytyei' } })).status, 403);
+  assert.equal((await call('PATCH', '/v1/me', { token: other.json.token, body: { name: 'Hytyei' } })).status, 409);
+  assert.equal((await call('POST', '/v1/me/username', { token: other.json.token, body: { username: 'Hytyei' } })).status, 409);
+  assert.equal((await call('GET', '/v1/auth/username?u=Hytyei')).json.available, false);
   // the badge shows up on the league table and friend lists
   const lb = await call('GET', '/v1/leaderboard', { token: s.json.token });
   assert.equal(lb.json.rows.find((r) => r.name === 'Hytyei').badge, 'founder');
 });
 
-test('founder: the private key takes the name back from an older account, the old account keeps its data', async () => {
+test('founder: the first claim takes the name from an account that held it before this rule, with no key', async () => {
+  const ctx = setup();
+  const old = await signup(ctx.call, 'old_phone', 'pass1234');
+  ctx.db.sqlite.prepare('UPDATE users SET username = ?, name = ?, badge = ? WHERE id = ?').run('Hytyei', 'Hytyei', 'founder', old.json.user.id);
+  assert.equal((await ctx.call('GET', '/v1/auth/username?u=Hytyei')).json.available, true);
+  const now = await signup(ctx.call, 'new_phone', 'pass1234');
+  const r = await ctx.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei' } });
+  assert.equal(r.status, 200, r.text);
+  assert.equal(r.json.user.badge, 'founder');
+  const was = (await ctx.call('GET', '/v1/me', { token: old.json.token })).json.user;
+  assert.equal(was.username, null);
+  assert.equal(was.badge, null);
+  assert.match(was.name, /^Player-/);
+});
+
+test('founder: a legacy account gets the name and the badge from the plain rename screen', async () => {
+  const { call } = setup();
+  const reg = await call('POST', '/v1/register', { body: { name: 'Oldtimer' } });
+  assert.equal((await call('PATCH', '/v1/me', { token: reg.json.id, body: { name: 'Hytyei' } })).status, 200);
+  const me = (await call('GET', '/v1/me', { token: reg.json.id })).json.user;
+  assert.equal(me.username, 'Hytyei');
+  assert.equal(me.badge, 'founder');
+});
+
+test('founder: after the first claim the private key can still take the name back', async () => {
   const open = setup({ FOUNDER_KEY_SHA256: undefined, FOUNDER_EMAIL_SHA256: undefined });
-  const old = await signup(open.call, 'Hytyei', 'pass1234'); // claimed before any key existed
+  const old = await signup(open.call, 'Hytyei', 'pass1234');
   assert.equal(old.status, 201);
   const now = await signup(open.call, 'new_phone', 'pass1234');
   assert.equal((await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei' } })).status, 409);
 
   open.env.FOUNDER_KEY_SHA256 = sha(FOUNDER_KEY);
-  assert.equal((await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei', founderKey: 'wrong' } })).status, 403);
+  assert.equal((await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei', founderKey: 'wrong' } })).status, 409);
   const r = await open.call('POST', '/v1/me/username', { token: now.json.token, body: { username: 'Hytyei', founderKey: FOUNDER_KEY } });
   assert.equal(r.status, 200, r.text);
   assert.equal(r.json.user.username, 'Hytyei');
@@ -131,7 +156,7 @@ test('the availability check only looks: it never renames anybody, and your own 
   ctx.db.sqlite.prepare('UPDATE users SET name = ? WHERE name = ?').run('hytyei', 'Oldtimer');
   await ctx.call('GET', '/v1/auth/username?u=Hytyei');
   assert.equal(ctx.db.sqlite.prepare('SELECT COUNT(*) AS n FROM users WHERE name = ?').get('hytyei').n, 1);
-  const mine = await ctx.call('GET', '/v1/auth/username?u=Hytyei', { token: reg.json.token });
+  const mine = await ctx.call('GET', '/v1/auth/username?u=Hytyei', { token: reg.json.id });
   assert.equal(mine.json.available, true);
   const theirs = await ctx.call('GET', '/v1/auth/username?u=hytyei');
   assert.equal(theirs.json.available, true); // an old display name does not block the founder name
@@ -260,10 +285,10 @@ test('the owner Google account gets the reserved name and the founder badge by i
   const ex = await ctx.call('POST', '/v1/auth/exchange', { body: { code: r.query.get('code'), verifier: r.verifier } });
   assert.equal(ex.json.user.username, 'Hytyei');
   assert.equal(ex.json.user.badge, 'founder');
-  // another Google user cannot claim it
+  // it is taken now, so another Google user cannot claim it
   const o = await googleFlow(ctx, { intent: 'signin', claims: { sub: 'g-other', email: 'other@gmail.com' } });
   const ox = await ctx.call('POST', '/v1/auth/exchange', { body: { code: o.query.get('code'), verifier: o.verifier } });
-  assert.equal((await ctx.call('POST', '/v1/me/username', { token: ox.json.token, body: { username: 'Hytyei' } })).status, 403);
+  assert.equal((await ctx.call('POST', '/v1/me/username', { token: ox.json.token, body: { username: 'Hytyei' } })).status, 409);
 });
 
 test('unlinking Google needs another way to sign in', async () => {
@@ -282,8 +307,6 @@ test('founder name: with no founder key or email set, the first person to regist
   assert.equal(s.status, 201, s.text);
   assert.equal(s.json.user.badge, 'founder');
   assert.equal((await signup(ctx.call, 'hytyei', 'pass1234')).status, 409); // and nobody can take it after that
-  const withKey = setup(); // a configured key still protects the name
-  assert.equal((await signup(withKey.call, 'Hytyei', 'pass1234')).status, 403);
 });
 
 test('Google: the app can collect the sign-in by itself (poll) when the kobel:// link never reaches it', async () => {

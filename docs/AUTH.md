@@ -29,7 +29,7 @@ See `docs/GO_LIVE.md` → "Version 3.4.0". In short: one migration (`0007_auth.s
 | `PASSWORD_PEPPER` (secret, required) | Long random text. If you lose it, nobody can log in with a password. Keep a copy somewhere safe. |
 | `GOOGLE_CLIENT_ID` (secret) | From Google Cloud Console (OAuth client of type *Web application*) |
 | `GOOGLE_CLIENT_SECRET` (secret) | From the same place |
-| `FOUNDER_KEY_SHA256` (secret) | SHA-256 of a founder key only you know. Lets you claim `Hytyei` + badge with a password-like key, also back from an older account (that account keeps its data under a generated name) |
+| `FOUNDER_KEY_SHA256` (secret, optional) | `Hytyei` is not reserved: the first account to add it gets the name and the founder badge, also from an older account (which keeps its data under a generated name). After that it counts as taken, and this key can move it again if it is ever lost |
 | `FOUNDER_EMAIL_SHA256` (secret, optional) | SHA-256 of your lower-case Google e-mail. Then signing in with that Google account gives you `Hytyei` + badge automatically |
 | `FOUNDER_USERNAME` (variable, optional) | Defaults to `Hytyei` |
 | `REGISTRATION_OPEN`, `REGISTER_PER_IP_DAILY`, `REGISTER_GLOBAL_DAILY`, `LOGIN_PER_IP_HOURLY`, `LOGIN_FAILS_HOURLY`, `USERNAME_CHECK_HOURLY`, `GOOGLE_START_HOURLY`, `SIGNUP_SALT` | Optional limits (defaults in `backend/src/auth.js`) |
