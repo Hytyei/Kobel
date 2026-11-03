@@ -354,7 +354,7 @@ export async function googleCallback(db, env, request, now = Date.now()) {
     const res = await fetch(GOOGLE_TOKEN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: redirectUri(request), grant_type: 'authorization_code', code_verifier: st.verifier }),
+      body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET.trim(), redirect_uri: redirectUri(request), grant_type: 'authorization_code', code_verifier: st.verifier }),
     });
     if (!res.ok) {
       const why = String(((await res.json().catch(() => null)) || {}).error || res.status).slice(0, 40);
