@@ -268,3 +268,9 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 * **Widgets:** the 15-minute job no longer needs a network and redraws them first, and a wake-up alarm covers midnight. Phones that stop background apps (Xiaomi) may still need Autostart turned on for Kobel.
 * **Google:** a failed token exchange now shows Google's reason on the page and in the Worker log.
 
+## Release notes: 4.2.2
+* **Release:** tag `v4.2.2` (version code 40202). No backend change since 4.2.1's server fixes.
+* **Widget:** the form widget always shows today's match minute: red while the streak is open, green once it is safe (it used to say FT all day after playing). On Xiaomi, Settings › Notifications has a row that opens Autostart for Kobel.
+* **Home:** the plate rings breathe, an outline in the crest's own shape ripples out, and a light sweeps across. Off with reduced motion.
+* **Training:** game of the day on a plate, the other games as rows in two groups (against the clock, full matches) with best score and stars.
+

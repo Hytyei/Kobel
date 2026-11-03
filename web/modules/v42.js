@@ -6,6 +6,9 @@ const V42={stats:false,lessons:false,more:false,ph:null};
 const V42_SHAPE={fca:'shield',fcu:'shield',koe:'shield',m05:'shield',scf:'shield',scp:'shield',tsg:'shield',vfb:'shield',bmg:'diamond',hsv:'diamond',svw:'diamond'};
 const v42Shape=id=>V42_SHAPE[id]||'circle';
 const v42Crest=size=>hasCrest(myAvatar())||clubOf(myAvatar())?badgeSvg(myAvatar(),size):'<img class="pl-eg" src="brand/eagle.png" alt="">';
+/* a thin outline in the crest's own shape that leaves the crest and fades: two of them, half a beat apart */
+const V42_RIP={circle:'<circle cx="50" cy="50" r="40"/>',diamond:'<path d="M50 6 88 50 50 94 12 50z"/>',shield:'<path d="M14 14h72v30c0 22-15 36-36 44C29 80 14 66 14 44z"/>'};
+const v42Ripple=sh=>[0,1].map(k=>`<svg class="pl-r ${k?'r2':''}" viewBox="0 0 100 100" aria-hidden="true">${V42_RIP[sh]||V42_RIP.circle}</svg>`).join('');
 function v42Fold(k,title,meta,body){
   return `<button class="h-fold ${V42[k]?'on':''}" data-a="v42fold" data-k="${k}" aria-expanded="${!!V42[k]}"><b>${title}</b><span>${meta}</span><i>${ARW}</i></button>${V42[k]?`<div class="h-foldb">${body}</div>`:''}`;
 }
@@ -16,7 +19,7 @@ function vHome(){
   const cta=ex?{a:'data-a="exam"',s:tx('Season final','Saisonfinale'),t:esc(TIERS[ex.e.lg].cup),u:tx('20 questions','20 Fragen')}
     :pn?{a:'data-a="pathgo"',s:tx('Next lesson','Nächste Lektion'),t:esc(pn.label),u:esc(pn.unit)}
     :{a:'data-a="start" data-mode="mix" data-lesson=""',s:tx('Path complete','Pfad geschafft'),t:tx('Training','Training'),u:tx('Keep your words sharp','Halte deine Wörter fit')};
-  const plate=`<section class="pl h-pl"><i class="pl-t pl-${v42Shape(myAvatar())}"></i><span class="pl-c">${v42Crest(170)}</span>
+  const plate=`<section class="pl h-pl"><i class="pl-t pl-${v42Shape(myAvatar())}"></i>${v42Ripple(v42Shape(myAvatar()))}<span class="pl-c">${v42Crest(170)}</span>
     <div class="h-pt"><h1>${tx('Matchday','Spieltag')} ${LG0.md+1}</h1><small>${tx('Season','Saison')} ${LG0.season} · ${dl} ${tx(dl===1?'day left':'days left',dl===1?'Tag übrig':'Tage übrig')}</small></div>
     <div class="h-pf"><span class="nm"><b>${esc(myName())}</b>${vbadge(myBadge())}</span><span class="sk"><b>${k}</b><small>${tx(k===1?'day':'days',k===1?'Tag':'Tage')}</small></span></div></section>
   <button class="h-cta" ${cta.a}><span><small>${cta.s}</small><b>${cta.t}</b><em>${cta.u}</em></span><i>${PLAYI}</i></button>`;
@@ -109,7 +112,8 @@ function trDraw(){
 }
 const V42_ACTIONS={
   v42fold:t=>{const k=t.dataset.k;V42[k]=!V42[k];render()},
-  v42ph:t=>{V42.ph=+t.dataset.k;render()}
+  v42ph:t=>{V42.ph=+t.dataset.k;render()},
+  v42auto:()=>{try{NATIVE.openAutostart()}catch(e){}}
 };
 
 /* coming back to a page that stayed alive overnight: the widgets get today's numbers at once */
@@ -135,3 +139,28 @@ function v42Widget(){
   setTimeout(()=>{bars();e.remove()},9000);
   e.addEventListener('pointerdown',()=>{e.classList.add('skip');bars();setTimeout(()=>e.remove(),260)});
 })();
+
+/* ---- training: the game of the day leads on a plate, the rest are fixture rows in two groups. One colour family,
+   names on one line, best score and stars on the right. ---- */
+function v42Stars(n){return `<i class="tg-st" aria-label="${n} ${tx('stars','Sterne')}">${[0,1,2].map(k=>`<u class="${k<n?'on':''}"></u>`).join('')}</i>`}
+function v42GameRow(id,f){
+  const g=GAMES[id],s=S.games[id]||{},req=gameReq(id,arc.lesson);
+  return `<button class="tg-r ${req?'off':''}" data-a="game" data-id="${id}" ${req?'data-lock="1"':''} aria-label="${esc(g.n)}: ${esc(req||g.tag)}">
+    <span class="tg-i">${g.ic}</span><span class="tg-t"><b>${esc(g.n)}${f===id?' <em>×2</em>':''}</b><small>${esc(req||g.tag)}</small></span>
+    <span class="tg-s">${s.best?`<b>${s.best}</b>${v42Stars(s.stars||0)}`:`<span>${tx('New','Neu')}</span>`}</span></button>`;
+}
+function vArcade(){
+  const ids=Object.keys(GAMES),f=featuredId(),sc=scopeInfo();
+  const opts=[['',tx('All active lessons','Alle aktiven Lektionen')],...lessonList().map(l=>[l.name,l.name])].map(([v,t])=>`<option value="${esc(v)}" ${arc.lesson===v?'selected':''}>${esc(t)}</option>`).join('');
+  const fg=f&&GAMES[f],fs=f&&(S.games[f]||{});
+  const lead=fg?`<button class="pl tg-pl" data-a="game" data-id="${f}"><i class="pl-t pl-circle"></i><span class="pl-c tg-pi">${fg.ic}</span>
+    <span class="tg-pk"><small>${tx('Game of the day','Spiel des Tages')} · ${tx('double points','doppelte Punkte')}</small><b>${esc(fg.n)}</b><em>${esc(fg.tag)}</em></span>
+    <span class="tg-pf"><span>${fs.best?`${tx('Best','Bestwert')} <b>${fs.best}</b>`:tx('Not played yet','Noch nicht gespielt')}</span><i>${PLAYI}</i></span></button>`:'';
+  const rush=ids.filter(id=>GAMES[id].kind==='rush'&&id!==f),rest=ids.filter(id=>GAMES[id].kind!=='rush'&&id!==f);
+  return `<div class="top"><h1 class="h1">Training</h1></div>
+  <p class="sub tg-sub">${tx('Minigames built from your own notes. Words you miss come back in your next practice.','Minispiele aus deinen eigenen Notizen. Verpasste Wörter kommen im nächsten Training wieder.')}</p>
+  ${lead}
+  <div class="tg-f"><select class="inp" id="arcl" aria-label="${tx('Lessons','Lektionen')}">${opts}</select><button class="tg-sc" data-a="scope">${tx('Scope','Umfang')} <b>${sc.n}/${sc.total}</b></button></div>
+  ${rush.length?`<h2 class="tg-h">${tx('Against the clock','Gegen die Uhr')}</h2><div class="tg-l">${rush.map(id=>v42GameRow(id,f)).join('')}</div>`:''}
+  <h2 class="tg-h">${tx('Full matches','Ganze Spiele')}</h2><div class="tg-l">${rest.map(id=>v42GameRow(id,f)).join('')}</div>`;
+}

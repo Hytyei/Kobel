@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'4.2.1',title:{en:'Kobel 4.2.1: the new opening screen and a widget that keeps up',de:'Kobel 4.2.1: neuer Startbildschirm und ein Widget, das mithält'},body:{\n  en:'The red opening screen now really shows, the form widget moves on to the new day by itself, and Google sign-in is more reliable.',\n  de:'Der rote Startbildschirm erscheint jetzt wirklich, das Form-Widget wechselt von selbst in den neuen Tag, und die Google-Anmeldung ist zuverlässiger.'}};\n"
+_CL = "const CHANGELOG={v:'4.2.2',title:{en:'Kobel 4.2.2: a living home screen and a new Training page',de:'Kobel 4.2.2: ein lebendiger Start und eine neue Trainingsseite'},body:{\n  en:'The crest on the home screen now sends out rings in its own shape. Training leads with the game of the day, and every minigame shows its best score and stars. The form widget always shows the match minute, green once your streak is safe.',\n  de:'Das Wappen auf dem Start sendet jetzt Ringe in seiner eigenen Form aus. Das Training beginnt mit dem Spiel des Tages, und jedes Minispiel zeigt Bestwert und Sterne. Das Form-Widget zeigt immer die Spielminute, grün sobald deine Serie sicher ist.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.1';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.2';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")

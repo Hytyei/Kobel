@@ -70,6 +70,7 @@ function stAlerts(){
   return stGroup('',
     sxSw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)+
     sxSw('fire',tx('Matchday clock','Spieltag-Uhr'),tx('Calls in the second half, then a live countdown from the 80th minute until your streak ends at midnight','Calls in der zweiten Halbzeit, ab der 80. Minute ein Live-Countdown bis zum Ende deiner Serie um Mitternacht'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`))+
+  (typeof NATIVE!=='undefined'&&NATIVE&&NATIVE.isXiaomi&&NATIVE.isXiaomi()?stGroup('',sxGo('bell',tx('Keep the widget live','Widget aktuell halten'),tx('Xiaomi stops apps in the background. Turn on Autostart for Kobel so the widget and the streak calls keep running.','Xiaomi stoppt Apps im Hintergrund. Schalte Autostart für Kobel ein, damit Widget und Serien-Calls weiterlaufen.'),'data-a="v42auto"',tx('Open','Öffnen'))):'')+
   stGroup('',sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"'))+
   `<p class="st-foot">${tx('Tip: study group members can nudge each other from Table › Friends › Study groups.','Tipp: Mitglieder einer Lerngruppe können sich unter Tabelle › Freunde › Lerngruppen anstupsen.')}</p>`;
 }

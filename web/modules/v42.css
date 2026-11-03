@@ -203,3 +203,46 @@
   .kb-pn{animation:kbFade .2s ease-out 1s forwards}
 }
 @keyframes kbFade{to{opacity:0}}
+
+/* ---- home plate: the rings breathe and send a ripple out from the crest every few seconds ---- */
+.h-pl .pl-t{animation:plBreath 9s ease-in-out infinite alternate}
+@keyframes plBreath{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
+.pl-r{position:absolute;z-index:1;left:var(--cx);top:var(--cy);width:calc(var(--cr)*1.15);height:calc(var(--cr)*1.15);overflow:visible;fill:none;color:var(--clubink,#fff);stroke:currentColor;stroke-width:1.4;vector-effect:non-scaling-stroke;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.9);animation:plRipple 5.4s cubic-bezier(.2,.6,.3,1) infinite}
+.pl-r *{vector-effect:non-scaling-stroke}
+.pl-r.r2{animation-delay:2.7s}
+@keyframes plRipple{0%{opacity:0;transform:translate(-50%,-50%) scale(.9)}12%{opacity:.6}100%{opacity:0;transform:translate(-50%,-50%) scale(3.2)}}
+.h-pl::before{content:'';position:absolute;z-index:1;top:-20%;bottom:-20%;left:0;width:38%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transform:translate3d(-140%,0,0) skewX(-16deg);animation:plSweep 7s ease-in-out 1.2s infinite;pointer-events:none}
+@keyframes plSweep{0%{transform:translate3d(-140%,0,0) skewX(-16deg)}22%,100%{transform:translate3d(360%,0,0) skewX(-16deg)}}
+@media (prefers-reduced-motion:reduce){.h-pl .pl-t,.pl-r,.h-pl::before{animation:none}.pl-r{display:none}}
+
+/* ---- training ---- */
+.tg-sub{margin:0 0 14px;text-align:left}
+.tg-pl{display:block;width:calc(100% + 32px);margin:0 -16px;height:212px;padding:0;border:0;text-align:left;cursor:pointer;background:var(--red);color:#fff;--cr:118px;--cx:76%;--cy:42%;transition:transform .12s ease-out}
+.tg-pl:active{transform:scale(.99)}
+.tg-pi{color:#fff}.tg-pi svg{width:62%;height:62%}
+.tg-pk{position:absolute;z-index:2;left:16px;top:16px;right:42%}
+.tg-pk small{display:block;font:500 13px var(--fb);opacity:.9}
+.tg-pk b{display:block;margin-top:4px;font:800 clamp(28px,8vw,36px)/1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;white-space:nowrap}
+.tg-pk em{display:block;margin-top:8px;font:400 14px/1.3 var(--fb);font-style:normal;opacity:.9}
+.tg-pf{position:absolute;z-index:2;left:0;right:0;bottom:0;display:flex;align-items:stretch;justify-content:space-between;background:#fff;color:#0B141B}
+.tg-pf>span{padding:14px 16px;font:500 14px var(--fb)}.tg-pf b{font:800 17px var(--fd)}
+.tg-pf>i{width:64px;display:grid;place-items:center;background:#0B141B;color:#fff}.tg-pf>i svg{width:22px;height:22px}
+.tg-f{display:flex;gap:8px;margin:16px 0 4px}
+.tg-f .inp{flex:1;min-width:0;margin:0}
+.tg-sc{flex:none;border:0;background:var(--surf);color:var(--mute);font:500 14px var(--fb);padding:0 14px;cursor:pointer}.tg-sc b{color:var(--ink);font:800 15px var(--fd)}
+.tg-h{margin:22px 0 8px;font:800 18px var(--fd);text-transform:uppercase}
+.tg-l{background:var(--surf)}
+.tg-r{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:10px 16px;border:0;background:none;color:var(--ink);text-align:left;cursor:pointer;transition:background-color .15s ease}
+.tg-r+.tg-r{border-top:1px solid rgba(127,140,152,.14)}
+.tg-r:active{background:var(--surf2)}
+.tg-r.off{opacity:.5}
+.tg-i{flex:none;width:44px;height:44px;display:grid;place-items:center;background:var(--red);color:#fff}
+.tg-i svg{width:24px;height:24px}
+.tg-t{flex:1;min-width:0}
+.tg-t b{display:block;font:600 17px/1.2 var(--fb);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-t b em{font:800 13px var(--fd);font-style:normal;color:var(--red)}
+.tg-t small{display:block;margin-top:2px;font:400 13px/1.3 var(--fb);color:var(--mute);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.tg-s{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:44px}
+.tg-s b{font:800 18px var(--fd);font-variant-numeric:tabular-nums}
+.tg-s>span{font:500 13px var(--fb);color:var(--mute)}
+.tg-st{display:flex;gap:3px}.tg-st u{width:8px;height:8px;background:rgba(127,140,152,.3)}.tg-st u.on{background:#F2C230}

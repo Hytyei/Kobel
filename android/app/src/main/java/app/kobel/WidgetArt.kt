@@ -94,7 +94,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val tw = w * 0.30f; val cw = (w - tw) / 2
         val hx = x + tw; val ax = hx + cw; val r = x + w
         fill(c, x, y, hx, y + h, 0f, BUG)
-        val mins = if (k.safe) "FT" else if (!k.streak) "KO" else k.label
+        val mins = k.label
         text(c, mins, x + tw / 2, y + h / 2 + dp(6f), 18f, INK, cond, 1)
         fill(c, hx, y, ax, y + h, 0f, RED)
         fill(c, ax, y, r, y + h, 0f, WHITE)
@@ -214,7 +214,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         for (i in 1..4) c.drawCircle(bx + bw * 0.74f, pad + topH * 0.5f, dp(17f) * i, p)
         p.style = Paint.Style.FILL
         c.restore()
-        val big = if (ck.safe) "FT" else if (!ck.streak) "KO" else ck.label
+        val big = ck.label   // always today's minute: green once today's game is won, red while the streak is open
         var size = minOf(44f, topH / u * 0.56f)
         while (measure(big, size) > bw - dp(14f) && size > 18f) size -= 1f
         text(c, big, bx + bw / 2, pad + topH * 0.40f + dp(size * 0.36f), size, ink, cond, 1)

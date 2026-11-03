@@ -161,6 +161,19 @@ class KobelBridge(private val activity: MainActivity) {
         }
     }
 
+    /** Xiaomi, Redmi and POCO stop background apps unless Autostart is on: widgets and streak calls need it. */
+    @JavascriptInterface
+    fun isXiaomi(): Boolean = android.os.Build.MANUFACTURER.lowercase() in setOf("xiaomi", "redmi", "poco")
+
+    @JavascriptInterface
+    fun openAutostart() = activity.runOnUiThread {
+        val miui = Intent().setClassName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
+        val details = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.parse("package:" + activity.packageName))
+        try { activity.startActivity(miui) } catch (_: Exception) {
+            try { activity.startActivity(details) } catch (_: Exception) { }
+        }
+    }
+
     /** The web splash is leaving: the system bars and the window go back from red to the app's dark. */
     @JavascriptInterface
     fun splashDone() = activity.runOnUiThread { activity.splashDone() }

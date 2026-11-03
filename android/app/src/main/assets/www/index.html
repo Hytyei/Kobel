@@ -2117,6 +2117,49 @@ button.b3-tr{cursor:pointer}
   .kb-pn{animation:kbFade .2s ease-out 1s forwards}
 }
 @keyframes kbFade{to{opacity:0}}
+
+/* ---- home plate: the rings breathe and send a ripple out from the crest every few seconds ---- */
+.h-pl .pl-t{animation:plBreath 9s ease-in-out infinite alternate}
+@keyframes plBreath{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
+.pl-r{position:absolute;z-index:1;left:var(--cx);top:var(--cy);width:calc(var(--cr)*1.15);height:calc(var(--cr)*1.15);overflow:visible;fill:none;color:var(--clubink,#fff);stroke:currentColor;stroke-width:1.4;vector-effect:non-scaling-stroke;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.9);animation:plRipple 5.4s cubic-bezier(.2,.6,.3,1) infinite}
+.pl-r *{vector-effect:non-scaling-stroke}
+.pl-r.r2{animation-delay:2.7s}
+@keyframes plRipple{0%{opacity:0;transform:translate(-50%,-50%) scale(.9)}12%{opacity:.6}100%{opacity:0;transform:translate(-50%,-50%) scale(3.2)}}
+.h-pl::before{content:'';position:absolute;z-index:1;top:-20%;bottom:-20%;left:0;width:38%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transform:translate3d(-140%,0,0) skewX(-16deg);animation:plSweep 7s ease-in-out 1.2s infinite;pointer-events:none}
+@keyframes plSweep{0%{transform:translate3d(-140%,0,0) skewX(-16deg)}22%,100%{transform:translate3d(360%,0,0) skewX(-16deg)}}
+@media (prefers-reduced-motion:reduce){.h-pl .pl-t,.pl-r,.h-pl::before{animation:none}.pl-r{display:none}}
+
+/* ---- training ---- */
+.tg-sub{margin:0 0 14px;text-align:left}
+.tg-pl{display:block;width:calc(100% + 32px);margin:0 -16px;height:212px;padding:0;border:0;text-align:left;cursor:pointer;background:var(--red);color:#fff;--cr:118px;--cx:76%;--cy:42%;transition:transform .12s ease-out}
+.tg-pl:active{transform:scale(.99)}
+.tg-pi{color:#fff}.tg-pi svg{width:62%;height:62%}
+.tg-pk{position:absolute;z-index:2;left:16px;top:16px;right:42%}
+.tg-pk small{display:block;font:500 13px var(--fb);opacity:.9}
+.tg-pk b{display:block;margin-top:4px;font:800 clamp(28px,8vw,36px)/1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;white-space:nowrap}
+.tg-pk em{display:block;margin-top:8px;font:400 14px/1.3 var(--fb);font-style:normal;opacity:.9}
+.tg-pf{position:absolute;z-index:2;left:0;right:0;bottom:0;display:flex;align-items:stretch;justify-content:space-between;background:#fff;color:#0B141B}
+.tg-pf>span{padding:14px 16px;font:500 14px var(--fb)}.tg-pf b{font:800 17px var(--fd)}
+.tg-pf>i{width:64px;display:grid;place-items:center;background:#0B141B;color:#fff}.tg-pf>i svg{width:22px;height:22px}
+.tg-f{display:flex;gap:8px;margin:16px 0 4px}
+.tg-f .inp{flex:1;min-width:0;margin:0}
+.tg-sc{flex:none;border:0;background:var(--surf);color:var(--mute);font:500 14px var(--fb);padding:0 14px;cursor:pointer}.tg-sc b{color:var(--ink);font:800 15px var(--fd)}
+.tg-h{margin:22px 0 8px;font:800 18px var(--fd);text-transform:uppercase}
+.tg-l{background:var(--surf)}
+.tg-r{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:10px 16px;border:0;background:none;color:var(--ink);text-align:left;cursor:pointer;transition:background-color .15s ease}
+.tg-r+.tg-r{border-top:1px solid rgba(127,140,152,.14)}
+.tg-r:active{background:var(--surf2)}
+.tg-r.off{opacity:.5}
+.tg-i{flex:none;width:44px;height:44px;display:grid;place-items:center;background:var(--red);color:#fff}
+.tg-i svg{width:24px;height:24px}
+.tg-t{flex:1;min-width:0}
+.tg-t b{display:block;font:600 17px/1.2 var(--fb);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-t b em{font:800 13px var(--fd);font-style:normal;color:var(--red)}
+.tg-t small{display:block;margin-top:2px;font:400 13px/1.3 var(--fb);color:var(--mute);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.tg-s{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:44px}
+.tg-s b{font:800 18px var(--fd);font-variant-numeric:tabular-nums}
+.tg-s>span{font:500 13px var(--fb);color:var(--mute)}
+.tg-st{display:flex;gap:3px}.tg-st u{width:8px;height:8px;background:rgba(127,140,152,.3)}.tg-st u.on{background:#F2C230}
 /*@@end css-v42*/
 </style>
 </head>
@@ -4046,7 +4089,7 @@ function cabinetHtml(){
   <div class="cabinet">${tr.map(slot).join('')}${ghost}</div>`;
 }
 /* ───────── v2.10: version, skins, welcome, about ───────── */
-const APP_VER='4.2.1';
+const APP_VER='4.2.2';
 const isDe=()=>LANG==='de';
 const tx=(en,de)=>isDe()?de:en;
 function applySkin(){document.documentElement.dataset.skin=S.settings.skin==='clean'?'clean':'bl'}
@@ -4134,9 +4177,9 @@ function addNotice(n){
   ib.push({id:n.id,kind:n.kind||'news',title:String(n.title||'').slice(0,80),body:String(n.body||'').slice(0,1000),t:n.t||Date.now(),read:false});
   ib.sort((a,b)=>b.t-a.t);S.inbox=ib.slice(0,40);return true;
 }
-const CHANGELOG={v:'4.2.1',title:{en:'Kobel 4.2.1: the new opening screen and a widget that keeps up',de:'Kobel 4.2.1: neuer Startbildschirm und ein Widget, das mithält'},body:{
-  en:'The red opening screen now really shows, the form widget moves on to the new day by itself, and Google sign-in is more reliable.',
-  de:'Der rote Startbildschirm erscheint jetzt wirklich, das Form-Widget wechselt von selbst in den neuen Tag, und die Google-Anmeldung ist zuverlässiger.'}};
+const CHANGELOG={v:'4.2.2',title:{en:'Kobel 4.2.2: a living home screen and a new Training page',de:'Kobel 4.2.2: ein lebendiger Start und eine neue Trainingsseite'},body:{
+  en:'The crest on the home screen now sends out rings in its own shape. Training leads with the game of the day, and every minigame shows its best score and stars. The form widget always shows the match minute, green once your streak is safe.',
+  de:'Das Wappen auf dem Start sendet jetzt Ringe in seiner eigenen Form aus. Das Training beginnt mit dem Spiel des Tages, und jedes Minispiel zeigt Bestwert und Sterne. Das Form-Widget zeigt immer die Spielminute, grün sobald deine Serie sicher ist.'}};
 function seedNotices(){
   addNotice({id:'ver:'+CHANGELOG.v,kind:'update',title:CHANGELOG.title.en,body:CHANGELOG.body.en,t:Date.now()});
 }
@@ -8369,6 +8412,7 @@ function stAlerts(){
   return stGroup('',
     sxSw('bell',tx('Notifications','Benachrichtigungen'),tx('Friend and match requests, study group news, new versions','Freundschafts- und Spielanfragen, Lerngruppen, neue Versionen'),stNote(),`data-a="notify" data-v="${stNote()?0:1}"`)+
     sxSw('fire',tx('Matchday clock','Spieltag-Uhr'),tx('Calls in the second half, then a live countdown from the 80th minute until your streak ends at midnight','Calls in der zweiten Halbzeit, ab der 80. Minute ein Live-Countdown bis zum Ende deiner Serie um Mitternacht'),noteStreakOn(),`data-a="notifystreak" data-v="${noteStreakOn()?0:1}"`))+
+  (typeof NATIVE!=='undefined'&&NATIVE&&NATIVE.isXiaomi&&NATIVE.isXiaomi()?stGroup('',sxGo('bell',tx('Keep the widget live','Widget aktuell halten'),tx('Xiaomi stops apps in the background. Turn on Autostart for Kobel so the widget and the streak calls keep running.','Xiaomi stoppt Apps im Hintergrund. Schalte Autostart für Kobel ein, damit Widget und Serien-Calls weiterlaufen.'),'data-a="v42auto"',tx('Open','Öffnen'))):'')+
   stGroup('',sxGo('bell',tx('Inbox','Postfach'),n?`${n} ${tx('unread','ungelesen')}`:tx('Nothing new','Nichts Neues'),'data-a="tab" data-k="inbox"'))+
   `<p class="st-foot">${tx('Tip: study group members can nudge each other from Table › Friends › Study groups.','Tipp: Mitglieder einer Lerngruppe können sich unter Tabelle › Freunde › Lerngruppen anstupsen.')}</p>`;
 }
@@ -9700,6 +9744,9 @@ const V42={stats:false,lessons:false,more:false,ph:null};
 const V42_SHAPE={fca:'shield',fcu:'shield',koe:'shield',m05:'shield',scf:'shield',scp:'shield',tsg:'shield',vfb:'shield',bmg:'diamond',hsv:'diamond',svw:'diamond'};
 const v42Shape=id=>V42_SHAPE[id]||'circle';
 const v42Crest=size=>hasCrest(myAvatar())||clubOf(myAvatar())?badgeSvg(myAvatar(),size):'<img class="pl-eg" src="brand/eagle.png" alt="">';
+/* a thin outline in the crest's own shape that leaves the crest and fades: two of them, half a beat apart */
+const V42_RIP={circle:'<circle cx="50" cy="50" r="40"/>',diamond:'<path d="M50 6 88 50 50 94 12 50z"/>',shield:'<path d="M14 14h72v30c0 22-15 36-36 44C29 80 14 66 14 44z"/>'};
+const v42Ripple=sh=>[0,1].map(k=>`<svg class="pl-r ${k?'r2':''}" viewBox="0 0 100 100" aria-hidden="true">${V42_RIP[sh]||V42_RIP.circle}</svg>`).join('');
 function v42Fold(k,title,meta,body){
   return `<button class="h-fold ${V42[k]?'on':''}" data-a="v42fold" data-k="${k}" aria-expanded="${!!V42[k]}"><b>${title}</b><span>${meta}</span><i>${ARW}</i></button>${V42[k]?`<div class="h-foldb">${body}</div>`:''}`;
 }
@@ -9710,7 +9757,7 @@ function vHome(){
   const cta=ex?{a:'data-a="exam"',s:tx('Season final','Saisonfinale'),t:esc(TIERS[ex.e.lg].cup),u:tx('20 questions','20 Fragen')}
     :pn?{a:'data-a="pathgo"',s:tx('Next lesson','Nächste Lektion'),t:esc(pn.label),u:esc(pn.unit)}
     :{a:'data-a="start" data-mode="mix" data-lesson=""',s:tx('Path complete','Pfad geschafft'),t:tx('Training','Training'),u:tx('Keep your words sharp','Halte deine Wörter fit')};
-  const plate=`<section class="pl h-pl"><i class="pl-t pl-${v42Shape(myAvatar())}"></i><span class="pl-c">${v42Crest(170)}</span>
+  const plate=`<section class="pl h-pl"><i class="pl-t pl-${v42Shape(myAvatar())}"></i>${v42Ripple(v42Shape(myAvatar()))}<span class="pl-c">${v42Crest(170)}</span>
     <div class="h-pt"><h1>${tx('Matchday','Spieltag')} ${LG0.md+1}</h1><small>${tx('Season','Saison')} ${LG0.season} · ${dl} ${tx(dl===1?'day left':'days left',dl===1?'Tag übrig':'Tage übrig')}</small></div>
     <div class="h-pf"><span class="nm"><b>${esc(myName())}</b>${vbadge(myBadge())}</span><span class="sk"><b>${k}</b><small>${tx(k===1?'day':'days',k===1?'Tag':'Tage')}</small></span></div></section>
   <button class="h-cta" ${cta.a}><span><small>${cta.s}</small><b>${cta.t}</b><em>${cta.u}</em></span><i>${PLAYI}</i></button>`;
@@ -9803,7 +9850,8 @@ function trDraw(){
 }
 const V42_ACTIONS={
   v42fold:t=>{const k=t.dataset.k;V42[k]=!V42[k];render()},
-  v42ph:t=>{V42.ph=+t.dataset.k;render()}
+  v42ph:t=>{V42.ph=+t.dataset.k;render()},
+  v42auto:()=>{try{NATIVE.openAutostart()}catch(e){}}
 };
 
 /* coming back to a page that stayed alive overnight: the widgets get today's numbers at once */
@@ -9829,6 +9877,31 @@ function v42Widget(){
   setTimeout(()=>{bars();e.remove()},9000);
   e.addEventListener('pointerdown',()=>{e.classList.add('skip');bars();setTimeout(()=>e.remove(),260)});
 })();
+
+/* ---- training: the game of the day leads on a plate, the rest are fixture rows in two groups. One colour family,
+   names on one line, best score and stars on the right. ---- */
+function v42Stars(n){return `<i class="tg-st" aria-label="${n} ${tx('stars','Sterne')}">${[0,1,2].map(k=>`<u class="${k<n?'on':''}"></u>`).join('')}</i>`}
+function v42GameRow(id,f){
+  const g=GAMES[id],s=S.games[id]||{},req=gameReq(id,arc.lesson);
+  return `<button class="tg-r ${req?'off':''}" data-a="game" data-id="${id}" ${req?'data-lock="1"':''} aria-label="${esc(g.n)}: ${esc(req||g.tag)}">
+    <span class="tg-i">${g.ic}</span><span class="tg-t"><b>${esc(g.n)}${f===id?' <em>×2</em>':''}</b><small>${esc(req||g.tag)}</small></span>
+    <span class="tg-s">${s.best?`<b>${s.best}</b>${v42Stars(s.stars||0)}`:`<span>${tx('New','Neu')}</span>`}</span></button>`;
+}
+function vArcade(){
+  const ids=Object.keys(GAMES),f=featuredId(),sc=scopeInfo();
+  const opts=[['',tx('All active lessons','Alle aktiven Lektionen')],...lessonList().map(l=>[l.name,l.name])].map(([v,t])=>`<option value="${esc(v)}" ${arc.lesson===v?'selected':''}>${esc(t)}</option>`).join('');
+  const fg=f&&GAMES[f],fs=f&&(S.games[f]||{});
+  const lead=fg?`<button class="pl tg-pl" data-a="game" data-id="${f}"><i class="pl-t pl-circle"></i><span class="pl-c tg-pi">${fg.ic}</span>
+    <span class="tg-pk"><small>${tx('Game of the day','Spiel des Tages')} · ${tx('double points','doppelte Punkte')}</small><b>${esc(fg.n)}</b><em>${esc(fg.tag)}</em></span>
+    <span class="tg-pf"><span>${fs.best?`${tx('Best','Bestwert')} <b>${fs.best}</b>`:tx('Not played yet','Noch nicht gespielt')}</span><i>${PLAYI}</i></span></button>`:'';
+  const rush=ids.filter(id=>GAMES[id].kind==='rush'&&id!==f),rest=ids.filter(id=>GAMES[id].kind!=='rush'&&id!==f);
+  return `<div class="top"><h1 class="h1">Training</h1></div>
+  <p class="sub tg-sub">${tx('Minigames built from your own notes. Words you miss come back in your next practice.','Minispiele aus deinen eigenen Notizen. Verpasste Wörter kommen im nächsten Training wieder.')}</p>
+  ${lead}
+  <div class="tg-f"><select class="inp" id="arcl" aria-label="${tx('Lessons','Lektionen')}">${opts}</select><button class="tg-sc" data-a="scope">${tx('Scope','Umfang')} <b>${sc.n}/${sc.total}</b></button></div>
+  ${rush.length?`<h2 class="tg-h">${tx('Against the clock','Gegen die Uhr')}</h2><div class="tg-l">${rush.map(id=>v42GameRow(id,f)).join('')}</div>`:''}
+  <h2 class="tg-h">${tx('Full matches','Ganze Spiele')}</h2><div class="tg-l">${rest.map(id=>v42GameRow(id,f)).join('')}</div>`;
+}
 /*@@end js-v42*/
 /* ───────── events ───────── */
 const A={
