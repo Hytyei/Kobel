@@ -9027,7 +9027,7 @@ function checkPendingAuth(){
     if(v.indexOf('error')===0)googleFailed();else googleDone(v);
   }catch(e){}
 }
-window.kobelAuth=v=>{if(v)googleDone(String(v))};
+window.kobelAuth=v=>{if(!v)return;if(String(v).indexOf('error')===0)googleFailed();else googleDone(String(v))};
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(checkPendingAuth,200)});
 setTimeout(checkPendingAuth,900);
 

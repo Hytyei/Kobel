@@ -417,10 +417,11 @@ export async function authExchange(db, env, body, now = Date.now()) {
   const h = await sha256Hex(body.code);
   const row = await db.prepare('SELECT * FROM auth_handoffs WHERE code_hash = ?').bind(h).first();
   await db.prepare('DELETE FROM auth_handoffs WHERE code_hash = ?').bind(h).run(); // single use, also when the check below fails
-  if (row) await db.prepare('DELETE FROM auth_handoffs WHERE challenge = ? AND user_id = ?').bind(row.challenge, row.user_id).run(); // and its poll copy
   if (!row || now - row.created_at > HANDOFF_TTL_MS || !same(await sha256Hex(body.verifier), row.challenge)) {
     throw new HttpError(401, 'invalid_code', 'This sign-in code is not valid any more. Please try again.');
   }
+  // only now its poll copy: a bad try with a stolen code must not lock the real app out
+  await db.prepare('DELETE FROM auth_handoffs WHERE challenge = ? AND user_id = ?').bind(row.challenge, row.user_id).run();
   const token = await createSession(db, row.user_id, body.label, now);
   const u = await db.prepare('SELECT id, name, username, badge, pw_hash, google_sub, email FROM users WHERE id = ?').bind(row.user_id).first();
   return { token, user: userView(u), isNew: Boolean(row.is_new), linked: Boolean(row.linked) };

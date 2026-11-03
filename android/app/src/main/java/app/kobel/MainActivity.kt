@@ -159,6 +159,7 @@ class MainActivity : ComponentActivity() {
     private fun readAuthIntent(i: Intent?): Boolean {
         val u = i?.data ?: return false
         if (u.scheme != "kobel" || u.host != "auth") return false
+        if (i.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return false   // reopened from recents: that code is already used
         val code = u.getQueryParameter("code")
         pendingAuth = if (code != null && code.matches(Regex("[A-Za-z0-9_-]{16,128}"))) code else "error"
         return true

@@ -309,6 +309,21 @@ test('founder name: with no founder key or email set, the first person to regist
   assert.equal((await signup(ctx.call, 'hytyei', 'pass1234')).status, 409); // and nobody can take it after that
 });
 
+test('Google: a bad exchange burns the link code but leaves the poll copy for the real app', async () => {
+  const ctx = setup();
+  const verifier = 'app-secret-race';
+  const start = await ctx.call('POST', '/v1/auth/google/start', { body: { intent: 'signin', challenge: sha(verifier) } });
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ id_token: idToken({ sub: 'g-race', email: 'race@gmail.com' }) }), { status: 200 });
+  let cb;
+  try { cb = await ctx.call('GET', '/v1/auth/google/callback?code=abc&state=' + encodeURIComponent(new URL(start.json.url).searchParams.get('state'))); } finally { globalThis.fetch = realFetch; }
+  const code = decodeURIComponent(cb.text.match(/kobel:\/\/auth\?code=([^"&]+)/)[1]);
+  assert.equal((await ctx.call('POST', '/v1/auth/exchange', { body: { code, verifier: 'stolen' } })).status, 401);
+  const ok = await ctx.call('POST', '/v1/auth/google/poll', { body: { ref: start.json.ref, verifier } });
+  assert.equal(ok.status, 200, ok.text);
+  assert.ok(ok.json.token);
+});
+
 test('Google: the app can collect the sign-in by itself (poll) when the kobel:// link never reaches it', async () => {
   const ctx = setup();
   const verifier = 'app-secret-poll';
