@@ -131,7 +131,7 @@ async function googleStart(intent){
     NATIVE.openUrl(r.url);
   }catch(e){toast(e.code==='google_not_configured'?tx('Google sign-in is not set up on the server yet.','Die Google-Anmeldung ist auf dem Server noch nicht eingerichtet.'):e.message)}
 }
-let gDone=false,gLast='';
+let gDone=false,gBusy=false,gLast='';
 function gStored(){try{return JSON.parse(localStorage.getItem(GKEY)||'null')}catch(e){return null}}
 async function gFinish(res){
   try{localStorage.removeItem(GKEY)}catch(e){}
@@ -142,21 +142,22 @@ async function gFinish(res){
   }else await finishAuth(res,{chooseName:true});
 }
 async function googleDone(code){
-  if(gDone||!code||code===gLast)return;gDone=true;gLast=code;
+  if(gDone||!code||code===gLast)return;gDone=true;gBusy=true;gLast=code;
   const st=gStored();
   try{
     if(!st)throw new Error(tx('Google sign-in did not start from this app. Please tap Continue with Google again.','Die Google-Anmeldung wurde nicht aus dieser App gestartet. Bitte tippe erneut auf Mit Google fortfahren.'));
     await gFinish(await authApi('POST','/v1/auth/exchange',{code,verifier:st.verifier,label:deviceLabel()}));
   }catch(e){
     // the one-time link code did not work (used twice, or the page was reloaded): ask the server directly
+    gBusy=false;
     if(!(await googlePoll(1)))toast(e.message)
   }
-  finally{gDone=false}
+  finally{gDone=false;gBusy=false}
 }
 /* Backup path: after coming back from the browser, ask the server whether the Google sign-in finished (no kobel:// link needed). */
 let gPolling=false;
 async function googlePoll(tries){
-  const st=gStored();if(!st||!st.ref||gPolling)return false;
+  const st=gStored();if(!st||!st.ref||gPolling||gBusy)return false;
   gPolling=true;
   try{
     for(let i=0;i<(tries||6);i++){
@@ -165,7 +166,7 @@ async function googlePoll(tries){
       if(r&&r.token){await gFinish(r);return true}
       await new Promise(f=>setTimeout(f,1500));
     }
-  }catch(e){try{localStorage.removeItem(GKEY)}catch(x){}}
+  }catch(e){if(e.status===401)try{localStorage.removeItem(GKEY)}catch(x){}}   /* a lost connection must not throw the sign-in away */
   finally{gPolling=false}
   return false;
 }

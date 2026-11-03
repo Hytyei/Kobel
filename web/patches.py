@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'4.2.0',title:{en:'Kobel 4.2: a new home, a new Tactics Room and a form widget',de:'Kobel 4.2: neuer Start, neuer Taktikraum und ein Form-Widget'},body:{\n  en:'Home now shows one clear next step and folds the rest away. The Tactics Room is a real tactics board with four phases, two new talks (free time and telling the time) and a better order. New 4x2 widget: your last 7 games, your league and the match minute. From the 80th minute a notification counts down the end of your streak.',\n  de:'Der Start zeigt jetzt einen klaren nächsten Schritt, der Rest ist eingeklappt. Der Taktikraum ist eine echte Taktiktafel mit vier Phasen, zwei neuen Besprechungen (Freizeit und Uhrzeit) und besserer Reihenfolge. Neues 4x2-Widget: deine letzten 7 Spiele, deine Liga und die Spielminute. Ab der 80. Minute zählt eine Benachrichtigung bis zum Ende deiner Serie herunter.'}};\n"
+_CL = "const CHANGELOG={v:'4.2.1',title:{en:'Kobel 4.2.1: the new opening screen and a widget that keeps up',de:'Kobel 4.2.1: neuer Startbildschirm und ein Widget, das mithält'},body:{\n  en:'The red opening screen now really shows, the form widget moves on to the new day by itself, and Google sign-in is more reliable.',\n  de:'Der rote Startbildschirm erscheint jetzt wirklich, das Form-Widget wechselt von selbst in den neuen Tag, und die Google-Anmeldung ist zuverlässiger.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.1';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")

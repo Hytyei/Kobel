@@ -218,23 +218,5 @@ function qxSlots(arr,n){
 }
 function qxShow(el,arr,n){el.classList.add('qx-slots');el.innerHTML=qxSlots(arr,n)}
 
-/* ---- logo motion: splash ---- */
-function qxSplash(){
-  try{
-    if(qxReduce()||/debug|nosplash/.test(location.hash||'')||document.getElementById('qxs'))return;
-    const s=document.createElement('div');s.id='qxs';s.className='qxs';
-    s.innerHTML=`<svg class="qxs-pitch" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="36" pathLength="1"/><circle cx="100" cy="100" r="62" pathLength="1"/><circle cx="100" cy="100" r="90" pathLength="1"/></svg>
-    <div class="qxs-in"><div style="position:relative"><div class="qxs-ring"></div><div class="qxs-ring r2"></div><div class="qxs-mark"><i class="qxs-bg"></i><i class="qxs-eg"></i><i class="qxs-sh"></i></div></div>
-    <div class="qxs-word">${[...'KOBEL'].map((ch,i)=>`<span style="animation-delay:${.95+i*.07}s">${ch}</span>`).join('')}</div><div class="qxs-tag">Deutsch · Bundesliga der Wörter</div></div>`;
-    document.body.appendChild(s);
-    const kill=()=>{if(s.parentNode)s.remove();qxShine()};
-    s.addEventListener('click',()=>{s.style.transition='opacity .25s';s.style.opacity='0';setTimeout(kill,260)});
-    setTimeout(kill,2500);
-  }catch(e){}
-}
-function qxShine(){
-  const l=document.querySelector('.b3-logo');if(!l||qxReduce())return;
-  l.classList.remove('qx-shine');void l.offsetWidth;l.classList.add('qx-shine');setTimeout(()=>l.classList.remove('qx-shine'),1000);
-}
-qxSplash();
+/* ---- logo motion ---- */
 try{let hid=0;document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(hid&&Date.now()-hid>30000)qxShine()})}catch(e){}

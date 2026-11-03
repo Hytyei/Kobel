@@ -1344,26 +1344,7 @@ button.b3-tr{cursor:pointer}
 .qx-say{font:800 30px/1.15 var(--fd);margin:16px 0 4px}
 
 /* ---- logo motion: splash ---- */
-.qxs{position:fixed;inset:0;z-index:9999;background:#0B141B;display:grid;place-items:center;overflow:hidden;animation:qxsOut .55s 1.85s cubic-bezier(.7,0,.2,1) forwards}
-@keyframes qxsOut{to{opacity:0;transform:scale(1.08);visibility:hidden}}
-.qxs-pitch{position:absolute;left:50%;top:50%;width:150vmax;height:150vmax;margin:-75vmax 0 0 -75vmax;opacity:.5}
-.qxs-pitch circle{fill:none;stroke:rgba(255,255,255,.1);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1;animation:qxsDraw 1.3s .1s var(--qx-ease) forwards}
-@keyframes qxsDraw{to{stroke-dashoffset:0}}
-.qxs-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:26px}
-.qxs-mark{position:relative;width:116px;height:116px;overflow:hidden;transform:scale(.9);animation:qxsMark 1.2s .1s var(--qx-ease) forwards}
-@keyframes qxsMark{to{transform:scale(1)}}
-.qxs-bg{position:absolute;inset:0;background:var(--qx-red);transform:scale(0,.03);animation:qxsBg .75s .12s var(--qx-ease) forwards}
-@keyframes qxsBg{0%{transform:scale(0,.03)}45%{transform:scale(1,.03)}100%{transform:scale(1,1)}}
-.qxs-eg{position:absolute;inset:0;background:url(brand/eagle.png) center/88% no-repeat;clip-path:inset(100% 0 0 0);opacity:0;animation:qxsEg .7s .6s var(--qx-ease) forwards}
-@keyframes qxsEg{0%{clip-path:inset(100% 0 0 0);opacity:1;transform:translateY(14px)}100%{clip-path:inset(0 0 0 0);opacity:1;transform:none}}
-.qxs-sh{position:absolute;inset:-10%;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);transform:translateX(-130%);animation:qxsSh .8s 1.2s ease-in-out forwards}
 @keyframes qxsSh{to{transform:translateX(130%)}}
-.qxs-ring{position:absolute;left:50%;top:58px;width:116px;height:116px;margin:-58px 0 0 -58px;border:2px solid var(--qx-red);opacity:0;animation:qxsRing 1.3s .75s ease-out}
-.qxs-ring.r2{animation-delay:.95s;border-color:rgba(255,255,255,.5)}
-@keyframes qxsRing{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3.4)}}
-.qxs-word{display:flex;gap:.22em;font:800 30px var(--fd);letter-spacing:.3em;color:#fff;padding-left:.3em}
-.qxs-word span{opacity:0;transform:translateY(16px);animation:qxUp .5s var(--qx-ease) forwards}
-.qxs-tag{font:600 12px var(--fb);letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.55);opacity:0;animation:qxUp .6s 1.4s both;margin-top:-14px}
 
 /* ---- logo motion: kick-off wipe when a session starts ---- */
 .qx-kick{position:fixed;inset:0;z-index:300;pointer-events:none;background:var(--club,var(--qx-red));display:grid;place-items:center;animation:qxKick .7s ease-out both}
@@ -1389,9 +1370,6 @@ button.b3-tr{cursor:pointer}
 .qx-b:not(.word) .qx-slots,.qx-b:not(.word) .qx-bank{gap:calc(var(--ts) * .11)}
 .qx-t{padding:0!important}
 .qx-b:not(.word) .qx-bank{padding:16px 2px 10px}
-.qxs-in{gap:0}
-.qxs-word{margin-top:48px}
-.qxs-tag{margin-top:14px}
 .qx-ms{top:auto;bottom:22%}
 /*@@end css-qx*/
 /*@@css-games*/
@@ -4068,7 +4046,7 @@ function cabinetHtml(){
   <div class="cabinet">${tr.map(slot).join('')}${ghost}</div>`;
 }
 /* ───────── v2.10: version, skins, welcome, about ───────── */
-const APP_VER='4.2.0';
+const APP_VER='4.2.1';
 const isDe=()=>LANG==='de';
 const tx=(en,de)=>isDe()?de:en;
 function applySkin(){document.documentElement.dataset.skin=S.settings.skin==='clean'?'clean':'bl'}
@@ -4156,9 +4134,9 @@ function addNotice(n){
   ib.push({id:n.id,kind:n.kind||'news',title:String(n.title||'').slice(0,80),body:String(n.body||'').slice(0,1000),t:n.t||Date.now(),read:false});
   ib.sort((a,b)=>b.t-a.t);S.inbox=ib.slice(0,40);return true;
 }
-const CHANGELOG={v:'4.2.0',title:{en:'Kobel 4.2: a new home, a new Tactics Room and a form widget',de:'Kobel 4.2: neuer Start, neuer Taktikraum und ein Form-Widget'},body:{
-  en:'Home now shows one clear next step and folds the rest away. The Tactics Room is a real tactics board with four phases, two new talks (free time and telling the time) and a better order. New 4x2 widget: your last 7 games, your league and the match minute. From the 80th minute a notification counts down the end of your streak.',
-  de:'Der Start zeigt jetzt einen klaren nächsten Schritt, der Rest ist eingeklappt. Der Taktikraum ist eine echte Taktiktafel mit vier Phasen, zwei neuen Besprechungen (Freizeit und Uhrzeit) und besserer Reihenfolge. Neues 4x2-Widget: deine letzten 7 Spiele, deine Liga und die Spielminute. Ab der 80. Minute zählt eine Benachrichtigung bis zum Ende deiner Serie herunter.'}};
+const CHANGELOG={v:'4.2.1',title:{en:'Kobel 4.2.1: the new opening screen and a widget that keeps up',de:'Kobel 4.2.1: neuer Startbildschirm und ein Widget, das mithält'},body:{
+  en:'The red opening screen now really shows, the form widget moves on to the new day by itself, and Google sign-in is more reliable.',
+  de:'Der rote Startbildschirm erscheint jetzt wirklich, das Form-Widget wechselt von selbst in den neuen Tag, und die Google-Anmeldung ist zuverlässiger.'}};
 function seedNotices(){
   addNotice({id:'ver:'+CHANGELOG.v,kind:'update',title:CHANGELOG.title.en,body:CHANGELOG.body.en,t:Date.now()});
 }
@@ -7804,25 +7782,7 @@ function qxSlots(arr,n){
 }
 function qxShow(el,arr,n){el.classList.add('qx-slots');el.innerHTML=qxSlots(arr,n)}
 
-/* ---- logo motion: splash ---- */
-function qxSplash(){
-  try{
-    if(qxReduce()||/debug|nosplash/.test(location.hash||'')||document.getElementById('qxs'))return;
-    const s=document.createElement('div');s.id='qxs';s.className='qxs';
-    s.innerHTML=`<svg class="qxs-pitch" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="36" pathLength="1"/><circle cx="100" cy="100" r="62" pathLength="1"/><circle cx="100" cy="100" r="90" pathLength="1"/></svg>
-    <div class="qxs-in"><div style="position:relative"><div class="qxs-ring"></div><div class="qxs-ring r2"></div><div class="qxs-mark"><i class="qxs-bg"></i><i class="qxs-eg"></i><i class="qxs-sh"></i></div></div>
-    <div class="qxs-word">${[...'KOBEL'].map((ch,i)=>`<span style="animation-delay:${.95+i*.07}s">${ch}</span>`).join('')}</div><div class="qxs-tag">Deutsch · Bundesliga der Wörter</div></div>`;
-    document.body.appendChild(s);
-    const kill=()=>{if(s.parentNode)s.remove();qxShine()};
-    s.addEventListener('click',()=>{s.style.transition='opacity .25s';s.style.opacity='0';setTimeout(kill,260)});
-    setTimeout(kill,2500);
-  }catch(e){}
-}
-function qxShine(){
-  const l=document.querySelector('.b3-logo');if(!l||qxReduce())return;
-  l.classList.remove('qx-shine');void l.offsetWidth;l.classList.add('qx-shine');setTimeout(()=>l.classList.remove('qx-shine'),1000);
-}
-qxSplash();
+/* ---- logo motion ---- */
 try{let hid=0;document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(hid&&Date.now()-hid>30000)qxShine()})}catch(e){}
 /*@@end js-qx*/
 /*@@js-qv*/
@@ -9019,7 +8979,7 @@ async function googleStart(intent){
     NATIVE.openUrl(r.url);
   }catch(e){toast(e.code==='google_not_configured'?tx('Google sign-in is not set up on the server yet.','Die Google-Anmeldung ist auf dem Server noch nicht eingerichtet.'):e.message)}
 }
-let gDone=false,gLast='';
+let gDone=false,gBusy=false,gLast='';
 function gStored(){try{return JSON.parse(localStorage.getItem(GKEY)||'null')}catch(e){return null}}
 async function gFinish(res){
   try{localStorage.removeItem(GKEY)}catch(e){}
@@ -9030,21 +8990,22 @@ async function gFinish(res){
   }else await finishAuth(res,{chooseName:true});
 }
 async function googleDone(code){
-  if(gDone||!code||code===gLast)return;gDone=true;gLast=code;
+  if(gDone||!code||code===gLast)return;gDone=true;gBusy=true;gLast=code;
   const st=gStored();
   try{
     if(!st)throw new Error(tx('Google sign-in did not start from this app. Please tap Continue with Google again.','Die Google-Anmeldung wurde nicht aus dieser App gestartet. Bitte tippe erneut auf Mit Google fortfahren.'));
     await gFinish(await authApi('POST','/v1/auth/exchange',{code,verifier:st.verifier,label:deviceLabel()}));
   }catch(e){
     // the one-time link code did not work (used twice, or the page was reloaded): ask the server directly
+    gBusy=false;
     if(!(await googlePoll(1)))toast(e.message)
   }
-  finally{gDone=false}
+  finally{gDone=false;gBusy=false}
 }
 /* Backup path: after coming back from the browser, ask the server whether the Google sign-in finished (no kobel:// link needed). */
 let gPolling=false;
 async function googlePoll(tries){
-  const st=gStored();if(!st||!st.ref||gPolling)return false;
+  const st=gStored();if(!st||!st.ref||gPolling||gBusy)return false;
   gPolling=true;
   try{
     for(let i=0;i<(tries||6);i++){
@@ -9053,7 +9014,7 @@ async function googlePoll(tries){
       if(r&&r.token){await gFinish(r);return true}
       await new Promise(f=>setTimeout(f,1500));
     }
-  }catch(e){try{localStorage.removeItem(GKEY)}catch(x){}}
+  }catch(e){if(e.status===401)try{localStorage.removeItem(GKEY)}catch(x){}}   /* a lost connection must not throw the sign-in away */
   finally{gPolling=false}
   return false;
 }
@@ -9844,6 +9805,9 @@ const V42_ACTIONS={
   v42fold:t=>{const k=t.dataset.k;V42[k]=!V42[k];render()},
   v42ph:t=>{V42.ph=+t.dataset.k;render()}
 };
+
+/* coming back to a page that stayed alive overnight: the widgets get today's numbers at once */
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pushWidgets()});
 
 /* ---- what the form widget needs: every day is a game. W = daily goal reached, D = played but short of it, L = no-show,
    N = before your first day. The last letter is today and the Android side reads it together with `day`. ---- */

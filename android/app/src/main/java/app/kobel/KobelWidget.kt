@@ -35,6 +35,7 @@ object WidgetCore {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("data", json).apply()
         refreshAll(ctx)
         MatchClock.scheduleTick(ctx)
+        NotifyPollJob.schedule(ctx)
     }
 
     private val ALL = listOf(KobelWidget::class.java, KobelWidgetSmall::class.java, KobelWidgetBig::class.java, KobelWidgetForm::class.java)

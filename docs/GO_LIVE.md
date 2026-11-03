@@ -262,3 +262,9 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 * **Match clock:** 0' = 00:00, 90' = 23:45, then +90'. `MatchClock.kt` redraws the widgets on that beat and fires the streak calls. From 80' (21:07) the call has a live countdown to midnight.
 * **Launch:** Android 12+ shows a plain red system screen (empty icon in `values-v31/themes.xml`), then the web splash takes over and calls `KobelAndroid.splashDone()`.
 
+## Release notes: 4.2.1
+* **Release:** tag `v4.2.1` (version code 40201). Backend deploys with the push.
+* **Opening screen:** the old `qxSplash` intro is gone. It drew on top of the red splash and is skipped by `#debug` and by first launch checks, so test with a plain URL.
+* **Widgets:** the 15-minute job no longer needs a network and redraws them first, and a wake-up alarm covers midnight. Phones that stop background apps (Xiaomi) may still need Autostart turned on for Kobel.
+* **Google:** a failed token exchange now shows Google's reason on the page and in the Worker log.
+

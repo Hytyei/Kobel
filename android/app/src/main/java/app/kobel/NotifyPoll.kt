@@ -65,14 +65,13 @@ class NotifyPollJob : JobService() {
     override fun onStopJob(params: JobParameters): Boolean = true
 
     companion object {
-        private const val JOB_ID = 4711
-        fun schedule(ctx: Context, on: Boolean) {
+        private const val JOB_ID = 4712   // 4711 needed a network, which also stopped the widgets while offline
+        fun schedule(ctx: Context) {
             val js = ctx.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-            if (!on) { js.cancel(JOB_ID); return }
+            js.cancel(4711)
             if (js.allPendingJobs.any { it.id == JOB_ID }) return
             js.schedule(
                 JobInfo.Builder(JOB_ID, ComponentName(ctx, NotifyPollJob::class.java))
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setPeriodic(15 * 60 * 1000L)
                     .setPersisted(true)
                     .build(),
@@ -88,6 +87,8 @@ object NotifyWork {
     private fun day(t: Long = System.currentTimeMillis()) = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(t))
 
     fun run(ctx: Context) {
+        // first and unconditional: on phones that drop background alarms (Xiaomi, for one) this job is what moves the widgets on
+        try { WidgetCore.refreshAll(ctx); MatchClock.scheduleTick(ctx) } catch (_: Exception) { }
         val p = NotifyPrefs.get(ctx)
         if (!p.on) return
         Notifier.ensureChannels(ctx)

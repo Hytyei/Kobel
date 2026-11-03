@@ -44,6 +44,7 @@ object MatchClock {
         val next = (0..90).map { startOf(it) }.plus(FULL + 1).firstOrNull { it > now }
         val am = ctx.getSystemService(AlarmManager::class.java) ?: return
         am.setWindow(AlarmManager.RTC, if (next != null) at(next, false) else at(0, true), WINDOW, pending(ctx, ACTION_TICK, 1))
+        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at(0, true), pending(ctx, ACTION_TICK, 4))   // a new day must never wait for the next redraw
     }
 
     /**
@@ -77,7 +78,7 @@ class ClockReceiver : BroadcastReceiver() {
                 MatchClock.scheduleStreak(ctx)
             }
             Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED -> {
-                MatchClock.scheduleTick(ctx); MatchClock.scheduleStreak(ctx)
+                WidgetCore.refreshAll(ctx); NotifyPollJob.schedule(ctx); MatchClock.scheduleTick(ctx); MatchClock.scheduleStreak(ctx)
             }
         }
     }

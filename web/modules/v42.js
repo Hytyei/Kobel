@@ -112,6 +112,9 @@ const V42_ACTIONS={
   v42ph:t=>{V42.ph=+t.dataset.k;render()}
 };
 
+/* coming back to a page that stayed alive overnight: the widgets get today's numbers at once */
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pushWidgets()});
+
 /* ---- what the form widget needs: every day is a game. W = daily goal reached, D = played but short of it, L = no-show,
    N = before your first day. The last letter is today and the Android side reads it together with `day`. ---- */
 function v42Widget(){

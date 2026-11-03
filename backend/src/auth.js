@@ -186,6 +186,8 @@ async function applyFounderByEmail(db, env, userId, email) {
   if (!email || (await founderProof(env, { email })) !== 'proved') return;
   const u = await db.prepare('SELECT username FROM users WHERE id = ?').bind(userId).first();
   if (!u || u.username) return;
+  // a plain Google sign-in must not quietly take the name away from the owner's own username account
+  if (await db.prepare('SELECT 1 AS y FROM users WHERE username = ? COLLATE NOCASE AND id <> ?').bind(founderName(env), userId).first()) return;
   try {
     const r = await checkUsername(db, env, founderName(env), { userId, email });
     await db.prepare('UPDATE users SET username = ?, name = ?, badge = ?, username_changed_at = ? WHERE id = ?').bind(r.username, r.username, r.badge, Date.now(), userId).run();
@@ -354,7 +356,13 @@ export async function googleCallback(db, env, request, now = Date.now()) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: redirectUri(request), grant_type: 'authorization_code', code_verifier: st.verifier }),
     });
-    if (!res.ok) return fail('Google refused the sign-in. Go back to the app and try again.');
+    if (!res.ok) {
+      const why = String(((await res.json().catch(() => null)) || {}).error || res.status).slice(0, 40);
+      console.error('google token exchange failed:', why);
+      return fail(why === 'invalid_client' || why === 'unauthorized_client'
+        ? `Google rejected this server's client secret (${why}). The secret on the server has to be updated.`
+        : `Google refused the sign-in (${why}). Go back to the app and try again.`);
+    }
     const tok = await res.json();
     const c = decodeIdToken(tok.id_token);
     // the token comes straight from Google over TLS; its claims are still checked

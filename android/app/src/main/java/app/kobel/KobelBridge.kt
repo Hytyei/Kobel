@@ -145,7 +145,7 @@ class KobelBridge(private val activity: MainActivity) {
         try {
             val j = JSONObject(json)
             NotifyPrefs.save(activity.applicationContext, j)
-            NotifyPollJob.schedule(activity.applicationContext, j.optBoolean("on", true))
+            NotifyPollJob.schedule(activity.applicationContext)
             MatchClock.scheduleStreak(activity.applicationContext)
         } catch (_: Exception) {
         }
