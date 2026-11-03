@@ -1,5 +1,6 @@
 package app.kobel
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -17,6 +18,7 @@ class WData(
     val dow: Int = 0,
     val xp7: List<Int> = List(7) { 0 }, val heat: List<Int> = List(35) { 0 }, val fc: List<Int> = List(7) { 0 },
     val cnt: List<Int> = listOf(0, 0, 0, 0),
+    val stage: String = "", val tierI: Int = 0, val games: String = "",
 )
 
 /**
@@ -92,7 +94,7 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         val tw = w * 0.30f; val cw = (w - tw) / 2
         val hx = x + tw; val ax = hx + cw; val r = x + w
         fill(c, x, y, hx, y + h, 0f, BUG)
-        val mins = if (k.safe) "FT" else if (!k.streak) "KO" else "${k.minute}'"
+        val mins = if (k.safe) "FT" else if (!k.streak) "KO" else k.label
         text(c, mins, x + tw / 2, y + h / 2 + dp(6f), 18f, INK, cond, 1)
         fill(c, hx, y, ax, y + h, 0f, RED)
         fill(c, ax, y, r, y + h, 0f, WHITE)
@@ -130,21 +132,20 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
     }
 
     // ───────── the day as a football match: kick-off 00:00, half-time 12:00, final whistle at midnight ─────────
-    private class Clock(val minute: Int, val safe: Boolean, val left: String, val frac: Float, val streak: Boolean)
+    private class Clock(val minute: Int, val label: String, val safe: Boolean, val left: String, val frac: Float, val streak: Boolean)
 
     private fun clock(d: WData): Clock {
-        val cal = java.util.Calendar.getInstance()
-        val mins = cal.get(java.util.Calendar.HOUR_OF_DAY) * 60 + cal.get(java.util.Calendar.MINUTE)
+        val mins = MatchClock.minsNow()
         val rest = 1440 - mins
         val left = if (d.de) (if (rest >= 60) "${rest / 60} Std ${rest % 60} Min" else "$rest Min") else (if (rest >= 60) "${rest / 60}h ${rest % 60}m" else "${rest}m")
-        return Clock((mins * 90 / 1440).coerceIn(0, 90), d.today > 0, left, mins / 1440f, d.streak > 0)
+        return Clock(MatchClock.minute(mins), MatchClock.label(mins), d.today > 0, left, mins / 1440f, d.streak > 0)
     }
 
     /** "78'" while the streak is on the line, "FULL TIME" once you have played today (the streak is safe). */
     private fun clockText(d: WData, k: Clock): String = when {
         k.safe -> t(d, "FULL TIME · STREAK SAFE", "ABPFIFF · SERIE SICHER")
         !k.streak -> t(d, "KICK-OFF · START A RUN", "ANSTOSS · NEUE SERIE")
-        else -> "${k.minute}' · ${t(d, "WHISTLE IN ", "ABPFIFF IN ")}${k.left}"
+        else -> "${k.label} · ${t(d, "WHISTLE IN ", "ABPFIFF IN ")}${k.left}"
     }
     private fun clockColor(k: Clock) = if (k.safe) GREEN else if (!k.streak) BLUE else if (k.minute >= 80) RED_HI else if (k.minute >= 62) AMBER else WHITE
 
@@ -195,6 +196,62 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
             text(c, s, x, cy + dp(4f), 12f, WHITE, cond, 2); x -= tw + dp(4f)
             fill(c, x - dp(8f), cy - dp(4.5f), x + dp(1f), cy + dp(4.5f), 0f, col); x -= dp(16f)
         }
+    }
+
+    // ───────── 4x2 form: one look, three facts. League, match minute, last seven games ─────────
+    fun form(c: Canvas, w: Float, h: Float, d: WData, logo: Bitmap?) {
+        background(c, w, h)
+        val pad = dp(14f); val ck = clock(d); val rowH = minOf(dp(32f), h * 0.24f); val gap = dp(10f)
+        val topB = h - pad - rowH - gap; val topH = topB - pad
+
+        // the clock block: red while the streak is open, green once it is safe, dark before a run has started
+        val bw = minOf(w * 0.32f, dp(112f)); val bx = w - pad - bw
+        val blockCol = if (ck.safe) GREEN else if (ck.streak) RED else CARD
+        val ink = if (ck.safe) INK else WHITE
+        fill(c, bx, pad, w - pad, topB, 0f, blockCol)
+        c.save(); c.clipRect(bx, pad, w - pad, topB)
+        p.style = Paint.Style.STROKE; p.shader = null; p.strokeWidth = dp(7f); p.color = alpha(if (ck.safe) INK else WHITE, 0.07f)
+        for (i in 1..4) c.drawCircle(bx + bw * 0.74f, pad + topH * 0.5f, dp(17f) * i, p)
+        p.style = Paint.Style.FILL
+        c.restore()
+        val big = if (ck.safe) "FT" else if (!ck.streak) "KO" else ck.label
+        var size = minOf(44f, topH / u * 0.56f)
+        while (measure(big, size) > bw - dp(14f) && size > 18f) size -= 1f
+        text(c, big, bx + bw / 2, pad + topH * 0.40f + dp(size * 0.36f), size, ink, cond, 1)
+        val cap = if (ck.safe) t(d, "STREAK SAFE", "SERIE SICHER") else if (!ck.streak) t(d, "START A RUN", "NEUE SERIE") else t(d, "${ck.left} LEFT", "NOCH ${ck.left}").uppercase()
+        text(c, cap, bx + bw / 2, topB - dp(9f), 9.5f, alpha(ink, 0.9f), cond, 1, 0.4f)
+
+        // league logo, league, stage
+        var tx = pad
+        if (logo != null) {
+            val lh = minOf(topH, dp(64f)); val lw = lh * logo.width / logo.height
+            val ly = pad + (topH - lh) / 2
+            rf.set(pad, ly, pad + lw, ly + lh)
+            p.isFilterBitmap = true
+            c.drawBitmap(logo, null, rf, p)
+            tx = pad + lw + dp(11f)
+        }
+        val room = bx - dp(10f) - tx; val mid = pad + topH / 2
+        text(c, fit(d.tier.uppercase(), 17f, room), tx, mid - dp(1f), 17f, WHITE, cond, 0, 0.2f)
+        text(c, fit(d.stage, 12f, room), tx, mid + dp(15f), 12f, MUTE, body, 0)
+
+        // the last seven games, oldest on the left
+        val list = d.games.takeLast(7).padStart(7, 'N')
+        val gp = dp(4f); val cw = (w - 2 * pad - 6 * gp) / 7
+        list.forEachIndexed { i, ch ->
+            val l = pad + i * (cw + gp); val tp = h - pad - rowH
+            val col = when (ch) { 'W' -> GREEN; 'D' -> AMBER; 'L' -> RED_HI; else -> alpha(WHITE, 0.08f) }
+            fill(c, l, tp, l + cw, tp + rowH, 0f, col)
+            val letter = when (ch) { 'W' -> t(d, "W", "S"); 'D' -> t(d, "D", "U"); 'L' -> t(d, "L", "N"); else -> "" }
+            if (letter.isNotEmpty()) text(c, letter, l + cw / 2, tp + rowH / 2 + dp(5.5f), 15f, 0xFF081018.toInt(), cond, 1)
+        }
+    }
+
+    private fun fit(s: String, sizeDp: Float, room: Float, face: Typeface = cond): String {
+        if (measure(s, sizeDp, face) <= room) return s
+        var n = s.length
+        while (n > 1 && measure(s.take(n) + "…", sizeDp, face) > room) n--
+        return s.take(n).trimEnd() + "…"
     }
 
     // ───────── 2x2 ─────────

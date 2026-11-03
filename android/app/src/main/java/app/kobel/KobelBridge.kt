@@ -146,6 +146,7 @@ class KobelBridge(private val activity: MainActivity) {
             val j = JSONObject(json)
             NotifyPrefs.save(activity.applicationContext, j)
             NotifyPollJob.schedule(activity.applicationContext, j.optBoolean("on", true))
+            MatchClock.scheduleStreak(activity.applicationContext)
         } catch (_: Exception) {
         }
     }
@@ -159,6 +160,10 @@ class KobelBridge(private val activity: MainActivity) {
             }
         }
     }
+
+    /** The web splash is leaving: the system bars and the window go back from red to the app's dark. */
+    @JavascriptInterface
+    fun splashDone() = activity.runOnUiThread { activity.splashDone() }
 
     @JavascriptInterface
     fun saveFile(name: String, text: String) {

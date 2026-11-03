@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'4.1.0',title:{en:'Kobel 4.1: new question page and a café lesson',de:'Kobel 4.1: neue Fragenseite und eine Café-Lektion'},body:{\n  en:'New lesson: ordering in a café, the menu and compound nouns. Every question has a new look that fills the screen, letter tiles are bigger and easier to tap, and right answers now send the ball into the score. Minigames earn real scores and stars again.',\n  de:'Neue Lektion: im Café bestellen, die Speisekarte und zusammengesetzte Nomen. Jede Frage hat einen neuen Look, der den Bildschirm füllt, die Buchstaben sind größer und leichter zu treffen, und richtige Antworten schießen den Ball ins Ergebnis. Minispiele geben wieder echte Punkte und Sterne.'\n}};\n"
+_CL = "const CHANGELOG={v:'4.2.0',title:{en:'Kobel 4.2: a new home, a new Tactics Room and a form widget',de:'Kobel 4.2: neuer Start, neuer Taktikraum und ein Form-Widget'},body:{\n  en:'Home now shows one clear next step and folds the rest away. The Tactics Room is a real tactics board with four phases, two new talks (free time and telling the time) and a better order. New 4x2 widget: your last 7 games, your league and the match minute. From the 80th minute a notification counts down the end of your streak.',\n  de:'Der Start zeigt jetzt einen klaren nächsten Schritt, der Rest ist eingeklappt. Der Taktikraum ist eine echte Taktiktafel mit vier Phasen, zwei neuen Besprechungen (Freizeit und Uhrzeit) und besserer Reihenfolge. Neues 4x2-Widget: deine letzten 7 Spiele, deine Liga und die Spielminute. Ab der 80. Minute zählt eine Benachrichtigung bis zum Ende deiner Serie herunter.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.1.0';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.0';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -208,3 +208,13 @@ src = src.replace("t:n=>`Score ${n}+ in a minigame`", "t:n=>tx(`Score ${n}+ in a
 src = src.replace("t:()=>'Finish a practice with no mistakes'", "t:()=>tx('Finish a practice with no mistakes','Beende ein Training ohne Fehler')")
 src = src.replace("rows=cur.map(([need,n,d])=>{const i=", "rows=cur.map(([need,n,d0])=>{const d=v4Stage(d0),i=")
 if "__k={startGame," not in src: src = src.replace("if(location.hash==='#debug')window.__k={", "if(location.hash==='#debug')window.__k={startGame,", 1)
+
+# ---- 4.2.0 ----
+src = sub(src, "  ...CAREER_ACTIONS,\n", "  ...CAREER_ACTIONS,\n  ...V42_ACTIONS,\n")
+src = sub(src, "...widgetExtra(),lang:S.settings.lang,", "...widgetExtra(),...v42Widget(),lang:S.settings.lang,")
+src = src.replace("'Finish all 17 talks in the Tactics Room'", "'Finish 17 talks in the Tactics Room'")
+_SPLASH = """<!--splash--><div id="kb" aria-hidden="true"><i class="kb-pn t"></i><i class="kb-pn b"></i><div class="kb-st"><i class="kb-rel"></i><i class="kb-fl"></i><i class="kb-w"></i><i class="kb-w w2"></i><i class="kb-w w3"></i><div class="kb-sp"><i style="--a:0deg;--d:-210px"></i><i style="--a:24deg;--d:-290px"></i><i style="--a:48deg;--d:-240px"></i><i style="--a:72deg;--d:-320px"></i><i style="--a:96deg;--d:-200px"></i><i style="--a:120deg;--d:-280px"></i><i style="--a:144deg;--d:-250px"></i><i style="--a:168deg;--d:-330px"></i><i style="--a:192deg;--d:-220px"></i><i style="--a:216deg;--d:-300px"></i><i style="--a:240deg;--d:-240px"></i><i style="--a:264deg;--d:-310px"></i><i style="--a:288deg;--d:-210px"></i><i style="--a:312deg;--d:-280px"></i><i style="--a:336deg;--d:-260px"></i></div><div class="kb-eg"><div class="kb-sh"></div></div><div class="kb-nm"><span style="--i:0">K</span><span style="--i:1">o</span><span style="--i:2">b</span><span style="--i:3">e</span><span style="--i:4">l</span></div></div></div><script>addEventListener('load',function(){requestAnimationFrame(function(){requestAnimationFrame(function(){var e=document.getElementById('kb');if(e)e.classList.add('go')})})})</script><!--/splash-->"""
+if '<!--splash-->' in src:
+    src = _re.sub(r'<!--splash-->.*?<!--/splash-->', lambda m: _SPLASH, src, count=1, flags=_re.S)
+else:
+    src = sub(src, '<body>\n<div class="app" id="app"></div>', '<body>\n' + _SPLASH + '\n<div class="app" id="app"></div>')

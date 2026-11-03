@@ -30,6 +30,7 @@ object NotifyPrefs {
             .putBoolean("de", j.optBoolean("de", false))
             .putInt("streak", j.optInt("streak", 0))
             .putString("last", j.optString("last").take(10))
+            .putInt("freezes", j.optInt("freezes", 0))
             .apply()
         // a goal was scored today: take down the "final whistle" reminder that may still be showing
         val t = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
@@ -47,6 +48,7 @@ class SharedPreferencesView(private val p: android.content.SharedPreferences) {
     val de get() = p.getBoolean("de", false)
     val streak get() = p.getInt("streak", 0)
     val last get() = p.getString("last", "") ?: ""
+    val freezes get() = p.getInt("freezes", 0)
 }
 
 /** Runs about every 15 to 30 minutes (Android decides), reads the alert feed and shows phone notifications. */
@@ -80,6 +82,9 @@ class NotifyPollJob : JobService() {
 }
 
 object NotifyWork {
+    /** Minute of the day of each streak call: 17:00, then the 75th, 80th, 85th and 90th match minute. */
+    val STAGES = intArrayOf(17 * 60, MatchClock.startOf(75), MatchClock.startOf(80), MatchClock.startOf(85), MatchClock.startOf(90))
+
     private fun day(t: Long = System.currentTimeMillis()) = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(t))
 
     fun run(ctx: Context) {
@@ -90,6 +95,7 @@ object NotifyWork {
         // that used to stop the "new version" notification from ever being reached
         try { alerts(ctx, p) } catch (_: Exception) { }
         try { if (p.streakOn) streak(ctx, p) } catch (_: Exception) { }
+        try { MatchClock.scheduleStreak(ctx) } catch (_: Exception) { }
         try { updates(ctx, p) } catch (_: Exception) { }
     }
 
@@ -162,11 +168,19 @@ object NotifyWork {
         }
     }
 
+    /** The alarm's way in: same checks as the regular job. */
+    fun streakCall(ctx: Context) {
+        val p = NotifyPrefs.get(ctx)
+        if (!p.on || !p.streakOn) return
+        Notifier.ensureChannels(ctx)
+        streak(ctx, p)
+    }
+
     /**
      * The streak as a football match: the day is the match, midnight is the final whistle.
-     * While your streak is alive from yesterday and you have not practised today you get up to five calls,
-     * each shown once per day (a later one replaces the earlier one): second half (17:00), 75th minute (20:30),
-     * 85th minute (22:00), 90th minute / final whistle incoming (23:00) and injury time (23:40).
+     * While your streak is alive and you have not practised today you get up to five calls, each shown once per day
+     * (a later one replaces the earlier one): second half (17:00), then the 75th minute (19:48). From the 80th minute (21:07)
+     * the call carries a live countdown to midnight, and the 85th (22:26) and 90th (23:45) minute raise it again.
      */
     private fun streak(ctx: Context, p: SharedPreferencesView) {
         val now = Calendar.getInstance()
@@ -174,15 +188,9 @@ object NotifyWork {
         if (p.streak < 1) return
         val today = day()
         val yesterday = day(System.currentTimeMillis() - 86400000L)
-        if (p.last != yesterday) return        // already practised today (a goal was scored), or the streak is gone
-        val stage = when {
-            mins >= 23 * 60 + 40 -> 5
-            mins >= 23 * 60 -> 4
-            mins >= 22 * 60 -> 3
-            mins >= 20 * 60 + 30 -> 2
-            mins >= 17 * 60 -> 1
-            else -> 0
-        }
+        val saved = p.last == day(System.currentTimeMillis() - 2 * 86400000L) && p.freezes > 0   // a joker covers one missed day
+        if (p.last != yesterday && !saved) return        // already practised today (a goal was scored), or the streak is gone
+        val stage = STAGES.count { mins >= it }
         if (stage == 0) return
         val sp = NotifyPrefs.raw(ctx)
         val told = sp.getString("streakStage", "") ?: ""
@@ -194,11 +202,12 @@ object NotifyWork {
         val (title, body) = when (stage) {
             1 -> if (p.de) "Zweite Halbzeit läuft" to "Dein Spiel gegen die Uhr: $run. Ein Tor (eine Übung) reicht." else "Second half is under way" to "Your match against the clock: $run. One goal (one session) is enough."
             2 -> if (p.de) "75. Minute: Zeit für ein Tor" to "$run steht auf dem Spiel. Ein kurzes Training bringt den Sieg." else "75th minute: time for a goal" to "Your $run is on the line. One short session wins it."
-            3 -> if (p.de) "85. Minute: Es wird eng" to "Nur noch kurz bis zum Schlusspfiff. Rette $run jetzt." else "85th minute: it is getting tight" to "Not long until the final whistle. Save your $run now."
-            4 -> if (p.de) "90. Minute: Abpfiff naht!" to "Gleich ist Schluss. Ein paar Fragen retten $run." else "90th minute: final whistle incoming!" to "Time is almost up. A few questions save your $run."
-            else -> if (p.de) "Nachspielzeit!" to "Letzte Chance: Jetzt spielen, sonst ist $run vorbei." else "Injury time!" to "Last chance: play now or your $run ends."
+            3 -> if (p.de) "80. Minute: Die Uhr läuft" to "$run enden um Mitternacht. Ein kurzes Training rettet sie." else "80th minute: the clock is running" to "Your $run ends at midnight. One short session saves it."
+            4 -> if (p.de) "85. Minute: Es wird eng" to "Nur noch kurz bis zum Schlusspfiff. Rette $run jetzt." else "85th minute: it is getting tight" to "Not long until the final whistle. Save your $run now."
+            else -> if (p.de) "90. Minute: Nachspielzeit!" to "Letzte Chance: Jetzt spielen, sonst ist $run vorbei." else "90th minute: injury time!" to "Last chance: play now or your $run ends."
         }
-        Notifier.show(ctx, 7001, if (stage >= 3) Notifier.CH_WHISTLE else Notifier.CH_STREAK, title, body)
+        val whistle = stage >= 3
+        Notifier.show(ctx, 7001, if (whistle) Notifier.CH_WHISTLE else Notifier.CH_STREAK, title, body, if (whistle) MatchClock.midnight() else 0L)
     }
 
     /** A new release on GitHub (checked at most twice a day, same numeric version rule as the in-app updater). */

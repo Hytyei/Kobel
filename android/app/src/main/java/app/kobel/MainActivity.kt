@@ -3,7 +3,10 @@ package app.kobel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
@@ -18,6 +21,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,6 +41,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var bridge: KobelBridge
     val updater: Updater by lazy { Updater(this) { fn, arg -> js("window.$fn&&window.$fn($arg)") } }
     private var pendingSave: String? = null
+
+    /** Red from the very first frame until the web splash leaves, so the launch is one red screen with no dark step in it. */
+    private var chrome by mutableStateOf(Color(SPLASH_RED))
 
     /** One-time sign-in code (or "error") that came back through kobel://auth; the page collects it with takeAuth(). */
     @Volatile private var pendingAuth: String = ""
@@ -81,7 +90,7 @@ class MainActivity : ComponentActivity() {
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF0B0B0B))
+                    .background(chrome)
                     .systemBarsPadding()
                     .imePadding(),
             ) {
@@ -99,7 +108,7 @@ class MainActivity : ComponentActivity() {
             .build()
 
         return WebView(ctx).apply {
-            setBackgroundColor(0xFF0B0B0B.toInt())
+            setBackgroundColor(SPLASH_RED)
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true          // localStorage holds your words and progress
@@ -114,12 +123,27 @@ class MainActivity : ComponentActivity() {
                 override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                     loader.shouldInterceptRequest(request.url)
 
+                // the page normally says so itself; this only stops the app staying red if it never does
+                override fun onPageFinished(view: WebView, url: String) {
+                    Handler(Looper.getMainLooper()).postDelayed({ splashDone() }, 5000)
+                }
+
                 // Never navigate away from our own page.
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
                     request.url.host != APP_HOST
             }
             loadUrl("https://$APP_HOST/assets/www/index.html")
         }
+    }
+
+    @Suppress("DEPRECATION")
+    fun splashDone() {
+        if (chrome.value == Color(NIGHT).value) return
+        chrome = Color(NIGHT)
+        webView?.setBackgroundColor(NIGHT)
+        window.setBackgroundDrawable(ColorDrawable(NIGHT))
+        window.statusBarColor = NIGHT
+        window.navigationBarColor = NIGHT
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -199,5 +223,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val APP_HOST = "appassets.androidplatform.net"
         private const val MAX_IMPORT_BYTES = 5_000_000
+        private const val SPLASH_RED = 0xFFD20515.toInt()
+        private const val NIGHT = 0xFF0B0B0B.toInt()
     }
 }

@@ -2,6 +2,10 @@
 
 The launcher icon is now your eagle artwork (adaptive icon: white eagle on a red gradient, plus round and themed variants). To replace it later, use Android Studio: right-click `app` > New > Image Asset. `assets/www/brand/logo.png` is the same logo for the welcome and About screens, and `brand/welcome.png` (optional, 1080 x 2400) is full-screen art behind the welcome screen.
 
+# Launch screen
+
+Every cold start shows a full-screen red splash: `<!--splash-->` in `index.html` (written by `web/patches.py`) with its styles at the end of `web/modules/v42.css`. It runs on CSS alone and ends by itself after about 1.9 seconds, and a tap skips it. Android's own launch screen is plain red, so the two read as one.
+
 # Your own icon and first-launch screen
 
 ## App icon

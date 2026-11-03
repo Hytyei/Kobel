@@ -18,7 +18,7 @@ object Notifier {
     // "update2": the first channel was created as silent (IMPORTANCE_LOW) and Android never lets an app raise an existing channel,
     // so updates use a new id with a pop-up (heads-up) importance
     const val CH_UPDATE = "update2"
-    /** Late streak calls (85th minute and later): pop-up importance, so the final whistle is hard to miss. */
+    /** Late streak calls (80th minute and later): pop-up importance and a live countdown, so the final whistle is hard to miss. */
     const val CH_WHISTLE = "whistle"
 
     fun ensureChannels(ctx: Context) {
@@ -28,8 +28,8 @@ object Notifier {
             if (nm.getNotificationChannel(id) == null) nm.createNotificationChannel(NotificationChannel(id, name, imp).apply { description = desc })
         }
         ch(CH_SOCIAL, "Friends and study groups", "Friend requests, match requests, study group news", NotificationManager.IMPORTANCE_DEFAULT)
-        ch(CH_STREAK, "Matchday clock (streak)", "Second-half and 75th-minute calls while your streak is on the line", NotificationManager.IMPORTANCE_DEFAULT)
-        ch(CH_WHISTLE, "Final whistle (streak ending)", "The last calls before your streak ends at midnight", NotificationManager.IMPORTANCE_HIGH)
+        ch(CH_STREAK, "Matchday clock (streak)", "Calls in the second half while your streak is on the line", NotificationManager.IMPORTANCE_DEFAULT)
+        ch(CH_WHISTLE, "Final whistle (streak ending)", "The live countdown before your streak ends at midnight", NotificationManager.IMPORTANCE_HIGH)
         ch(CH_UPDATE, "App updates", "A new Kobel version is available", NotificationManager.IMPORTANCE_HIGH)
         if (nm.getNotificationChannel("update") != null) nm.deleteNotificationChannel("update")
     }
@@ -38,14 +38,15 @@ object Notifier {
     fun canPost(ctx: Context): Boolean =
         Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 
-    fun show(ctx: Context, id: Int, channel: String, title: String, text: String) {
+    /** [untilMs] > 0: the notification shows a live countdown to that moment and removes itself when it arrives. */
+    fun show(ctx: Context, id: Int, channel: String, title: String, text: String, untilMs: Long = 0L) {
         if (!canPost(ctx)) return
         ensureChannels(ctx)
         val open = PendingIntent.getActivity(
             ctx, 0, Intent(ctx, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        val n = NotificationCompat.Builder(ctx, channel)
+        val b = NotificationCompat.Builder(ctx, channel)
             .setSmallIcon(R.drawable.ic_stat_kobel)
             .setContentTitle(title)
             .setContentText(text)
@@ -54,9 +55,12 @@ object Notifier {
             .setContentIntent(open)
             .setColor(0xFFD20515.toInt())
             .setPriority(if (channel == CH_UPDATE || channel == CH_WHISTLE) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_DEFAULT)
-            .build()
+        if (untilMs > System.currentTimeMillis()) {
+            b.setWhen(untilMs).setShowWhen(true).setUsesChronometer(true).setChronometerCountDown(true)
+                .setTimeoutAfter(untilMs - System.currentTimeMillis())
+        }
         try {
-            (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(id, n)
+            (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(id, b.build())
         } catch (_: SecurityException) {
         }
     }

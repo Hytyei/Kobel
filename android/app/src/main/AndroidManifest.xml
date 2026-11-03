@@ -65,6 +65,19 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kobel_big_info" />
         </receiver>
 
+        <receiver android:name=".KobelWidgetForm" android:exported="false">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kobel_form_info" />
+        </receiver>
+
+        <!-- The match clock: widget redraws, streak calls, and getting both back after a reboot or an update. -->
+        <receiver android:name=".ClockReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".NotifyPollJob"
             android:exported="false"

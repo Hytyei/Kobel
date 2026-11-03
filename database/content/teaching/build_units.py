@@ -16,8 +16,8 @@ U = []
 # 1 ───────── Greetings
 U.append({"id":"greet","md":1,"tag":"Kick-off","title":"Greetings & polite phrases","de":"Begrüßung","sub":"Say hello, goodbye and ask how someone is.","subject":"Greetings & polite phrases","boards":[
  talk("Kick-off!","Every match starts with a handshake. In German, every conversation starts with a greeting. Learn these first and you can walk onto the pitch.",["Pick the greeting by the time of day","Choose du-style (friends) or Sie-style (formal)"]),
- words("The greeting line-up","Four greetings, one for each part of the day. Tap a word to hear it.",[["Guten Morgen","good morning"],["Guten Tag","good day / hello"],["Guten Abend","good evening"],["Gute Nacht","good night"],["Hallo","hello"]]),
- words("Goodbyes","Two ways to leave the pitch. Informal with friends, formal with strangers and teachers.",[["Tschüs","bye"],["Mach's gut!","take care!"],["Auf Wiedersehen","goodbye (formal)"]]),
+ words("The greeting line-up","One greeting for each part of the day, and Hallo for any time. Tap a word to hear it.",[["Guten Morgen","good morning"],["Guten Tag","good day / hello"],["Guten Abend","good evening"],["Gute Nacht","good night"],["Hallo","hello"]]),
+ words("Goodbyes","Tschüs and Mach's gut with friends, Auf Wiedersehen with strangers and teachers.",[["Tschüs","bye"],["Mach's gut!","take care!"],["Auf Wiedersehen","goodbye (formal)"]]),
  slots("Two systems: du and Sie","Think of two formations. Friends play the informal system, strangers the formal one. Same question, different shape.",[
    {"line":"Informal (friends)","parts":[["Wie geht's dir?","How are you?"],["Und dir?","And you?"]]},
    {"line":"Formal (Sie)","parts":[["Wie geht es Ihnen?","How are you?"]]}]),
@@ -44,11 +44,12 @@ U.append({"id":"class","md":2,"tag":"Warm-up","title":"Classroom & instructions"
 
 # 3 ───────── Sounds & articles
 U.append({"id":"sounds","md":3,"tag":"Fitness","title":"Sounds & articles","de":"Laute & Artikel","sub":"German spelling sounds, and the three little words der, die, das.","subject":None,"covers":"Sounds & articles","boards":[
- talk("Fitness first","German is easier than it looks, because it is spelled as it sounds. A few sound rules and you can read any word.",["Learn 5 key sounds","Meet der, die, das"]),
+ talk("Fitness first","German is easier than it looks, because it is spelled as it sounds. A few sound rules and you can read any word.",["Learn the key sounds","Meet der, die, das"]),
  table("Five key sounds","Learn these sound patterns. Each one has an example from your notes.",[["sch","like sh in shoe (Entschuldigung)"],["tsch","like ch in chair (Deutschland)"],["ei","like i in mine (schreiben)"],["eu","like oy in boy (Deutschland)"],["ie","long ee (wiederholen)"]]),
  table("Tricky ones","Two more tricks that German players use all the time.",[["ch after a, o, u","hard, from the throat (Nacht, acht)"],["ch after other vowels","soft (Ich)"],["st / sp at the start","sounds like sht / shp (Starten)"],["-ig at the end","like -ich"]]),
+ table("Umlauts and ß","Two dots change the sound, and ß is a sharp s. Round your lips for ö and ü.",[["ä","like e in bed (Mädchen)"],["ö","say e with round lips (schön)"],["ü","say ee with round lips (fünf)"],["ß","a sharp s (heißen)"]]),
  words("Listen and copy","Tap each word and say it back out loud.",[["Entschuldigung","excuse me"],["Deutschland","Germany"],["schreiben","to write"],["wiederholen","to repeat"],["starten","to start"],["acht","eight"]]),
- talk("Meet the three articles","Every German noun wears a shirt: der, die or das. This is the gender. There are no tricks to guess it, so always learn the noun with its article.",["der = masculine","die = feminine","das = neuter","die = all plurals"]),
+ talk("Meet the three articles","Every German noun wears a shirt: der, die or das. This is the gender. Later you will meet rules that help, but always learn the noun with its article.",["der = masculine","die = feminine","das = neuter","die = all plurals"]),
  table("The squad sheet","Same word 'the', four shirts.",[["der","masculine (der Vater)"],["die","feminine (die Mutter)"],["das","neuter (das Kind)"],["die","plural (die Eltern)"]]),
  drill("Which shirt does Kind wear?",["der","die","das"],2,"das Kind. Always learn the article with the noun.","das Kind"),
  drill("What do ALL plurals wear?",["der","die","das"],1,"die: die Eltern, die Kinder. All plurals use die."),
@@ -86,7 +87,7 @@ U.append({"id":"numbers","md":5,"tag":"Scoreboard","title":"Numbers","de":"Zahle
 # 6 ───────── Everyday verbs
 U.append({"id":"verbs","md":6,"tag":"Training ground","title":"Everyday verbs","de":"Verben","sub":"Make regular verbs work with every player, plus haben.","subject":"Everyday verbs","boards":[
  talk("The training ground","Verbs are your players. They change their ending depending on who is playing. Learn one pattern and most verbs follow it.",["Take the stem (komm-)","Add the ending","Learn haben separately"]),
- words("Five everyday verbs","These will work in almost every conversation.",[["kommen","to come"],["wohnen","to live (reside)"],["lernen","to learn"],["gehen","to go"],["leben","to live"],["sagen","to say"]]),
+ words("Six everyday verbs","These will work in almost every conversation.",[["kommen","to come"],["wohnen","to live (reside)"],["lernen","to learn"],["gehen","to go"],["leben","to live"],["sagen","to say"]]),
  table("Regular endings","Take the stem, add the ending. kommen → komm- + ending.",[["ich","komme (-e)"],["du","kommst (-st)"],["er/sie/es","kommt (-t)"],["wir","kommen (-en)"],["ihr","kommt (-t)"],["sie/Sie","kommen (-en)"]],[0,1]),
  words("In real sentences","See the endings at work.",[["Ich komme aus Deutschland.","I come from Germany."],["Wo wohnst du?","Where do you live?"],["Warum lernst du Deutsch?","Why are you learning German?"],["Wohin gehst du?","Where are you going?"],["Ich lebe allein.","I live alone."]]),
  table("haben = to have","haben is irregular. Careful: er/sie/es is hat, not habt.",[["ich","habe"],["du","hast"],["er/sie/es","hat"],["wir","haben"],["ihr","habt"],["sie/Sie","haben"]],[1,2]),
@@ -150,7 +151,7 @@ U.append({"id":"jobs","md":10,"tag":"Careers","title":"Jobs & work","de":"Beruf"
  talk("The -in rule","Male job + -in = female job. Student → Studentin. Kellner → Kellnerin. Arzt → Ärztin (with an umlaut).",["+ -in","sometimes + umlaut"]),
  words("Ask and answer","Two questions, three ways to answer.",[["Was machst du beruflich?","what do you do? (informal)"],["Was machen Sie beruflich?","what do you do? (formal)"],["Ich bin ... von Beruf.","my profession is ..."],["Ich arbeite als ... bei ...","I work as ... at ..."]]),
  slots("als and bei","als = the role. bei = the employer.",[
-   {"line":"Er arbeitet als Friseurin.","parts":[["Er arbeitet","he works"],["als","as","hi"],["Friseurin","role"]]},
+   {"line":"Sie arbeitet als Friseurin.","parts":[["Sie arbeitet","she works"],["als","as","hi"],["Friseurin","role"]]},
    {"line":"Sie arbeitet bei HotSped.","parts":[["Sie arbeitet","she works"],["bei","at","hi"],["HotSped","employer"]]}]),
  words("Training and studying","Not working yet? Say it like this.",[["die Ausbildung","vocational training"],["das Praktikum","internship"],["studieren","to study (at university)"],["arbeitslos","unemployed"],["der Schüler","pupil"],["die Rentnerin","retiree (f.)"]]),
  dlg("Match tape: new teammate","Talking about jobs.",[["A","Was machst du beruflich?","What do you do for a living?"],["B","Ich bin Kellnerin. Und du?","I am a waitress. And you?"],["A","Ich studiere Medizin.","I study medicine."],["B","Wo arbeitest du?","Where do you work?"],["A","Ich arbeite bei HotSped.","I work at HotSped."]]),
@@ -225,15 +226,15 @@ U.append({"id":"vowel","md":16,"tag":"Advanced tactics","title":"Verbs with vowe
  table("nehmen (e → i, double m)","nehmen also doubles the m: nimmst, nimmt.",[["ich","nehme"],["du","nimmst"],["er/sie/es","nimmt"],["wir","nehmen"],["ihr","nehmt"],["sie/Sie","nehmen"]],[1,2]),
  table("lesen (e → ie)","lesen and sehen change to ie.",[["du","liest"],["er/sie/es","liest"]],[0,1]),
  table("schlafen (a → ä)","a becomes ä.",[["ich","schlafe"],["du","schläfst"],["er/sie/es","schläft"],["wir","schlafen"]],[1,2]),
- words("The squad of verbs","Learn them with their changing forms.",[["essen (du isst)","to eat"],["geben (du gibst)","to give"],["helfen (er hilft)","to help"],["sehen (du siehst)","to see"],["fahren (du fährst)","to drive"],["tragen (er trägt)","to carry / to wear"],["gehen","does NOT change"]]),
+ words("The squad of verbs","Learn them with their changing forms.",[["essen (du isst)","to eat"],["geben (du gibst)","to give"],["helfen (er hilft)","to help"],["sehen (du siehst)","to see"],["fahren (du fährst)","to drive"],["tragen (er trägt)","to carry / to wear"]]),
  words("In sentences","See them in action.",[["Du sprichst Englisch.","You speak English."],["Er nimmt den Stuhl.","He takes the chair."],["Du liest ein Buch.","You read a book."],["Du schläfst lange.","You sleep for a long time."],["Er hilft mir.","He helps me."]]),
  drill("Complete: Du ___ Englisch.",["sprechst","sprichst","sprecht"],1,"sprechen: du sprichst.","Du sprichst Englisch."),
  drill("Complete: Er ___ lange.",["schlafet","schläft","schlaft"],1,"schlafen: er schläft (a → ä)."),
- recap("You have the full tactics board. Train the changing verbs.","Verbs with vowel change")]})
+ recap("Now the tricky verbs are on your side. Train the changing verbs.","Verbs with vowel change")]})
 
 # 17 ───────── Languages
-U.append({"id":"languages","md":17,"tag":"Semi-final","title":"Languages","de":"Sprachen","sub":"Say which languages you speak and how well.","subject":"Countries & languages","boards":[
- talk("The final","The last match of the season: languages. You can already say where you are from. Now say what you speak and how well.",["Ich spreche ...","Ich lerne ..."]),
+U.append({"id":"languages","md":17,"tag":"Press room","title":"Languages","de":"Sprachen","sub":"Say which languages you speak and how well.","subject":"Countries & languages","boards":[
+ talk("The press room","Languages next. You can already say where you are from. Now say what you speak and how well.",["Ich spreche ...","Ich lerne ..."]),
  words("Languages","Language = country + -isch (mostly).",[["Deutsch","German"],["Englisch","English"],["Französisch","French"],["Italienisch","Italian"],["Spanisch","Spanish"],["Schwedisch","Swedish"],["Chinesisch","Chinese"],["Russisch","Russian"],["Polnisch","Polish"],["Türkisch","Turkish"],["Persisch","Persian"],["Aserbaidschanisch","Azerbaijani"]]),
  words("How well?","From best to worst.",[["sehr gut","very well"],["gut","well"],["ein bisschen","a little bit"],["gar nicht","not at all"]]),
  slots("Speak, learn, ask","Verb in position 2 again. Sprechen changes its vowel with du: du sprichst.",[
@@ -242,7 +243,7 @@ U.append({"id":"languages","md":17,"tag":"Semi-final","title":"Languages","de":"
  dlg("Match tape: the press room","Two players, many languages.",[["A","Welche Sprachen sprichst du?","Which languages do you speak?"],["B","Ich spreche sehr gut Deutsch und ein bisschen Türkisch.","I speak German very well and a little Turkish."],["A","Sprichst du Persisch?","Do you speak Persian?"],["B","Ja. Und ich lerne Deutsch.","Yes. And I am learning German."],["A","Ich spreche gar nicht Chinesisch.","I do not speak Chinese at all."]]),
  drill("How do you say: I speak a little German?",["Ich spreche ein bisschen Deutsch.","Ich spreche gar nicht Deutsch.","Ich spreche sehr gut Deutsch."],0,"ein bisschen = a little bit.","Ich spreche ein bisschen Deutsch."),
  drill("Complete: Welche Sprachen ___ du?",["sprechen","sprichst","spreche"],1,"du sprichst: e → i."),
- recap("Full time! That was the last of the early lessons. Train the languages and keep the streak.","Countries & languages")]})
+ recap("Full time! You can say what you speak and how well. Train the languages.","Countries & languages")]})
 
 
 # ───────── Sessions 7-10 (md numbers are renumbered at the end) ─────────
@@ -306,7 +307,7 @@ U.append({"id":"objects","md":22,"tag":"Equipment bag","title":"Everyday objects
  recap("Bag packed! Train the everyday objects.","Everyday objects")]})
 
 # 23 ───────── Business cards & forms
-U.append({"id":"cards","md":23,"tag":"Player card 2","title":"Business cards & forms","de":"Visitenkarten & Formulare","sub":"Read a business card and fill in a form.","subject":"Business cards & forms","boards":[
+U.append({"id":"cards","md":23,"tag":"Paperwork","title":"Business cards & forms","de":"Visitenkarten & Formulare","sub":"Read a business card and fill in a form.","subject":"Business cards & forms","boards":[
  talk("Player card","Every player has a card with name, club and number. In business life it is a Visitenkarte. Learn the fields.",["Department, company, address","Fill in a form with your details"]),
  words("On a business card","The typical fields.",[["die Abteilung","department"],["die Personalabteilung","HR department"],["die IT-Abteilung","IT department"],["die E-Mail-Adresse","email address"],["die Firma","company"],["die Homepage","website"],["die Telefonnummer","telephone number"]]),
  words("The address","Street, house number, postcode, place.",[["die Straße","street"],["die Hausnummer","house number"],["die Postleitzahl","postcode"],["der Ort","place / town"],["die Stadt","city"],["das Land","country"]]),
@@ -393,7 +394,33 @@ U.append({"id":"phone","md":29,"tag":"Radio link","title":"Phone calls at the of
 # ───────── Sorting: classroom instructions stay out of the Tactics Room (they live in daily challenges and training) ─────────
 EXCLUDED_FROM_TEACHING = {"class"}
 U = [u for u in U if u["id"] not in EXCLUDED_FROM_TEACHING]
+# Semester 2 lives in units_a12.json: it is plain data, edited by hand.
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"units_a12.json"),encoding="utf-8") as _f: U += json.load(_f)
+
+# ───────── Order: every talk only leans on what came before it. Four phases, each one fits a formation on the Tactics page. ─────────
+# Moved on purpose: asking comes early (a beginner needs "how do you say that?" first), ein/kein before the first talk that uses it,
+# big numbers before the prices in describe, the vowel-change verbs before sehen and sprechen are used.
+PHASES = [
+    ["greet","sounds","intro","numbers","verbs","questions","asking","personal"],
+    ["countries","jobs","family","doch","genders","einkein","furniture","bignum","describe"],
+    ["vowel","languages","colours","describe2","objects","cards","office","plurals","online"],
+    ["akk","phone","koennen","degree","freetime","clock","food","cafe"],
+]
+_by = {u["id"]: u for u in U}
+assert sorted(_by) == sorted(sum(PHASES, [])), set(_by) ^ set(sum(PHASES, []))
+U = [dict(_by[i], ph=p) for p, ids in enumerate(PHASES) for i in ids]
 for _i, _u in enumerate(U): _u["md"] = _i + 1
+
+# Quick checks: the right answer must not sit in the same place every time (it was first in most late talks).
+for _ui, _u in enumerate(U):
+    _n = 0
+    for _b in _u["boards"]:
+        if _b["k"] != "drill" or set(_b["opts"]) == {"der", "die", "das"}: continue   # der, die, das always keep their order
+        _to = (_ui + _n * 2 + 1) % len(_b["opts"]); _n += 1
+        _right = _b["opts"][_b["a"]]
+        _rest = [o for k, o in enumerate(_b["opts"]) if k != _b["a"]]
+        _b["opts"] = _rest[:_to] + [_right] + _rest[_to:]
+        _b["a"] = _to
 
 SPV={"sein = to be","heißen = to be called","haben = to have","Stems ending in -t","sprechen (e → i)","nehmen (e → i, double m)","lesen (e → ie)","schlafen (a → ä)","Regular endings"}  # SPV: verb tables are spoken row by row
 for _u in U:

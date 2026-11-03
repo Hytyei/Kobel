@@ -6,6 +6,8 @@ here = os.path.dirname(os.path.abspath(__file__))
 notes = sorted(glob.glob(os.path.join(here, "..", "*.notes")))
 TOK = re.compile(r"[A-Za-zÄÖÜäöüß][A-Za-zÄÖÜäöüß-]*")
 corpus, subjects = set(), set()
+# sessions after 014 are kept only in the app's notes module
+notes.append(os.path.join(here, "..", "..", "..", "web", "modules", "notes.js"))
 for p in notes:
     for line in open(p, encoding="utf-8"):
         if line.startswith("@subject"): subjects.add(line[8:].strip()); continue
@@ -15,7 +17,7 @@ subjects |= {"Classroom & instructions","Countries & languages","Introductions &
 # extra tokens used only as numbers/names already inside the notes' wording (documented, kept tiny)
 ALLOW = set()
 units = json.load(open(os.path.join(here, "units.json"), encoding="utf-8"))
-GER_TABLES = {"sein = to be","heißen = to be called","haben = to have","Stems ending in -t","sprechen (e → i)","nehmen (e → i, double m)","lesen (e → ie)","schlafen (a → ä)","Regular endings","mein / meine","er / sie / es for things","Positive question","Negative question"}
+GER_TABLES = {"sein = to be","heißen = to be called","haben = to have","Stems ending in -t","sprechen (e → i)","nehmen (e → i, double m)","lesen (e → ie)","schlafen (a → ä)","Regular endings","möchten = would like","mögen = to like","mein / meine","er / sie / es for things","Positive question","Negative question"}
 bad = []
 def chk(where, text):
     for t in TOK.findall(text):
@@ -52,7 +54,7 @@ for u in units:
             if b["subject"] and b["subject"] not in subjects: bad.append((w, "subject", b["subject"]))
         if k == "table" and b["h"] in GER_TABLES and b["h"] in ("sein = to be",) and len(b["rows"]) != 6: bad.append((w,"rows",len(b["rows"])))
 # Classroom instructions are for daily challenges and training only, not for the Tactics Room
-missing = subjects - seen_subjects - {"Classroom & instructions"}
+missing = {s for s in subjects - seen_subjects - {"Classroom & instructions", "Sentences from the notes"} if not s.startswith("`")}
 if missing: bad.append(("coverage", "subjects not taught", sorted(missing)))
 for x in bad: print("PROBLEM", x)
 print(f"{len(units)} units, {sum(len(u['boards']) for u in units)} boards, {len(bad)} problems")

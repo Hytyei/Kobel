@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ draws its own launch screen before any app code runs. An empty icon turns it into plain red, and the web splash takes over from there. -->
+    <style name="Theme.Kobel" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/kobel_red</item>
+        <item name="android:statusBarColor">@color/kobel_red</item>
+        <item name="android:navigationBarColor">@color/kobel_red</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowSplashScreenBackground">@color/kobel_red</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_blank</item>
+        <item name="android:windowSplashScreenAnimationDuration">0</item>
+    </style>
+</resources>

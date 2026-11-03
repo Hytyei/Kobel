@@ -1,0 +1,1736 @@
+[
+ {
+  "id": "koennen",
+  "md": 29,
+  "tag": "Skill check",
+  "title": "Can do: können",
+  "de": "Können: Was kannst du?",
+  "sub": "Say what you can do, and ask others.",
+  "subject": "Hobbies & activities",
+  "covers": [
+   "Can-do sentences",
+   "Can you help? (everyday)"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Skill check",
+    "say": "Every player has a strength. With können you say what you can do. It sits in position 2 like a captain, and the action verb runs to the very end of the pitch.",
+    "pts": [
+     "können is in position 2",
+     "The action verb goes to the end, as an infinitive",
+     "Yes/no question: können moves to position 1"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Hobbies & activities",
+    "say": "Your squad of skills.",
+    "items": [
+     [
+      "kochen",
+      "to cook"
+     ],
+     [
+      "backen",
+      "to bake"
+     ],
+     [
+      "singen",
+      "to sing"
+     ],
+     [
+      "schwimmen",
+      "to swim"
+     ],
+     [
+      "fotografieren",
+      "to photograph"
+     ],
+     [
+      "Schach spielen",
+      "to play chess"
+     ],
+     [
+      "malen",
+      "to paint"
+     ],
+     [
+      "Rad fahren",
+      "to ride a bike"
+     ],
+     [
+      "Fußball spielen",
+      "to play football"
+     ],
+     [
+      "tanzen",
+      "to dance"
+     ],
+     [
+      "Tennis spielen",
+      "to play tennis"
+     ],
+     [
+      "Gitarre spielen",
+      "to play the guitar"
+     ],
+     [
+      "Ski fahren",
+      "to ski"
+     ],
+     [
+      "reiten",
+      "to ride a horse"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "können: the line-up",
+    "say": "Watch ich and er/sie/es: no ending. The rest follow the usual endings.",
+    "rows": [
+     [
+      "ich",
+      "kann"
+     ],
+     [
+      "du",
+      "kannst"
+     ],
+     [
+      "er / sie / es",
+      "kann"
+     ],
+     [
+      "wir",
+      "können"
+     ],
+     [
+      "ihr",
+      "könnt"
+     ],
+     [
+      "sie / Sie",
+      "können"
+     ]
+    ],
+    "hi": [
+     0,
+     2
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "The sentence frame",
+    "say": "Position 2 and the end.",
+    "rows": [
+     {
+      "line": "Statement",
+      "parts": [
+       [
+        "Sie",
+        "you"
+       ],
+       [
+        "können",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "wirklich super",
+        "really super"
+       ],
+       [
+        "tanzen",
+        "end",
+        "hi"
+       ]
+      ]
+     },
+     {
+      "line": "Statement",
+      "parts": [
+       [
+        "Ich",
+        "I"
+       ],
+       [
+        "kann",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "super",
+        "great"
+       ],
+       [
+        "kochen",
+        "end",
+        "hi"
+       ]
+      ]
+     },
+     {
+      "line": "Yes/no question",
+      "parts": [
+       [
+        "Kannst",
+        "pos. 1",
+        "hi"
+       ],
+       [
+        "du",
+        "you"
+       ],
+       [
+        "mir",
+        "me"
+       ],
+       [
+        "helfen",
+        "end",
+        "hi"
+       ],
+       [
+        "?",
+        ""
+       ]
+      ]
+     },
+     {
+      "line": "W-question",
+      "parts": [
+       [
+        "Wer",
+        "who"
+       ],
+       [
+        "kann",
+        "pos. 2",
+        "hi"
+       ],
+       [
+        "gut",
+        "well"
+       ],
+       [
+        "kochen",
+        "end",
+        "hi"
+       ],
+       [
+        "?",
+        ""
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: a compliment",
+    "say": "Compliment and thank you.",
+    "lines": [
+     [
+      "A",
+      "Sie können wirklich super tanzen!",
+      "You can really dance super!"
+     ],
+     [
+      "B",
+      "Vielen Dank! Meine Enkelin kann auch gut tanzen!",
+      "Thank you very much! My granddaughter can dance well too!"
+     ],
+     [
+      "A",
+      "Wer kann gut kochen?",
+      "Who can cook well?"
+     ],
+     [
+      "B",
+      "Ich kann super kochen.",
+      "I can cook great."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which form is right? \"Du ... toll Schach spielen.\"",
+    "opts": [
+     "kannst",
+     "kann",
+     "können"
+    ],
+    "a": 0,
+    "why": "du → kannst"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which sentence is correct?",
+    "opts": [
+     "Ich kann super kochen.",
+     "Ich kochen kann super.",
+     "Ich kann kochen super."
+    ],
+    "a": 0,
+    "why": "können in position 2, kochen at the end."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "You want to ask for help. What do you say?",
+    "opts": [
+     "Kannst du mir helfen?",
+     "Du kannst mir helfen?",
+     "Helfen kannst du mir."
+    ],
+    "a": 0,
+    "why": "Yes/no question: können first."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can say what you can do. Train the hobby words and the can-do sentences.",
+    "subject": "Hobbies & activities"
+   }
+  ]
+ },
+ {
+  "id": "degree",
+  "md": 30,
+  "tag": "Post-match",
+  "title": "How well? And what do you think?",
+  "de": "Wie gut? Wie finden Sie das?",
+  "sub": "Say how well you can do something and give an opinion.",
+  "subject": "How well? (degrees)",
+  "covers": [
+   "Opinions: Wie finden Sie das?",
+   "Compliments & thanks"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "The post-match interview",
+    "say": "After the match the reporter asks how it went. You say how well you can do something, and what you think about it.",
+    "pts": [
+     "sehr gut → gut → ein bisschen → nicht so gut → gar nicht",
+     "These phrases stand before the infinitive",
+     "Wie finden Sie das? asks for an opinion"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "How well?",
+    "say": "From strong to zero.",
+    "items": [
+     [
+      "sehr gut",
+      "very well"
+     ],
+     [
+      "gut",
+      "well"
+     ],
+     [
+      "ein bisschen",
+      "a little bit"
+     ],
+     [
+      "nicht so gut",
+      "not so well"
+     ],
+     [
+      "gar nicht",
+      "not at all"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "What do you think?",
+    "say": "Wie finden Sie das?",
+    "items": [
+     [
+      "toll / super",
+      "great"
+     ],
+     [
+      "normal",
+      "normal"
+     ],
+     [
+      "komisch",
+      "funny / strange"
+     ],
+     [
+      "blöd",
+      "stupid / annoying"
+     ],
+     [
+      "interessant",
+      "interesting"
+     ],
+     [
+      "lustig",
+      "funny"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Compliments & thanks",
+    "say": "Give a compliment, say thank you.",
+    "items": [
+     [
+      "Du kannst ja toll Ski fahren!",
+      "You can ski really great!"
+     ],
+     [
+      "Vielen Dank!",
+      "Thank you very much!"
+     ],
+     [
+      "Oh, danke!",
+      "Oh, thanks!"
+     ],
+     [
+      "Danke sehr!",
+      "Thank you very much!"
+     ],
+     [
+      "Herzlichen Dank!",
+      "Many thanks!"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "\"Sie können ... Fußball spielen.\" They cannot play at all.",
+    "opts": [
+     "gar nicht",
+     "sehr gut",
+     "ein bisschen"
+    ],
+    "a": 0,
+    "why": "gar nicht = not at all"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What does komisch mean?",
+    "opts": [
+     "funny / strange",
+     "normal",
+     "great"
+    ],
+    "a": 0,
+    "why": "komisch = funny / strange"
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! Train the degrees and the opinions.",
+    "subject": "How well? (degrees)"
+   }
+  ]
+ },
+ {
+  "id": "freetime",
+  "md": 0,
+  "tag": "Away day",
+  "title": "Going out, days and how often",
+  "de": "Freizeit",
+  "sub": "Say where you go, on which day and how often.",
+  "subject": "Places to go (noun table)",
+  "covers": [
+   "Days of the week",
+   "Time words: when? how often?",
+   "Verbs 1: going and meeting (movement and people)",
+   "Verbs 2: doing, playing and sport",
+   "Verbs 3: feelings and music (regular verbs)",
+   "Verbs 4: separable verbs (the prefix jumps to the end)",
+   "Talking about your free time"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Away day",
+    "say": "No match today. Where does the squad go? You will learn the places, the days of the week and how often you go.",
+    "pts": [
+     "in + place: ins Kino, in eine Disco",
+     "am + day: am Montag",
+     "immer, oft, manchmal, nie"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Places to go",
+    "say": "Most places here are das, so you say ins.",
+    "items": [
+     [
+      "das Kino",
+      "cinema"
+     ],
+     [
+      "das Museum",
+      "museum"
+     ],
+     [
+      "das Theater",
+      "theater"
+     ],
+     [
+      "das Café",
+      "café"
+     ],
+     [
+      "das Schwimmbad",
+      "swimming pool"
+     ],
+     [
+      "das Konzert",
+      "concert"
+     ],
+     [
+      "die Disco",
+      "disco"
+     ],
+     [
+      "der Klub",
+      "club"
+     ]
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "Where are you going?",
+    "say": "After gehen the place is in the accusative. in + das becomes ins.",
+    "rows": [
+     {
+      "line": "Ich gehe ins Kino.",
+      "parts": [
+       [
+        "Ich gehe",
+        "I go"
+       ],
+       [
+        "ins",
+        "das → ins",
+        "hi"
+       ],
+       [
+        "Kino",
+        "cinema"
+       ]
+      ]
+     },
+     {
+      "line": "Ich gehe in eine Disco.",
+      "parts": [
+       [
+        "Ich gehe",
+        "I go"
+       ],
+       [
+        "in eine",
+        "die → in eine",
+        "hi"
+       ],
+       [
+        "Disco",
+        "disco"
+       ]
+      ]
+     },
+     {
+      "line": "Ich gehe in einen Klub.",
+      "parts": [
+       [
+        "Ich gehe",
+        "I go"
+       ],
+       [
+        "in einen",
+        "der → in einen",
+        "hi"
+       ],
+       [
+        "Klub",
+        "club"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "words",
+    "h": "The fixture list",
+    "say": "All days are der. With a day you say am: am Montag.",
+    "items": [
+     [
+      "der Montag",
+      "Monday"
+     ],
+     [
+      "der Dienstag",
+      "Tuesday"
+     ],
+     [
+      "der Mittwoch",
+      "Wednesday"
+     ],
+     [
+      "der Donnerstag",
+      "Thursday"
+     ],
+     [
+      "der Freitag",
+      "Friday"
+     ],
+     [
+      "der Samstag",
+      "Saturday"
+     ],
+     [
+      "der Sonntag",
+      "Sunday"
+     ],
+     [
+      "am Wochenende",
+      "at the weekend"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Before and after today",
+    "say": "A time line from two days ago to two days ahead.",
+    "items": [
+     [
+      "vorgestern",
+      "the day before yesterday"
+     ],
+     [
+      "gestern",
+      "yesterday"
+     ],
+     [
+      "heute",
+      "today"
+     ],
+     [
+      "morgen",
+      "tomorrow"
+     ],
+     [
+      "übermorgen",
+      "the day after tomorrow"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "How often?",
+    "say": "Wie oft? From always to never. The word stands after the verb.",
+    "items": [
+     [
+      "immer",
+      "always"
+     ],
+     [
+      "oft",
+      "often"
+     ],
+     [
+      "manchmal",
+      "sometimes"
+     ],
+     [
+      "nie",
+      "never"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Free time",
+    "say": "Ask about hobbies and answer. gern after the verb means you like doing it.",
+    "items": [
+     [
+      "Was machst du gern?",
+      "What do you like to do?"
+     ],
+     [
+      "Was sind deine Hobbys?",
+      "What are your hobbies?"
+     ],
+     [
+      "Ich treibe gern Sport.",
+      "I like doing sport."
+     ],
+     [
+      "Ich treffe Freunde.",
+      "I meet friends."
+     ],
+     [
+      "Das macht Spaß.",
+      "That is fun."
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "A verb that splits: auflegen",
+    "say": "The first part of a separable verb jumps to the very end.",
+    "rows": [
+     [
+      "auflegen",
+      "to play records"
+     ],
+     [
+      "Ich",
+      "lege Musik auf."
+     ]
+    ],
+    "hi": [
+     1
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: the weekend",
+    "say": "Two teammates compare plans.",
+    "lines": [
+     [
+      "A",
+      "Was machst du gern?",
+      "What do you like to do?"
+     ],
+     [
+      "B",
+      "Ich gehe oft ins Café.",
+      "I often go to the café."
+     ],
+     [
+      "A",
+      "Am Freitag gehe ich in eine Disco.",
+      "On Friday I go to a disco."
+     ],
+     [
+      "B",
+      "Ich gehe nie in eine Disco.",
+      "I never go to a disco."
+     ],
+     [
+      "A",
+      "Am Wochenende treffe ich Freunde.",
+      "At the weekend I meet friends."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Ich gehe ___ Kino.",
+    "opts": [
+     "ins",
+     "in eine",
+     "am"
+    ],
+    "a": 0,
+    "why": "das Kino: in + das = ins.",
+    "de": "Ich gehe ins Kino."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you say: on Monday?",
+    "opts": [
+     "im Montag",
+     "am Montag",
+     "um Montag"
+    ],
+    "a": 1,
+    "why": "With a day you always say am."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which word means sometimes?",
+    "opts": [
+     "nie",
+     "immer",
+     "manchmal"
+    ],
+    "a": 2,
+    "why": "The scale: immer, oft, manchmal, nie."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: I often go to the café.",
+    "words": [
+     "Ich",
+     "gehe",
+     "oft",
+     "ins",
+     "Café"
+    ],
+    "why": "The word for how often stands after the verb."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can plan your week. Train the places and the days.",
+    "subject": "Places to go (noun table)"
+   }
+  ]
+ },
+ {
+  "id": "clock",
+  "md": 0,
+  "tag": "Stadium clock",
+  "title": "Telling the time",
+  "de": "Die Uhrzeit",
+  "sub": "Ask the time, read it two ways and say when.",
+  "subject": "Telling time: official (24 hours)",
+  "covers": [
+   "Telling time: everyday (12 hours)",
+   "Parts of the day",
+   "wissen: to know a fact",
+   "Goodbyes"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "The stadium clock",
+    "say": "Kick-off is at half past three. But in German, half past three is said as half four. There are two ways to read the clock, and you need both.",
+    "pts": [
+     "Official: drei Uhr fünfzehn",
+     "Everyday: viertel nach drei",
+     "When? Um halb vier"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Ask the time",
+    "say": "Two questions with the same meaning, and one for when something happens.",
+    "items": [
+     [
+      "Wie spät ist es?",
+      "What time is it?"
+     ],
+     [
+      "Wie viel Uhr ist es?",
+      "What time is it?"
+     ],
+     [
+      "Um wie viel Uhr?",
+      "At what time?"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Official time",
+    "say": "Hours, the word Uhr, minutes. Uhr stands in the middle.",
+    "rows": [
+     [
+      "3:15",
+      "drei Uhr fünfzehn"
+     ],
+     [
+      "15:15",
+      "fünfzehn Uhr fünfzehn"
+     ],
+     [
+      "15:00",
+      "fünfzehn Uhr"
+     ]
+    ],
+    "hi": [
+     1
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Everyday time",
+    "say": "nach = past, vor = to. Round the clock in quarters.",
+    "rows": [
+     [
+      "15:15",
+      "viertel nach drei"
+     ],
+     [
+      "15:30",
+      "halb vier"
+     ],
+     [
+      "15:45",
+      "viertel vor vier"
+     ],
+     [
+      "15:50",
+      "zehn vor vier"
+     ]
+    ],
+    "hi": [
+     1
+    ]
+   },
+   {
+    "k": "talk",
+    "h": "The halb trap",
+    "say": "halb looks forward to the NEXT hour. halb vier is 3:30, not 4:30. Think: half of the way to four.",
+    "pts": [
+     "halb vier = 3:30",
+     "fünf vor halb vier = 3:25",
+     "fünf nach halb vier = 3:35"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Parts of the day",
+    "say": "All with am. Only the night is different.",
+    "items": [
+     [
+      "am Morgen",
+      "in the morning"
+     ],
+     [
+      "am Vormittag",
+      "in the late morning"
+     ],
+     [
+      "am Mittag",
+      "at noon"
+     ],
+     [
+      "am Nachmittag",
+      "in the afternoon"
+     ],
+     [
+      "am Abend",
+      "in the evening"
+     ],
+     [
+      "in der Nacht",
+      "at night"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "wissen = to know a fact",
+    "say": "Irregular. ich and er/sie/es have no ending.",
+    "items": [
+     [
+      "Das weiß ich noch nicht.",
+      "I do not know that yet."
+     ],
+     [
+      "Weißt du das?",
+      "Do you know that?"
+     ],
+     [
+      "Er weiß es.",
+      "He knows it."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "See you",
+    "say": "Goodbyes that say when you meet again.",
+    "items": [
+     [
+      "Bis bald!",
+      "See you soon!"
+     ],
+     [
+      "Bis gleich!",
+      "See you in a moment!"
+     ],
+     [
+      "Bis dann!",
+      "See you then!"
+     ],
+     [
+      "Bis später!",
+      "See you later!"
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: when is it?",
+    "say": "Two friends agree a time.",
+    "lines": [
+     [
+      "A",
+      "Wie spät ist es?",
+      "What time is it?"
+     ],
+     [
+      "B",
+      "Es ist viertel nach drei.",
+      "It is a quarter past three."
+     ],
+     [
+      "A",
+      "Um wie viel Uhr gehst du ins Kino?",
+      "At what time do you go to the cinema?"
+     ],
+     [
+      "B",
+      "Um halb vier gehe ich ins Kino.",
+      "At half past three I go to the cinema."
+     ],
+     [
+      "A",
+      "Bis gleich!",
+      "See you in a moment!"
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "What time is halb vier?",
+    "opts": [
+     "3:30",
+     "4:30",
+     "4:00"
+    ],
+    "a": 0,
+    "why": "halb looks forward to the next hour."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "How do you say 15:45 in everyday German?",
+    "opts": [
+     "viertel nach drei",
+     "halb vier",
+     "viertel vor vier"
+    ],
+    "a": 2,
+    "why": "vor = to: a quarter to four."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: ___ halb vier gehe ich ins Kino.",
+    "opts": [
+     "Am",
+     "Um",
+     "In"
+    ],
+    "a": 1,
+    "why": "When? is answered with um.",
+    "de": "Um halb vier gehe ich ins Kino."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: It is a quarter past three.",
+    "words": [
+     "Es",
+     "ist",
+     "viertel",
+     "nach",
+     "drei"
+    ],
+    "why": "nach = past."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can read any clock in Germany. Train the times.",
+    "subject": "Telling time: official (24 hours)"
+   }
+  ]
+ },
+ {
+  "id": "food",
+  "md": 31,
+  "tag": "Team canteen",
+  "title": "Food, drink and what you like",
+  "de": "Essen, Trinken und was du magst",
+  "sub": "Talk about meals, say what you like and agree or disagree.",
+  "subject": "Food & drink",
+  "covers": [
+   "Meals of the day",
+   "Taste",
+   "Breakfast and more food",
+   "Liking and agreeing",
+   "Table talk",
+   "Making plans"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Team canteen",
+    "say": "Before the match the whole squad eats together. Everybody says what they like, and the others agree or disagree.",
+    "pts": [
+     "mögen takes the accusative",
+     "ich mag and er mag have no ending",
+     "möchten is the polite way to order"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Meals",
+    "say": "Three meals a day.",
+    "items": [
+     [
+      "das Frühstück",
+      "breakfast"
+     ],
+     [
+      "das Mittagessen",
+      "lunch"
+     ],
+     [
+      "das Abendessen",
+      "dinner"
+     ],
+     [
+      "zum Frühstück",
+      "for breakfast"
+     ],
+     [
+      "Guten Appetit!",
+      "enjoy your meal"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "How does it taste?",
+    "say": "Wie schmeckt das?",
+    "items": [
+     [
+      "lecker",
+      "delicious"
+     ],
+     [
+      "süß",
+      "sweet"
+     ],
+     [
+      "salzig",
+      "salty"
+     ],
+     [
+      "sauer",
+      "sour"
+     ],
+     [
+      "bitter",
+      "bitter"
+     ],
+     [
+      "scharf",
+      "spicy"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "mögen = to like",
+    "say": "Irregular, and it takes the accusative. ich and er/sie/es are the same: mag.",
+    "rows": [
+     [
+      "ich",
+      "mag"
+     ],
+     [
+      "du",
+      "magst"
+     ],
+     [
+      "er/sie/es",
+      "mag"
+     ],
+     [
+      "wir",
+      "mögen"
+     ],
+     [
+      "ihr",
+      "mögt"
+     ],
+     [
+      "sie/Sie",
+      "mögen"
+     ]
+    ],
+    "hi": [
+     0,
+     2
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "Not my thing: kein",
+    "say": "To say you do not like something, use kein in the accusative. Only der changes to keinen.",
+    "rows": [
+     {
+      "line": "Ich mag keinen Käse.",
+      "parts": [
+       [
+        "Ich mag",
+        "I like"
+       ],
+       [
+        "keinen",
+        "der → keinen",
+        "hi"
+       ],
+       [
+        "Käse",
+        "cheese"
+       ]
+      ]
+     },
+     {
+      "line": "Ich mag kein Fleisch.",
+      "parts": [
+       [
+        "Ich mag",
+        "I like"
+       ],
+       [
+        "kein",
+        "das → kein",
+        "hi"
+       ],
+       [
+        "Fleisch",
+        "meat"
+       ]
+      ]
+     },
+     {
+      "line": "Ich mag keine Schokolade.",
+      "parts": [
+       [
+        "Ich mag",
+        "I like"
+       ],
+       [
+        "keine",
+        "die → keine",
+        "hi"
+       ],
+       [
+        "Schokolade",
+        "chocolate"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Agree or disagree",
+    "say": "Two answers for each sentence.",
+    "items": [
+     [
+      "Ich mag Tee. → Ich auch!",
+      "agree"
+     ],
+     [
+      "Ich mag Tee. → Ich nicht!",
+      "disagree"
+     ],
+     [
+      "Ich mag keinen Tee. → Ich auch nicht!",
+      "agree"
+     ],
+     [
+      "Ich mag keinen Tee. → Ich schon!",
+      "disagree"
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: at breakfast",
+    "say": "Two teammates compare what they eat.",
+    "lines": [
+     [
+      "A",
+      "Was isst du gern zum Frühstück?",
+      "What do you like to eat for breakfast?"
+     ],
+     [
+      "B",
+      "Ich esse gern Brot mit Butter und Schinken und ein Ei.",
+      "I like eating bread with butter and ham and an egg."
+     ],
+     [
+      "A",
+      "Was trinkst du gern zum Frühstück?",
+      "What do you like to drink for breakfast?"
+     ],
+     [
+      "B",
+      "Ich trinke gern Kaffee mit Milch.",
+      "I like drinking coffee with milk."
+     ],
+     [
+      "A",
+      "Ich mag keinen Kaffee.",
+      "I do not like coffee."
+     ],
+     [
+      "B",
+      "Ich schon!",
+      "I do!"
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Making plans",
+    "say": "Felix asks, Anabel answers.",
+    "items": [
+     [
+      "Gehen wir ins Kino?",
+      "Shall we go to the cinema?"
+     ],
+     [
+      "Gute Idee.",
+      "Good idea."
+     ],
+     [
+      "Keine Lust.",
+      "I do not feel like it."
+     ],
+     [
+      "Das ist zu spät.",
+      "That is too late."
+     ],
+     [
+      "Ja, okay. Um vier.",
+      "Yes, okay. At four."
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: making plans",
+    "say": "Felix asks, Anabel answers. Note how a time gets agreed.",
+    "lines": [
+     [
+      "A",
+      "Gehen wir ins Kino?",
+      "Shall we go to the cinema?"
+     ],
+     [
+      "B",
+      "Gute Idee. Wann denn?",
+      "Good idea. When then?"
+     ],
+     [
+      "A",
+      "Am Abend habe ich keine Zeit.",
+      "I have no time in the evening."
+     ],
+     [
+      "B",
+      "Na, dann um halb vier?",
+      "Well, at half past three then?"
+     ],
+     [
+      "A",
+      "Ja, okay. Um vier.",
+      "Yes, okay. At four."
+     ]
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Ich mag Tee. You like tea too. What do you say?",
+    "opts": [
+     "Ich nicht!",
+     "Ich auch!",
+     "Ich schon!"
+    ],
+    "a": 1,
+    "why": "Agree with a positive sentence: Ich auch!"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Ich mag keinen Fisch. You DO like fish. What do you say?",
+    "opts": [
+     "Ich schon!",
+     "Ich auch!",
+     "Ich auch nicht!"
+    ],
+    "a": 0,
+    "why": "Disagree with a negative sentence: Ich schon!"
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Du ___ Käse.",
+    "opts": [
+     "mag",
+     "mögt",
+     "magst"
+    ],
+    "a": 2,
+    "why": "du magst, with -st as usual.",
+    "de": "Du magst Käse."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: Ich mag ___ Käse. (der Käse)",
+    "opts": [
+     "keinen",
+     "kein",
+     "keine"
+    ],
+    "a": 0,
+    "why": "der Käse → keinen Käse.",
+    "de": "Ich mag keinen Käse."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: I do not like chocolate.",
+    "words": [
+     "Ich",
+     "mag",
+     "keine",
+     "Schokolade"
+    ],
+    "why": "die Schokolade → keine Schokolade."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can talk about food and agree or disagree. Train the food words.",
+    "subject": "Food & drink"
+   }
+  ]
+ },
+ {
+  "id": "cafe",
+  "md": 32,
+  "tag": "Players' lounge",
+  "title": "Ordering in a café",
+  "de": "Im Café bestellen",
+  "sub": "Order politely, handle a missing item and build compound nouns.",
+  "subject": "Ordering in a café",
+  "covers": [
+   "The menu",
+   "Café dialogues"
+  ],
+  "boards": [
+   {
+    "k": "talk",
+    "h": "Players' lounge",
+    "say": "After training the team goes to the café. The waiter asks, you order, and sometimes the cake has run out.",
+    "pts": [
+     "Order in the accusative: einen, ein, eine",
+     "kein ... mehr means it has run out",
+     "In a compound noun the last noun gives the article"
+    ]
+   },
+   {
+    "k": "words",
+    "h": "The conversation",
+    "say": "Waiter and guest.",
+    "items": [
+     [
+      "Guten Tag, Sie wünschen?",
+      "Good day, what would you like?"
+     ],
+     [
+      "Einen Kaffee, bitte.",
+      "A coffee, please."
+     ],
+     [
+      "Tut mir leid.",
+      "I am sorry."
+     ],
+     [
+      "Schade!",
+      "Too bad!"
+     ],
+     [
+      "Gern.",
+      "Sure."
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Ordering: einen, ein, eine",
+    "say": "What you order is in the accusative, so der becomes einen.",
+    "rows": [
+     [
+      "der Kaffee",
+      "Einen Kaffee, bitte."
+     ],
+     [
+      "das Wasser",
+      "Ein Wasser, bitte."
+     ],
+     [
+      "die Suppe",
+      "Eine Suppe, bitte."
+     ]
+    ],
+    "hi": [
+     0
+    ]
+   },
+   {
+    "k": "table",
+    "h": "möchten = would like",
+    "say": "The polite way to order. ich and er/sie/es are the same, with no -t.",
+    "rows": [
+     [
+      "ich",
+      "möchte"
+     ],
+     [
+      "du",
+      "möchtest"
+     ],
+     [
+      "er/sie/es",
+      "möchte"
+     ],
+     [
+      "wir",
+      "möchten"
+     ]
+    ],
+    "hi": [
+     0,
+     2
+    ]
+   },
+   {
+    "k": "slots",
+    "h": "It has run out: kein ... mehr",
+    "say": "kein follows the accusative, and mehr goes to the end.",
+    "rows": [
+     {
+      "line": "Wir haben keinen Tee mehr.",
+      "parts": [
+       [
+        "Wir haben",
+        "we have"
+       ],
+       [
+        "keinen",
+        "der → keinen",
+        "hi"
+       ],
+       [
+        "Tee",
+        "tea"
+       ],
+       [
+        "mehr",
+        "more",
+        "hi"
+       ]
+      ]
+     },
+     {
+      "line": "Wir haben keine Pizza mehr.",
+      "parts": [
+       [
+        "Wir haben",
+        "we have"
+       ],
+       [
+        "keine",
+        "die → keine",
+        "hi"
+       ],
+       [
+        "Pizza",
+        "pizza"
+       ],
+       [
+        "mehr",
+        "more",
+        "hi"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "k": "words",
+    "h": "The menu",
+    "say": "Die Speisekarte.",
+    "items": [
+     [
+      "die Vorspeise",
+      "starter"
+     ],
+     [
+      "das Hauptgericht",
+      "main course"
+     ],
+     [
+      "das Dessert",
+      "dessert"
+     ],
+     [
+      "das Getränk",
+      "drink"
+     ]
+    ]
+   },
+   {
+    "k": "dlg",
+    "h": "Match tape: the cake has run out",
+    "say": "Waiter and guest. Listen for dann.",
+    "lines": [
+     [
+      "A",
+      "Möchten Sie Nusskuchen?",
+      "Would you like nut cake?"
+     ],
+     [
+      "B",
+      "Nein, danke. Ich möchte Schokoladenkuchen.",
+      "No, thanks. I would like chocolate cake."
+     ],
+     [
+      "A",
+      "Tut mir leid, wir haben keinen Schokoladenkuchen mehr.",
+      "I am sorry, we have no more chocolate cake."
+     ],
+     [
+      "A",
+      "Wir haben nur noch Apfelkuchen und Nusskuchen.",
+      "We only have apple cake and nut cake left."
+     ],
+     [
+      "B",
+      "Gut, dann nehme ich den Apfelkuchen.",
+      "Fine, then I will take the apple cake."
+     ]
+    ]
+   },
+   {
+    "k": "words",
+    "h": "Compound nouns",
+    "say": "The last noun decides.",
+    "items": [
+     [
+      "die Nuss + der Kuchen",
+      "der Nusskuchen"
+     ],
+     [
+      "der Apfel + der Saft",
+      "der Apfelsaft"
+     ],
+     [
+      "die Schokolade + der Kuchen",
+      "der Schokoladenkuchen"
+     ]
+    ]
+   },
+   {
+    "k": "table",
+    "h": "Which article?",
+    "say": "The LAST noun gives the article and says what the thing is.",
+    "rows": [
+     [
+      "die Nuss + der Kuchen",
+      "der Nusskuchen"
+     ],
+     [
+      "der Apfel + der Saft",
+      "der Apfelsaft"
+     ],
+     [
+      "die Kartoffel + die Suppe",
+      "die Kartoffelsuppe"
+     ]
+    ],
+    "hi": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Complete: ___ Kaffee, bitte. (der Kaffee)",
+    "opts": [
+     "Ein",
+     "Einen",
+     "Eine"
+    ],
+    "a": 1,
+    "why": "der Kaffee → einen Kaffee.",
+    "de": "Einen Kaffee, bitte."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "Which article has Nusskuchen?",
+    "opts": [
+     "die",
+     "das",
+     "der"
+    ],
+    "a": 2,
+    "why": "The last noun decides: der Kuchen → der Nusskuchen."
+   },
+   {
+    "k": "drill",
+    "h": "Quick check",
+    "q": "The soup has run out. What does the waiter say?",
+    "opts": [
+     "Wir haben keine Suppe mehr.",
+     "Wir haben eine Suppe mehr.",
+     "Wir haben keinen Suppe mehr."
+    ],
+    "a": 0,
+    "why": "die Suppe → keine Suppe, and mehr at the end."
+   },
+   {
+    "k": "order",
+    "h": "Build the play",
+    "q": "Build: I would like a coffee, please.",
+    "words": [
+     "Ich",
+     "möchte",
+     "einen",
+     "Kaffee",
+     "bitte"
+    ],
+    "why": "möchten takes the accusative: einen Kaffee."
+   },
+   {
+    "k": "recap",
+    "h": "Full time",
+    "say": "Final whistle! You can order, and react when something has run out. Train the café words.",
+    "subject": "Ordering in a café"
+   }
+  ]
+ }
+]

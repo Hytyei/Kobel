@@ -253,3 +253,12 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 
 ## Release notes: 4.1.0
 * **Release:** tag `v4.1.0` (version code 40100), build with `android\sign-release.ps1`, upload `kobelapp.apk`. No backend change.
+
+## Release notes: 4.2.0
+* **Release:** tag `v4.2.0` (version code 40200), build with `android\sign-release.ps1`, upload `kobelapp.apk`. No backend change.
+* **Home:** one plate and one main button, the rest folded away. The plates use `brand/emboss-*.webp`, made by `web/tools/make_art.py`; the rings repeat the shape of each crest (`V42_SHAPE` in `web/modules/v42.js`).
+* **Tactics Room:** new board and list, 34 talks, see `docs/TACTICS_ROOM.md`.
+* **Form widget:** 4x2, `KobelWidgetForm`. Every day is a game: W = daily goal, D = played but short of it, L = no-show.
+* **Match clock:** 0' = 00:00, 90' = 23:45, then +90'. `MatchClock.kt` redraws the widgets on that beat and fires the streak calls. From 80' (21:07) the call has a live countdown to midnight.
+* **Launch:** Android 12+ shows a plain red system screen (empty icon in `values-v31/themes.xml`), then the web splash takes over and calls `KobelAndroid.splashDone()`.
+
