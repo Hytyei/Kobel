@@ -28,7 +28,7 @@ src = sub(src, "<div class=\"set\"><span>Skin</span>${seg('skin',['bl','clean'],
 src = sub(src, "home:()=>S.settings.skin==='clean'?vHomeClean():vHome()", "home:vHome")
 src = sub(src, "function render(){\n  settle();careerCheck();", "function render(){\n  settle();careerCheck();applyClub();")
 src = sub(src, "soLoad(true);if(tab==='stats')render()}", "soLoad(true);if(tab==='stats'||tab==='friends')render()}")
-_CL = "const CHANGELOG={v:'4.2.3',title:{en:'Kobel 4.2.3: a new match clock on the widgets',de:'Kobel 4.2.3: eine neue Spieluhr auf den Widgets'},body:{\n  en:'The form widget shows the match minute on a stadium clock ring, and there is a new 2x2 form widget with the same clock, your league and your last 7 games.',\n  de:'Das Form-Widget zeigt die Spielminute auf einem Stadionuhr-Ring, und es gibt ein neues 2x2-Form-Widget mit derselben Uhr, deiner Liga und deinen letzten 7 Spielen.'}};\n"
+_CL = "const CHANGELOG={v:'4.2.4',title:{en:'Kobel 4.2.4: a fair Play-Off',de:'Kobel 4.2.4: ein faires Play-Off'},body:{\n  en:'The Play-Off question opens at once, and its trap tiles are near misses now: another article, another ending, an umlaut that is not there. After midnight the app notices by itself when your streak is on the edge, and bonus points no longer keep a streak alive on a day you did not practise.',\n  de:'Die Play-Off-Frage öffnet sofort, und ihre Fallen sind jetzt knapp daneben: ein anderer Artikel, eine andere Endung, ein Umlaut, der nicht dazugehört. Nach Mitternacht merkt die App von selbst, wenn deine Serie am Abgrund steht, und Bonuspunkte halten eine Serie nicht mehr an einem Tag ohne Training am Leben.'}};\n"
 if _re.search(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'", src):
     src = _re.sub(r"const CHANGELOG=\{v:'[234]\.[0-9]+\.[0-9]+'.*?\}\};\n", lambda m: _CL, src, count=1, flags=_re.S)
 
@@ -75,7 +75,7 @@ src = sub(src, "setTimeout(newsSheet,900);", "setTimeout(newsSheet,900);setTimeo
 src = sub(src, "if(settle()){render();newsSheet()}}", "if(settle()){render();newsSheet()}setTimeout(poAsk,1200)}")
 src = sub(src, "toast('Quest done: +15 points')", "b3Banner('✓',tx('Quest done','Aufgabe erledigt'),'+15 '+tx('points','Punkte'))")
 src = sub(src, "setTimeout(()=>toast('Quest bonus: +40 points'),900)", "setTimeout(()=>b3Banner('★',tx('All quests done','Alle Aufgaben erledigt'),'+40 '+tx('points','Punkte')),1500)")
-src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.3';", src, count=1)
+src = _re.sub(r"const APP_VER='[0-9.]+';", "const APP_VER='4.2.4';", src, count=1)
 
 # ---- 3.0: career step icons, league logos ----
 src = sub(src, "return `<div class=\"stg ${st}\"><i>${st==='done'?'✓':st==='cur'?'●':''}</i><div>", "return `<div class=\"stg ${st}\"><span class=\"sico\">${stageIco(i,22)}</span><div>")
@@ -218,3 +218,9 @@ if '<!--splash-->' in src:
     src = _re.sub(r'<!--splash-->.*?<!--/splash-->', lambda m: _SPLASH, src, count=1, flags=_re.S)
 else:
     src = sub(src, '<body>\n<div class="app" id="app"></div>', '<body>\n' + _SPLASH + '\n<div class="app" id="app"></div>')
+
+# ---- 4.2.4: points the app hands out by itself (a new career stage, a duel result that arrives later) are not a played day ----
+src = sub(src, "toast(tx('Career stage reached: ','Karrierestufe erreicht: ')+s.n);addXP(10,0)}", "toast(tx('Career stage reached: ','Karrierestufe erreicht: ')+s.n);bonusXP(10)}")
+src = sub(src, "addXP(25,0);toast(tx('Duel won! +25 XP','Duell gewonnen! +25 XP'))}", "bonusXP(25);toast(tx('Duel won! +25 XP','Duell gewonnen! +25 XP'))}")
+src = sub(src, "m.d++;addXP(12,0);toast(tx('Draw. +12 XP','Unentschieden. +12 XP'))}", "m.d++;bonusXP(12);toast(tx('Draw. +12 XP','Unentschieden. +12 XP'))}")
+src = sub(src, "else{m.l++;m.streak=0;if(d.my.done)addXP(8,0)}", "else{m.l++;m.streak=0;if(d.my.done)bonusXP(8)}")

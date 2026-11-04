@@ -116,8 +116,22 @@ const V42_ACTIONS={
   v42auto:()=>{try{NATIVE.openAutostart()}catch(e){}}
 };
 
-/* coming back to a page that stayed alive overnight: the widgets get today's numbers at once */
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pushWidgets()});
+/* points without a played day: they count for the league and levels, but not for today's goal or the streak */
+function bonusXP(n){S.stats.xp+=n;S.stats.bonusXp=(S.stats.bonusXp||0)+n}
+
+/* the day can change while the app is open or waiting in the background. Nothing else redraws on its own then, so a
+   streak that just ended (or a Play-Off that just became possible) stayed invisible until something else happened */
+let V42_DAY=dkey();
+function v42DayCheck(){
+  if(dkey()===V42_DAY)return;
+  V42_DAY=dkey();
+  try{settle()}catch(e){}
+  if(!ses&&!document.getElementById('po'))render();
+  pushWidgets();try{pushNotifyState()}catch(e){}
+  setTimeout(poAsk,800);
+}
+setInterval(v42DayCheck,20000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){v42DayCheck();pushWidgets()}});
 
 /* ---- what the form widget needs: every day is a game. W = daily goal reached, D = played but short of it, L = no-show,
    N = before your first day. The last letter is today and the Android side reads it together with `day`. ---- */

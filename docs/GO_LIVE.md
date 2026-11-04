@@ -278,3 +278,9 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 * **Release:** tag `v4.2.3` (version code 40203). No backend change.
 * **Form widgets:** the match clock is a ring (`clockRing` in `WidgetArt.kt`): the track fills from 0' to 90', a tick marks half-time, and the ball turns green once today's game is won. New 2x2 form widget `KobelWidgetFormSmall` with the same clock, league, stage and last 7 games. Picker previews are cropped from real renders.
 
+## Release notes: 4.2.4
+* **Release:** tag `v4.2.4` (version code 40204). No backend change.
+* **Play-Off:** `sentenceOf` threw on grammar cards, so building a sentence question could fail and "Take the Play-Off" did nothing. Trap tiles are now near misses (`poTwins`, `poLetterTraps` in `playoff.js`) instead of words or letters that are plainly not in the answer. The home check is cached for a minute.
+* **Midnight:** `v42DayCheck` redraws, settles the league and asks about the Play-Off when the date changes while the app is open or comes back. The Play-Off prompt is keyed by kind and day, so "danger" before midnight no longer hides "last" after it, and a busy screen retries in 5 seconds.
+* **Streak:** career-stage and duel-result points use `bonusXP`, so they no longer count as a played day.
+

@@ -18,11 +18,52 @@ function streakAlertHtml(){
   const last=r.kind==='last';
   return `<div class="b3-alert"><span class="fl">${FLAME(34)}</span><div style="flex:1;min-width:0"><b>${last?tx('Streak on the edge','Serie am Abgrund'):tx('Streak in danger','Serie in Gefahr')} · ${r.streak}</b><small>${last?tx('You missed a day. Win the Play-Off or lose it.','Du hast einen Tag verpasst. Gewinne das Play-Off oder verliere sie.'):tx('Ends in','Endet in')+' '+fmtLeft(r.left)+'. '+tx('Practise, or take the Play-Off.','Übe, oder spiele das Play-Off.')}</small></div><button class="b3-wb" data-a="poopen" style="flex:none"><span>Play-Off</span></button></div>`;
 }
-/* ---- build the question: always built from tiles (with trap tiles), never multiple choice ---- */
+/* ---- build the question: always built from tiles, never multiple choice. The trap tiles are near misses of the real
+   answer (the other article or case, the other verb ending, the umlaut or not, another plural ending), so a learner has
+   to know the form: random extra words or letters that are not in the answer at all gave it away at a glance. ---- */
 const poScore=c=>((c.bad||0)+(c.srs?c.srs.lapses:0)*2+1)/((c.ok||0)+1)+Math.random()*.8;
+const PO_SETS=[['der','die','das','den','dem','des'],['ein','eine','einen','einem','einer'],['kein','keine','keinen','keinem'],['mein','meine','meinen','meinem'],['dein','deine','deinen','deinem'],
+  ['ich','du','er','sie','es','wir','ihr'],['mich','dich','mir','dir','ihn','ihm'],['bin','bist','ist','sind','seid'],['habe','hast','hat','haben','habt'],['kann','kannst','können','könnt'],
+  ['mag','magst','mögen','mögt'],['möchte','möchtest','möchten'],['in','im','ins','am','an','um'],['aus','bei','von','zu','nach']];
+const PO_UML={a:'ä',o:'ö',u:'ü',ä:'a',ö:'o',ü:'u'};
+const poCase=(like,w)=>like[0]&&like[0]!==like[0].toLowerCase()?w[0].toUpperCase()+w.slice(1):w;
+/** near misses of one word, written the same way (capital stays capital) */
+function poTwins(w,uml){
+  const lc=w.toLowerCase(),set=PO_SETS.find(x=>x.includes(lc));
+  if(set)return set.filter(x=>x!==lc).map(x=>poCase(w,x));
+  const out=[];
+  const m=/^([a-zäöüß]{3,}?)(en|st|e|t)$/.exec(w);              // a lower-case verb: swap its ending
+  if(m)['e','st','t','en'].forEach(e=>{if(e!==m[2])out.push(m[1]+e)});
+  const v=uml&&/[aouäöü]/i.exec(w);if(v){const k=v.index,ch=w[k],to=PO_UML[ch.toLowerCase()];if(to)out.push(w.slice(0,k)+(ch===ch.toLowerCase()?to:to.toUpperCase())+w.slice(k+1))}
+  return out.filter(x=>x!==w);
+}
+const poBare=w=>w.replace(/[.,!?;:]+$/,'');
+function poSentenceTraps(W,known){
+  const have=new Set(W),traps=[];
+  shuffle(W.map((w,i)=>i)).forEach(i=>{
+    if(traps.length>=3)return;
+    const w=W[i],b=poBare(w),tail=w.slice(b.length);if(b.length<2)return;
+    const alt=shuffle(poTwins(b)).map(x=>x+tail).find(x=>!have.has(x)&&!traps.includes(x));
+    if(alt)traps.push(alt);
+  });
+  if(traps.length<3){   // too few near misses: fill with words from your other sentences
+    const more=shuffle(known.map(sentenceOf).filter(Boolean).flatMap(x=>x.de.split(/\s+/)).filter(w=>w.length>=3&&!have.has(w)&&!/[.!?]$/.test(w)));
+    for(const w of more){if(traps.length>=3)break;if(!traps.includes(w))traps.push(w)}
+  }
+  return traps;
+}
+/** letters for a spelled word: the umlaut or not, and endings a plural or a verb could have */
+function poLetterTraps(word,k){
+  const out=[],v=/[aouäöü]/i.exec(word);
+  if(v){const to=PO_UML[v[0].toLowerCase()];if(to)out.push(to)}
+  shuffle(['e','n','r','s','t','e','n']).forEach(ch=>{if(out.length<k)out.push(ch)});
+  return out.slice(0,k);
+}
+let PO_PEEK={at:0,v:null};
 function poBuild(peek){
+  /* the home screen asks "is there a Play-Off?" on every redraw: remember the answer for a minute */
+  if(peek&&Date.now()-PO_PEEK.at<6e4&&PO_PEEK.n===S.cards.length)return PO_PEEK.v;
   const known=S.cards.filter(c=>!c.susp&&c.srs&&c.srs.seen>0);
-  if(!known.length)return null;
   const pools={sent:[],noun:[],gap:[]};
   known.forEach(c=>{
     if(isG(c)){const z=gz(c);if(z&&z.ans&&c.en)pools.gap.push(c);return}
@@ -30,19 +71,22 @@ function poBuild(peek){
     if(c.art&&c.pl&&pluralOf(c))pools.noun.push(c);
   });
   const avail=Object.keys(pools).filter(k=>pools[k].length);
+  if(peek){PO_PEEK={at:Date.now(),n:S.cards.length,v:avail.length?true:null};return PO_PEEK.v}
   if(!avail.length)return null;
-  if(peek)return true;
   const wt={sent:.45,noun:.3,gap:.25},sum=avail.reduce((a,k)=>a+wt[k],0);let r=Math.random()*sum,type=avail[0];
   for(const k of avail){r-=wt[k];if(r<=0){type=k;break}}
-  const c=pools[type].sort((a,b)=>poScore(b)-poScore(a)).slice(0,8)[rnd(Math.min(8,pools[type].length))];
+  const top=pools[type].sort((a,b)=>poScore(b)-poScore(a)).slice(0,8),c=top[rnd(top.length)];
   if(type==='sent'){
-    const s=sentenceOf(c),W=s.de.split(/\s+/),have=new Set(W.map(x=>x.toLowerCase().replace(/[.,!?]/g,'')));
-    const extra=shuffle(known.map(k=>sentenceOf(k)).filter(Boolean).flatMap(x=>x.de.split(/\s+/)).filter(w=>w.length>=3&&!have.has(w.toLowerCase().replace(/[.,!?]/g,''))&&!/[.!?]$/.test(w))).filter((w,i,a)=>a.indexOf(w)===i).slice(0,3);
-    return{type,id:c.id,limit:100,label:tx('Build the sentence in German','Baue den Satz auf Deutsch'),prompt:s.en,answer:s.de,board:{units:shuffle(W.concat(extra)),sol:W,word:true},hint:tx('Tap the words in the right order. Three of the words do not belong.','Tippe die Wörter in der richtigen Reihenfolge. Drei Wörter gehören nicht dazu.')}}
+    const s=sentenceOf(c),W=s.de.split(/\s+/);
+    return{type,id:c.id,limit:100,label:tx('Build the sentence in German','Baue den Satz auf Deutsch'),prompt:s.en,answer:s.de,board:{units:shuffle(W.concat(poSentenceTraps(W,known))),sol:W,word:true},hint:tx('Tap the words in the right order. Three tiles are near misses: a wrong ending, article or form.','Tippe die Wörter in der richtigen Reihenfolge. Drei Kacheln sind knapp daneben: falsche Endung, falscher Artikel oder falsche Form.')}}
   if(type==='noun'){const pl=pluralOf(c),U=[...pl];
-    return{type,id:c.id,limit:45,label:tx('Article and plural','Artikel und Plural'),prompt:c.en,answer:`${c.art} ${c.de}, die ${pl}`,art:c.art,board:{units:U.concat(gmDecoys(pl,3)),sol:U},hint:tx('Pick the article of the singular noun, then spell the plural. Some letters are extra.','Wähle den Artikel des Singulars und buchstabiere dann den Plural. Manche Buchstaben sind zu viel.')}}
-  const z=gz(c),one=!/\s/.test(z.ans.trim()),U=one?[...z.ans]:z.ans.trim().split(/\s+/);
-  return{type:'gap',id:c.id,limit:35,label:tx('Fill the gap, hard mode','Lücke füllen, schwer'),prompt:`${z.pre}____${z.post}`,en:c.en,answer:z.ans,board:one?{units:U.concat(gmDecoys(z.ans,3)),sol:U}:{units:U.concat(['nicht','der']).filter((w,i,a)=>a.indexOf(w)===i),sol:U,word:true},hint:tx('Spell the missing word. Some letters are extra.','Buchstabiere das fehlende Wort. Manche Buchstaben sind zu viel.')};
+    return{type,id:c.id,limit:45,label:tx('Article and plural','Artikel und Plural'),prompt:c.en,answer:`${c.art} ${c.de}, die ${pl}`,art:c.art,board:{units:shuffle(U.concat(poLetterTraps(pl,3))),sol:U},hint:tx('Pick the article of the singular noun, then spell the plural. Three letters are traps: an umlaut or an ending that is not there.','Wähle den Artikel des Singulars und buchstabiere dann den Plural. Drei Buchstaben sind Fallen: ein Umlaut oder eine Endung, die nicht dazugehört.')}}
+  const z=gz(c),ans=z.ans.trim(),one=!/\s/.test(ans),twins=one?poTwins(ans,true).filter(x=>x!==ans):[];
+  let board;
+  if(one&&twins.length>=3)board={units:shuffle([ans,...shuffle(twins).slice(0,3)]),sol:[ans],word:true};   // der / den / dem ...: pick the one form that fits
+  else if(one)board={units:shuffle([...ans].concat(poLetterTraps(ans,3))),sol:[...ans]};
+  else{const U=ans.split(/\s+/);board={units:shuffle(U.concat(poSentenceTraps(U,known).slice(0,2))),sol:U,word:true}}
+  return{type:'gap',id:c.id,limit:35,label:tx('Fill the gap, hard mode','Lücke füllen, schwer'),prompt:`${z.pre}____${z.post}`,en:c.en,answer:ans,board,hint:board.sol.length===1&&board.word?tx('Only one of these forms fits the sentence.','Nur eine dieser Formen passt in den Satz.'):tx('Spell the missing word. Three tiles are traps.','Buchstabiere das fehlende Wort. Drei Kacheln sind Fallen.')}
 }
 const poN=x=>norm(String(x).replace(/(\w)['’]s\b/g,'$1 es'));
 function poCheck(q,got,art){
@@ -128,9 +172,10 @@ function poForfeit(){
 /* ask once per few hours when the app opens */
 function poAsk(){
   try{
-    const r=streakRisk();if(!r||!poBuild(true)||ses||$('#po')||$('#cel'))return;
-    const st=S.stats;if(st.poAsk&&Date.now()-st.poAsk<3*36e5)return;
-    st.poAsk=Date.now();save();
+    const r=streakRisk();if(!r||!poBuild(true))return;
+    if(ses||$('#po')||$('#cel')||$('#sheet')){clearTimeout(PO.ask);PO.ask=setTimeout(poAsk,5000);return}   // busy: ask again shortly, not hours later
+    const st=S.stats,key=r.kind+':'+dkey();if(st.poAsk&&Date.now()-st.poAsk<3*36e5&&st.poAskKey===key)return;
+    st.poAsk=Date.now();st.poAskKey=key;save();
     const last=r.kind==='last';
     sheet(`<div class="kick">${last?tx('Streak on the edge','Serie am Abgrund'):tx('Streak in danger','Serie in Gefahr')}</div><h3 style="font-size:38px;margin:6px 0 8px">${r.streak} ${tx('days','Tage')}</h3>
     <p class="sub">${last?tx('You missed yesterday. Win the Play-Off to keep your streak, or practise and start again.','Du hast gestern verpasst. Gewinne das Play-Off, um deine Serie zu behalten, oder übe und beginne neu.'):tx('Your streak ends in '+fmtLeft(r.left)+'. Practise now, or answer one very hard question.','Deine Serie endet in '+fmtLeft(r.left)+'. Übe jetzt oder beantworte eine sehr schwere Frage.')}</p>

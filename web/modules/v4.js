@@ -17,9 +17,10 @@ function clozeOf(c){
 /* note shorthand ("Mach es gut! / Mach's gut!", "Firma ..., ...") is not a sentence you can build from blocks */
 const v4Whole=s=>!/\s\/\s|\.\.\.|…/.test(s);
 function sentenceOf(c){
-  const ex=plain(c.ex);
+  if(!c)return null;
+  const ex=plain(c.ex||''),de=String(c.de||'');
   if(ex.split(/\s+/).length>=3&&c.exEn&&v4Whole(ex))return{de:ex,en:c.exEn};
-  if(!c.ex&&c.de.split(/\s+/).length>=3&&v4Whole(c.de))return{de:c.de,en:c.en};
+  if(!c.ex&&de.split(/\s+/).length>=3&&v4Whole(de))return{de,en:c.en};
   return null;
 }
 
