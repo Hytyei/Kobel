@@ -4089,7 +4089,7 @@ function cabinetHtml(){
   <div class="cabinet">${tr.map(slot).join('')}${ghost}</div>`;
 }
 /* ───────── v2.10: version, skins, welcome, about ───────── */
-const APP_VER='4.2.2';
+const APP_VER='4.2.3';
 const isDe=()=>LANG==='de';
 const tx=(en,de)=>isDe()?de:en;
 function applySkin(){document.documentElement.dataset.skin=S.settings.skin==='clean'?'clean':'bl'}
@@ -4177,9 +4177,9 @@ function addNotice(n){
   ib.push({id:n.id,kind:n.kind||'news',title:String(n.title||'').slice(0,80),body:String(n.body||'').slice(0,1000),t:n.t||Date.now(),read:false});
   ib.sort((a,b)=>b.t-a.t);S.inbox=ib.slice(0,40);return true;
 }
-const CHANGELOG={v:'4.2.2',title:{en:'Kobel 4.2.2: a living home screen and a new Training page',de:'Kobel 4.2.2: ein lebendiger Start und eine neue Trainingsseite'},body:{
-  en:'The crest on the home screen now sends out rings in its own shape. Training leads with the game of the day, and every minigame shows its best score and stars. The form widget always shows the match minute, green once your streak is safe.',
-  de:'Das Wappen auf dem Start sendet jetzt Ringe in seiner eigenen Form aus. Das Training beginnt mit dem Spiel des Tages, und jedes Minispiel zeigt Bestwert und Sterne. Das Form-Widget zeigt immer die Spielminute, grün sobald deine Serie sicher ist.'}};
+const CHANGELOG={v:'4.2.3',title:{en:'Kobel 4.2.3: a new match clock on the widgets',de:'Kobel 4.2.3: eine neue Spieluhr auf den Widgets'},body:{
+  en:'The form widget shows the match minute on a stadium clock ring, and there is a new 2x2 form widget with the same clock, your league and your last 7 games.',
+  de:'Das Form-Widget zeigt die Spielminute auf einem Stadionuhr-Ring, und es gibt ein neues 2x2-Form-Widget mit derselben Uhr, deiner Liga und deinen letzten 7 Spielen.'}};
 function seedNotices(){
   addNotice({id:'ver:'+CHANGELOG.v,kind:'update',title:CHANGELOG.title.en,body:CHANGELOG.body.en,t:Date.now()});
 }

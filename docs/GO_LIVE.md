@@ -274,3 +274,7 @@ What changed in the app: one-page Settings, new games (Fehlerjagd, Satzbau), les
 * **Home:** the plate rings breathe, an outline in the crest's own shape ripples out, and a light sweeps across. Off with reduced motion.
 * **Training:** game of the day on a plate, the other games as rows in two groups (against the clock, full matches) with best score and stars.
 
+## Release notes: 4.2.3
+* **Release:** tag `v4.2.3` (version code 40203). No backend change.
+* **Form widgets:** the match clock is a ring (`clockRing` in `WidgetArt.kt`): the track fills from 0' to 90', a tick marks half-time, and the ball turns green once today's game is won. New 2x2 form widget `KobelWidgetFormSmall` with the same clock, league, stage and last 7 games. Picker previews are cropped from real renders.
+

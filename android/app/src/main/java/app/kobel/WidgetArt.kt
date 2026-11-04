@@ -198,53 +198,85 @@ class WidgetArt(private val u: Float, private val cond: Typeface, private val bo
         }
     }
 
-    // ───────── 4x2 form: one look, three facts. League, match minute, last seven games ─────────
+    // ───────── form widgets: league, the match clock, the last seven games ─────────
+    /**
+     * The match clock as a stadium ring: the track fills from 0' at the top round to 90', a tick marks half-time and the
+     * ball sits at the current minute. White on the dark card; only the ball changes, to green once today's game is won.
+     */
+    private fun clockRing(c: Canvas, cx: Float, cy: Float, r: Float, d: WData, k: Clock) {
+        val sw = r * 0.12f
+        val frac = (MatchClock.minsNow() / MatchClock.FULL.toFloat()).coerceIn(0f, 1f)
+        p.shader = null; p.style = Paint.Style.STROKE; p.strokeCap = Paint.Cap.BUTT; p.strokeWidth = sw
+        rf.set(cx - r, cy - r, cx + r, cy + r)
+        p.color = alpha(WHITE, 0.12f); c.drawArc(rf, 0f, 360f, false, p)
+        p.color = WHITE; c.drawArc(rf, -90f, 360f * frac, false, p)
+        p.strokeWidth = maxOf(dp(1.2f), sw * 0.22f); p.color = alpha(WHITE, 0.55f)   // half-time, at the bottom
+        c.drawLine(cx, cy + r - sw * 1.1f, cx, cy + r + sw * 1.1f, p)
+        p.style = Paint.Style.FILL
+        val a = Math.toRadians((-90.0 + 360.0 * frac)); val bx = cx + r * Math.cos(a).toFloat(); val by = cy + r * Math.sin(a).toFloat()
+        p.color = BG2; c.drawCircle(bx, by, sw * 1.15f, p)
+        p.color = if (k.safe) GREEN else WHITE; c.drawCircle(bx, by, sw * 0.82f, p)
+        // the minute large, a short status under it
+        var size = r / u * 0.62f
+        while (measure(k.label, size) > r * 1.45f && size > 10f) size -= 1f
+        text(c, k.label, cx, cy + dp(size * 0.30f), size, WHITE, cond, 1)
+        val cap = if (k.safe) t(d, "SAFE", "SICHER") else if (!k.streak) t(d, "NEW RUN", "NEUE SERIE") else t(d, "${k.left} LEFT", "NOCH ${k.left}").uppercase()
+        var cs = maxOf(7.5f, r / u * 0.16f)
+        while (measure(cap, cs, cond, 0.3f) > r * 1.5f && cs > 6.5f) cs -= 0.5f
+        text(c, cap, cx, cy + dp(size * 0.30f) + dp(cs + 4f), cs, if (k.safe) GREEN else MUTE, cond, 1, 0.3f)
+    }
+
+    private fun formRow(c: Canvas, d: WData, l: Float, r: Float, top: Float, rowH: Float, letterDp: Float) {
+        val list = d.games.takeLast(7).padStart(7, 'N')
+        val gp = dp(3f); val cw = (r - l - 6 * gp) / 7
+        list.forEachIndexed { i, ch ->
+            val x = l + i * (cw + gp)
+            val col = when (ch) { 'W' -> GREEN; 'D' -> AMBER; 'L' -> RED_HI; else -> alpha(WHITE, 0.08f) }
+            fill(c, x, top, x + cw, top + rowH, 0f, col)
+            val letter = when (ch) { 'W' -> t(d, "W", "S"); 'D' -> t(d, "D", "U"); 'L' -> t(d, "L", "N"); else -> "" }
+            if (letter.isNotEmpty()) text(c, letter, x + cw / 2, top + rowH / 2 + dp(letterDp * 0.36f), letterDp, 0xFF081018.toInt(), cond, 1)
+        }
+    }
+
+    private fun drawLogo(c: Canvas, logo: Bitmap?, x: Float, y: Float, hgt: Float): Float {
+        if (logo == null) return 0f
+        val lw = hgt * logo.width / logo.height
+        rf.set(x, y, x + lw, y + hgt); p.isFilterBitmap = true; p.shader = null; p.alpha = 255
+        c.drawBitmap(logo, null, rf, p)
+        return lw
+    }
+
+    /** 4x2: logo and league on the left, the clock ring on the right, the form along the bottom. */
     fun form(c: Canvas, w: Float, h: Float, d: WData, logo: Bitmap?) {
         background(c, w, h)
-        val pad = dp(14f); val ck = clock(d); val rowH = minOf(dp(32f), h * 0.24f); val gap = dp(10f)
+        val pad = dp(14f); val ck = clock(d); val rowH = minOf(dp(30f), h * 0.22f); val gap = dp(12f)
         val topB = h - pad - rowH - gap; val topH = topB - pad
-
-        // the clock block: red while the streak is open, green once it is safe, dark before a run has started
-        val bw = minOf(w * 0.32f, dp(112f)); val bx = w - pad - bw
-        val blockCol = if (ck.safe) GREEN else if (ck.streak) RED else CARD
-        val ink = if (ck.safe) INK else WHITE
-        fill(c, bx, pad, w - pad, topB, 0f, blockCol)
-        c.save(); c.clipRect(bx, pad, w - pad, topB)
-        p.style = Paint.Style.STROKE; p.shader = null; p.strokeWidth = dp(7f); p.color = alpha(if (ck.safe) INK else WHITE, 0.07f)
-        for (i in 1..4) c.drawCircle(bx + bw * 0.74f, pad + topH * 0.5f, dp(17f) * i, p)
-        p.style = Paint.Style.FILL
-        c.restore()
-        val big = ck.label   // always today's minute: green once today's game is won, red while the streak is open
-        var size = minOf(44f, topH / u * 0.56f)
-        while (measure(big, size) > bw - dp(14f) && size > 18f) size -= 1f
-        text(c, big, bx + bw / 2, pad + topH * 0.40f + dp(size * 0.36f), size, ink, cond, 1)
-        val cap = if (ck.safe) t(d, "STREAK SAFE", "SERIE SICHER") else if (!ck.streak) t(d, "START A RUN", "NEUE SERIE") else t(d, "${ck.left} LEFT", "NOCH ${ck.left}").uppercase()
-        text(c, cap, bx + bw / 2, topB - dp(9f), 9.5f, alpha(ink, 0.9f), cond, 1, 0.4f)
-
-        // league logo, league, stage
-        var tx = pad
-        if (logo != null) {
-            val lh = minOf(topH, dp(64f)); val lw = lh * logo.width / logo.height
-            val ly = pad + (topH - lh) / 2
-            rf.set(pad, ly, pad + lw, ly + lh)
-            p.isFilterBitmap = true
-            c.drawBitmap(logo, null, rf, p)
-            tx = pad + lw + dp(11f)
-        }
-        val room = bx - dp(10f) - tx; val mid = pad + topH / 2
+        val r = minOf(topH / 2 - dp(2f), w * 0.17f); val cx = w - pad - r - dp(2f); val cy = pad + topH / 2
+        clockRing(c, cx, cy, r, d, ck)
+        val lh = minOf(topH, dp(62f))
+        val lw = drawLogo(c, logo, pad, pad + (topH - lh) / 2, lh)
+        val tx = pad + (if (lw > 0) lw + dp(11f) else 0f)
+        val room = cx - r - dp(14f) - tx; val mid = pad + topH / 2
         text(c, fit(d.tier.uppercase(), 17f, room), tx, mid - dp(1f), 17f, WHITE, cond, 0, 0.2f)
-        text(c, fit(d.stage, 12f, room), tx, mid + dp(15f), 12f, MUTE, body, 0)
+        text(c, fit(d.stage, 12f, room, body), tx, mid + dp(15f), 12f, MUTE, body, 0)
+        formRow(c, d, pad, w - pad, h - pad - rowH, rowH, 14f)
+    }
 
-        // the last seven games, oldest on the left
-        val list = d.games.takeLast(7).padStart(7, 'N')
-        val gp = dp(4f); val cw = (w - 2 * pad - 6 * gp) / 7
-        list.forEachIndexed { i, ch ->
-            val l = pad + i * (cw + gp); val tp = h - pad - rowH
-            val col = when (ch) { 'W' -> GREEN; 'D' -> AMBER; 'L' -> RED_HI; else -> alpha(WHITE, 0.08f) }
-            fill(c, l, tp, l + cw, tp + rowH, 0f, col)
-            val letter = when (ch) { 'W' -> t(d, "W", "S"); 'D' -> t(d, "D", "U"); 'L' -> t(d, "L", "N"); else -> "" }
-            if (letter.isNotEmpty()) text(c, letter, l + cw / 2, tp + rowH / 2 + dp(5.5f), 15f, 0xFF081018.toInt(), cond, 1)
-        }
+    /** 2x2: the same three facts stacked. Logo and clock side by side, then league and stage, then the form. */
+    fun formSmall(c: Canvas, w: Float, h: Float, d: WData, logo: Bitmap?) {
+        background(c, w, h)
+        val pad = dp(12f); val ck = clock(d)
+        val rowH = minOf(dp(20f), h * 0.13f)
+        val textH = dp(34f)
+        val topH = h - 2 * pad - rowH - textH - dp(8f)
+        val r = minOf(topH / 2, (w - 2 * pad) * 0.29f); val cx = w - pad - r - dp(1f); val cy = pad + topH / 2
+        clockRing(c, cx, cy, r, d, ck)
+        val lh = minOf(topH * 0.82f, cx - r - pad - dp(6f), dp(54f))
+        drawLogo(c, logo, pad, pad + (topH - lh) / 2, lh)
+        val ty = pad + topH + dp(6f); val room = w - 2 * pad
+        text(c, fit(d.tier.uppercase(), 14f, room), pad, ty + dp(13f), 14f, WHITE, cond, 0, 0.2f)
+        text(c, fit(d.stage, 10.5f, room, body), pad, ty + dp(27f), 10.5f, MUTE, body, 0)
+        formRow(c, d, pad, w - pad, h - pad - rowH, rowH, 11f)
     }
 
     private fun fit(s: String, sizeDp: Float, room: Float, face: Typeface = cond): String {

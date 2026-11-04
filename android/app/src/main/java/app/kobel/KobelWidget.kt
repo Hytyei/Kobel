@@ -18,7 +18,7 @@ import org.json.JSONObject
 /**
  * Home-screen widgets. The web UI pushes fresh numbers through KobelAndroid.setWidgetData(json); they are stored in
  * SharedPreferences and drawn by WidgetArt (rings, bar charts, heatmap) into a bitmap that fills the widget.
- * Providers: 4x2 (KobelWidget), 2x2 (KobelWidgetSmall), 4x4 (KobelWidgetBig), 4x2 form (KobelWidgetForm). No network involved.
+ * Providers: 4x2 (KobelWidget), 2x2 (KobelWidgetSmall), 4x4 (KobelWidgetBig), form 4x2 (KobelWidgetForm) and 2x2 (KobelWidgetFormSmall). No network involved.
  */
 object WidgetCore {
     private const val PREFS = "kobel_widget"
@@ -38,7 +38,7 @@ object WidgetCore {
         NotifyPollJob.schedule(ctx)
     }
 
-    private val ALL = listOf(KobelWidget::class.java, KobelWidgetSmall::class.java, KobelWidgetBig::class.java, KobelWidgetForm::class.java)
+    private val ALL = listOf(KobelWidget::class.java, KobelWidgetSmall::class.java, KobelWidgetBig::class.java, KobelWidgetForm::class.java, KobelWidgetFormSmall::class.java)
 
     fun hasWidgets(ctx: Context): Boolean {
         val mgr = AppWidgetManager.getInstance(ctx)
@@ -62,6 +62,7 @@ object WidgetCore {
             KobelWidgetSmall::class.java -> Spec(160, 160, R.layout.widget_small, R.id.s_root)
             KobelWidgetBig::class.java -> Spec(320, 392, R.layout.widget_big, R.id.b_root)
             KobelWidgetForm::class.java -> Spec(320, 150, R.layout.widget_form, R.id.f_root)
+            KobelWidgetFormSmall::class.java -> Spec(160, 160, R.layout.widget_form_small, R.id.f2_root)
             else -> Spec(320, 150, R.layout.widget_kobel, R.id.w_root)
         }
         // the launcher tells us the size in dp: width when upright, height when upright (MAX_HEIGHT)
@@ -77,6 +78,7 @@ object WidgetCore {
             KobelWidgetSmall::class.java -> art.small(c, w.toFloat(), h.toFloat(), d)
             KobelWidgetBig::class.java -> art.big(c, w.toFloat(), h.toFloat(), d)
             KobelWidgetForm::class.java -> art.form(c, w.toFloat(), h.toFloat(), d, leagueLogo(ctx, d.tierI))
+            KobelWidgetFormSmall::class.java -> art.formSmall(c, w.toFloat(), h.toFloat(), d, leagueLogo(ctx, d.tierI))
             else -> art.wide(c, w.toFloat(), h.toFloat(), d)
         }
         val v = RemoteViews(ctx.packageName, layout)
@@ -166,3 +168,4 @@ class KobelWidget : ArtWidget(KobelWidget::class.java)
 class KobelWidgetSmall : ArtWidget(KobelWidgetSmall::class.java)
 class KobelWidgetBig : ArtWidget(KobelWidgetBig::class.java)
 class KobelWidgetForm : ArtWidget(KobelWidgetForm::class.java)
+class KobelWidgetFormSmall : ArtWidget(KobelWidgetFormSmall::class.java)
